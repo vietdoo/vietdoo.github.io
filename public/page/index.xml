@@ -1,2 +1,20 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Pages on vietdoo's blog</title><link>https://vietdoo.github.io/page/</link><description>Recent content in Pages on vietdoo's blog</description><generator>Hugo -- gohugo.io</generator><lastBuildDate>Fri, 12 May 2023 00:00:00 +0000</lastBuildDate><atom:link href="https://vietdoo.github.io/page/index.xml" rel="self" type="application/rss+xml"/><item><title>About Me</title><link>https://vietdoo.github.io/page/about/</link><pubDate>Fri, 12 May 2023 00:00:00 +0000</pubDate><guid>https://vietdoo.github.io/page/about/</guid><description>Hi, I&amp;rsquo;m Do Quoc Viet, a Data Science major at the University of Science, VNU-HCM. My passion for programming began with competitive programming focused on data structures and algorithms, and has since expanded to Machine Learning and Big Data.
-I&amp;rsquo;m deeply focused on Big Data frameworks like Hadoop, Spark, Kafka, and BigQuery. I&amp;rsquo;m always seeking new learning opportunities and have developed skills in C/C++, Python3, SQL, NoSQL, ETLs, Data Warehousing, Visualization, web server technologies, backend development, Linux, Docker, and networking.</description></item></channel></rss>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Pages on vietdoo&#39;s blog</title>
+    <link>https://vietdoo.github.io/page/</link>
+    <description>Recent content in Pages on vietdoo&#39;s blog</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <lastBuildDate>Fri, 12 May 2023 00:00:00 +0000</lastBuildDate><atom:link href="https://vietdoo.github.io/page/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>About Me</title>
+      <link>https://vietdoo.github.io/page/about/</link>
+      <pubDate>Fri, 12 May 2023 00:00:00 +0000</pubDate>
+      
+      <guid>https://vietdoo.github.io/page/about/</guid>
+      <description>Hi, I&amp;rsquo;m Do Quoc Viet, a Data Science major at the University of Science, VNU-HCM. My passion for programming began with competitive programming focused on data structures and algorithms, and has since expanded to Machine Learning and Big Data.
+I&amp;rsquo;m deeply focused on Big Data frameworks like Hadoop, Spark, Kafka, and BigQuery. I&amp;rsquo;m always seeking new learning opportunities and have developed skills in C/C++, Python3, SQL, NoSQL, ETLs, Data Warehousing, Visualization, web server technologies, backend development, Linux, Docker, and networking.</description>
+    </item>
+    
+  </channel>
+</rss>
