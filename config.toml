@@ -1,0 +1,129 @@
+baseurl = "https://vietdoo.github.io/"
+metaDataFormat = "yaml"
+title = "vietdoo's blog"
+theme = "blist"
+
+DefaultContentLanguage = "en"
+DefaultContentLanguageInSubdir = false
+
+[languages]
+  [languages.en]
+    contentDir = "content/en" #English
+    weight = 1
+    languageName = "English"
+    [languages.en.params]
+      introTitle = "Hey! I'm Do Quoc Viet"
+      introSubtitle = "22 y/o junior data engineer who likes to play with numbers"
+      introPhoto = "/picture.jpg"
+      logo = "/blist-logo.png"
+    [[languages.en.menu.main]]
+        name = "Blog"
+        url = "blog"
+        weight = 1
+
+    [[languages.en.menu.main]]
+        name = "About"
+        url = "page/about/"
+        weight = 2
+
+    [[languages.en.menu.main]]
+        name = "Tags"
+        url = "tags"
+        weight = 3
+
+
+[params]
+  darkModeToggle = true
+  enableSearch = true
+
+  searchKeys = [
+    "tags",
+    "date",
+    "categories",
+    "summary",
+    "content",
+    "link",
+    "author"
+  ]
+
+  copyright = "Copyright © 2023 - Do Quoc Viet (vietdoo) · All rights reserved"
+  favicon = "/favicon.svg"
+  ascentColor = "bg-blue-100"
+  frontBundle = "blog"
+  hideMeta = false
+  hideOtherLanguages = false
+  toc = true
+  hidePageThumbnail = false
+
+# Comments system
+[params.comments]
+  system = "giscus"
+
+  # Options for giscus, exclude hyphens
+  repo = ""
+  repoid = ""
+  category = ""
+  categoryid = ""
+  mapping = ""
+  strict = ""
+  reactionsenabled = ""
+  emitmetadata = ""
+  inputposition = ""
+  theme = ""
+
+
+[params.homepage.social]
+  title = "Follow me"
+  description = "I work on everything coding"
+
+  [[params.homepage.social.icons]]
+    website = "twitter"
+    url = "https://twitter.com/vietdoo"
+  [[params.homepage.social.icons]]
+    website = "linkedin"
+    url = "https://linkedin.com/in/vietdoo"
+
+  [[params.homepage.social.icons]]
+    website = "telegram"
+    url = "https://t.me/vietdoo"
+  [[params.homepage.social.icons]]
+    website = "github"
+    url = "https://github.com/vietdoo"
+
+
+  [[params.homepage.social.icons]]
+    website = "stackoverflow"
+    url = "https://stackoverflow.com/vietdoo"
+
+  [[params.homepage.social.icons]]
+    website = "tiktok"
+    url = "https://tiktok.com/vietdataflow"
+
+  [[params.homepage.social.icons]]
+    website = "youtube"
+    url = "https://youtube.com/@ViValViet"
+  [[params.homepage.social.icons]]
+    website = "instagram"
+    url = "https://instagram.com/vietdoo.ig"
+  [[params.homepage.social.icons]]
+    website = "facebook"
+    url = "https://facebook.com/vietdoo"
+
+
+[[menu.main]]
+  name = "About"
+  url = "/about"
+
+[build]
+  writeStats = true
+
+[outputs]
+  home = ["HTML", "RSS", "JSON"]
+
+# syntax highlight settings
+[markup]
+  [markup.highlight]
+    style = "dracula"
+  [markup.goldmark.renderer]
+    # Enable to include inline HTML
+    unsafe = true

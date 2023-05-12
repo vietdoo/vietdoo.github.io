@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>html on Blist (mehrsprachig)</title>
+    <link>https://blist.vercel.app/de/tags/html/</link>
+    <description>Recent content in html on Blist (mehrsprachig)</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <lastBuildDate>Wed, 14 Jul 2021 00:00:00 +0000</lastBuildDate><atom:link href="https://blist.vercel.app/de/tags/html/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Markdown Syntax Guide</title>
+      <link>https://blist.vercel.app/de/blog/markdown-syntax/</link>
+      <pubDate>Wed, 14 Jul 2021 00:00:00 +0000</pubDate>
+      
+      <guid>https://blist.vercel.app/de/blog/markdown-syntax/</guid>
+      <description>&lt;p&gt;Dieser Artikel bietet ein Beispiel für die grundlegende Markdown-Syntax, die in Hugo-Inhaltsdateien verwendet werden kann, und zeigt auch, ob grundlegende HTML-Elemente mit CSS in einem Hugo-Theme dekoriert sind.&lt;/p&gt;</description>
+    </item>
+    
+  </channel>
+</rss>

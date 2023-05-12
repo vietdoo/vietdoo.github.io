@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>vietdoo&#39;s blog</title>
+    <link>https://vietdoo.github.io/</link>
+    <description>Recent content on vietdoo&#39;s blog</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <lastBuildDate>Fri, 12 May 2023 00:00:00 +0000</lastBuildDate><atom:link href="https://vietdoo.github.io/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>About Me</title>
+      <link>https://vietdoo.github.io/page/about/</link>
+      <pubDate>Fri, 12 May 2023 00:00:00 +0000</pubDate>
+      
+      <guid>https://vietdoo.github.io/page/about/</guid>
+      <description>Hi, I&amp;rsquo;m Do Quoc Viet, a Data Science major at the University of Science, VNU-HCM. My passion for programming began with competitive programming focused on data structures and algorithms, and has since expanded to Machine Learning and Big Data.
+I&amp;rsquo;m deeply focused on Big Data frameworks like Hadoop, Spark, Kafka, and BigQuery. I&amp;rsquo;m always seeking new learning opportunities and have developed skills in C/C++, Python3, SQL, NoSQL, ETLs, Data Warehousing, Visualization, web server technologies, backend development, Linux, Docker, and networking.</description>
+    </item>
+    
+    <item>
+      <title>Review Ngành Khoa học dữ liệu Đại học Khoa Học Tự Nhiên</title>
+      <link>https://vietdoo.github.io/blog/review-nganh-khoa-hoc-du-lieu-hcmus/</link>
+      <pubDate>Sat, 17 Jul 2021 00:00:00 +0000</pubDate>
+      
+      <guid>https://vietdoo.github.io/blog/review-nganh-khoa-hoc-du-lieu-hcmus/</guid>
+      <description>Xin chào! Mình là Đỗ Quốc Việt.
+Hiện đang học ngành Khoa học dữ liệu (Data Science) khoá K20 trường ĐH Khoa học tự nhiên ĐHQG-TPHCM.
+Hôm nay mình viết một bài chia sẻ về ngành cũng như trường, cũng như trải nghiệm 1 năm qua tại HCMUS để cho các em khoá sau có ý định tìm hiểu ngành hay vừa thi đại học xong có thể tham khảo và chọn lựa cho bản thân lựa chọn phù hợp nhất.</description>
+    </item>
+    
+    <item>
+      <title>Rich Content</title>
+      <link>https://vietdoo.github.io/blog/rich-content/</link>
+      <pubDate>Tue, 13 Jul 2021 00:00:00 +0000</pubDate>
+      
+      <guid>https://vietdoo.github.io/blog/rich-content/</guid>
+      <description>&lt;p&gt;Hugo ships with several &lt;a href=&#34;https://gohugo.io/content-management/shortcodes/#use-hugos-built-in-shortcodes&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;Built-in Shortcodes&lt;/a&gt;
+ for rich content, along with a &lt;a href=&#34;https://gohugo.io/about/hugo-and-gdpr/&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;Privacy Config&lt;/a&gt;
+ and a set of Simple Shortcodes that enable static and no-JS versions of various social media embeds.&lt;/p&gt;
+&lt;h2 id=&#34;heading&#34;&gt;&lt;/h2&gt;</description>
+    </item>
+    
+  </channel>
+</rss>

@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Blog on Blist (mehrsprachig)</title>
+    <link>https://blist.vercel.app/de/blog/</link>
+    <description>Recent content in Blog on Blist (mehrsprachig)</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <lastBuildDate>Thu, 15 Jul 2021 00:00:00 +0000</lastBuildDate><atom:link href="https://blist.vercel.app/de/blog/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Emoji-Unterstützung</title>
+      <link>https://blist.vercel.app/de/blog/emoji-support/</link>
+      <pubDate>Thu, 15 Jul 2021 00:00:00 +0000</pubDate>
+      
+      <guid>https://blist.vercel.app/de/blog/emoji-support/</guid>
+      <description>&lt;p&gt;Emojis können in einem Hugo-Projekt auf verschiedene Weise aktiviert werden.&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>Markdown Syntax Guide</title>
+      <link>https://blist.vercel.app/de/blog/markdown-syntax/</link>
+      <pubDate>Wed, 14 Jul 2021 00:00:00 +0000</pubDate>
+      
+      <guid>https://blist.vercel.app/de/blog/markdown-syntax/</guid>
+      <description>&lt;p&gt;Dieser Artikel bietet ein Beispiel für die grundlegende Markdown-Syntax, die in Hugo-Inhaltsdateien verwendet werden kann, und zeigt auch, ob grundlegende HTML-Elemente mit CSS in einem Hugo-Theme dekoriert sind.&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>Platzhaltertext</title>
+      <link>https://blist.vercel.app/de/blog/placeholder-text/</link>
+      <pubDate>Tue, 13 Jul 2021 00:00:00 +0000</pubDate>
+      
+      <guid>https://blist.vercel.app/de/blog/placeholder-text/</guid>
+      <description>&lt;p&gt;Lorem est tota propiore conpellat pectoribus de pectora summo.&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>Reichhaltiger Inhalt</title>
+      <link>https://blist.vercel.app/de/blog/rich-content/</link>
+      <pubDate>Tue, 13 Jul 2021 00:00:00 +0000</pubDate>
+      
+      <guid>https://blist.vercel.app/de/blog/rich-content/</guid>
+      <description>&lt;p&gt;Hugo wird mit mehreren &lt;a href=&#34;https://gohugo.io/content-management/shortcodes/#use-hugos-built-in-shortcodes&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;Built-in Shortcodes&lt;/a&gt;
+ für reichhaltige Inhalte geliefert, zusammen mit einer &lt;a href=&#34;https://gohugo.io/about/hugo-and-gdpr/&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;Privacy Config&lt;/a&gt;
+ und einer Reihe einfacher Shortcodes, die statische und keine JS-Versionen verschiedener Social-Media-Einbettungen ermöglichen.&lt;/p&gt;
+&lt;h2 id=&#34;heading&#34;&gt;&lt;/h2&gt;</description>
+    </item>
+    
+  </channel>
+</rss>
