@@ -6,25 +6,30 @@ import Card from "./Card/index.astro";
   <div class="flex flex-col items-center justify-center h-full gap-2">
     <div class="theme-colors flex items-center gap-3">
       <button
-        class="theme-btn w-6 h-6 rounded-full bg-[#e63946] transition-all duration-200"
+        class="theme-btn cursor-pointer w-6 h-6 rounded-full bg-[#e63946] transition-all duration-200"
         data-theme="default"
-        aria-label="Default theme"></button>
+        aria-label="Default theme"
+        title="Default theme"></button>
       <button
-        class="theme-btn w-6 h-6 rounded-full bg-yellow-500 transition-all duration-200"
+        class="theme-btn cursor-pointer w-6 h-6 rounded-full bg-yellow-500 transition-all duration-200"
         data-theme="yellow-theme"
-        aria-label="Yellow theme"></button>
+        aria-label="Yellow theme"
+        title="Yellow theme"></button>
       <button
-        class="theme-btn w-6 h-6 rounded-full bg-blue-500 transition-all duration-200"
+        class="theme-btn cursor-pointer w-6 h-6 rounded-full bg-blue-500 transition-all duration-200"
         data-theme="blue-theme"
-        aria-label="Blue theme"></button>
+        aria-label="Blue theme"
+        title="Blue theme"></button>
       <button
-        class="theme-btn w-6 h-6 rounded-full bg-purple-500 transition-all duration-200"
+        class="theme-btn cursor-pointer w-6 h-6 rounded-full bg-purple-500 transition-all duration-200"
         data-theme="purple-theme"
-        aria-label="Purple theme"></button>
+        aria-label="Purple theme"
+        title="Purple theme"></button>
       <button
-        class="theme-btn w-6 h-6 rounded-full bg-green-500 transition-all duration-200"
+        class="theme-btn cursor-pointer w-6 h-6 rounded-full bg-green-500 transition-all duration-200"
         data-theme="green-theme"
-        aria-label="Green theme"></button>
+        aria-label="Green theme"
+        title="Green theme"></button>
     </div>
   </div>
 </Card>
@@ -37,6 +42,11 @@ import Card from "./Card/index.astro";
   }
   .theme-btn:hover {
     transform: scale(1.2);
+  }
+  .theme-btn:focus-visible {
+    box-shadow: 0 0 0 2px var(--primary-500);
+    outline: 2px solid var(--primary-400);
+    outline-offset: 2px;
   }
   .theme-btn.active {
     box-shadow:
@@ -72,10 +82,9 @@ import Card from "./Card/index.astro";
     const updateSelectedTheme = () => {
       const currentTheme = localStorage.getItem("theme") || "default";
       themeButtons.forEach((btn) => {
-        btn.classList.toggle(
-          "active",
-          btn.getAttribute("data-theme") === currentTheme,
-        );
+        const isActive = btn.getAttribute("data-theme") === currentTheme;
+        btn.classList.toggle("active", isActive);
+        btn.setAttribute("aria-pressed", isActive.toString());
       });
     };
 
