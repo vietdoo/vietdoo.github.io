@@ -12,3 +12,7 @@
 ## 2024-09-06 - Dynamic aria-pressed on Custom Theme Toggles
 **Learning:** Using `outline: none` on interactive buttons (like theme selectors) without a `:focus-visible` fallback severely degrades keyboard navigation. Furthermore, custom toggle buttons that change visual state (like active classes) must also dynamically update the `aria-pressed` attribute so screen readers receive accurate state feedback.
 **Action:** Always provide custom `:focus-visible` styles when overriding default outlines, and ensure JavaScript managing visual toggle states also updates the `aria-pressed` attribute appropriately.
+
+## 2024-09-12 - Ensure Custom Icon Buttons Have Focus Styles
+**Learning:** Custom UI components without borders or backgrounds, like close (`×`) or refresh icon buttons on dashboards, often miss clear `:focus-visible` states, making them difficult to use for keyboard-only users. Default browser focus outlines may be suppressed or simply look broken without proper styling.
+**Action:** Always provide clear `:focus-visible` outlines (e.g., matching the accent color with an `outline-offset`) on custom interactive elements (like `.drawer-close` or `.icon-button`), especially when they lack natural borders.

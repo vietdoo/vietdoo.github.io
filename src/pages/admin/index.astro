@@ -471,6 +471,11 @@ import AdminDashboard from "../../components/admin/AdminDashboard";
     color: #fff;
     border-color: #427aa8;
   }
+  .icon-button:focus-visible {
+    color: #fff;
+    outline: 2px solid #427aa8;
+    outline-offset: 2px;
+  }
   .icon-button:disabled {
     opacity: 0.5;
     cursor: wait;
@@ -1019,11 +1024,16 @@ import AdminDashboard from "../../components/admin/AdminDashboard";
   .drawer-close {
     float: right;
     border: 0;
+    border-radius: 6px;
     background: transparent;
     color: #7e8b9c;
     cursor: pointer;
     font-size: 27px;
     line-height: 1;
+  }
+  .drawer-close:focus-visible {
+    outline: 2px solid #2d87c7;
+    outline-offset: 2px;
   }
   .log-drawer h2 {
     margin: 11px 0 13px;
@@ -1394,6 +1404,11 @@ import AdminDashboard from "../../components/admin/AdminDashboard";
     color: var(--admin-accent-dark);
     border-color: rgba(200, 107, 75, 0.55);
   }
+  .icon-button:focus-visible {
+    color: var(--admin-accent-dark);
+    outline: 2px solid var(--admin-accent);
+    outline-offset: 2px;
+  }
   .avatar {
     background: #dfc3af;
     color: #654332;
@@ -1737,6 +1752,11 @@ import AdminDashboard from "../../components/admin/AdminDashboard";
   }
   .drawer-close:hover {
     color: var(--admin-accent-dark);
+  }
+  .drawer-close:focus-visible {
+    color: var(--admin-accent-dark);
+    outline: 2px solid var(--admin-accent);
+    outline-offset: 2px;
   }
   .log-drawer h2 {
     color: var(--admin-ink);
