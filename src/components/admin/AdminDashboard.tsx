@@ -735,6 +735,8 @@ export default function AdminDashboard() {
                   <button
                     class="drawer-close"
                     onClick={() => setSelectedLog(null)}
+                    title="Close"
+                    aria-label="Close request details"
                   >
                     ×
                   </button>
