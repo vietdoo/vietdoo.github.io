@@ -321,6 +321,14 @@ export default function AdminDashboard() {
                 <p>
                   Review request activity and keep the routing layer in order.
                 </p>
+                <Show when={typeof window !== "undefined" && window.location.hostname.endsWith("github.io")}>
+                  <div style={{ "margin-top": "1rem", padding: "0.75rem", "border-radius": "8px", background: "rgba(245, 158, 11, 0.1)", border: "1px solid rgba(245, 158, 11, 0.3)", color: "#fcd34d", "font-size": "0.75rem", "line-height": "1.4", "text-align": "left" }}>
+                    Console bảo mật yêu cầu phiên làm việc server. Vui lòng đăng nhập trực tiếp tại{" "}
+                    <a href="https://vietdoo.vndo.vn/admin" style={{ color: "#fff", "text-decoration": "underline", "font-weight": "600" }}>
+                      vietdoo.vndo.vn/admin
+                    </a>.
+                  </div>
+                </Show>
                 <form onSubmit={login} class="login-form">
                   <label for="admin-username">Username</label>
                   <input

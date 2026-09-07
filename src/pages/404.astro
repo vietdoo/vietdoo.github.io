@@ -1,0 +1,60 @@
+---
+import Layout from "../layouts/Layout.astro";
+import { SITE } from "../site-config";
+---
+
+<Layout
+  title={`404: Page Not Found — ${SITE.author.fullNameVi}`}
+  description="The requested page could not be found."
+  hideCal={true}
+>
+  <main class="min-h-[75vh] flex items-center justify-center px-4 py-16">
+    <div
+      class="w-full max-w-md bg-darkslate-800/80 border border-darkslate-600 rounded-2xl p-8 sm:p-10 text-center shadow-2xl backdrop-blur-md flex flex-col items-center gap-4"
+    >
+      <div
+        class="w-16 h-16 rounded-2xl bg-darkslate-700 border border-darkslate-500/60 flex items-center justify-center text-primary-400 text-2xl font-bold font-mono select-none"
+      >
+        404
+      </div>
+
+      <div class="space-y-2">
+        <h1 class="text-2xl sm:text-3xl font-bold text-white tracking-tight">
+          Page Not Found
+        </h1>
+        <p class="text-sm text-darkslate-300 leading-relaxed">
+          The page you are looking for might have been moved, deleted, or does not exist.
+        </p>
+      </div>
+
+      <div class="pt-4 w-full flex flex-col sm:flex-row gap-3 justify-center">
+        <a
+          href="/"
+          class="inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl bg-primary-500 hover:bg-primary-400 text-darkslate-900 font-semibold text-sm transition-all duration-200 hover:scale-[1.02] active:scale-[0.98] shadow-lg shadow-primary-500/20"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="16"
+            height="16"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
+            <polyline points="9 22 9 12 15 12 15 22" />
+          </svg>
+          Back to Home
+        </a>
+        <a
+          href="/blog"
+          class="inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl bg-darkslate-700 hover:bg-darkslate-600 text-white font-medium text-sm border border-darkslate-500/50 transition-all duration-200 hover:scale-[1.02] active:scale-[0.98]"
+        >
+          Read Blog
+        </a>
+      </div>
+    </div>
+  </main>
+</Layout>

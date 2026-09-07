@@ -92,3 +92,52 @@ if (!isGitHubPages) {
     </section>
   </div>
 </Layout>
+
+<script>
+  import { apiFetch, parseJsonResponse } from "../lib/api-config";
+  import { renderGuestbookCardHtml, type GuestbookEntry } from "../lib/guestbook";
+
+  async function initGuestbookClient() {
+    const entriesContainer = document.getElementById("entries");
+    const countEl = document.getElementById("entries-count");
+    if (!entriesContainer) return;
+
+    const hasEmptyState = Boolean(
+      entriesContainer.querySelector("[data-empty-state]"),
+    );
+    const currentCards = entriesContainer.querySelectorAll("[data-entry-id]");
+
+    // Nếu trang đang ở trạng thái rỗng (như trên bản tĩnh GitHub Pages), fetch động từ API
+    if (hasEmptyState || currentCards.length === 0) {
+      try {
+        const urlParams = new URLSearchParams(window.location.search);
+        const page = urlParams.get("page") || "1";
+
+        const res = await apiFetch(
+          `/api/guestbook?page=${encodeURIComponent(page)}`,
+        );
+        const parsed = await parseJsonResponse<{
+          entries: GuestbookEntry[];
+          total: number;
+          page: number;
+          totalPages: number;
+        }>(res);
+
+        if (parsed.ok && parsed.data && parsed.data.entries.length > 0) {
+          if (countEl) {
+            countEl.textContent = `${parsed.data.total} messages`;
+          }
+
+          entriesContainer.innerHTML = parsed.data.entries
+            .map((entry) => renderGuestbookCardHtml(entry))
+            .join("");
+        }
+      } catch (err) {
+        console.warn("[Guestbook Client Loader] Failed to fetch entries:", err);
+      }
+    }
+  }
+
+  document.addEventListener("astro:page-load", initGuestbookClient);
+</script>
+

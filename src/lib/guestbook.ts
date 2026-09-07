@@ -60,5 +60,43 @@ export const normalizeWebsiteUrl = (url?: string | null): string | null => {
   return null;
 };
 
-export const PIXEL_HEART_SVG = `<svg xmlns="http://www.w3.org/2000/svg" width="14" height="12" viewBox="0 0 7 6" class="heart-svg block" shape-rendering="crispEdges" style="image-rendering:pixelated" fill="currentColor"><rect x="1" y="0" width="2" height="1"/><rect x="4" y="0" width="2" height="1"/><rect x="0" y="1" width="7" height="1"/><rect x="0" y="2" width="7" height="1"/><rect x="1" y="3" width="5" height="1"/><rect x="2" y="4" width="3" height="1"/><rect x="3" y="5" width="1" height="1"/></svg>`;
+export const escapeHtml = (untrustedText: string): string => {
+  return untrustedText
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#039;");
+};
+
+export const renderGuestbookCardHtml = (entry: GuestbookEntry): string => {
+  const rotationDegrees = rotationFromSeed(entry.id);
+  const avatarColor = avatarColorForSeed(entry.id);
+  const avatarInitials = getInitials(entry.name);
+  const escapedName = escapeHtml(entry.name);
+  const cleanWebsite = entry.website
+    ? normalizeWebsiteUrl(entry.website)
+    : null;
+  const nameMarkup = cleanWebsite
+    ? `<a href="${escapeHtml(cleanWebsite)}" target="_blank" rel="noopener noreferrer" class="font-semibold text-white hover:text-primary-400 transition-colors text-sm">${escapedName}</a>`
+    : `<span class="font-semibold text-white text-sm">${escapedName}</span>`;
+
+  const heartCount = entry.heartCount ?? 0;
+  const timeAgo = formatTimeAgo(entry.createdAt);
+
+  return `
+    <article data-entry-id="${entry.id}" class="guestbook-entry bg-darkslate-500 p-5 rounded-xl border border-darkslate-400 hover:border-primary-500/50 transition-[border-color,transform] duration-300 hover:rotate-0 flex flex-col gap-3" style="transform: rotate(${rotationDegrees}deg);">
+      <p class="text-darkslate-100 text-sm leading-relaxed whitespace-pre-wrap flex-1">${escapeHtml(entry.message)}</p>
+      <footer class="flex items-center gap-2.5 pt-2 border-t border-darkslate-400/50">
+        <div class="flex-shrink-0 w-7 h-7 rounded-full ${avatarColor} flex items-center justify-center text-white text-xs font-bold select-none">${avatarInitials}</div>
+        <div class="min-w-0 flex-1 flex items-baseline gap-1.5 flex-wrap">
+          ${nameMarkup}
+          <span class="text-darkslate-300 text-xs">${timeAgo}</span>
+        </div>
+        <button type="button" data-heart-button data-heart-count="${heartCount}" aria-label="Send love" title="Send love" class="heart-btn flex items-center gap-1 px-2 py-1 rounded-md text-darkslate-300 hover:text-white hover:bg-darkslate-400/30 transition-colors text-xs">${PIXEL_HEART_SVG}<span class="heart-count tabular-nums">${heartCount}</span></button>
+      </footer>
+    </article>
+  `;
+};
+
 

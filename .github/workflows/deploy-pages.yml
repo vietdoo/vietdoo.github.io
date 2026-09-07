@@ -48,6 +48,9 @@ jobs:
           PUBLIC_API_BASE_URL: "https://vietdoo.vndo.vn"
         run: pnpm run astro build
 
+      - name: Disable Jekyll for GitHub Pages
+        run: touch dist/.nojekyll
+
       - name: Upload Pages Artifact
         uses: actions/upload-pages-artifact@v3
         with:

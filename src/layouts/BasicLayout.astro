@@ -45,7 +45,9 @@ const {
   image: propImage,
 } = Astro.props;
 
-const siteBaseUrl = SITE.site.url.endsWith("/") ? SITE.site.url.slice(0, -1) : SITE.site.url;
+const siteBaseUrl = Astro.site
+  ? Astro.site.toString().replace(/\/+$/, "")
+  : (SITE.site.url.endsWith("/") ? SITE.site.url.slice(0, -1) : SITE.site.url);
 const canonicalUrl = new URL(Astro.url.pathname, siteBaseUrl).href;
 
 let image = `${siteBaseUrl}/og.webp`;
