@@ -14,16 +14,22 @@ import db from "@astrojs/db";
 import { unified } from "@astrojs/markdown-remark";
 import rehypeMermaid from "rehype-mermaid";
 
-const envSiteUrl = process.env.SITE_URL ?? "https://vietdoo.vndo.vn/";
+const isGitHubPages = process.env.GITHUB_PAGES === "true";
+const envSiteUrl = isGitHubPages
+  ? "https://vietdoo.github.io/"
+  : (process.env.SITE_URL ?? "https://vietdoo.vndo.vn/");
 const site = envSiteUrl.endsWith("/") ? envSiteUrl : `${envSiteUrl}/`;
 const siteNoTrailingSlash = site.endsWith("/") ? site.slice(0, -1) : site;
 
 // https://astro.build/config
 export default defineConfig({
-  output: "server",
-  adapter: vercel({
-    webAnalytics: { enabled: true },
-  }),
+  output: isGitHubPages ? "static" : "server",
+  adapter: isGitHubPages
+    ? undefined
+    : vercel({
+        webAnalytics: { enabled: true },
+      }),
+  base: "/",
   redirects: {
     "/design-works": "/engineering-showcase",
   },
