@@ -1,5 +1,5 @@
 import { createSignal, onMount, For, Show } from "solid-js";
-import { getApiUrl, parseJsonResponse } from "../../lib/api-config";
+import { apiFetch, parseJsonResponse } from "../../lib/api-config";
 
 interface CommentItem {
   id: number;
@@ -79,8 +79,8 @@ export default function BlogComments(props: BlogCommentsProps) {
   const fetchComments = async () => {
     setLoading(true);
     try {
-      const res = await fetch(
-        getApiUrl(`/api/comments?slug=${encodeURIComponent(props.postSlug)}`),
+      const res = await apiFetch(
+        `/api/comments?slug=${encodeURIComponent(props.postSlug)}`,
       );
       const parsed = await parseJsonResponse<{ comments: CommentItem[] }>(res);
       if (!parsed.ok || !parsed.data) {
@@ -113,7 +113,7 @@ export default function BlogComments(props: BlogCommentsProps) {
 
     setSubmitting(true);
     try {
-      const res = await fetch(getApiUrl("/api/comments"), {
+      const res = await apiFetch("/api/comments", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -160,7 +160,7 @@ export default function BlogComments(props: BlogCommentsProps) {
 
     setSubmitting(true);
     try {
-      const res = await fetch(getApiUrl("/api/comments"), {
+      const res = await apiFetch("/api/comments", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({

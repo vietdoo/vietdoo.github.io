@@ -1,5 +1,5 @@
 import { For, Show, createSignal, onMount } from "solid-js";
-import { getApiUrl } from "../../lib/api-config";
+import { apiFetch } from "../../lib/api-config";
 
 type Risk = "low" | "medium" | "high" | "local";
 type Signal = {
@@ -319,7 +319,7 @@ export default function FingerprintAuditPlayground() {
   const requestAiSummary = async (result: FingerprintSnapshot) => {
     setIsAiLoading(true);
     try {
-      const response = await fetch(getApiUrl("/api/fingerprint-summary"), {
+      const response = await apiFetch("/api/fingerprint-summary", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({

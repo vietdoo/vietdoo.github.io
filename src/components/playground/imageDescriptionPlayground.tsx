@@ -1,6 +1,6 @@
 import MarkdownIt from "markdown-it";
 import { createSignal, Show } from "solid-js";
-import { getApiUrl } from "../../lib/api-config";
+import { apiFetch } from "../../lib/api-config";
 
 const MAX_IMAGE_BYTES = 8 * 1024 * 1024;
 const ACCEPTED_TYPES = ["image/png", "image/jpeg", "image/webp", "image/gif"];
@@ -94,7 +94,7 @@ export default function ImageDescriptionPlayground() {
     setCopied(false);
 
     try {
-      const response = await fetch(getApiUrl("/api/image-description"), {
+      const response = await apiFetch("/api/image-description", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ image: imageData(), prompt: prompt().trim() }),
