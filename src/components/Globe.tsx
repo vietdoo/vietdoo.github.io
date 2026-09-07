@@ -1,4 +1,4 @@
-import { onMount } from "solid-js";
+import { onMount, onCleanup } from "solid-js";
 import * as d3 from "d3";
 import worldData from "../lib/world.json";
 import { SITE } from "../site-config";
@@ -555,13 +555,18 @@ const GlobeComponent = ({ isStatic, enableHover }: Props) => {
     }
 
     // --- auto-rotate -------------------------------------------------
-    d3.timer(() => {
+    const timer = d3.timer(() => {
       if (isPaused || isStatic) return;
       const rot = projection.rotate();
       const k = DRAG_SENSITIVITY / projection.scale();
       projection.rotate([rot[0] - k, rot[1]]);
       updatePaths();
     }, TICK_MS);
+
+    onCleanup(() => {
+      timer.stop();
+      d3.select("body").selectAll(".globe-tooltip").remove();
+    });
   });
 
   return (
