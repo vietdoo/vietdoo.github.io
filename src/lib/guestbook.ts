@@ -60,6 +60,8 @@ export const normalizeWebsiteUrl = (url?: string | null): string | null => {
   return null;
 };
 
+export const PIXEL_HEART_SVG = `<svg xmlns="http://www.w3.org/2000/svg" width="14" height="12" viewBox="0 0 7 6" class="heart-svg block" shape-rendering="crispEdges" style="image-rendering:pixelated" fill="currentColor"><rect x="1" y="0" width="2" height="1"/><rect x="4" y="0" width="2" height="1"/><rect x="0" y="1" width="7" height="1"/><rect x="0" y="2" width="7" height="1"/><rect x="1" y="3" width="5" height="1"/><rect x="2" y="4" width="3" height="1"/><rect x="3" y="5" width="1" height="1"/></svg>`;
+
 export const escapeHtml = (untrustedText: string): string => {
   return untrustedText
     .replace(/&/g, "&amp;")
