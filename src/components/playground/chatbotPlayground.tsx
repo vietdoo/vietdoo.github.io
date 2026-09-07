@@ -1,5 +1,6 @@
 import { For, Show, createEffect, createSignal } from "solid-js";
 import MarkdownIt from "markdown-it";
+import { getApiUrl } from "../../lib/api-config";
 
 type Message = {
   id: string;
@@ -66,7 +67,7 @@ export default function ChatbotPlayground() {
     if (textareaEl) textareaEl.style.height = "auto";
 
     try {
-      const response = await fetch("/api/chat", {
+      const response = await fetch(getApiUrl("/api/chat"), {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({

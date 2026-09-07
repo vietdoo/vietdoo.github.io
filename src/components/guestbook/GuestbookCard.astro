@@ -113,6 +113,7 @@ const normalizedWebsite = normalizeWebsiteUrl(entry.website);
 </style>
 
 <script>
+  import { getApiUrl } from "../../lib/api-config";
   const STORAGE_KEY = "guestbookHearts";
 
   const readHearted = (): string[] => {
@@ -192,7 +193,7 @@ const normalizedWebsite = normalizeWebsiteUrl(entry.website);
     if (countEl) countEl.textContent = String(optimistic);
 
     try {
-      const response = await fetch("/api/reactions", {
+      const response = await fetch(getApiUrl("/api/reactions"), {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ id: parseInt(entryId, 10) }),

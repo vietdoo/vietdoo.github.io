@@ -1,4 +1,5 @@
 import { createSignal, onMount, For, Show } from "solid-js";
+import { getApiUrl, parseJsonResponse } from "../../lib/api-config";
 
 interface CommentItem {
   id: number;
@@ -79,11 +80,13 @@ export default function BlogComments(props: BlogCommentsProps) {
     setLoading(true);
     try {
       const res = await fetch(
-        `/api/comments?slug=${encodeURIComponent(props.postSlug)}`,
+        getApiUrl(`/api/comments?slug=${encodeURIComponent(props.postSlug)}`),
       );
-      if (!res.ok) throw new Error("Failed to fetch comments");
-      const data = await res.json();
-      setComments(data.comments || []);
+      const parsed = await parseJsonResponse<{ comments: CommentItem[] }>(res);
+      if (!parsed.ok || !parsed.data) {
+        throw new Error(parsed.error || "Failed to fetch comments");
+      }
+      setComments(parsed.data.comments || []);
     } catch (err) {
       console.error(err);
     } finally {
@@ -110,7 +113,7 @@ export default function BlogComments(props: BlogCommentsProps) {
 
     setSubmitting(true);
     try {
-      const res = await fetch("/api/comments", {
+      const res = await fetch(getApiUrl("/api/comments"), {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -120,12 +123,16 @@ export default function BlogComments(props: BlogCommentsProps) {
         }),
       });
 
-      if (!res.ok) {
-        const errData = await res.json();
-        throw new Error(errData.error || "Failed to post comment");
+      const parsed = await parseJsonResponse<CommentItem>(
+        res,
+        isVi() ? "Không thể gửi bình luận lúc này" : "Failed to post comment",
+      );
+
+      if (!parsed.ok || !parsed.data) {
+        throw new Error(parsed.error || "Failed to post comment");
       }
 
-      const newComment = await res.json();
+      const newComment = parsed.data;
       setComments([newComment, ...comments()]);
       setMainContent("");
       setIsMainFormOpen(false);
@@ -153,7 +160,7 @@ export default function BlogComments(props: BlogCommentsProps) {
 
     setSubmitting(true);
     try {
-      const res = await fetch("/api/comments", {
+      const res = await fetch(getApiUrl("/api/comments"), {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -164,12 +171,16 @@ export default function BlogComments(props: BlogCommentsProps) {
         }),
       });
 
-      if (!res.ok) {
-        const errData = await res.json();
-        throw new Error(errData.error || "Failed to post reply");
+      const parsed = await parseJsonResponse<CommentItem>(
+        res,
+        isVi() ? "Không thể gửi phản hồi lúc này" : "Failed to post reply",
+      );
+
+      if (!parsed.ok || !parsed.data) {
+        throw new Error(parsed.error || "Failed to post reply");
       }
 
-      const newComment = await res.json();
+      const newComment = parsed.data;
       setComments([...comments(), newComment]);
       setReplyContent("");
       setReplyingToId(null);

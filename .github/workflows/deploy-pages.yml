@@ -45,6 +45,7 @@ jobs:
       - name: Build with Astro (Static Mode)
         env:
           GITHUB_PAGES: "true"
+          PUBLIC_API_BASE_URL: "https://vietdoo.vndo.vn"
         run: pnpm run astro build
 
       - name: Upload Pages Artifact

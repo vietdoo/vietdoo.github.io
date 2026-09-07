@@ -91,6 +91,7 @@ const { class: className } = Astro.props;
     rotationFromSeed,
     PIXEL_HEART_SVG,
   } from "../../lib/guestbook";
+  import { getApiUrl } from "../../lib/api-config";
 
   type CreatedGuestbookEntry = {
     id: number;
@@ -208,7 +209,7 @@ const { class: className } = Astro.props;
 
       setSubmitting(true);
       try {
-        const response = await fetch("/api/guestbook", {
+        const response = await fetch(getApiUrl("/api/guestbook"), {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify(submission),

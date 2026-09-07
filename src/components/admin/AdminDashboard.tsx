@@ -1,4 +1,5 @@
 import { For, Show, createMemo, createSignal, onMount } from "solid-js";
+import { getApiUrl } from "../../lib/api-config";
 
 type Model = {
   id: string;
@@ -111,7 +112,7 @@ export default function AdminDashboard() {
     setAiSummaryLoading(true);
     setAiSummaryError("");
     try {
-      const response = await fetch("/api/admin/summary", {
+      const response = await fetch(getApiUrl("/api/admin/summary"), {
         credentials: "same-origin",
         cache: "no-store",
       });
@@ -140,8 +141,8 @@ export default function AdminDashboard() {
     setDataError("");
     try {
       const [modelsResponse, logsResponse] = await Promise.all([
-        fetch("/api/admin/models", { credentials: "same-origin" }),
-        fetch("/api/admin/logs?limit=50", { credentials: "same-origin" }),
+        fetch(getApiUrl("/api/admin/models"), { credentials: "same-origin" }),
+        fetch(getApiUrl("/api/admin/logs?limit=50"), { credentials: "same-origin" }),
       ]);
       if (modelsResponse.status === 401 || logsResponse.status === 401) {
         setAuthenticated(false);
@@ -173,7 +174,7 @@ export default function AdminDashboard() {
     setLoginError("");
     setLoginLoading(true);
     try {
-      const response = await fetch("/api/admin/auth", {
+      const response = await fetch(getApiUrl("/api/admin/auth"), {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         credentials: "same-origin",
@@ -200,7 +201,7 @@ export default function AdminDashboard() {
   }
 
   async function logout() {
-    await fetch("/api/admin/logout", {
+    await fetch(getApiUrl("/api/admin/logout"), {
       method: "POST",
       credentials: "same-origin",
     });
@@ -216,7 +217,7 @@ export default function AdminDashboard() {
     setToggleLoading(model.id);
     setDataError("");
     try {
-      const response = await fetch("/api/admin/models", {
+      const response = await fetch(getApiUrl("/api/admin/models"), {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
         credentials: "same-origin",
@@ -238,7 +239,7 @@ export default function AdminDashboard() {
   }
 
   onMount(() => {
-    fetch("/api/admin/models", { credentials: "same-origin" })
+    fetch(getApiUrl("/api/admin/models"), { credentials: "same-origin" })
       .then(async (response) => {
         if (response.ok) {
           setAuthenticated(true);
