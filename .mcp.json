@@ -1,0 +1,12 @@
+{
+  "mcpServers": {
+    "cloudinary-asset-mgmt": {
+      "command": "sh",
+      "args": ["-c", "set -a && . .env && set +a && npx -y --registry https://registry.npmjs.org --package @cloudinary/asset-management -- mcp start --transport stdio"]
+    },
+    "cloudinary-env-config": {
+      "command": "sh",
+      "args": ["-c", "set -a && . .env && set +a && npx -y --registry https://registry.npmjs.org --package @cloudinary/environment-config -- mcp start --transport stdio"]
+    }
+  }
+}

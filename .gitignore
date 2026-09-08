@@ -35,3 +35,6 @@ context/
 
 # temporary before/after UI review artifacts
 .artifacts/ui-review/
+
+# Cloudinary skills
+.agents/skills/cloudinary-*/

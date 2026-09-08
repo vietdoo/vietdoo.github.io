@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<!--
+  Cloudinary Getting Started Preview
+  Demonstrates original asset delivery vs. optimized, transformed delivery side by side.
+  Notice the format conversion (f_auto) and compression (q_auto) savings.
+-->
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cloudinary Delivery & Optimization Preview</title>
+  <style>
+    :root {
+      --bg: #0f172a;
+      --card-bg: #1e293b;
+      --border: #334155;
+      --text: #f8fafc;
+      --muted: #94a3b8;
+      --primary: #38bdf8;
+      --success: #4ade80;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      padding: 2rem 1rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    .container { max-width: 1100px; width: 100%; }
+    header { text-align: center; margin-bottom: 2.5rem; }
+    h1 { font-size: 2.25rem; font-weight: 700; margin-bottom: 0.5rem; color: #fff; }
+    .subtitle { color: var(--muted); font-size: 1.1rem; }
+    .badge {
+      display: inline-block;
+      margin-top: 0.75rem;
+      background: rgba(56, 189, 248, 0.15);
+      color: var(--primary);
+      padding: 0.35rem 0.85rem;
+      border-radius: 9999px;
+      font-size: 0.875rem;
+      font-weight: 600;
+      border: 1px solid rgba(56, 189, 248, 0.3);
+    }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 2rem;
+      margin-bottom: 2.5rem;
+    }
+    .card {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+    .card-header {
+      padding: 1.25rem;
+      border-bottom: 1px solid var(--border);
+    }
+    .card-title { font-size: 1.25rem; font-weight: 600; }
+    .card-meta { color: var(--muted); font-size: 0.875rem; margin-top: 0.25rem; }
+    .image-container {
+      background: #020617;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 1rem;
+      min-height: 340px;
+    }
+    .image-container img {
+      max-width: 100%;
+      height: auto;
+      max-height: 320px;
+      border-radius: 8px;
+      object-fit: contain;
+    }
+    .card-body {
+      padding: 1.25rem;
+      flex-grow: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+    }
+    .stat-row {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.925rem;
+      padding-bottom: 0.5rem;
+      border-bottom: 1px dashed var(--border);
+    }
+    .stat-label { color: var(--muted); }
+    .stat-val { font-weight: 600; font-family: monospace; }
+    .savings-banner {
+      background: rgba(74, 222, 128, 0.1);
+      border: 1px solid rgba(74, 222, 128, 0.3);
+      border-radius: 8px;
+      padding: 1rem;
+      text-align: center;
+      margin-bottom: 2.5rem;
+    }
+    .savings-banner h2 { color: var(--success); font-size: 1.5rem; }
+    .savings-banner p { color: var(--muted); margin-top: 0.25rem; }
+    #stage-5-integration-snippet {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 1.5rem;
+    }
+    pre {
+      background: #020617;
+      padding: 1rem;
+      border-radius: 8px;
+      overflow-x: auto;
+      font-size: 0.9rem;
+      color: #e2e8f0;
+      margin-top: 0.75rem;
+      border: 1px solid var(--border);
+    }
+    code { font-family: "JetBrains Mono", Consolas, Menlo, monospace; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>Cloudinary Delivery Preview</h1>
+      <p class="subtitle">Real-time media optimization and dynamic transformation verified</p>
+      <div class="badge">Cloud: dda3uwwte</div>
+    </header>
+
+    <div class="savings-banner">
+      <h2>17% File Size Reduction</h2>
+      <p>Cloudinary automatically selected the optimal modern format and compression level for your browser.</p>
+    </div>
+
+    <div class="grid">
+      <!-- Original Asset -->
+      <div class="card">
+        <div class="card-header">
+          <div class="card-title">Original Asset</div>
+          <div class="card-meta">Raw asset delivered without transformations</div>
+        </div>
+        <div class="image-container">
+          <img id="orig-img" src="https://res.cloudinary.com/dda3uwwte/image/upload/sample" alt="Original image" />
+        </div>
+        <div class="card-body">
+          <div class="stat-row">
+            <span class="stat-label">File Size:</span>
+            <span class="stat-val">117.4 KB</span>
+          </div>
+          <div class="stat-row">
+            <span class="stat-label">Format:</span>
+            <span class="stat-val">JPEG</span>
+          </div>
+          <div class="stat-row">
+            <span class="stat-label">Optimization:</span>
+            <span class="stat-val">None</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Transformed Asset -->
+      <div class="card">
+        <div class="card-header">
+          <div class="card-title">Optimized & Transformed</div>
+          <div class="card-meta">f_auto, q_auto, auto fill, and text overlays applied on the fly</div>
+        </div>
+        <div class="image-container">
+          <img id="trans-img" src="https://res.cloudinary.com/dda3uwwte/image/upload/b_gen_fill,c_pad,w_1000,h_1000,y_-100/l_text:Arial_72_bold:Adapt%20everywhere,co_white/e_shadow:50/fl_layer_apply,g_south_west,x_80,y_140/l_text:Arial_34:Dynamic%20media%20built%20in%20real%20time,co_rgb:E9D5FF/e_shadow:35/fl_layer_apply,g_south_west,x_84,y_90/f_auto,q_auto/sample" alt="Transformed image" />
+        </div>
+        <div class="card-body">
+          <div class="stat-row">
+            <span class="stat-label">File Size:</span>
+            <span class="stat-val">97.6 KB</span>
+          </div>
+          <div class="stat-row">
+            <span class="stat-label">Format:</span>
+            <span class="stat-val">WEBP</span>
+          </div>
+          <div class="stat-row">
+            <span class="stat-label">Savings:</span>
+            <span class="stat-val" style="color: var(--success);">17%</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SDK Integration Snippet -->
+    <section id="stage-5-integration-snippet">
+      <h2 style="font-size: 1.25rem; font-weight: 600; margin-bottom: 0.5rem;">Astro / Node.js SDK Integration</h2>
+      <p style="color: var(--muted); font-size: 0.9rem;">Generate delivery URLs programmatically in server routes, Astro frontmatter, or API endpoints:</p>
+      <pre><code>import { cloudinary } from './src/lib/cloudinary';
+
+// Generate optimized delivery URL
+const url = cloudinary.url('sample', {
+  transformation: [
+    { width: 1000, height: 1000, crop: 'pad', background: 'gen_fill', y: -100 },
+    { overlay: { font_family: 'Arial', font_size: 72, font_weight: 'bold', text: 'Adapt everywhere' }, color: 'white', effect: 'shadow:50' },
+    { flags: 'layer_apply', gravity: 'south_west', x: 80, y: 140 },
+    { overlay: { font_family: 'Arial', font_size: 34, text: 'Dynamic media built in real time' }, color: 'rgb:E9D5FF', effect: 'shadow:35' },
+    { flags: 'layer_apply', gravity: 'south_west', x: 84, y: 90 },
+    { fetch_format: 'auto', quality: 'auto' }
+  ]
+});
+
+console.log('Optimized URL:', url);</code></pre>
+    </section>
+  </div>
+
+  <script>
+    // Verify and measure client-side
+    const headers = { Accept: 'image/avif,image/webp,image/apng,image/svg+xml,image/*,*/*;q=0.8' };
+    fetch('https://res.cloudinary.com/dda3uwwte/image/upload/sample', { headers })
+      .then(res => res.blob())
+      .then(blob => console.log('Original client blob size:', blob.size));
+    fetch('https://res.cloudinary.com/dda3uwwte/image/upload/b_gen_fill,c_pad,w_1000,h_1000,y_-100/l_text:Arial_72_bold:Adapt%20everywhere,co_white/e_shadow:50/fl_layer_apply,g_south_west,x_80,y_140/l_text:Arial_34:Dynamic%20media%20built%20in%20real%20time,co_rgb:E9D5FF/e_shadow:35/fl_layer_apply,g_south_west,x_84,y_90/f_auto,q_auto/sample', { headers })
+      .then(res => res.blob())
+      .then(blob => console.log('Transformed client blob size:', blob.size));
+  </script>
+</body>
+</html>

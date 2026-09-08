@@ -1,0 +1,27 @@
+{
+  "_comment": "Cloudinary environment and verification documentation. Generated during onboarding setup.",
+  "schema_version": 1,
+  "cloud_name": "dda3uwwte",
+  "upload_preset": "ai_powerstart",
+  "preset_source": "admin_api_script",
+  "preview": {
+    "public_id": "sample",
+    "selection_source": "admin_api_list",
+    "original_url": "https://res.cloudinary.com/dda3uwwte/image/upload/sample",
+    "transformed_url": "https://res.cloudinary.com/dda3uwwte/image/upload/b_gen_fill,c_pad,w_1000,h_1000,y_-100/l_text:Arial_72_bold:Adapt%20everywhere,co_white/e_shadow:50/fl_layer_apply,g_south_west,x_80,y_140/l_text:Arial_34:Dynamic%20media%20built%20in%20real%20time,co_rgb:E9D5FF/e_shadow:35/fl_layer_apply,g_south_west,x_84,y_90/f_auto,q_auto/sample",
+    "transformation": "b_gen_fill,c_pad,w_1000,h_1000,y_-100/l_text:Arial_72_bold:Adapt%20everywhere,co_white/e_shadow:50/fl_layer_apply,g_south_west,x_80,y_140/l_text:Arial_34:Dynamic%20media%20built%20in%20real%20time,co_rgb:E9D5FF/e_shadow:35/fl_layer_apply,g_south_west,x_84,y_90/f_auto,q_auto"
+  },
+  "measurements": {
+    "original": {
+      "bytes": 120253,
+      "format": "jpeg",
+      "url": "https://res.cloudinary.com/dda3uwwte/image/upload/sample"
+    },
+    "transformed": {
+      "bytes": 99950,
+      "format": "webp",
+      "url": "https://res.cloudinary.com/dda3uwwte/image/upload/b_gen_fill,c_pad,w_1000,h_1000,y_-100/l_text:Arial_72_bold:Adapt%20everywhere,co_white/e_shadow:50/fl_layer_apply,g_south_west,x_80,y_140/l_text:Arial_34:Dynamic%20media%20built%20in%20real%20time,co_rgb:E9D5FF/e_shadow:35/fl_layer_apply,g_south_west,x_84,y_90/f_auto,q_auto/sample"
+    },
+    "savings_percent": 17
+  }
+}
