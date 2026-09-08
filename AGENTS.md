@@ -25,6 +25,8 @@
   - Đặt tên danh từ ngắn gọn, tự nhiên (ví dụ: `Word counter`, `JWT decoder`).
   - Description ngắn gọn 1 dòng, mô tả trực tiếp tính năng.
 
+## Quy Chuẩn Viết Blog (Blog Writing Guidelines)
+- **Không dùng trích dẫn số trong bài**: Tuyệt đối không chèn ký hiệu trích dẫn dạng `[1]`, `[2]` vào thân bài viết (chỉ để danh sách nguồn ở mục Tài liệu tham khảo / References cuối bài).
 
 ## Visual Before/After Review
 - For every meaningful feature, page, component, layout, styling, responsive, interaction, or content edit, use the Folio UI review workflow before declaring the task complete.
