@@ -6,7 +6,7 @@ category: "engineering"
 lang: "vi"
 translationKey: "ai-agent-finops-token-cost-allocation"
 draft: false
-image: "/blog/ai-agent-finops/hero.png"
+image: "/blog/ai-agent-finops/hero.webp"
 ---
 
 Bản AI cost report đầu tiên mình thường thấy là một con số theo tháng: model spend tăng 37 phần trăm. Con số đó đủ chính xác để finance lo lắng, nhưng quá mơ hồ để engineering biết phải sửa gì.
@@ -15,7 +15,7 @@ Tenant nào làm chi phí tăng? Workflow nào đắt hơn? Phần spend thêm �
 
 Monthly total không trả lời được các câu hỏi đó. AI agent không phải một API call duy nhất với một owner duy nhất. Nó là một workflow có thể route qua nhiều model, retrieve context, gọi tool, retry sau timeout, hỏi clarification, chờ human và tạo ra outcome có business value rất khác với chi phí token đã dùng để đi đến đó.
 
-![AI Agent FinOps ledger nối tenant và workflow với token usage, tool call, shared infrastructure, budget và business outcome](/blog/ai-agent-finops/hero.png)
+![AI Agent FinOps ledger nối tenant và workflow với token usage, tool call, shared infrastructure, budget và business outcome](/blog/ai-agent-finops/hero.webp)
 
 > **Luận điểm chính:** AI FinOps trở nên hữu ích khi cost được phân bổ theo đúng những dimension mà business dùng để quản lý công việc: tenant, workflow, outcome và owner. Token usage là meter, nhưng accountable unit economics mới là sản phẩm.
 
@@ -116,7 +116,7 @@ CostEvent {
 }
 ```
 
-![Allocation ledger nối tenant, workflow, model, tool và shared platform usage với direct cost và shared cost bucket](/blog/ai-agent-finops/allocation-ledger.png)
+![Allocation ledger nối tenant, workflow, model, tool và shared platform usage với direct cost và shared cost bucket](/blog/ai-agent-finops/allocation-ledger.webp)
 
 Ledger event phải giữ quantity và price version dùng để tính amount. Pricing của provider có thể thay đổi. Historical report vẫn phải reproducible kể cả sau khi provider công bố rate card mới.
 
@@ -278,7 +278,7 @@ BudgetEnvelope {
 }
 ```
 
-![Budget envelope lúc runtime bao quanh AI workflow bằng soft limit, hard limit, optional work stop và protected safety path](/blog/ai-agent-finops/budget-envelope.png)
+![Budget envelope lúc runtime bao quanh AI workflow bằng soft limit, hard limit, optional work stop và protected safety path](/blog/ai-agent-finops/budget-envelope.webp)
 
 Envelope có thể trigger behavior ở nhiều threshold.
 
@@ -321,7 +321,7 @@ Chargeback cũng cần dispute process. Tenant phải có thể hỏi trace nào
 
 AI cost optimization không chỉ là đổi model. Nó là chuỗi quyết định qua nhiều layer của workflow.
 
-![Optimization frontier so sánh model quality, latency, token spend, cache reuse, tool fan-out và accepted outcome rate](/blog/ai-agent-finops/optimization-frontier.png)
+![Optimization frontier so sánh model quality, latency, token spend, cache reuse, tool fan-out và accepted outcome rate](/blog/ai-agent-finops/optimization-frontier.webp)
 
 ### Loại bỏ work không nên xảy ra
 

@@ -3,13 +3,13 @@ title: "Kiến trúc mã nguồn Spring Boot tối ưu token"
 description: "Hướng dẫn tổ chức mã nguồn giúp AI hiểu nhanh, sinh đúng, và giảm chi phí token trong vòng đời phát triển sản phẩm với Java 21 và Spring Boot 3.x."
 pubDate: 2026-03-06
 category: "architecture"
-image: "/blog/spring-boot-ai-code-structure/springboot-ai-cover.jpg"
+image: "/blog/spring-boot-ai-code-structure/springboot-ai-cover.webp"
 lang: "vi"
 translationKey: "spring-boot-ai-code-structure"
 draft: false
 ---
 
-![Kiến trúc mã nguồn Java Spring Boot AI SDLC](/blog/spring-boot-ai-code-structure/springboot-ai-cover.jpg)
+![Kiến trúc mã nguồn Java Spring Boot AI SDLC](/blog/spring-boot-ai-code-structure/springboot-ai-cover.webp)
 
 * **Đối tượng**: Developer & Tech Lead
 * **Tech Stack**: Java 21 · Spring Boot 3.x
@@ -80,7 +80,7 @@ Mỗi tính năng là một lát cắt dọc tự đủ: `controller` → `servi
 
 ### SO SÁNH: Layered (Truyền thống) vs Feature-based
 
-![So sánh Layered Architecture truyền thống vs Feature-based AI-Friendly](/blog/spring-boot-ai-code-structure/layered-vs-feature.jpg)
+![So sánh Layered Architecture truyền thống vs Feature-based AI-Friendly](/blog/spring-boot-ai-code-structure/layered-vs-feature.webp)
 
 Cùng một thay đổi nghiệp vụ — số file AI phải nạp khác hẳn nhau.
 
@@ -179,7 +179,7 @@ CHANGELOG.md           · Lịch sử thay đổi public API.
 
 Code ngoài chỉ thấy `api/` — phần còn lại là hộp đen với cả developer và AI.
 
-![Module Boundary Contract Architecture Diagram](/blog/spring-boot-ai-code-structure/module-boundary-contract.jpg)
+![Module Boundary Contract Architecture Diagram](/blog/spring-boot-ai-code-structure/module-boundary-contract.webp)
 
 ```text
 OrderModule ──> billing/api ──> [ billing (internal) ]
@@ -235,7 +235,7 @@ Mỗi anti-pattern dưới đây kéo theo nhiều file phải nạp vào contex
 
 Tận dụng feature folder để giảm token ở mọi bước.
 
-![Workflow 5 bước prompting giảm token cho AI](/blog/spring-boot-ai-code-structure/ai-prompting-workflow.jpg)
+![Workflow 5 bước prompting giảm token cho AI](/blog/spring-boot-ai-code-structure/ai-prompting-workflow.webp)
 
 1. **Locate**: Chỉ feature folder cần đổi — không paste cả repo.
 2. **Anchor**: Đính kèm `README.md` + `ARCHITECTURE.md` của feature đó.

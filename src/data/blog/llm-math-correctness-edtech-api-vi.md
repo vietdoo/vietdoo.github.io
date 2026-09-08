@@ -6,7 +6,7 @@ category: "engineering"
 lang: "vi"
 translationKey: "llm-math-correctness-edtech-api"
 draft: false
-image: "/blog/llm-math-correctness-edtech/hero.png"
+image: "/blog/llm-math-correctness-edtech/hero.webp"
 ---
 
 Đầu ra nguy hiểm nhất của một AI tutor dạy toán không phải là một đáp án vô lý nhìn qua đã thấy sai. Nguy hiểm hơn là một lời giải được viết rất trôi chảy, có giọng điệu giống giáo viên, chỉ chứa một bước biến đổi đại số không hợp lệ, nhưng lại đủ thuyết phục để học sinh ghi nhớ nhầm lẫn đó.
@@ -15,7 +15,7 @@ Failure mode này làm thay đổi câu hỏi engineering. Câu hỏi không ch�
 
 LLM API là một generator, paraphraser và giao diện tutor hữu ích. Nó không phải nguồn sự thật toán học. Nghiên cứu về LLM trong vai trò math tutor cho thấy response có thể trông phù hợp với nguyên tắc sư phạm nhưng vẫn chứa nhiều inaccuracies; những lỗi nghe hợp lý có thể tạo misconception cho người học.[1](https://arxiv.org/html/2503.16460v1) Nghiên cứu về stepwise verification cũng chỉ ra rằng việc tìm đúng bước sai đầu tiên trong lời giải của học sinh là bài toán khó với các model hiện tại, trong khi verifier độc lập có thể giúp feedback chính xác và có mục tiêu hơn.[2](https://aclanthology.org/2024.emnlp-main.478/)
 
-![Một candidate toán do LLM sinh ra đi qua các cổng verification độc lập trước khi được hệ thống EdTech phát hành](/blog/llm-math-correctness-edtech/hero.png)
+![Một candidate toán do LLM sinh ra đi qua các cổng verification độc lập trước khi được hệ thống EdTech phát hành](/blog/llm-math-correctness-edtech/hero.webp)
 
 > **Luận điểm chính:** Hãy để LLM đề xuất nội dung toán, nhưng để tính toán xác định, symbolic reasoning, luật chương trình học và human review quyết định nội dung đó có được publish hay không.
 
@@ -106,7 +106,7 @@ Publish, monitor hoặc quarantine
 
 Pipeline nên fail closed. Nếu solver timeout, assumption bắt buộc bị thiếu hoặc checker không quyết định được equivalence, item không được âm thầm pass. Fallback an toàn là regenerate với task hẹp hơn, chuyển sang template đơn giản hơn hoặc đưa vào hàng đợi human review.
 
-![Math contract có cấu trúc được kiểm tra bởi parser, symbolic solver, domain invariant và pedagogical rule](/blog/llm-math-correctness-edtech/structured-math-contract.png)
+![Math contract có cấu trúc được kiểm tra bởi parser, symbolic solver, domain invariant và pedagogical rule](/blog/llm-math-correctness-edtech/structured-math-contract.webp)
 
 ## Lớp một: parse và canonicalize trước khi solve
 
@@ -175,7 +175,7 @@ Metamorphic test có thể đổi tên biến, đổi thứ tự các fact khôn
 
 Adversarial test nhắm vào những chỗ language model rất dễ nói với giọng tự tin: mẫu số bằng 0, đại lượng âm, xác suất ở boundary, unit lặp, phân số lồng nhau, số lớn, đại từ mơ hồ và assumption tự nhiên mâu thuẫn.
 
-![Metamorphic và adversarial case kiểm tra boundary value, expression tương đương, unit và assumption mơ hồ trước khi publish](/blog/llm-math-correctness-edtech/adversarial-tests.png)
+![Metamorphic và adversarial case kiểm tra boundary value, expression tương đương, unit và assumption mơ hồ trước khi publish](/blog/llm-math-correctness-edtech/adversarial-tests.webp)
 
 Đừng chỉ báo cáo average pass rate. Hãy theo dõi failure taxonomy. Generator có answer validity 98% nhưng unit error 12% có thể không an toàn cho curriculum khoa học. Tutor có final answer đúng 95% nhưng first-error localization kém sẽ đưa feedback có hại cho học sinh đang làm gần đúng.
 
@@ -228,7 +228,7 @@ rollout:
     - quality_regression
 ```
 
-![Verification-first release loop nối generation, kiểm tra độc lập, review sư phạm, publish, monitoring và quarantine](/blog/llm-math-correctness-edtech/release-loop.png)
+![Verification-first release loop nối generation, kiểm tra độc lập, review sư phạm, publish, monitoring và quarantine](/blog/llm-math-correctness-edtech/release-loop.webp)
 
 Threshold phải được calibrate bằng benchmark của chính sản phẩm, không copy từ team khác. Với high-stakes assessment hoặc answer key, một item sai có thể là không chấp nhận được dù batch average rất cao. Với draft generation rủi ro thấp, sản phẩm có thể chọn review queue thay vì block mọi candidate.
 

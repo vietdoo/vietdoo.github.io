@@ -3,13 +3,13 @@ title: "Thiết kế AI System theo Evals: Từ Golden Set nhỏ đến Rollout 
 description: "Playbook dành cho senior engineer để biến một golden set nhỏ thành release gate, KPI kinh doanh và vòng lặp học tập cho AI system production."
 pubDate: 2026-07-05
 category: "engineering"
-image: "/blog/eval-driven-ai-system-design/hero.png"
+image: "/blog/eval-driven-ai-system-design/hero.webp"
 lang: "vi"
 translationKey: "eval-driven-ai-system-design"
 draft: false
 ---
 
-![Minh họa nét vẽ tay về vòng lặp đánh giá AI production nối golden set, trace, release gate và kết quả kinh doanh](/blog/eval-driven-ai-system-design/hero.png)
+![Minh họa nét vẽ tay về vòng lặp đánh giá AI production nối golden set, trace, release gate và kết quả kinh doanh](/blog/eval-driven-ai-system-design/hero.webp)
 
 AI system đầu tiên khiến tôi thực sự yên tâm không phải system có demo ấn tượng nhất. Đó là system mà cả team có thể trả lời một câu hỏi kém hào nhoáng hơn: **điều gì sẽ khiến chúng ta dừng một release?**
 
@@ -72,7 +72,7 @@ Hai team có thể chạy cùng một tập case nhưng đi đến hai kết lu�
 
 Điều này đặc biệt quan trọng với agentic system. Một model upgrade có thể cải thiện answer quality nhưng lại thay đổi tool selection, retry behavior hoặc lượng dữ liệu đưa vào prompt. Nếu dashboard gộp mọi thứ thành một score, team không biết mình đã được gì và âm thầm làm hỏng gì.
 
-![Minh họa nét vẽ tay: capability test leo lên cao còn regression test bảo vệ con đường release](/blog/eval-driven-ai-system-design/capability-regression.png)
+![Minh họa nét vẽ tay: capability test leo lên cao còn regression test bảo vệ con đường release](/blog/eval-driven-ai-system-design/capability-regression.webp)
 
 Release suite nên có ít nhất các lane sau:
 
@@ -135,7 +135,7 @@ case -> trace -> technical graders -> reviewer action -> customer outcome
 
 Technical grader kiểm tra citation coverage, policy compliance và tool behavior. Reviewer action ghi nhận accepted, edited, rejected hay escalated. Customer outcome ghi nhận ticket reopen, time to resolution hoặc satisfaction signal. Chuỗi này chưa phải bằng chứng rằng model gây ra mọi business result, nhưng nó giúp team kiểm tra xem cải thiện kỹ thuật có sống sót khi đi vào công việc thật hay không.
 
-![Minh họa nét vẽ tay nối model trace với reviewer action, operational metric và business outcome](/blog/eval-driven-ai-system-design/kpi-bridge.png)
+![Minh họa nét vẽ tay nối model trace với reviewer action, operational metric và business outcome](/blog/eval-driven-ai-system-design/kpi-bridge.webp)
 
 | Technical signal          | Operational signal         | Câu hỏi business                                      |
 | ------------------------- | -------------------------- | ----------------------------------------------------- |
@@ -153,7 +153,7 @@ Release gate phải phụ thuộc vào risk của behavior. Internal summarizer 
 
 Dùng hard gate cho property không thể thương lượng. Dùng soft threshold cho phẩm chất có thể cải thiện dần. Những kết quả mơ hồ nên đi vào review thay vì bị biến thành một false pass.
 
-![Minh họa nét vẽ tay về release-gate matrix nối risk tier với hard failure, quality threshold và review path](/blog/eval-driven-ai-system-design/release-gate-matrix.png)
+![Minh họa nét vẽ tay về release-gate matrix nối risk tier với hard failure, quality threshold và review path](/blog/eval-driven-ai-system-design/release-gate-matrix.webp)
 
 | Risk tier | Hard gate                                            | Soft gate                                | Promotion policy                      |
 | --------- | ---------------------------------------------------- | ---------------------------------------- | ------------------------------------- |

@@ -3,7 +3,7 @@ title: "Context Firewall: Redaction, Tokenization và Data Lineage trước khi 
 description: "Playbook production để xem context của AI như một data plane có governance—minimize theo field, redaction, tokenization, kiểm tra tenant và purpose, giữ lineage, freshness và fail-closed trước inference."
 pubDate: 2026-09-05
 category: "engineering"
-image: "/blog/context-firewall/hero.png"
+image: "/blog/context-firewall/hero.webp"
 lang: "vi"
 translationKey: "context-firewall-redaction-tokenization-lineage"
 draft: false
@@ -38,7 +38,7 @@ Một mental model thực tế là xem mỗi context item như một data object
 
 Một pipeline production có thể gồm năm bước. Tên gọi không quan trọng bằng invariant: mọi item được accept phải mang theo ngữ cảnh quyết định, còn mọi item bị reject phải observable nhưng không được làm lộ payload bị từ chối.
 
-![Minh họa ba bước từ raw record đi qua filter và tokenization để trở thành model context an toàn](/blog/context-firewall/redaction-tokenization.png)
+![Minh họa ba bước từ raw record đi qua filter và tokenization để trở thành model context an toàn](/blog/context-firewall/redaction-tokenization.webp)
 
 ### 1. Classify trước khi retrieve rộng
 
@@ -123,7 +123,7 @@ Prompt gửi cho model không cần chứa toàn bộ chi tiết audit, nhưng h
 
 Nếu dùng cho audit, manifest nên append-only hoặc content-addressed. Nó không nên copy rejected payload vào một log mới. Một denial record an toàn có thể chứa source reference ổn định, rule code, policy version và hash của field identifier mà không lưu raw value nhạy cảm.
 
-![Minh họa source record nối qua lineage ledger để tạo context manifest có purpose, tenant, transformation và expiry](/blog/context-firewall/lineage-manifest.png)
+![Minh họa source record nối qua lineage ledger để tạo context manifest có purpose, tenant, transformation và expiry](/blog/context-firewall/lineage-manifest.webp)
 
 ## Purpose cũng là security boundary
 
@@ -143,7 +143,7 @@ Item stale không nhất thiết phải biến mất mà không có lời giải
 
 “Fail closed” không có nghĩa là trả về một prompt rỗng và để người dùng tự đoán. Nó có nghĩa là từ chối inclusion không an toàn nhưng vẫn trả về đủ structured information để workflow recover.
 
-![Ba panel minh họa chặn cross-tenant, context hết hạn và đường fail-closed sạch dẫn tới human review](/blog/context-firewall/failure-modes.png)
+![Ba panel minh họa chặn cross-tenant, context hết hạn và đường fail-closed sạch dẫn tới human review](/blog/context-firewall/failure-modes.webp)
 
 Một response envelope hữu ích có thể như sau:
 

@@ -3,13 +3,13 @@ title: "AI Code Supply Chains: Provenance, SBOMs, and Policy Gates for Agent-Gen
 description: "AI coding agents can accelerate delivery without making the software supply chain trustworthy by default. This practical guide designs a chain-of-custody from agent change to signed build, SBOM, and release policy."
 pubDate: 2026-04-09
 category: "security"
-image: "/blog/ai-code-supply-chain-policy-gates/ai-code-supply-chain-cover.png"
+image: "/blog/ai-code-supply-chain-policy-gates/ai-code-supply-chain-cover.webp"
 lang: "en"
 translationKey: "ai-code-supply-chain-policy-gates"
 draft: false
 ---
 
-![A hand-drawn software supply chain showing an AI coding agent, source commit, SBOM inspection, signed provenance, and a production release gate](/blog/ai-code-supply-chain-policy-gates/ai-code-supply-chain-cover.png)
+![A hand-drawn software supply chain showing an AI coding agent, source commit, SBOM inspection, signed provenance, and a production release gate](/blog/ai-code-supply-chain-policy-gates/ai-code-supply-chain-cover.webp)
 
 AI coding agents have changed the shape of a software change. A developer can describe a feature, let an agent inspect a repository, ask it to modify several files, run tests, and open a pull request before the coffee gets cold. The productivity gain is real. The security assumption is not.
 
@@ -39,7 +39,7 @@ The distinction is healthy. It prevents a signed artifact from becoming a magica
 
 The practical supply chain is a sequence of evidence-producing transitions. Each transition should either create a durable record or deliberately state why no record is retained. The exact tools can vary; the contract should not.
 
-![A hand-drawn chain-of-custody map from AI agent change through reviewed diff, SBOM and scans, signed build, and release gate](/blog/ai-code-supply-chain-policy-gates/supply-chain-map.png)
+![A hand-drawn chain-of-custody map from AI agent change through reviewed diff, SBOM and scans, signed build, and release gate](/blog/ai-code-supply-chain-policy-gates/supply-chain-map.webp)
 
 A minimal chain looks like this:
 
@@ -84,7 +84,7 @@ A software bill of materials answers, “What is inside this artifact?” It is 
 
 For an AI-generated change, the SBOM should be created from the build output or the exact dependency lock used to produce it. Generating an SBOM from an unbuilt working tree can create a mismatch between what was inspected and what was shipped. The artifact digest is the join key that keeps the evidence connected.
 
-![A hand-drawn evidence card with source, build, artifact, commit SHA, agent change ID, dependency lock, builder, timestamp, artifact digest, and an SBOM document](/blog/ai-code-supply-chain-policy-gates/provenance-sbom-evidence.png)
+![A hand-drawn evidence card with source, build, artifact, commit SHA, agent change ID, dependency lock, builder, timestamp, artifact digest, and an SBOM document](/blog/ai-code-supply-chain-policy-gates/provenance-sbom-evidence.webp)
 
 A useful evidence envelope combines source and artifact views:
 
@@ -117,7 +117,7 @@ Evidence is valuable only when a system can act on it. A policy gate is the poin
 
 The gate should be deterministic where possible. “The agent sounded confident” is not a control. “The artifact has a valid signature, its provenance points to an allowed builder, no critical vulnerability exceeds the exception policy, the required review exists, and the SBOM is attached” is a control that can be tested.
 
-![A hand-drawn release pipeline with DIFF, TEST, ATTEST, and PROMOTE stations, including a BLOCK barrier for failed checks](/blog/ai-code-supply-chain-policy-gates/policy-gate-pipeline.png)
+![A hand-drawn release pipeline with DIFF, TEST, ATTEST, and PROMOTE stations, including a BLOCK barrier for failed checks](/blog/ai-code-supply-chain-policy-gates/policy-gate-pipeline.webp)
 
 One possible policy shape is:
 

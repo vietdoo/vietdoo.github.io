@@ -3,13 +3,13 @@ title: "Từ RAG Chunk đến Câu trả lời có trích dẫn: Xây dựng Pro
 description: "Một lớp provenance thực tế kết nối source được retrieve, các bước biến đổi, claim và citation để AI answer có thể được kiểm tra thay vì chỉ được tin."
 pubDate: 2026-05-23
 category: "engineering"
-image: "/blog/ai-output-provenance/hero.png"
+image: "/blog/ai-output-provenance/hero.webp"
 lang: "vi"
 translationKey: "ai-output-provenance-cited-answers"
 draft: false
 ---
 
-![Kỹ sư và AI robot truy nguyên một câu trả lời về các document, table và source evidence](/blog/ai-output-provenance/hero.png)
+![Kỹ sư và AI robot truy nguyên một câu trả lời về các document, table và source evidence](/blog/ai-output-provenance/hero.webp)
 
 Một RAG demo thường kết thúc bằng một câu khá yên tâm: “Câu trả lời được ground bằng document của bạn.” Câu đó có thể đúng, nhưng vẫn rất khó kiểm tra.
 
@@ -42,7 +42,7 @@ Mô hình này chi tiết hơn một trace span, nhưng không thay thế trace.
 
 Bước đầu thực tế là biểu diễn answer thành một tập các claim. Claim có thể là một sentence, một table value, một recommendation hoặc một statement về uncertainty. Mỗi claim nhận một hoặc nhiều evidence link và một status.
 
-![Provenance lineage map nối source document qua extraction và model transformation đến final claim](/blog/ai-output-provenance/lineage-map.png)
+![Provenance lineage map nối source document qua extraction và model transformation đến final claim](/blog/ai-output-provenance/lineage-map.webp)
 
 ```ts
 type Claim = {
@@ -136,7 +136,7 @@ Contract này không bắt model trở nên nhút nhát. Nó bắt interface ph�
 
 Provenance record có thể có dạng graph nhưng UI không cần phơi bày cả graph database. Citation drawer có thể show claim, source region, document version và một summary ngắn “nó được hình thành thế nào”. Với table hoặc figure, sản phẩm có thể highlight đúng region được dùng.
 
-![Provenance envelope đóng gói claim, source, transformation, timestamp và confidence thành một artifact có thể inspect](/blog/ai-output-provenance/provenance-envelope.png)
+![Provenance envelope đóng gói claim, source, transformation, timestamp và confidence thành một artifact có thể inspect](/blog/ai-output-provenance/provenance-envelope.webp)
 
 Interface nên làm ba state khác nhau rõ ràng:
 

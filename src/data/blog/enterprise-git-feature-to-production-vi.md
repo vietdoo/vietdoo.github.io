@@ -3,13 +3,13 @@ title: "Từ Feature Branch đến Production: Cách My Company Ship Feature D�
 description: "Playbook quản lý Git và release enterprise qua ví dụ thêm nút gửi email cho công dân ở bước 3 của quy trình iGate, với authorization, audit, CI/CD, canary và rollback rõ ràng."
 pubDate: 2026-08-26
 category: "architecture"
-image: "/blog/enterprise-git-feature-to-production/branch-flow.png"
+image: "/blog/enterprise-git-feature-to-production/branch-flow.webp"
 lang: "vi"
 translationKey: "enterprise-git-feature-to-production"
 draft: false
 ---
 
-![Enterprise Git workflow đưa feature gửi email cho công dân ở bước 3 iGate từ feature branch qua review, integration, release và production được kiểm chứng](/blog/enterprise-git-feature-to-production/branch-flow.png)
+![Enterprise Git workflow đưa feature gửi email cho công dân ở bước 3 iGate từ feature branch qua review, integration, release và production được kiểm chứng](/blog/enterprise-git-feature-to-production/branch-flow.webp)
 
 Ở my company, một yêu cầu feature đôi khi trông nhỏ đến mức dễ đánh giá thấp.
 
@@ -53,7 +53,7 @@ Browser button -> POST /send-email -> mail provider
 
 Browser không được tự quyết định action có được phép hay không, hồ sơ nào nằm trong scope, hoặc workflow hiện tại có phải bước 3 không. Thiết kế an toàn hơn coi browser là request surface, còn authority nằm ở backend:
 
-![Feature email ở bước 3 kiểm tra cán bộ, scope hồ sơ, workflow state, outbox event, idempotency, provider delivery và audit trail](/blog/enterprise-git-feature-to-production/email-feature-flow.png)
+![Feature email ở bước 3 kiểm tra cán bộ, scope hồ sơ, workflow state, outbox event, idempotency, provider delivery và audit trail](/blog/enterprise-git-feature-to-production/email-feature-flow.webp)
 
 ```text
 Cán bộ bấm nút
@@ -325,7 +325,7 @@ Ba từ này mô tả ba sự kiện khác nhau:
 
 Production pipeline phải làm rõ các boundary này. Một sequence điển hình:
 
-![Deployment pipeline có cổng CI, immutable artifact, staging/UAT, approval, canary hoặc rolling rollout, smoke test, metrics và rollback](/blog/enterprise-git-feature-to-production/deploy-gates.png)
+![Deployment pipeline có cổng CI, immutable artifact, staging/UAT, approval, canary hoặc rolling rollout, smoke test, metrics và rollback](/blog/enterprise-git-feature-to-production/deploy-gates.webp)
 
 ```text
 PR checks

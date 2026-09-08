@@ -3,13 +3,13 @@ title: "Chaos Engineering for AI Agents: Injecting the Failures Production Will 
 description: "A practical fault-injection playbook for AI agents: tool timeouts, provider outages, malformed responses, stale context, recovery invariants, and safe promotion gates."
 pubDate: 2026-08-31
 category: "engineering"
-image: "/blog/chaos-engineering-ai-agents/hero.jpg"
+image: "/blog/chaos-engineering-ai-agents/hero.webp"
 lang: "en"
 translationKey: "chaos-engineering-ai-agents"
 draft: false
 ---
 
-![A controlled fault signal moving through an AI-agent workflow toward a protected release gate](/blog/chaos-engineering-ai-agents/hero.jpg)
+![A controlled fault signal moving through an AI-agent workflow toward a protected release gate](/blog/chaos-engineering-ai-agents/hero.webp)
 
 A production AI agent rarely fails because the model suddenly becomes incapable of speaking English. It fails because a dependency times out after the agent has already formed a plan, a tool returns an empty page with a successful status code, a provider changes a field shape, or the context that looked current is already stale.
 
@@ -49,7 +49,7 @@ Map the workflow into boundaries where the next action can change. These are usu
 
 This matrix is more valuable than a long list of HTTP errors because it connects a fault to a decision. The same timeout is harmless for a read-only weather lookup and dangerous after a payment provider may have accepted a charge.
 
-![A fault matrix routes timeout, rate-limit, outage, malformed data, stale context, and worker restart experiments through observable agent runs](/blog/chaos-engineering-ai-agents/fault-matrix.png)
+![A fault matrix routes timeout, rate-limit, outage, malformed data, stale context, and worker restart experiments through observable agent runs](/blog/chaos-engineering-ai-agents/fault-matrix.webp)
 
 ## Define the safety envelope before injecting anything
 
@@ -64,7 +64,7 @@ A practical safety envelope has four layers:
 
 The experiment itself should be versioned. Record the agent build, model identifier, prompt and tool versions, fault profile, seed or replay input, environment, and oracle version. Without this evidence, a pass is difficult to reproduce and a failure is difficult to explain.
 
-![Synthetic data and reversible tools surround an isolated agent laboratory with a human approval gate and a hard stop](/blog/chaos-engineering-ai-agents/safety-envelope.png)
+![Synthetic data and reversible tools surround an isolated agent laboratory with a human approval gate and a hard stop](/blog/chaos-engineering-ai-agents/safety-envelope.webp)
 
 ## Fault profiles should model semantics, not only transport errors
 
@@ -131,7 +131,7 @@ A fluent recovery message is not proof of recovery. Each experiment needs a dete
 
 ReliabilityBench’s action metamorphic relations provide a useful pattern: after a fault or an equivalent perturbation, correctness can be determined by end-state equivalence rather than identical wording.[1] For example, an agent may say “I could not complete the reservation” or “The reservation remains pending while inventory is refreshed.” Both can be acceptable if the state is pending, no duplicate reservation exists, and the user receives an honest next step.
 
-![State snapshots, invariant checks, evidence capture, and a release gate verify whether an agent really recovered after a fault](/blog/chaos-engineering-ai-agents/verification-oracle.png)
+![State snapshots, invariant checks, evidence capture, and a release gate verify whether an agent really recovered after a fault](/blog/chaos-engineering-ai-agents/verification-oracle.webp)
 
 A minimal oracle record might look like this:
 

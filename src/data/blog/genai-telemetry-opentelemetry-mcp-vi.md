@@ -3,13 +3,13 @@ title: "Telemetry cho GenAI có thể di chuyển: OpenTelemetry Semantics cho A
 description: "Cách thiết kế trace vendor-neutral cho model call, retrieval, tool use, MCP session, privacy control và cost accounting mà không bị khóa vào một provider."
 pubDate: 2026-07-28
 category: "engineering"
-image: "/blog/genai-telemetry-opentelemetry-mcp/hero.png"
+image: "/blog/genai-telemetry-opentelemetry-mcp/hero.webp"
 lang: "vi"
 translationKey: "genai-telemetry-opentelemetry-mcp"
 draft: false
 ---
 
-![Minh họa nét vẽ tay về bản đồ observability gồm AI agent, MCP server, model provider, retrieval store và telemetry trace portable](/blog/genai-telemetry-opentelemetry-mcp/hero.png)
+![Minh họa nét vẽ tay về bản đồ observability gồm AI agent, MCP server, model provider, retrieval store và telemetry trace portable](/blog/genai-telemetry-opentelemetry-mcp/hero.webp)
 
 Trace AI đầu tiên tôi nhìn thấy trong production đầy đủ về mặt kỹ thuật nhưng gần như vô dụng khi vận hành.
 
@@ -41,7 +41,7 @@ Mỗi boundary có một câu hỏi khác nhau. Model span hỏi model và param
 
 Dashboard chỉ hiện “LLM latency” không thể trả lời các câu đó. Trace hiện mọi prompt ở plaintext có thể trả lời, nhưng lại tạo data leak. Bài toán engineering là ghi đủ structure để debug behavior mà không copy toàn bộ thế giới vào logging system.
 
-![Minh họa nét vẽ tay về execution graph tách model, retrieval, MCP, tool, policy và outcome span](/blog/genai-telemetry-opentelemetry-mcp/execution-graph.png)
+![Minh họa nét vẽ tay về execution graph tách model, retrieval, MCP, tool, policy và outcome span](/blog/genai-telemetry-opentelemetry-mcp/execution-graph.webp)
 
 | Boundary    | Câu hỏi cốt lõi                      | Signal hữu ích                                         |
 | ----------- | ------------------------------------ | ------------------------------------------------------ |
@@ -131,7 +131,7 @@ Manifest trả lời document và score nào đã tham gia. Privileged investiga
 
 Đây cũng là nơi provenance và temporal retrieval trở nên hữu ích về vận hành. Nếu answer phải valid tại một historical date, trace nên lưu interval được suy ra và validity interval của document được chọn. Nếu source stale hoặc superseded, trace phải làm điều đó nhìn thấy được.
 
-![Minh họa nét vẽ tay về evidence manifest gồm document ID, score, time interval và redaction state mà không lộ raw content](/blog/genai-telemetry-opentelemetry-mcp/evidence-manifest.png)
+![Minh họa nét vẽ tay về evidence manifest gồm document ID, score, time interval và redaction state mà không lộ raw content](/blog/genai-telemetry-opentelemetry-mcp/evidence-manifest.webp)
 
 ## Nối cost và latency với quality
 

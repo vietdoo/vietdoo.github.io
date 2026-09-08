@@ -3,13 +3,13 @@ title: "When the Model Changes: Behavioral Contracts and Safe Upgrades for Produ
 description: "A production playbook for upgrading AI models with behavioral contracts, shadow traffic, semantic diffs, canary promotion, rollback, and post-release drift detection."
 pubDate: 2026-02-18
 category: "engineering"
-image: "/blog/model-upgrade/hero.png"
+image: "/blog/model-upgrade/hero.webp"
 lang: "en"
 translationKey: "model-upgrade-safe-upgrades"
 draft: false
 ---
 
-![Two AI model versions connected by checkpoints and a guarded release gate](/blog/model-upgrade/hero.png)
+![Two AI model versions connected by checkpoints and a guarded release gate](/blog/model-upgrade/hero.webp)
 
 A model upgrade often arrives as a one-line configuration change. Replace `model-a` with `model-b`, run the deployment, and watch the dashboard turn green. The diff may be tiny, but the behavior behind it is not. A new model can change how an agent interprets intent, chooses tools, formats arguments, refuses requests, cites evidence, spends tokens, or recovers from a failed step.
 
@@ -82,7 +82,7 @@ review:
 
 The numbers above are examples, not universal thresholds. A support chatbot, a code agent, and a clinical workflow should not share the same tolerances. The important design choice is that the threshold is explicit, owned, and reviewable.
 
-![A behavioral contract matrix comparing a blue baseline model with an amber candidate model](/blog/model-upgrade/contract-matrix.png)
+![A behavioral contract matrix comparing a blue baseline model with an amber candidate model](/blog/model-upgrade/contract-matrix.webp)
 
 ## Compare behavior, not raw text
 
@@ -145,7 +145,7 @@ Offline tests are necessary but narrow. They usually contain carefully selected 
 
 Shadow traffic provides a bridge. The production system sends a copy of an eligible request to the candidate, but only the baseline is allowed to produce the user-visible response or execute a side effect. The candidate runs in a sandboxed path with tools replaced by read-only simulators, recorded responses, or no-op adapters.
 
-![A stream of requests split between a blue production model and an amber shadow model before a guarded canary bridge](/blog/model-upgrade/shadow-canary.png)
+![A stream of requests split between a blue production model and an amber shadow model before a guarded canary bridge](/blog/model-upgrade/shadow-canary.webp)
 
 Shadowing sounds simple until privacy and determinism enter the picture. The candidate may see personal data, secrets in tool results, or content that the team is not allowed to retain. The comparison pipeline should therefore define a data policy before collecting shadow traces:
 
@@ -208,7 +208,7 @@ Post-release monitoring should therefore compare the candidate against a baselin
 
 NIST’s work on evaluation probes points in the same direction: automated verifiers can be integrated directly into an agent workflow, and their results can be accumulated into a machine-readable audit trail that connects decisions to supporting evidence.[2] The important idea is not a particular judge model. It is the feedback loop: the release system continues checking the contract after the deployment ceremony is over.
 
-![A post-release drift and rollback loop connecting quality signals, human review, and a stable baseline model](/blog/model-upgrade/drift-rollback.png)
+![A post-release drift and rollback loop connecting quality signals, human review, and a stable baseline model](/blog/model-upgrade/drift-rollback.webp)
 
 When drift appears, avoid automatically blaming the model. A change in retrieval coverage, user mix, tool availability, or policy configuration may create the same symptom. Preserve the comparison record so an incident review can ask: **which observable behavior moved, when did it move, and which dependency changed at the same time?**
 

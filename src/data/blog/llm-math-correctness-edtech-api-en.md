@@ -6,7 +6,7 @@ category: "engineering"
 lang: "en"
 translationKey: "llm-math-correctness-edtech-api"
 draft: false
-image: "/blog/llm-math-correctness-edtech/hero.png"
+image: "/blog/llm-math-correctness-edtech/hero.webp"
 ---
 
 The most dangerous output from an AI math tutor is not an obviously absurd answer. It is a polished explanation that looks like something a teacher would say, contains one invalid algebraic step, and gives a student enough confidence to remember the mistake.
@@ -15,7 +15,7 @@ That failure mode changes the engineering question. The question is not whether 
 
 An LLM API is a useful generator, paraphraser, and tutor interface. It is not a mathematical source of truth. Research on LLM tutoring has found that responses can be aligned with pedagogical best practices while still containing frequent inaccuracies, and that plausible errors can create misconceptions for learners.[1](https://arxiv.org/html/2503.16460v1) Research on stepwise verification similarly finds that identifying the first incorrect step in a student solution is difficult for current models, while an independent verifier can improve the correctness and targeting of feedback.[2](https://aclanthology.org/2024.emnlp-main.478/)
 
-![An LLM math candidate enters independent verification gates before an EdTech release can publish it](/blog/llm-math-correctness-edtech/hero.png)
+![An LLM math candidate enters independent verification gates before an EdTech release can publish it](/blog/llm-math-correctness-edtech/hero.webp)
 
 > **The thesis:** Let the LLM propose mathematical content, but let deterministic computation, symbolic reasoning, curriculum rules, and human review decide whether that content is publishable.
 
@@ -106,7 +106,7 @@ Publish, monitor, or quarantine
 
 The pipeline should fail closed. If the solver times out, if a required assumption is missing, or if a checker cannot determine equivalence, the item should not silently pass. A safe fallback is either regeneration with a narrower task, a simpler item type, or a human review queue.
 
-![A structured math contract is checked by parser, symbolic solver, domain invariants, and pedagogical rules](/blog/llm-math-correctness-edtech/structured-math-contract.png)
+![A structured math contract is checked by parser, symbolic solver, domain invariants, and pedagogical rules](/blog/llm-math-correctness-edtech/structured-math-contract.webp)
 
 ## Layer one: parse and canonicalize before solving
 
@@ -175,7 +175,7 @@ A metamorphic test can rename variables, reorder irrelevant facts, scale all len
 
 Adversarial tests target the places where language models are most likely to sound confident: zero denominators, negative quantities, boundary probabilities, repeated units, nested fractions, large numbers, ambiguous pronouns, and problems whose natural-language assumptions are inconsistent.
 
-![Metamorphic and adversarial cases probe boundary values, equivalent forms, units, and ambiguous assumptions before publication](/blog/llm-math-correctness-edtech/adversarial-tests.png)
+![Metamorphic and adversarial cases probe boundary values, equivalent forms, units, and ambiguous assumptions before publication](/blog/llm-math-correctness-edtech/adversarial-tests.webp)
 
 Do not report only the average pass rate. Track the failure taxonomy. A generator with 98% answer validity but 12% unit errors may be unsafe for a science curriculum. A tutor with 95% correct final answers but poor first-error localization may give harmful feedback to students who made a near-correct attempt.
 
@@ -228,7 +228,7 @@ rollout:
     - quality_regression
 ```
 
-![A verification-first release loop connects generation, independent checks, pedagogy review, publication, monitoring, and quarantine](/blog/llm-math-correctness-edtech/release-loop.png)
+![A verification-first release loop connects generation, independent checks, pedagogy review, publication, monitoring, and quarantine](/blog/llm-math-correctness-edtech/release-loop.webp)
 
 The thresholds should be calibrated using the product's own benchmark, not copied from another team. For high-stakes assessment or answer keys, a single invalid item may be unacceptable even if the batch average is excellent. For low-risk draft generation, the product may accept a review queue rather than blocking every candidate.
 

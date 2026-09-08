@@ -3,13 +3,13 @@ title: "Identity của AI Agent không phải User ID: Thiết kế Delegation, 
 description: "Hướng dẫn production để tách user, client và AI agent identity, thực thi delegated authority bằng token giới hạn, giữ attribution xuyên service và thu hồi quyền an toàn."
 pubDate: 2026-06-18
 category: "security"
-image: "/blog/agent-identity-delegation-revocation/hero-playwright.png"
+image: "/blog/agent-identity-delegation-revocation/hero-playwright.webp"
 lang: "vi"
 translationKey: "agent-identity-delegation-revocation"
 draft: false
 ---
 
-![Sơ đồ identity triangle kết nối user, client, AI agent, authorization server và protected resource](/blog/agent-identity-delegation-revocation/hero-playwright.png)
+![Sơ đồ identity triangle kết nối user, client, AI agent, authorization server và protected resource](/blog/agent-identity-delegation-revocation/hero-playwright.webp)
 
 Một AI agent không nên biến thành user ID chỉ vì người dùng vừa bấm “Run”. Đây là shortcut rất dễ chọn: ứng dụng đã có session, downstream API đã nhận bearer token, và demo đầu tiên chạy được mà không cần thiết kế thêm identity model. Vấn đề xuất hiện khi agent phải diễn giải ngôn ngữ tự nhiên, gọi nhiều tool và tiếp tục làm việc sau khi người dùng đã rời mắt khỏi màn hình.
 
@@ -70,7 +70,7 @@ Effective authority =
 
 Giả sử một engineer có quyền đọc deployment, rollback release và xoá cloud resource. Deployment assistant có thể chỉ được cấu hình cho post-deploy check dạng read-only. Authority của user rộng, nhưng role của agent hẹp. Token hiệu lực chỉ nên chứa phần giao nhau. Ngược lại, nếu role của agent cho phép rollback nhưng role hiện tại của user không cho phép, call vẫn phải bị từ chối.
 
-![Phần giao của user permission, agent role, task scope, audience và environment](/blog/agent-identity-delegation-revocation/intersection-authority-playwright.png)
+![Phần giao của user permission, agent role, task scope, audience và environment](/blog/agent-identity-delegation-revocation/intersection-authority-playwright.webp)
 
 WorkOS gọi đây là intersection rule: permission của user là một ceiling, không phải toàn bộ grant. Scope riêng của agent là ceiling thứ hai.[4] Cách này ngăn failure mode phổ biến trong đó một nhân viên có quyền cao vô tình cấp cho general-purpose agent khả năng thực hiện mọi privileged action mà nhân viên đó có thể làm.
 
@@ -131,7 +131,7 @@ actor_token_type=urn:ietf:params:oauth:token-type:jwt
 
 Đây là ví dụ minh hoạ, không phải cấu hình copy-paste cho mọi provider. Authorization server phải validate client, subject token, actor token, audience, task scope và policy cục bộ trước khi cấp token. Session credential gốc của user không nên trở thành tấm vé universal cho mọi tool.
 
-![Flow bốn bước từ user delegation tới resource API enforcement](/blog/agent-identity-delegation-revocation/token-exchange-playwright.png)
+![Flow bốn bước từ user delegation tới resource API enforcement](/blog/agent-identity-delegation-revocation/token-exchange-playwright.webp)
 
 
 Token hoặc authorization context được cấp nên làm mối quan hệ có thể inspect. Tên claim cụ thể phụ thuộc provider và profile, nhưng semantics nên gần như sau:
@@ -199,7 +199,7 @@ Token cũng không phải hệ thống revocation. Expiry ngắn giới hạn da
 
 Revocation nên được model như một state transition, không phải một nút admin bị giấu trong identity console. Authorization service và downstream resource boundary cần trả lời rõ câu hỏi: “Delegation này còn hợp lệ ngay lúc này không?”
 
-![Timeline revocation gồm task cancel, role change, token expiry, policy deny và safe stop](/blog/agent-identity-delegation-revocation/revocation-timeline-playwright.png)
+![Timeline revocation gồm task cancel, role change, token expiry, policy deny và safe stop](/blog/agent-identity-delegation-revocation/revocation-timeline-playwright.webp)
 
 Một thiết kế vững thường kết hợp nhiều control:
 

@@ -3,13 +3,13 @@ title: "Beyond Tool Calls: Thiết kế Agent-to-Agent Collaboration đáng tin 
 description: "Góc nhìn system design thực tế về Agent Card, task lifecycle, capability negotiation, streaming, push update và trust boundary trong hệ thống agent-to-agent."
 pubDate: 2026-05-26
 category: "architecture"
-image: "/blog/a2a-agent-interoperability/hero.png"
+image: "/blog/a2a-agent-interoperability/hero.webp"
 lang: "vi"
 translationKey: "a2a-agent-interoperability"
 draft: false
 ---
 
-![Client agent ủy quyền một task có giới hạn cho remote agent qua ranh giới giao thức A2A](/blog/a2a-agent-interoperability/hero.png)
+![Client agent ủy quyền một task có giới hạn cho remote agent qua ranh giới giao thức A2A](/blog/a2a-agent-interoperability/hero.webp)
 
 Trước đây, tôi thường mô tả mọi tích hợp AI bằng cụm từ **tool call**. Đây là một cách đơn giản hóa hữu ích: model chọn một function, function trả dữ liệu, rồi model tiếp tục suy luận. Nhưng hệ thống lớn dần lên. Một customer-support agent cần gọi specialist của team khác. Một research agent cần nhờ compliance agent kiểm tra. Một scheduling agent cần yêu cầu booking agent giữ chỗ trong vài phút, trong lúc con người xác nhận thông tin.
 
@@ -39,7 +39,7 @@ Một cách tóm tắt hữu ích là:
 
 Sự khác biệt đó làm thay đổi kiến trúc. Agent gọi trở thành client. Remote agent trở thành server với policy và runtime riêng. Message là intent, nhưng task là một protocol object có thể sống lâu hơn một request. Artifact là kết quả của công việc, không chỉ là return value.
 
-![Luồng discovery và delegation biến Agent Card thành capability contract trước khi task được gửi đi](/blog/a2a-agent-interoperability/agent-card.png)
+![Luồng discovery và delegation biến Agent Card thành capability contract trước khi task được gửi đi](/blog/a2a-agent-interoperability/agent-card.webp)
 
 _Hình 1. Discovery phải thu hẹp ranh giới delegation trước khi client gửi task._
 
@@ -79,7 +79,7 @@ Bước thứ sáu quan trọng hơn vẻ bề ngoài. Remote agent không cần
 
 Thay đổi thiết kế quan trọng nhất là ngừng xem delegated request như một response đơn lẻ. Remote agent có thể trả về một **Task**, một object có state và đi qua lifecycle được định nghĩa. Từ vựng chính xác của protocol không quan trọng bằng kỷ luật engineering phía sau: client cần biết công việc đã được accept, đang chạy, cần thêm input, hoàn tất, thất bại hay đã bị hủy.[2]
 
-![Task đi qua các trạng thái rõ ràng thay vì bị biểu diễn bằng một response mơ hồ](/blog/a2a-agent-interoperability/task-lifecycle.png)
+![Task đi qua các trạng thái rõ ràng thay vì bị biểu diễn bằng một response mơ hồ](/blog/a2a-agent-interoperability/task-lifecycle.webp)
 
 _Hình 2. Task state rõ ràng giúp client phân biệt progress, failure, cancellation và yêu cầu thêm input._
 
@@ -152,7 +152,7 @@ Agent có thể nói rằng nó đã hoàn tất booking, revoke token hoặc đ
 
 Khi phần cơ bản đã chạy, team thường phát hiện protocol không phải phần khó nhất. Phần khó là vận hành một boundary nơi hai autonomous system đều có thể hợp lý ở local level nhưng vẫn tạo ra kết quả không an toàn ở global level.
 
-![Production path kiểm tra capability, authorization, retry safety, bounded work và traceability trước delegation](/blog/a2a-agent-interoperability/reliability-gates.png)
+![Production path kiểm tra capability, authorization, retry safety, bounded work và traceability trước delegation](/blog/a2a-agent-interoperability/reliability-gates.webp)
 
 _Hình 3. Reliability là chuỗi gate trước delegation, không phải một prompt pass/fail duy nhất._
 

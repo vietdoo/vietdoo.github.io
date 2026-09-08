@@ -3,13 +3,13 @@ title: "Tư duy Founder trong Lập trình: Xây dựng Side-Project từ A-Z v�
 description: "Góc nhìn thực chiến từ Founder VNDO: Cách lựa chọn Tech Stack tinh gọn, thiết kế kiến trúc hệ thống thực dụng, quản lý thời gian và đưa sản phẩm lên Production."
 pubDate: 2026-01-27
 category: "engineering"
-image: "/blog/side-project-founder-mindset/hero.jpg"
+image: "/blog/side-project-founder-mindset/hero.webp"
 lang: "vi"
 translationKey: "side-project-founder-mindset"
 draft: false
 ---
 
-![Tư duy Founder trong Lập trình Side Project](/blog/side-project-founder-mindset/hero.jpg)
+![Tư duy Founder trong Lập trình Side Project](/blog/side-project-founder-mindset/hero.webp)
 
 > **TL;DR** — Đã bao giờ bạn bắt đầu một side-project hoành tráng nhưng dừng lại sau 2 tuần vì kiệt sức hoặc sa lầy vào việc chọn thư viện, thiết kế Microservices cho 0 người dùng? Bài viết này đúc kết góc nhìn thực chiến từ Founder @ VNDO: cách chuyển từ tư duy *"Code cho vui"* sang tư duy *"Founder sản phẩm"*, xây dựng Tech Stack tối giản (Astro, SolidJS, FastAPI, Docker), đưa ứng dụng lên Production với chi phí 0$ và quản lý thời gian hiệu quả cho một Full-time Engineer.
 
@@ -32,7 +32,7 @@ Tư duy Founder Product : Problem ──▶ Core Feature (MVP) ──▶ Product
 
 Một sản phẩm chạy thực tế với 10 dòng code rác vẫn có giá trị hơn một hệ thống microservices chưa từng được deploy.
 
-![Over-Engineering vs MVP Mindset](/blog/side-project-founder-mindset/over-engineering-vs-mvp.jpg)
+![Over-Engineering vs MVP Mindset](/blog/side-project-founder-mindset/over-engineering-vs-mvp.webp)
 
 ---
 
@@ -52,7 +52,7 @@ Một sản phẩm chạy thực tế với 10 dòng code rác vẫn có giá tr
 * **Frontend**: Vercel / Cloudflare Pages (Free, Unlimited Traffic, Edge CDN).
 * **Backend API**: Cloudflare Workers (Serverless) hoặc VPS giá rẻ ($3 - $5/tháng trên Hetzner/DigitalOcean) dùng Docker Compose + Traefik/Nginx reverse proxy.
 
-![The Lean Tech Stack Architecture](/blog/side-project-founder-mindset/lean-tech-stack.jpg)
+![The Lean Tech Stack Architecture](/blog/side-project-founder-mindset/lean-tech-stack.webp)
 
 ---
 
@@ -85,7 +85,7 @@ Một sản phẩm chạy thực tế với 10 dòng code rác vẫn có giá tr
 2. **Stateless Backend**: Giữ API Server không lưu trạng thái (Stateless) để dễ dàng restart, deploy lại mà không mất dữ liệu.
 3. **Environment Isolation**: Sử dụng `.env` chuẩn chỉnh cho Local và Production.
 
-![Pragmatic Infrastructure Architecture](/blog/side-project-founder-mindset/pragmatic-architecture.jpg)
+![Pragmatic Infrastructure Architecture](/blog/side-project-founder-mindset/pragmatic-architecture.webp)
 
 ---
 
@@ -103,7 +103,7 @@ Chia nhỏ công việc thành các Micro-tasks có thể hoàn thành trong 30�
 * **AI Pair Programming**: Sử dụng các AI Agent/Assistant chuyên dụng để sinh boilerplate code, tạo unit test, và viết tài liệu API tự động.
 * **Git Auto-Commit & CI/CD**: Thiết lập GitHub Actions tự động check lints và deploy lên Server mỗi khi push code lên nhánh `main`.
 
-![AI Pair Programming Workspace](/blog/side-project-founder-mindset/ai-pair-programming.jpg)
+![AI Pair Programming Workspace](/blog/side-project-founder-mindset/ai-pair-programming.webp)
 
 ---
 

@@ -3,13 +3,13 @@ title: "State-Aware Browser Agents: Verifying the World Before Every Click"
 description: "A production design for browser agents that treat the DOM, URL, account, visible text, and page version as changing state instead of trusting yesterday's screenshot before taking an irreversible action."
 pubDate: 2026-06-20
 category: "engineering"
-image: "/blog/state-aware-browser-agents/hero.png"
+image: "/blog/state-aware-browser-agents/hero.webp"
 lang: "en"
 translationKey: "state-aware-browser-agents"
 draft: false
 ---
 
-![A hand-drawn browser agent observes a changing page, revalidates its target, and asks for confirmation before acting](/blog/state-aware-browser-agents/hero.png)
+![A hand-drawn browser agent observes a changing page, revalidates its target, and asks for confirmation before acting](/blog/state-aware-browser-agents/hero.webp)
 
 The browser agent was not confused by the button. It was confused by time.
 
@@ -66,7 +66,7 @@ type StateFingerprint = {
 
 The fingerprint is not a security boundary by itself. It is a revalidation input. The execution layer still needs authorization and an action policy. A matching fingerprint says “the observed target still looks like the intended target”; it does not say “the agent is allowed to submit this form.”
 
-![A browser state fingerprint compares URL, DOM, text, account, time, and version before allowing a click](/blog/state-aware-browser-agents/state-fingerprint.png)
+![A browser state fingerprint compares URL, DOM, text, account, time, and version before allowing a click](/blog/state-aware-browser-agents/state-fingerprint.webp)
 
 ## Locate by intent, not by position
 
@@ -109,7 +109,7 @@ Browser agents are good at exploration: opening a page, reading a policy, compar
 
 Classify actions by their effect on the world. Reading a page is usually reversible. Editing a draft may be recoverable. Sending an email, submitting a payment, deleting a record, or changing access is not. The browser agent should move through an explicit boundary before the irreversible group.
 
-![Browser actions are divided into reversible exploration and irreversible mutation with a confirmation gate](/blog/state-aware-browser-agents/action-boundaries.png)
+![Browser actions are divided into reversible exploration and irreversible mutation with a confirmation gate](/blog/state-aware-browser-agents/action-boundaries.webp)
 
 | Action class | Examples | Default control |
 |---|---|---|
@@ -159,7 +159,7 @@ function needsRevalidation(
 
 When the fingerprint does not match, the agent has three tempting options: click anyway, search for a similar target, or ask the model to improvise. All three can be acceptable only inside a bounded recovery policy. For irreversible actions, the default should be stop, re-observe, and re-plan.
 
-![A browser-agent recovery loop detects stale state, stops, re-observes, re-plans, confirms, and retries or aborts](/blog/state-aware-browser-agents/recovery-loop.png)
+![A browser-agent recovery loop detects stale state, stops, re-observes, re-plans, confirms, and retries or aborts](/blog/state-aware-browser-agents/recovery-loop.webp)
 
 The recovery loop must not silently reuse the old plan. A new page may show a different account, a different price, or a different object. Re-planning from the new state is a new decision. If the system cannot explain why the new target is equivalent to the old intent, it should ask the user or abort.
 

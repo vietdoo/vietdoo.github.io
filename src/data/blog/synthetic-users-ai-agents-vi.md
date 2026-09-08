@@ -3,13 +3,13 @@ title: "Synthetic User cho AI Agent: Sinh Scenario mà không làm rò rỉ Eval
 description: "Synthetic user giúp mở rộng kiểm thử end-to-end cho AI agent, nhưng simulator được huấn luyện từ answer key có thể khiến evaluation trông tốt hơn thực tế. Playbook production này trình bày grounded behavior, scenario factory, held-out partition, leakage control, fidelity check và continuous evaluation."
 pubDate: 2026-06-19
 category: "engineering"
-image: "/blog/synthetic-users-ai-agents/hero.png"
+image: "/blog/synthetic-users-ai-agents/hero.webp"
 lang: "vi"
 translationKey: "synthetic-users-ai-agents"
 draft: false
 ---
 
-![Scenario factory tạo nhiều agent task khác nhau nhưng giữ locked evaluation set sau một lớp bảo vệ](/blog/synthetic-users-ai-agents/hero.png)
+![Scenario factory tạo nhiều agent task khác nhau nhưng giữ locked evaluation set sau một lớp bảo vệ](/blog/synthetic-users-ai-agents/hero.webp)
 
 Tôi từng thấy một agent vượt qua evaluation suite thuyết phục đến mức cả team gần như promote model mới ngay trong buổi chiều hôm đó. Dashboard xanh. User simulator nghe có vẻ kiên nhẫn, tool call hợp lệ, còn final answer khớp với reference output.
 
@@ -110,7 +110,7 @@ Ví dụ, “frustrated user” một mình không phải scenario dimension có
 
 Hãy generate structured state trước, rồi render initial user turn. Nếu LLM viết state và conversation trong cùng một pass, nó thường tự sửa contradiction bằng cách bịa fact. Deterministic validator nên reject scenario khi user goal, available facts, policy và expected invariant không khớp.
 
-![Scenario factory tách stable task invariant khỏi các variation có kiểm soát về user, world, policy và tool](/blog/synthetic-users-ai-agents/scenario-factory.png)
+![Scenario factory tách stable task invariant khỏi các variation có kiểm soát về user, world, policy và tool](/blog/synthetic-users-ai-agents/scenario-factory.webp)
 
 ## Ground user simulator bằng behavior, nhưng không copy test
 
@@ -175,7 +175,7 @@ scenario source families
                                        final report
 ```
 
-![Evaluation firewall giữ generator và development artifact cách xa locked test set cùng evaluator-only annotation](/blog/synthetic-users-ai-agents/split-and-lock.png)
+![Evaluation firewall giữ generator và development artifact cách xa locked test set cùng evaluator-only annotation](/blog/synthetic-users-ai-agents/split-and-lock.webp)
 
 Một partitioning policy thực tế có thể như sau:
 
@@ -309,7 +309,7 @@ Một safe update loop có thể như sau:
 
 Locked set nên stable đủ lâu để so sánh release, nhưng không tĩnh đến mức team memorise nó. Hãy rotate shadow set từ source family mới và giữ rotation process độc lập với release score. Fresh scenario chưa đủ trusted vẫn hữu ích như drift signal mà chưa cần trở thành pass/fail gate chính thức.
 
-![Continuous evaluation loop đưa production pattern đã redact vào development và shadow set trong khi bảo vệ locked release gate](/blog/synthetic-users-ai-agents/fidelity-loop.png)
+![Continuous evaluation loop đưa production pattern đã redact vào development và shadow set trong khi bảo vệ locked release gate](/blog/synthetic-users-ai-agents/fidelity-loop.webp)
 
 ## Rollout plan cho team nhỏ
 

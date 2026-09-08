@@ -3,13 +3,13 @@ title: "Failover đa mô hình không phải Route Flapping: Xoay Provider, Ph�
 description: "Hướng dẫn production về xoay tua AI model và provider mà không biến fallback thành retry storm, đứt tool contract, mất state hội thoại hoặc suy giảm chất lượng âm thầm."
 pubDate: 2026-08-19
 category: "engineering"
-image: "/blog/provider-rotation/hero.png"
+image: "/blog/provider-rotation/hero.webp"
 lang: "vi"
 translationKey: "provider-rotation-multi-model-failover"
 draft: false
 ---
 
-![Bảng whiteboard vẽ tay mô tả nhiều AI provider, các model pool, circuit breaker, retry budget và đường failover có giữ state](/blog/provider-rotation/hero.png)
+![Bảng whiteboard vẽ tay mô tả nhiều AI provider, các model pool, circuit breaker, retry budget và đường failover có giữ state](/blog/provider-rotation/hero.webp)
 
 Tôi từng chứng kiến một hệ thống AI trông hoàn toàn khỏe mạnh nhưng làm mất cả cuộc hội thoại mà không hề trả về lỗi 5xx. Provider chính chậm lại, gateway chuyển request sang backup, và backup trả về HTTP 200. Dashboard báo availability tốt. Người dùng thì thấy trợ lý quên mất sáu lượt trao đổi trước đó.
 
@@ -42,7 +42,7 @@ OpenRouter cũng tách hai lớp này: provider routing cố gắng phục vụ 
 
 Sai lầm phổ biến là nhét cả năm quyết định vào một mảng `fallbacks: [...]`. Mảng đó có thể tiện, nhưng không phải reliability policy. Một route phải giải thích được candidate đủ điều kiện vì sao, lỗi nào kích hoạt transition, và invariant nào phải còn đúng sau transition.
 
-![Minh họa vẽ tay so sánh provider rotation, giữ nguyên model capability, với model fallback, chỉ đổi capability khi thực sự cần](/blog/provider-rotation/provider-pools.png)
+![Minh họa vẽ tay so sánh provider rotation, giữ nguyên model capability, với model fallback, chỉ đổi capability khi thực sự cần](/blog/provider-rotation/provider-pools.webp)
 
 Sự khác biệt này đáng được giữ trong architecture documentation vì nó ngăn một ambiguity rất đắt: ta chỉ đang chuyển traffic, hay đang thay đổi thứ mà trợ lý có thể làm?
 
@@ -129,7 +129,7 @@ Circuit breaker bảo vệ provider pool khỏi bị dội request khi đang l�
 
 Failure classifier rất quan trọng. Connection reset, timeout, 429, 401, context overflow, content refusal, schema error và business validation failure không có cùng ý nghĩa. 401 thường cần xử lý credential hoặc configuration. Context overflow có thể khắc phục bằng compact hoặc model có context lớn hơn, không phải lặp nguyên request sang provider khác. Schema failure có thể chỉ ra capability drift chứ không phải provider health.
 
-![Minh họa vẽ tay về AI gateway resilient với các trạng thái circuit breaker, retry budget có giới hạn, jittered backoff và cảnh báo retry storm](/blog/provider-rotation/circuit-breaker-retry-budget.png)
+![Minh họa vẽ tay về AI gateway resilient với các trạng thái circuit breaker, retry budget có giới hạn, jittered backoff và cảnh báo retry storm](/blog/provider-rotation/circuit-breaker-retry-budget.webp)
 
 Hình này cố ý mang tính vận hành hơn là trang trí: breaker, admission budget và backoff policy là ba control khác nhau. Gộp chúng thành một công tắc “retry” sẽ khiến incident khó khoanh vùng hơn.
 
@@ -190,7 +190,7 @@ Fallback có thể trả response nhưng vẫn làm mất task. Điều này d�
 
 ContinuityBench mô tả đây là khác biệt đo được giữa availability và conversational continuity. Nghiên cứu đề xuất forward state đủ để tái dựng hội thoại trên các endpoint khác nhau, và báo cáo Continuity Preservation Rate 99,20% trong chính evaluation với 750 failover event.[5] Kết quả này cho thấy continuity có thể đo được; nó không phải lời bảo đảm mọi implementation sẽ đạt cùng con số.
 
-![Minh họa vẽ tay về stateful failover với immutable tool event, state hash, route lease và stream boundary bị ngắt](/blog/provider-rotation/stateful-failover.png)
+![Minh họa vẽ tay về stateful failover với immutable tool event, state hash, route lease và stream boundary bị ngắt](/blog/provider-rotation/stateful-failover.webp)
 
 Đối tượng quan trọng trong hình không phải mũi tên giữa các provider. Đó là state hash và event trail bất biến, giúp mũi tên ấy trở nên an toàn.
 

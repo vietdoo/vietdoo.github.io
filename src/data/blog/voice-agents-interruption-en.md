@@ -3,13 +3,13 @@ title: "Voice Agents Under Interruption: Turn-Taking, Barge-In, and Safe Handoff
 description: "A production playbook for voice agents that can detect turn boundaries, stop speaking when a person barges in, repair partial intent, and hand off safely without losing the conversation state."
 pubDate: 2026-07-30
 category: "engineering"
-image: "/blog/voice-agents-interruption/hero.png"
+image: "/blog/voice-agents-interruption/hero.webp"
 lang: "en"
 translationKey: "voice-agents-interruption"
 draft: false
 ---
 
-![A hand-drawn voice agent handles an interruption through turn detection, cancellation, repair, and human handoff](/blog/voice-agents-interruption/hero.png)
+![A hand-drawn voice agent handles an interruption through turn detection, cancellation, repair, and human handoff](/blog/voice-agents-interruption/hero.webp)
 
 The voice agent was technically listening. It was not listening to the person.
 
@@ -37,7 +37,7 @@ A voice conversation is often drawn as a neat sequence: user speaks, model think
 
 The application should represent these possibilities explicitly rather than letting a single boolean called `isSpeaking` control the whole pipeline. A useful state model separates what the user is doing from what the agent is doing.
 
-![A voice-agent state machine moves through listening, thinking, speaking, interrupted, repair, and handoff](/blog/voice-agents-interruption/turn-state-machine.png)
+![A voice-agent state machine moves through listening, thinking, speaking, interrupted, repair, and handoff](/blog/voice-agents-interruption/turn-state-machine.webp)
 
 ```ts
 type TurnState =
@@ -80,7 +80,7 @@ These moments may be separated by milliseconds or by a human confirmation. Colla
 
 Barge-in is not merely lowering the agent’s volume. It is a cancellation transaction across audio, synthesis, generation, and queued actions.
 
-![The real-time voice pipeline routes microphone audio through VAD, turn detection, STT, LLM, and TTS, with a fast cancellation path for interruption](/blog/voice-agents-interruption/audio-pipeline.png)
+![The real-time voice pipeline routes microphone audio through VAD, turn detection, STT, LLM, and TTS, with a fast cancellation path for interruption](/blog/voice-agents-interruption/audio-pipeline.webp)
 
 When user speech crosses the interruption policy, the system should:
 
@@ -138,7 +138,7 @@ The agent should not repeat the entire previous answer after every interruption.
 
 Voice latency is usually discussed as time to first response. For interruption handling, time to yield matters just as much. A slow first response is awkward; a slow stop after a person says “no” is a trust failure.
 
-![A conceptual voice latency timeline shows stop, endpoint, partial STT, first token, first audio, and agent response, with a fast barge-in cancellation path](/blog/voice-agents-interruption/latency-budget.png)
+![A conceptual voice latency timeline shows stop, endpoint, partial STT, first token, first audio, and agent response, with a fast barge-in cancellation path](/blog/voice-agents-interruption/latency-budget.webp)
 
 Measure at least four intervals:
 

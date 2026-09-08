@@ -6,7 +6,7 @@ category: "security"
 lang: "vi"
 translationKey: "ai-agent-memory-poisoning"
 draft: false
-image: "/blog/memory-poisoning/hero.png"
+image: "/blog/memory-poisoning/hero.webp"
 ---
 
 Một chatbot stateless sẽ quên chỉ dẫn xấu khi cuộc trò chuyện kết thúc. Một agent có persistent memory có thể mang chỉ dẫn đó sang ngày mai, sang session của người dùng khác, hoặc sang một workflow hoàn toàn khác.
@@ -21,7 +21,7 @@ Một nghiên cứu có hệ thống gần đây xác định bốn kênh ghi me
 
 Hệ quả thực tế hơi khó chịu nhưng rất hữu ích: **memory database là một phần của security perimeter của agent**.
 
-![Một memory card bị corruption tiến vào kho memory được bảo vệ của agent](/blog/memory-poisoning/hero.png)
+![Một memory card bị corruption tiến vào kho memory được bảo vệ của agent](/blog/memory-poisoning/hero.webp)
 
 *Khoảnh khắc nguy hiểm không phải lúc retrieval. Đó là lúc input không đáng tin được chuyển thành trusted memory.*
 
@@ -54,7 +54,7 @@ Cách triển khai cụ thể khác nhau, nhưng phần lớn hệ thống có b
 
 Kiến trúc an toàn nhất mà tôi từng dùng khá “nhàm chán”, và đó là ưu điểm. Memory mới không đi thẳng vào trusted store. Nó đi qua quarantine pipeline để ghi lại nguồn gốc, kiểm tra policy và nhận một trust state.
 
-![Input không đáng tin đi qua quarantine và các policy gate trước khi vào trusted memory](/blog/memory-poisoning/quarantine-pipeline.png)
+![Input không đáng tin đi qua quarantine và các policy gate trước khi vào trusted memory](/blog/memory-poisoning/quarantine-pipeline.webp)
 
 *Quarantine không phải là từ chối automation. Nó là trạng thái trung gian còn thiếu giữa “write” và “không bao giờ dùng”.*
 
@@ -122,7 +122,7 @@ Recall vì thế nên áp dụng bốn filter trước khi xếp hạng theo sim
 3. **Freshness:** Nó còn hiệu lực không, source version có còn hiện hành không?
 4. **Impact:** Action đang yêu cầu có quá quan trọng để dựa vào một memory duy nhất không?
 
-![Retrieval lens chỉ chọn các memory card mới, có chữ ký và được policy cho phép](/blog/memory-poisoning/recall-trust-layers.png)
+![Retrieval lens chỉ chọn các memory card mới, có chữ ký và được policy cho phép](/blog/memory-poisoning/recall-trust-layers.webp)
 
 *Similarity trả lời “có vẻ liên quan không?”. Nó không trả lời “memory này có được phép ảnh hưởng đến action không?”.*
 
@@ -153,7 +153,7 @@ Nếu memory có thể thay đổi hành vi, user cần cách hiểu và reverse
 
 Rollback target nên là known-good state, không đơn giản là “xóa row mới nhất”. Một write độc hại có thể kích hoạt summarization job, rồi tạo ra derived memory thứ hai. Xóa một row nhưng để lại các descendant của nó sẽ tạo ra cảm giác recovery giả.
 
-![Forensic timeline phát hiện write bất thường và rollback agent về known-good snapshot](/blog/memory-poisoning/rollback-forensics.png)
+![Forensic timeline phát hiện write bất thường và rollback agent về known-good snapshot](/blog/memory-poisoning/rollback-forensics.webp)
 
 *Forensics không chỉ phải chỉ ra memory nào bị poison, mà còn phải chỉ ra những memory về sau đã thừa hưởng nó.*
 

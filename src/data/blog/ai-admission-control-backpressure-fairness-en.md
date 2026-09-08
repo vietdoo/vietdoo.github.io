@@ -3,13 +3,13 @@ title: "The Queue Is a Policy: Admission Control, Backpressure, and Fairness for
 description: "A production guide to treating the queue as an AI-agent policy: admission control, backpressure, fair scheduling, tail-SLO protection, and graceful load shedding."
 pubDate: 2026-07-03
 category: "engineering"
-image: "/blog/ai-admission-control/hero.png"
+image: "/blog/ai-admission-control/hero.webp"
 lang: "en"
 translationKey: "ai-admission-control-backpressure-fairness"
 draft: false
 ---
 
-![A hand-drawn whiteboard showing an AI agent gateway, a fair queue, admission gates, backpressure signals, and graceful load shedding](/blog/ai-admission-control/hero.png)
+![A hand-drawn whiteboard showing an AI agent gateway, a fair queue, admission gates, backpressure signals, and graceful load shedding](/blog/ai-admission-control/hero.webp)
 
 A queue looks harmless in an architecture diagram. It is usually drawn as a small rectangle between an API gateway and a worker pool, with an arrow entering from the left and another leaving on the right. The drawing suggests that the queue is passive: it stores work until the system has time to process it.
 
@@ -124,7 +124,7 @@ A global FIFO queue is easy to explain and often unfair. A tenant that submits 1
 
 Cohere’s description of multi-tenant LLM serving is useful here. It combines admission control, performance tiers, Deficit Round Robin, and priority/deadline ordering. The important design choice is the unit of fairness: a request is not always the same amount of work. For variable-size generative requests, token-based or measured-cost budgeting is often more faithful than counting requests.
 
-![A hand-drawn whiteboard showing per-tenant fair queues, weighted quanta, token budgets, and priority inside each tenant lane](/blog/ai-admission-control/fair-queue-token-budget.png)
+![A hand-drawn whiteboard showing per-tenant fair queues, weighted quanta, token budgets, and priority inside each tenant lane](/blog/ai-admission-control/fair-queue-token-budget.webp)
 
 A simplified weighted fair scheduler might look like this:
 
@@ -179,7 +179,7 @@ def can_meet_deadline(job, state):
 
 This is not a promise that every request will finish on time. It is a refusal to knowingly start work whose deadline is already unattainable.
 
-![A hand-drawn whiteboard showing deadline-aware admission using queue wait p95, model execution p95, tool-path p95, and a defer-or-reject gate](/blog/ai-admission-control/tail-slo-scheduler.png)
+![A hand-drawn whiteboard showing deadline-aware admission using queue wait p95, model execution p95, tool-path p95, and a defer-or-reject gate](/blog/ai-admission-control/tail-slo-scheduler.webp)
 
 The system should also separate **admission SLOs** from **completion SLOs**:
 
@@ -197,7 +197,7 @@ When the system cannot meet a deadline, rejecting early can be kinder than accep
 
 “Reject everything” is not a load-shedding strategy. It is an emergency brake. Production systems need a ladder that protects the most valuable work first and removes optional work before critical work.
 
-![A hand-drawn whiteboard showing a graceful degradation ladder from full agent execution to async handoff, bounded rejection, and recovery](/blog/ai-admission-control/admission-backpressure-ladder.png)
+![A hand-drawn whiteboard showing a graceful degradation ladder from full agent execution to async handoff, bounded rejection, and recovery](/blog/ai-admission-control/admission-backpressure-ladder.webp)
 
 One possible ladder is:
 

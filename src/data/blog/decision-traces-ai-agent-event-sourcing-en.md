@@ -3,13 +3,13 @@ title: "Decision Traces for AI Agents: Event-Sourcing the Action Path Without Lo
 description: "A production guide to event-sourced decision traces for AI agents: audit the action path, replay incidents, preserve privacy, and explain outcomes without treating private chain-of-thought as a log format."
 pubDate: 2026-07-29
 category: "engineering"
-image: "/blog/decision-traces/hero.png"
+image: "/blog/decision-traces/hero.webp"
 lang: "en"
 translationKey: "decision-traces-ai-agent-event-sourcing"
 draft: false
 ---
 
-![A hand-drawn whiteboard showing an AI agent decision ledger, evidence references, policy gates, and a replay path](/blog/decision-traces/hero.png)
+![A hand-drawn whiteboard showing an AI agent decision ledger, evidence references, policy gates, and a replay path](/blog/decision-traces/hero.webp)
 
 I once debugged an automation that had done the technically correct thing for the wrong reason. The final action looked harmless. The request had returned a `200`, the database row had been updated, and the user had received a polite confirmation. Three hours later, someone asked the question that matters after an autonomous system changes the world: **what exactly did the agent see, which policy allowed the action, and what state did it believe it was changing?**
 
@@ -59,7 +59,7 @@ RequestReceived
 
 The order matters. An agent may produce a candidate action before a human approves it, but the candidate is not the same thing as an accepted decision. A tool invocation may time out after the remote system committed the change, so `ToolInvocationTimedOut` cannot be treated as proof that nothing happened. A trace should make these distinctions visible instead of flattening them into one success flag.
 
-![A hand-drawn whiteboard event ledger for an AI agent, showing request, evidence, policy, approval, tool execution, and outcome events connected by causation arrows](/blog/decision-traces/decision-ledger.png)
+![A hand-drawn whiteboard event ledger for an AI agent, showing request, evidence, policy, approval, tool execution, and outcome events connected by causation arrows](/blog/decision-traces/decision-ledger.webp)
 
 Streamkap’s decision-trace discussion describes a similar chain from triggering data event through context lookup, reasoning, action, and outcome.[2] The production lesson is not to copy a vendor’s event names. It is to make the chain explicit enough that an incident investigator can follow the same request across data access, policy, agent runtime, and the business system.
 
@@ -130,7 +130,7 @@ For tamper evidence, chain each event to the previous event’s hash or periodic
 2. **Decision-path replay:** reconstruct what evidence, policy, route, approval, and tool outcome were recorded at the time. This is an investigation operation.
 3. **Re-execution:** call the model or tool again. The world may have changed, the provider may return a different answer, and the operation may have a side effect.
 
-![A hand-drawn whiteboard comparing safe projection replay and decision-path replay against risky model re-execution and duplicate side effects](/blog/decision-traces/replay-vs-reexecute.png)
+![A hand-drawn whiteboard comparing safe projection replay and decision-path replay against risky model re-execution and duplicate side effects](/blog/decision-traces/replay-vs-reexecute.webp)
 
 A good incident console makes these operations separate buttons. “Rebuild projection” should be safe. “Show decision path” should be read-only. “Re-run tool” should require explicit authorization, a new idempotency key or reconciliation step, and a visible blast-radius warning.
 
@@ -142,7 +142,7 @@ The easiest audit system to build is the least safe one: copy every prompt and m
 
 ARMO’s minimum-audit-trail guidance makes a useful distinction between infrastructure logs and the application-layer agent-action log. It recommends redacting at the source and retaining data shape, sensitivity classification, semantic tags, byte counts, and hashes rather than plaintext when the content itself is not required.[3]
 
-![A hand-drawn whiteboard showing the privacy boundary between private prompt/tool content and the redacted decision ledger, with hashes and sensitivity labels crossing the boundary](/blog/decision-traces/privacy-boundary.png)
+![A hand-drawn whiteboard showing the privacy boundary between private prompt/tool content and the redacted decision ledger, with hashes and sensitivity labels crossing the boundary](/blog/decision-traces/privacy-boundary.webp)
 
 The right retention policy depends on the domain. A healthcare workflow, a public-sector service, and a developer sandbox do not have the same obligations. The design should answer four questions for every field:
 

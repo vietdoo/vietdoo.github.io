@@ -6,7 +6,7 @@ category: "architecture"
 lang: "en"
 translationKey: "zero-downtime-canary-db-migration"
 draft: false
-image: "/blog/zero-downtime-canary/canary_release_sketch.jpg"
+image: "/blog/zero-downtime-canary/canary_release_sketch.webp"
 ---
 
 When shipping major system updates, every SRE and Backend Engineer's biggest fear is: **"Will this deployment cause connection drops or data loss for live users?"**
@@ -17,7 +17,7 @@ This article covers the two core pillars required to achieve true zero-downtime 
 1. **Canary Release Strategy** on Kubernetes via Traffic Splitting.
 2. **Expand-Contract Pattern** for zero-downtime Database Migration.
 
-![Kubernetes Canary Release Scribbly Diagram](/blog/zero-downtime-canary/canary_release_sketch.jpg)
+![Kubernetes Canary Release Scribbly Diagram](/blog/zero-downtime-canary/canary_release_sketch.webp)
 
 ---
 
@@ -101,7 +101,7 @@ spec:
 
 If a container starts up but isn't ready to serve requests (e.g. JVM warm-up, DB connection pool initialization), K8s might prematurely route traffic to it, producing $502 / 503$ errors.
 
-![K8s Probes Traffic Gatekeeping Scribbly Diagram](/blog/zero-downtime-canary/k8s_probes_sketch.jpg)
+![K8s Probes Traffic Gatekeeping Scribbly Diagram](/blog/zero-downtime-canary/k8s_probes_sketch.webp)
 
 ### Production Best Practices for Health Checks:
 
@@ -136,7 +136,7 @@ Suppose $V_1$ uses a `users` table with a `full_name` column, while $V_2$ splits
 
 The **Expand-Contract Pattern (Parallel Change Pattern)** solves this in 3 phases:
 
-![Expand-Contract Database Migration Pattern Scribbly Diagram](/blog/zero-downtime-canary/db_migration_sketch.jpg)
+![Expand-Contract Database Migration Pattern Scribbly Diagram](/blog/zero-downtime-canary/db_migration_sketch.webp)
 
 ### Phase 1: Expand
 - Add nullable new columns `first_name` and `last_name`.
@@ -158,7 +158,7 @@ The **Expand-Contract Pattern (Parallel Change Pattern)** solves this in 3 phase
 
 On-call engineers shouldn't manually watch dashboards at 2 AM to trigger rollbacks. Automating rollbacks based on Prometheus metrics ensures rapid mitigation.
 
-![Automated Rollback and Prometheus Alerting Scribbly Diagram](/blog/zero-downtime-canary/auto_rollback_sketch.jpg)
+![Automated Rollback and Prometheus Alerting Scribbly Diagram](/blog/zero-downtime-canary/auto_rollback_sketch.webp)
 
 Using tools like **Argo Rollouts** or **Flagger**, declarative metric analysis can trigger automated aborts:
 

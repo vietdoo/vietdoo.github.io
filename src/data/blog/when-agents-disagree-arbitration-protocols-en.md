@@ -6,7 +6,7 @@ category: "engineering"
 lang: "en"
 translationKey: "when-agents-disagree-arbitration-protocols"
 draft: false
-image: "/blog/agent-arbitration/hero.png"
+image: "/blog/agent-arbitration/hero.webp"
 ---
 
 The first version of a multi-agent system often looks deceptively simple. One agent retrieves evidence. Another evaluates risk. A third proposes an action. A final model reads the outputs and picks the answer that sounds most convincing.
@@ -17,7 +17,7 @@ A fraud detector says a payment is suspicious. A customer-context agent says the
 
 The dangerous response is to make the system vote harder. Majority voting can hide correlated mistakes, reward verbosity, and turn an unresolved conflict into a false sense of certainty. A production system needs something more deliberate: an **arbitration protocol** that defines how disagreement is detected, how evidence is compared, when a decision may be committed, and when the system must abstain or escalate.
 
-![A production AI system routes conflicting specialist decisions through evidence normalization, arbitration, abstention, and human escalation](/blog/agent-arbitration/hero.png)
+![A production AI system routes conflicting specialist decisions through evidence normalization, arbitration, abstention, and human escalation](/blog/agent-arbitration/hero.webp)
 
 > **The thesis:** Arbitration is not the last model call in a multi-agent workflow. It is a policy-bound decision stage with explicit inputs, protected state, calibrated confidence, and a safe outcome when consensus is not justified.
 
@@ -39,7 +39,7 @@ Before choosing an arbitration method, classify the disagreement. Different conf
 | Confidence conflict | Agents agree on outcome but disagree about certainty. | Calibrate confidence and inspect the disagreement distribution. |
 | Correlated error | Agents appear to agree because they share the same blind spot. | Diversify evidence or add an independent verification path. |
 
-![A hand-drawn conflict matrix compares evidence conflict, scope conflict, policy boundaries, and correlated agreement](/blog/agent-arbitration/conflict-matrix.png)
+![A hand-drawn conflict matrix compares evidence conflict, scope conflict, policy boundaries, and correlated agreement](/blog/agent-arbitration/conflict-matrix.webp)
 
 The distinction matters because arbitration cannot repair an input contract that was never shared. If one agent interprets “approve the request” as “approve the document” and another interprets it as “approve the payment,” a weighted average of their scores is meaningless.
 
@@ -96,7 +96,7 @@ Claim {
 }
 ```
 
-![An evidence ladder separates unsupported claims from fresh, independent, policy-compliant support](/blog/agent-arbitration/evidence-ladder.png)
+![An evidence ladder separates unsupported claims from fresh, independent, policy-compliant support](/blog/agent-arbitration/evidence-ladder.webp)
 
 The packet gives the arbiter something more useful than “Agent B thinks yes.” It can ask which claims are shared, which claims are contradictory, which evidence is authoritative, and whether the conflict is material to the decision.
 
@@ -157,7 +157,7 @@ A useful rule is **independent evidence before additional opinions**. When two a
 
 A reliable arbitration path usually has several levels. Each level should be cheaper and faster than the next, but no level should bypass a hard policy constraint.
 
-![A layered arbitration cascade moves from deterministic checks to evidence review, stronger judging, and human escalation](/blog/agent-arbitration/escalation-cascade.png)
+![A layered arbitration cascade moves from deterministic checks to evidence review, stronger judging, and human escalation](/blog/agent-arbitration/escalation-cascade.webp)
 
 ### Level 0: deterministic checks
 

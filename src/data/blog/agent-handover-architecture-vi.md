@@ -3,13 +3,13 @@ title: "Kiến trúc Handover: Đổi từ Claude sang Codex trong 1 giây"
 description: "Một pattern ở tầng repo giúp bất kỳ AI agent nào cũng tiếp nhận được công việc dang dở: một bộ hiến pháp, một sổ bàn giao, một bản đồ định tuyến và một cơ chế kiểm tra phi-AI."
 pubDate: 2026-02-16
 category: "architecture"
-image: "/blog/agent-handover-architecture.jpg"
+image: "/blog/agent-handover-architecture.webp"
 lang: "vi"
 translationKey: "agent-handover-architecture"
 draft: false
 ---
 
-![Kiến trúc Handover cho AI Agent](/blog/agent-handover-architecture.jpg)
+![Kiến trúc Handover cho AI Agent](/blog/agent-handover-architecture.webp)
 
 Bất kỳ ai dùng AI coding agent đủ nhiều đều vấp phải cùng một nỗi đau: **Agent cực kỳ thông minh trong đúng một phiên làm việc, rồi lập tức "mất trí nhớ" ngay khi đóng chat.** 
 
@@ -25,7 +25,7 @@ AI Agent là *stateless* (không lưu trạng thái). Nhưng repository của b�
 
 Kiến trúc này được xây dựng trên 4 tầng với nhiệm vụ phân tách rõ ràng:
 
-![Bốn trụ cột của Kiến trúc Handover](/blog/handover-four-pillars.jpg)
+![Bốn trụ cột của Kiến trúc Handover](/blog/handover-four-pillars.webp)
 
 1. **HIẾN PHÁP (Constitution)**: Một file quy tắc duy nhất đi kèm các adapter mỏng. Chứa các bất biến kiến trúc, checklist DoD và giới hạn cứng. Bắt buộc đọc trước mọi task.
 2. **SỔ BÀN GIAO (Ledger)**: Nhật ký chỉ ghi thêm (*append-only*). Lưu lại phiên trước đã làm gì, tại sao ra quyết định như vậy, và còn dang dở những gì.
@@ -160,7 +160,7 @@ Script này không bị dỗ ngọt bởi prompt engineering, chạy trực ti�
 
 Khi kết hợp cả 4 trụ cột, mọi AI agent — dù thuộc bất kỳ nhà phát triển nào — đều tuân theo một chu trình khép kín:
 
-![Vòng lặp làm việc chuẩn của AI Agent](/blog/handover-session-loop.jpg)
+![Vòng lặp làm việc chuẩn của AI Agent](/blog/handover-session-loop.webp)
 
 1. **Kéo Docs mới nhất**: Cập nhật quy tắc và contract hiện tại.
 2. **Đọc Sổ Bàn Giao**: Nắm bắt ý định và các công việc dang dở từ phiên trước.

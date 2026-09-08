@@ -3,13 +3,13 @@ title: "Event-driven AI Systems: Solving the LLM Timeout Problem with Kafka and 
 description: "Building an AI Agent is more than just calling the OpenAI API. When a task takes 5 minutes to complete, the traditional Request-Response architecture crumbles. Enter Event-driven Architecture."
 pubDate: 2026-07-15
 category: "engineering"
-image: "/blog/event-driven-ai-hero.jpg"
+image: "/blog/event-driven-ai-hero.webp"
 lang: "en"
 translationKey: "event-driven-ai-systems"
 draft: false
 ---
 
-![Event-driven Architecture for AI Systems](/blog/event-driven-ai-hero.jpg)
+![Event-driven Architecture for AI Systems](/blog/event-driven-ai-hero.webp)
 
 If you've ever built a sufficiently complex AI system, you've definitely encountered this error message: `504 Gateway Timeout`.
 

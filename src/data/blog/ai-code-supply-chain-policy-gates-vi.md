@@ -3,13 +3,13 @@ title: "Software Supply Chain cho Code do AI tạo: Provenance, SBOM và Policy 
 description: "Coding agent giúp tăng tốc delivery nhưng không tự động làm software supply chain đáng tin cậy. Bài viết thiết kế chain-of-custody từ thay đổi do agent tạo đến build có chữ ký, SBOM và quyết định release."
 pubDate: 2026-04-09
 category: "security"
-image: "/blog/ai-code-supply-chain-policy-gates/ai-code-supply-chain-cover.png"
+image: "/blog/ai-code-supply-chain-policy-gates/ai-code-supply-chain-cover.webp"
 lang: "vi"
 translationKey: "ai-code-supply-chain-policy-gates"
 draft: false
 ---
 
-![Sơ đồ supply chain phần mềm vẽ tay, thể hiện coding agent, source commit, kiểm tra SBOM, provenance có chữ ký và release gate trước production](/blog/ai-code-supply-chain-policy-gates/ai-code-supply-chain-cover.png)
+![Sơ đồ supply chain phần mềm vẽ tay, thể hiện coding agent, source commit, kiểm tra SBOM, provenance có chữ ký và release gate trước production](/blog/ai-code-supply-chain-policy-gates/ai-code-supply-chain-cover.webp)
 
 Coding agent đã thay đổi hình dạng của một software change. Developer có thể mô tả một feature, để agent đọc repository, yêu cầu sửa nhiều file, chạy test và mở pull request trước khi kịp uống hết một tách cà phê. Lợi ích năng suất là có thật. Nhưng giả định về bảo mật thì không tự nhiên đúng theo.
 
@@ -39,7 +39,7 @@ SLSA định nghĩa provenance là thông tin có thể kiểm chứng về nơi
 
 Supply chain thực tế là một chuỗi các bước chuyển tạo ra bằng chứng. Mỗi bước nên tạo một record bền vững, hoặc nói rõ tại sao không giữ record. Tool có thể thay đổi; contract thì không nên thay đổi.
 
-![Sơ đồ chain-of-custody vẽ tay từ AI agent change qua reviewed diff, SBOM và security scan, signed build đến release gate](/blog/ai-code-supply-chain-policy-gates/supply-chain-map.png)
+![Sơ đồ chain-of-custody vẽ tay từ AI agent change qua reviewed diff, SBOM và security scan, signed build đến release gate](/blog/ai-code-supply-chain-policy-gates/supply-chain-map.webp)
 
 Một chain tối thiểu có thể là:
 
@@ -84,7 +84,7 @@ Software bill of materials trả lời câu hỏi: “Artifact này chứa nhữ
 
 Với thay đổi do AI tạo, SBOM nên được sinh từ build output hoặc chính dependency lock được dùng để tạo artifact. Sinh SBOM từ working tree chưa build có thể tạo ra mismatch giữa thứ được kiểm tra và thứ được ship. Artifact digest là join key giúp các bằng chứng nối với nhau.
 
-![Thẻ evidence vẽ tay gồm source, build, artifact, commit SHA, agent change ID, dependency lock, builder, timestamp, artifact digest và tài liệu SBOM](/blog/ai-code-supply-chain-policy-gates/provenance-sbom-evidence.png)
+![Thẻ evidence vẽ tay gồm source, build, artifact, commit SHA, agent change ID, dependency lock, builder, timestamp, artifact digest và tài liệu SBOM](/blog/ai-code-supply-chain-policy-gates/provenance-sbom-evidence.webp)
 
 Một evidence envelope hữu ích kết hợp source view và artifact view:
 
@@ -117,7 +117,7 @@ Evidence chỉ có giá trị khi hệ thống có thể hành động dựa tr�
 
 Gate nên deterministic nếu có thể. “Agent nghe có vẻ tự tin” không phải một control. “Artifact có signature hợp lệ, provenance trỏ tới builder được phép, không có critical vulnerability vượt exception policy, có review bắt buộc và SBOM được đính kèm” là một control có thể test.
 
-![Pipeline release vẽ tay gồm DIFF, TEST, ATTEST và PROMOTE, có barrier BLOCK khi một kiểm tra thất bại](/blog/ai-code-supply-chain-policy-gates/policy-gate-pipeline.png)
+![Pipeline release vẽ tay gồm DIFF, TEST, ATTEST và PROMOTE, có barrier BLOCK khi một kiểm tra thất bại](/blog/ai-code-supply-chain-policy-gates/policy-gate-pipeline.webp)
 
 Một policy có thể có hình dạng như sau:
 

@@ -6,17 +6,17 @@ category: "architecture"
 lang: "en"
 translationKey: "schema-evolution-event-driven-compatibility-rollback"
 draft: false
-image: "/blog/schema-evolution/hero.png"
+image: "/blog/schema-evolution/hero.webp"
 ---
 
 An event schema looks like a serialization detail until a real system has to change it. Then the schema becomes a public API shared by producers, consumers, dashboards, replay jobs, data warehouses, and incident tools that may not be owned by the same team.
 
 The difficult part of schema evolution is not adding a field to a JSON object. It is coordinating old consumers, new producers, replayed events, ownership, and rollback while messages continue to move through the system.
 
-![An event stream travels through version gates while old and new consumers continue operating under an explicit contract](/blog/schema-evolution/hero.png)
+![An event stream travels through version gates while old and new consumers continue operating under an explicit contract](/blog/schema-evolution/hero.webp)
 
 <figure class="blog-video">
-  <video controls preload="metadata" playsinline poster="/blog/schema-evolution/hero.png" aria-label="Explainer video for this article, English version">
+  <video controls preload="metadata" playsinline poster="/blog/schema-evolution/hero.webp" aria-label="Explainer video for this article, English version">
     <source src="/blog/schema-evolution-event-driven-compatibility-rollback/video-en.mp4" type="video/mp4" />
     Your browser does not support HTML5 video.
   </video>
@@ -65,7 +65,7 @@ The names are useful, but teams often misuse them. A schema may be structurally 
 
 Schema checks should therefore run alongside semantic tests. The registry protects the shape; consumer tests protect the behavior.
 
-![A compatibility matrix shows V1 and V2 producers and consumers crossing backward, forward, and full-compatibility gates](/blog/schema-evolution/compatibility-matrix.png)
+![A compatibility matrix shows V1 and V2 producers and consumers crossing backward, forward, and full-compatibility gates](/blog/schema-evolution/compatibility-matrix.webp)
 
 ## Safe changes are still changes
 
@@ -122,7 +122,7 @@ A rollback plan should answer three questions:
 
 Sometimes the safest move is not an immediate schema rollback. It may be to stop new writes, quarantine a consumer, deploy a bridge that normalizes versions, or replay events into a new topic after repairing the data.
 
-![A rollback conveyor pauses the producer, quarantines incompatible events, normalizes safe records, and replays them through verified consumers](/blog/schema-evolution/rollback-replay.png)
+![A rollback conveyor pauses the producer, quarantines incompatible events, normalizes safe records, and replays them through verified consumers](/blog/schema-evolution/rollback-replay.webp)
 
 The important distinction is between reversing code and reversing facts. Facts already published to an event log need an explicit correction strategy.
 

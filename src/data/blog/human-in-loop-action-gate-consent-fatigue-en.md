@@ -6,17 +6,17 @@ category: "architecture"
 lang: "en"
 translationKey: "human-in-loop-action-gate-consent-fatigue"
 draft: false
-image: "/blog/human-action-gate/hero.png"
+image: "/blog/human-action-gate/hero.webp"
 ---
 
 “Human-in-the-loop” is often implemented as a button that says **Approve**. The agent proposes something, the person clicks once, and the system proceeds. It looks responsible in a diagram. In production, it can become a ritual that people perform without reading.
 
 The problem is not that humans are careless. It is that a generic approval request asks for too much trust with too little context. If the same person sees fifty prompts that all say “approve agent action,” the safest behavior becomes clicking through them.
 
-![A human reviewer stands at a clear action gate with the exact target, effect, risk, and expiry visible before execution](/blog/human-action-gate/hero.png)
+![A human reviewer stands at a clear action gate with the exact target, effect, risk, and expiry visible before execution](/blog/human-action-gate/hero.webp)
 
 <figure class="blog-video">
-  <video controls preload="metadata" playsinline poster="/blog/human-action-gate/hero.png" aria-label="Explainer video for this article, English version">
+  <video controls preload="metadata" playsinline poster="/blog/human-action-gate/hero.webp" aria-label="Explainer video for this article, English version">
     <source src="/blog/human-in-loop-action-gate-consent-fatigue/video-en.mp4" type="video/mp4" />
     Your browser does not support HTML5 video.
   </video>
@@ -63,7 +63,7 @@ A risk tier can make the rule explicit:
 
 The tier should describe the effect, not the model’s confidence. A confident model can still be wrong. A low-confidence read may be harmless, while a high-confidence delete remains high impact.
 
-![A risk ladder routes low-impact actions automatically, medium actions to policy review, and high-impact actions to contextual human approval](/blog/human-action-gate/risk-ladder.png)
+![A risk ladder routes low-impact actions automatically, medium actions to policy review, and high-impact actions to contextual human approval](/blog/human-action-gate/risk-ladder.webp)
 
 Risk should also consider the target, data classification, reversibility, blast radius, and whether the action is new for this user or tenant. The same tool can be low risk in one context and critical in another.
 

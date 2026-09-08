@@ -3,13 +3,13 @@ title: "Browser Agent hiểu State: Xác minh thế giới trước mỗi lần 
 description: "Thiết kế production cho browser agent biết DOM, URL, account, visible text và page version đều có thể thay đổi, thay vì tin vào screenshot cũ trước một action không thể hoàn tác."
 pubDate: 2026-06-20
 category: "engineering"
-image: "/blog/state-aware-browser-agents/hero.png"
+image: "/blog/state-aware-browser-agents/hero.webp"
 lang: "vi"
 translationKey: "state-aware-browser-agents"
 draft: false
 ---
 
-![Browser agent quan sát một trang web đang thay đổi, revalidate target và xin xác nhận trước khi action](/blog/state-aware-browser-agents/hero.png)
+![Browser agent quan sát một trang web đang thay đổi, revalidate target và xin xác nhận trước khi action](/blog/state-aware-browser-agents/hero.webp)
 
 Browser agent không bị nhầm với cái button. Nó bị nhầm bởi thời gian.
 
@@ -66,7 +66,7 @@ type StateFingerprint = {
 
 Fingerprint không tự nó là security boundary. Nó là input cho revalidation. Execution layer vẫn cần authorization và action policy. Fingerprint khớp chỉ nói rằng “target được observe vẫn trông giống target mong muốn”; nó không nói “agent được phép submit form này.”
 
-![State fingerprint so sánh URL, DOM, text, account, time và version trước khi cho phép click](/blog/state-aware-browser-agents/state-fingerprint.png)
+![State fingerprint so sánh URL, DOM, text, account, time và version trước khi cho phép click](/blog/state-aware-browser-agents/state-fingerprint.webp)
 
 ## Locate theo intent, không theo vị trí
 
@@ -109,7 +109,7 @@ Browser agent thường giỏi exploration: mở trang, đọc policy, so sánh 
 
 Hãy phân loại action theo effect lên thế giới. Đọc trang thường có thể hoàn tác. Sửa draft có thể khôi phục. Gửi email, submit payment, xóa record hoặc đổi quyền truy cập thì không. Browser agent phải đi qua boundary rõ ràng trước khi bước vào nhóm irreversible.
 
-![Browser action được chia thành reversible exploration và irreversible mutation với confirmation gate](/blog/state-aware-browser-agents/action-boundaries.png)
+![Browser action được chia thành reversible exploration và irreversible mutation với confirmation gate](/blog/state-aware-browser-agents/action-boundaries.webp)
 
 | Nhóm action | Ví dụ | Control mặc định |
 |---|---|---|
@@ -159,7 +159,7 @@ function needsRevalidation(
 
 Khi fingerprint không khớp, agent có ba lựa chọn rất hấp dẫn: cứ click, tìm target tương tự hoặc hỏi model tự improvisation. Cả ba chỉ có thể chấp nhận trong một recovery policy có giới hạn. Với irreversible action, mặc định nên là stop, observe lại và re-plan.
 
-![Recovery loop của browser agent phát hiện stale state, dừng, observe lại, re-plan, confirm rồi retry hoặc abort](/blog/state-aware-browser-agents/recovery-loop.png)
+![Recovery loop của browser agent phát hiện stale state, dừng, observe lại, re-plan, confirm rồi retry hoặc abort](/blog/state-aware-browser-agents/recovery-loop.webp)
 
 Recovery loop không được âm thầm dùng lại plan cũ. Trang mới có thể hiển thị account khác, price khác hoặc object khác. Re-plan từ state mới là một quyết định mới. Nếu hệ thống không giải thích được vì sao target mới tương đương intent cũ, nó nên hỏi user hoặc abort.
 

@@ -3,13 +3,13 @@ title: "Khi model thay đổi: Behavioral contract và quy trình nâng cấp AI
 description: "Playbook production để nâng cấp AI model bằng behavioral contract, shadow traffic, semantic diff, canary promotion, rollback và phát hiện drift sau release."
 pubDate: 2026-02-18
 category: "engineering"
-image: "/blog/model-upgrade/hero.png"
+image: "/blog/model-upgrade/hero.webp"
 lang: "vi"
 translationKey: "model-upgrade-safe-upgrades"
 draft: false
 ---
 
-![Hai phiên bản AI model được nối với nhau bằng các checkpoint và một cổng release có kiểm soát](/blog/model-upgrade/hero.png)
+![Hai phiên bản AI model được nối với nhau bằng các checkpoint và một cổng release có kiểm soát](/blog/model-upgrade/hero.webp)
 
 Một lần nâng cấp model thường chỉ xuất hiện dưới dạng một thay đổi cấu hình. Thay `model-a` bằng `model-b`, chạy deployment rồi nhìn dashboard chuyển sang màu xanh. Phần diff có thể chỉ một dòng, nhưng hành vi phía sau thì không nhỏ như vậy. Model mới có thể thay đổi cách agent hiểu intent, chọn tool, tạo arguments, từ chối yêu cầu, trích dẫn bằng chứng, tiêu thụ token hoặc phục hồi sau một bước thất bại.
 
@@ -82,7 +82,7 @@ review:
 
 Các con số trên chỉ là ví dụ, không phải ngưỡng dùng chung cho mọi hệ thống. Chatbot hỗ trợ khách hàng, code agent và workflow lâm sàng không thể chia sẻ cùng một tolerance. Quyết định quan trọng là threshold phải rõ ràng, có owner và có thể review.
 
-![Ma trận behavioral contract so sánh model baseline màu xanh với model candidate màu hổ phách](/blog/model-upgrade/contract-matrix.png)
+![Ma trận behavioral contract so sánh model baseline màu xanh với model candidate màu hổ phách](/blog/model-upgrade/contract-matrix.webp)
 
 ## So sánh hành vi, đừng chỉ diff raw text
 
@@ -145,7 +145,7 @@ Offline test là cần thiết nhưng hẹp. Chúng thường chứa các case �
 
 Shadow traffic tạo ra cây cầu giữa hai thế giới. Production system gửi một bản copy của request đủ điều kiện cho candidate, nhưng chỉ baseline được phép tạo response nhìn thấy bởi user hoặc thực hiện side effect. Candidate chạy trong path bị sandbox, với tool được thay bằng simulator read-only, response đã ghi lại hoặc adapter no-op.
 
-![Luồng request được tách giữa model production màu xanh và model shadow màu hổ phách trước cổng canary có kiểm soát](/blog/model-upgrade/shadow-canary.png)
+![Luồng request được tách giữa model production màu xanh và model shadow màu hổ phách trước cổng canary có kiểm soát](/blog/model-upgrade/shadow-canary.webp)
 
 Shadow nghe đơn giản cho đến khi privacy và determinism xuất hiện. Candidate có thể nhìn thấy dữ liệu cá nhân, secret trong tool result hoặc nội dung mà đội ngũ không được phép lưu. Vì vậy comparison pipeline cần định nghĩa data policy trước khi thu shadow trace:
 
@@ -208,7 +208,7 @@ Vì vậy post-release monitoring phải so candidate với baseline behavior k�
 
 Công trình evaluation probes của NIST cũng đi theo hướng này: automated verifier có thể được tích hợp trực tiếp vào agent workflow, và kết quả được tích lũy thành machine-readable audit trail nối decision với evidence hỗ trợ.[2] Ý tưởng quan trọng không nằm ở một judge model cụ thể. Nó nằm ở feedback loop: release system tiếp tục kiểm tra contract sau khi buổi deploy kết thúc.
 
-![Vòng lặp phát hiện drift và rollback sau release, nối quality signal, human review với baseline model ổn định](/blog/model-upgrade/drift-rollback.png)
+![Vòng lặp phát hiện drift và rollback sau release, nối quality signal, human review với baseline model ổn định](/blog/model-upgrade/drift-rollback.webp)
 
 Khi drift xuất hiện, đừng tự động đổ lỗi cho model. Retrieval coverage, user mix, tool availability hoặc policy configuration thay đổi cũng có thể tạo cùng một triệu chứng. Hãy giữ comparison record để incident review trả lời được: **observable behavior nào đã dịch chuyển, nó dịch chuyển từ khi nào, và dependency nào thay đổi cùng lúc?**
 

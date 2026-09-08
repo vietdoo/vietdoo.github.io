@@ -3,13 +3,13 @@ title: "GenAI Telemetry That Travels: OpenTelemetry Semantics for Agents and MCP
 description: "How to design vendor-neutral traces for model calls, retrieval, tool use, MCP sessions, privacy controls, and cost accounting without locking observability to one provider."
 pubDate: 2026-07-28
 category: "engineering"
-image: "/blog/genai-telemetry-opentelemetry-mcp/hero.png"
+image: "/blog/genai-telemetry-opentelemetry-mcp/hero.webp"
 lang: "en"
 translationKey: "genai-telemetry-opentelemetry-mcp"
 draft: false
 ---
 
-![A hand-drawn observability map showing an AI agent, MCP server, model provider, retrieval store, and portable telemetry traces](/blog/genai-telemetry-opentelemetry-mcp/hero.png)
+![A hand-drawn observability map showing an AI agent, MCP server, model provider, retrieval store, and portable telemetry traces](/blog/genai-telemetry-opentelemetry-mcp/hero.webp)
 
 The first AI trace I saw in production was technically complete and operationally useless.
 
@@ -41,7 +41,7 @@ Each boundary has a different question. The model span asks which model and para
 
 A dashboard that shows only “LLM latency” cannot answer those questions. A trace that shows every prompt in plaintext may answer them while creating a data leak. The engineering problem is to record enough structure to debug behavior without copying the entire world into the logging system.
 
-![A hand-drawn execution graph separating model, retrieval, MCP, tool, policy, and outcome spans](/blog/genai-telemetry-opentelemetry-mcp/execution-graph.png)
+![A hand-drawn execution graph separating model, retrieval, MCP, tool, policy, and outcome spans](/blog/genai-telemetry-opentelemetry-mcp/execution-graph.webp)
 
 | Boundary    | Core question                         | Useful signal                                            |
 | ----------- | ------------------------------------- | -------------------------------------------------------- |
@@ -131,7 +131,7 @@ The manifest answers which documents and scores were involved. A privileged inve
 
 This is also where provenance and temporal retrieval become operationally useful. If an answer was supposed to be valid on a historical date, the trace should record the inferred interval and the validity interval of selected documents. If the source was stale or superseded, the trace should make that visible.
 
-![A hand-drawn evidence manifest showing document IDs, scores, time intervals, and redaction states without exposing raw content](/blog/genai-telemetry-opentelemetry-mcp/evidence-manifest.png)
+![A hand-drawn evidence manifest showing document IDs, scores, time intervals, and redaction states without exposing raw content](/blog/genai-telemetry-opentelemetry-mcp/evidence-manifest.webp)
 
 ## Make cost and latency joinable with quality
 

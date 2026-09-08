@@ -3,13 +3,13 @@ title: "Semantic Caching cho LLM App: Freshness, Safety và Evaluation Playbook"
 description: "Semantic caching giúp LLM app nhanh và rẻ hơn, nhưng một cache hit không chứng minh câu trả lời đúng. Playbook production này đi qua freshness, invalidation, scope, poisoning, intermediate context và cách đánh giá chất lượng."
 pubDate: 2026-07-03
 category: "engineering"
-image: "/blog/semantic-caching/hero.jpg"
+image: "/blog/semantic-caching/hero.webp"
 lang: "vi"
 translationKey: "semantic-caching-llm-freshness-safety"
 draft: false
 ---
 
-![Semantic cache bảo vệ LLM app bằng các lớp freshness, authorization và evaluation](/blog/semantic-caching/hero.jpg)
+![Semantic cache bảo vệ LLM app bằng các lớp freshness, authorization và evaluation](/blog/semantic-caching/hero.webp)
 
 Tôi từng xem một support assistant trả lời câu hỏi của khách hàng trong chưa tới 100 milliseconds. Biểu đồ latency rất đẹp. Chi phí token giảm rõ rệt. Cache hit rate đủ cao để dashboard trông giống một câu chuyện thành công.
 
@@ -31,7 +31,7 @@ LLM request thường không lặp lại ở cấp độ chuỗi ký tự. Một
 
 Redis mô tả semantic-cache flow cơ bản gồm embedding query mới, tìm kiếm vector đã lưu, trả cached response khi similarity vượt threshold, và gọi LLM khi cache miss.[2] Đây là điểm bắt đầu hữu ích. Nó chưa phải production contract.
 
-![Request đi qua normalization, scope check, semantic lookup và freshness validation trước khi được phép cache hit hoặc chạy model mới](/blog/semantic-caching/pipeline.jpg)
+![Request đi qua normalization, scope check, semantic lookup và freshness validation trước khi được phép cache hit hoặc chạy model mới](/blog/semantic-caching/pipeline.webp)
 
 Một cache production phải trả lời những câu hỏi mà similarity không thể tự trả lời:
 
@@ -128,7 +128,7 @@ Nên kết hợp nhiều freshness signal:
 | Risk class | Answer cũ sẽ gây tốn kém đến đâu | TTL ngắn hơn hoặc không reuse final answer ở risk cao. |
 | Validation result | Candidate còn khớp current evidence không | Allow, hạ xuống context-only hoặc miss. |
 
-![Freshness matrix kết hợp source version, TTL, risk class và validation result trước khi cho phép reuse](/blog/semantic-caching/freshness-matrix.jpg)
+![Freshness matrix kết hợp source version, TTL, risk class và validation result trước khi cho phép reuse](/blog/semantic-caching/freshness-matrix.webp)
 
 Một invalidation rule tốt thường cụ thể hơn “mỗi giờ xóa hết một lần”. Nếu `refund-policy-v42` thay đổi, hãy invalidate những entry có provenance chứa document đó. Nếu role của user bị revoke, invalidate entry scoped theo subject ấy. Nếu prompt đổi từ `support-v7` sang `support-v8`, hoặc namespace cache rõ ràng, hoặc chạy migration job để regrade entry cũ một cách có chủ đích.
 
@@ -221,7 +221,7 @@ Dashboard chỉ có hit rate và latency là lời mời tối ưu nhầm thứ.
 
 Không nên đưa raw private prompt và answer vào mọi trace theo mặc định. Các nguyên tắc observability đang có trên folio vẫn đúng ở đây: ưu tiên shape, version, ID, hash, count và policy decision; giữ content phía sau restricted access cùng một break-glass path rõ ràng.
 
-![Cache-quality dashboard theo dõi hit, safe-reuse precision, stale response, invalidation và cost saving trong cùng một nơi](/blog/semantic-caching/quality-dashboard.jpg)
+![Cache-quality dashboard theo dõi hit, safe-reuse precision, stale response, invalidation và cost saving trong cùng một nơi](/blog/semantic-caching/quality-dashboard.webp)
 
 Một cache hit chỉ nên được coi là thành công khi downstream quality signal đồng ý. Feedback loop có thể gồm user correction, citation check, deterministic policy validator, sampled human review và regression case. Khi cache hit fail, hãy lưu một failure fixture tối giản: query shape, scope, entry metadata, source version, score và observed outcome. Answer text có thể bị hạn chế hoặc redact, nhưng failure vẫn phải trở thành thứ có thể test.
 

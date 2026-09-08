@@ -6,7 +6,7 @@ category: "engineering"
 lang: "vi"
 translationKey: "langfuse-dev-prod-prompt-trace-eval-cicd"
 draft: false
-image: "/blog/langfuse-dev-prod-cicd/hero.png"
+image: "/blog/langfuse-dev-prod-cicd/hero.webp"
 ---
 
 Dấu hiệu đầu tiên cho thấy một team AI đã vượt qua giai đoạn thử nghiệm tự phát thường không phải là một model bị lỗi. Đó là một câu hỏi xuất hiện trong incident channel: “Production đang dùng prompt nào vậy?”
@@ -15,7 +15,7 @@ Câu hỏi nghe có vẻ đơn giản cho đến khi team phát hiện một dev
 
 Langfuse thường được đưa vào hệ thống như một nơi để xem trace và so sánh output của model. Điều đó hữu ích, nhưng chưa giải quyết toàn bộ bài toán vận hành. Một AI system trưởng thành cần release path nối được thay đổi prompt hoặc model với bằng chứng, phê duyệt, deployment, quan sát và rollback. Langfuse cung cấp nhiều mảnh ghép quan trọng qua prompt versioning, label, dataset, experiment, score, tracing, API và tích hợp CI/CD.[1](https://langfuse.com/docs/prompt-management/features/prompt-version-control) [2](https://langfuse.com/docs/evaluation/experiments/datasets) [3](https://langfuse.com/docs/prompt-management/features/github-integration)
 
-![Một hệ thống release Langfuse kết nối prompt version, trace, dataset, evaluation, CI/CD gate và rollback production](/blog/langfuse-dev-prod-cicd/hero.png)
+![Một hệ thống release Langfuse kết nối prompt version, trace, dataset, evaluation, CI/CD gate và rollback production](/blog/langfuse-dev-prod-cicd/hero.webp)
 
 > **Luận điểm chính:** Langfuse không nên chỉ là dashboard production đứng cạnh release system. Nó nên là một phần của AI release system, trong khi Git, runtime của ứng dụng và data boundary vẫn chịu trách nhiệm cho những thứ mà chúng phù hợp nhất để quản lý.
 
@@ -160,7 +160,7 @@ Thay đổi item trong Langfuse dataset tạo ra version được theo dõi bằ
 
 Không dùng production làm training ground mặc định cho development. Thay vào đó, tạo controlled path từ production observation thành regression item đã redaction. Path này cần data owner approval, PII check, tenant authorization và record giải thích tại sao example đó cần thiết. Production trace là bằng chứng, không tự động trở thành test fixture hợp lệ.
 
-![Environment promotion tách release artifact portable khỏi dữ liệu đã redaction và secret riêng của từng môi trường](/blog/langfuse-dev-prod-cicd/environment-promotion.png)
+![Environment promotion tách release artifact portable khỏi dữ liệu đã redaction và secret riêng của từng môi trường](/blog/langfuse-dev-prod-cicd/environment-promotion.webp)
 
 ## Xây trace contract trước khi thêm dashboard
 
@@ -331,7 +331,7 @@ Một release approval phải gồm diff, không chỉ score. Reviewer cần th�
 
 Protected production label hữu ích vì biến convention thành permission boundary. Label nên được di chuyển bởi release identity và operator đã được phê duyệt, không phải bởi mọi developer có quyền edit prompt.[1](https://langfuse.com/docs/prompt-management/features/prompt-version-control)
 
-![CI/CD gate so sánh các prompt version trên dataset đã pin trước khi staging, approval, promotion production và rollback](/blog/langfuse-dev-prod-cicd/ci-cd-gates.png)
+![CI/CD gate so sánh các prompt version trên dataset đã pin trước khi staging, approval, promotion production và rollback](/blog/langfuse-dev-prod-cicd/ci-cd-gates.webp)
 
 ## Rollback là label move cộng với application check
 
@@ -372,7 +372,7 @@ Nếu user báo một câu trả lời sai, phản ứng đầu tiên nên là c
 
 Chỉ biến incident thành dataset item sau khi data boundary được review. Redact hoặc transform input, giữ nguyên failure property, định nghĩa expected behavior và assign owner. Một regression item không còn đại diện cho failure gốc còn tệ hơn không có item vì nó tạo false confidence.
 
-![Production trace trở thành regression case đã redaction, được evaluate với candidate và liên kết ngược về release decision](/blog/langfuse-dev-prod-cicd/trace-to-regression.png)
+![Production trace trở thành regression case đã redaction, được evaluate với candidate và liên kết ngược về release decision](/blog/langfuse-dev-prod-cicd/trace-to-regression.webp)
 
 ## Những failure mode thường gặp
 

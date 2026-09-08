@@ -3,12 +3,12 @@ title: "Semantic Diff cho AI Agent: Review Intent, không chỉ JSON"
 description: "Thiết kế production để biến tool call của AI agent thành semantic diff dễ review: entity bị ảnh hưởng, before/after, invariant, mức rủi ro và write boundary an toàn."
 pubDate: 2026-09-01
 category: "engineering"
-image: "/blog/semantic-diff-agents/hero.png"
+image: "/blog/semantic-diff-agents/hero.webp"
 lang: "vi"
 translationKey: "semantic-diff-agents"
 draft: false
 ---
-![AI agent và người review đối chiếu một semantic change giữa hai trạng thái của hệ thống](/blog/semantic-diff-agents/hero.png)
+![AI agent và người review đối chiếu một semantic change giữa hai trạng thái của hệ thống](/blog/semantic-diff-agents/hero.webp)
 
 Màn hình approval hiển thị JSON hoàn toàn hợp lệ. Mọi field bắt buộc đều có mặt, schema validator trả về màu xanh và phần giải thích của agent nghe rất hợp lý. Người review bấm **Approve**.
 
@@ -36,7 +36,7 @@ Semantic diff là một translation layer. Nó giữ lại machine request, như
 | Điều gì bắt buộc phải còn đúng? | Invariant và policy check |
 | Ai hoặc hệ thống nào được approve? | Risk class, authority cần có và thời điểm hết hạn |
 
-![Raw tool-call card được chuyển thành semantic change map ở cấp entity, field, relationship và state transition](/blog/semantic-diff-agents/semantic-diff-map.png)
+![Raw tool-call card được chuyển thành semantic change map ở cấp entity, field, relationship và state transition](/blog/semantic-diff-agents/semantic-diff-map.webp)
 
 ## Bắt đầu bằng canonical change set
 
@@ -101,7 +101,7 @@ Một impact record hữu ích nên nhỏ và rõ ràng:
 
 Sự hiện diện của unknown không phải lỗi UI. Đó là ranh giới trung thực về điều hệ thống có thể chứng minh. Unknown có impact cao nên chuyển cho người hoặc block write. Unknown có impact thấp có thể được chấp nhận kèm audit note. Policy, không phải model confidence, quyết định việc này.
 
-![Impact panel hiển thị target entity, record liên quan, invariant, unknown và vùng blast radius được reviewer đánh dấu](/blog/semantic-diff-agents/impact-panel.png)
+![Impact panel hiển thị target entity, record liên quan, invariant, unknown và vùng blast radius được reviewer đánh dấu](/blog/semantic-diff-agents/impact-panel.webp)
 
 ## Tính diff bên ngoài model
 
@@ -136,7 +136,7 @@ Một policy matrix khả dụng có thể như sau:
 
 Review surface không nên giấu noise ít rủi ro sau một bức tường thông tin của action rủi ro cao. Hãy hiển thị summary ngắn trước, sau đó cho reviewer mở rộng để xem field, relationship, evidence và policy decision. Mục tiêu không phải là nhiều thông tin nhất, mà là **thông tin phục vụ quyết định**.
 
-![Approval ladder theo rủi ro tách low-risk change tự động, human review và action high-risk bị block](/blog/semantic-diff-agents/approval-ladder.png)
+![Approval ladder theo rủi ro tách low-risk change tự động, human review và action high-risk bị block](/blog/semantic-diff-agents/approval-ladder.webp)
 
 ## Bảo toàn intent mà không giả vờ đọc suy nghĩ
 
@@ -162,7 +162,7 @@ type ReviewSummary = {
 
 Semantic diff hữu ích trước approval, nhưng không phải authorization vĩnh viễn. Thế giới có thể đổi trong lúc con người review. Worker khác có thể update record, permission của user có thể bị revoke hoặc policy mới có thể bắt đầu có hiệu lực. Final adapter phải recompute hoặc revalidate diff ngay trước side effect.
 
-![Write boundary được bảo vệ bằng before/after state, invariant check, audit receipt và commit cuối cùng](/blog/semantic-diff-agents/write-boundary.png)
+![Write boundary được bảo vệ bằng before/after state, invariant check, audit receipt và commit cuối cùng](/blog/semantic-diff-agents/write-boundary.webp)
 
 ```ts
 async function commit(changeSet: ChangeSet) {

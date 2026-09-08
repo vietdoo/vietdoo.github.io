@@ -3,13 +3,13 @@ title: "Temporal RAG: Teaching Retrieval to Respect What Was True When"
 description: "A production-minded guide to time-aware retrieval, valid-time versus transaction-time, contradiction handling, and evaluation for historical questions."
 pubDate: 2026-07-07
 category: "engineering"
-image: "/blog/temporal-rag-time-aware-retrieval/hero.png"
+image: "/blog/temporal-rag-time-aware-retrieval/hero.webp"
 lang: "en"
 translationKey: "temporal-rag-time-aware-retrieval"
 draft: false
 ---
 
-![A hand-drawn time-aware RAG system connecting dated documents, a timeline, and an evidence-backed answer](/blog/temporal-rag-time-aware-retrieval/hero.png)
+![A hand-drawn time-aware RAG system connecting dated documents, a timeline, and an evidence-backed answer](/blog/temporal-rag-time-aware-retrieval/hero.webp)
 
 A normal RAG system answers the question, “Which documents are semantically similar to this query?” A production knowledge system often needs to answer a harder question: **which documents were true at the time the user means?**
 
@@ -115,7 +115,7 @@ The first stage narrows candidates using the temporal relation. For a point-in-t
 
 The second stage ranks the temporally valid candidates by semantic relevance, source authority, granularity, and coverage. The third stage checks whether the candidates contradict one another, overlap ambiguously, or leave a gap.
 
-![A hand-drawn pipeline filtering evidence by time before semantic ranking and contradiction review](/blog/temporal-rag-time-aware-retrieval/pipeline.png)
+![A hand-drawn pipeline filtering evidence by time before semantic ranking and contradiction review](/blog/temporal-rag-time-aware-retrieval/pipeline.webp)
 
 | Stage                 | Input                           | Output                          | Main failure it prevents            |
 | --------------------- | ------------------------------- | ------------------------------- | ----------------------------------- |
@@ -180,7 +180,7 @@ A small test matrix can cover most high-risk bugs:
 
 This is where temporal RAG connects naturally to eval-driven system design. Each temporal case should capture not only the final prose but also the selected interval, source versions, and evidence chain.
 
-![A hand-drawn timeline benchmark showing historical queries, overlapping validity windows, and expected evidence](/blog/temporal-rag-time-aware-retrieval/benchmark.png)
+![A hand-drawn timeline benchmark showing historical queries, overlapping validity windows, and expected evidence](/blog/temporal-rag-time-aware-retrieval/benchmark.webp)
 
 A hard grader can verify interval inclusion and source IDs. A semantic grader can assess whether the explanation of a change is understandable. If the system chooses a source that was not valid at the reference time, it should be a hard failure even if the answer sounds plausible.
 

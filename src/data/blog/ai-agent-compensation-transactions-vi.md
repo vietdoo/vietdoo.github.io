@@ -3,13 +3,13 @@ title: "Compensation Transaction cho AI Agent: Khôi phục sau Partial Side Eff
 description: "Production playbook cho tình huống AI agent đã thay đổi thế giới một phần: compensation contract, action ledger bền vững, trạng thái không chắc chắn và reconciliation an toàn."
 pubDate: 2026-06-07
 category: "engineering"
-image: "/blog/ai-agent-compensation-transactions/hero.png"
+image: "/blog/ai-agent-compensation-transactions/hero.webp"
 lang: "vi"
 translationKey: "ai-agent-compensation-transactions"
 draft: false
 ---
 
-![AI agent vẽ lại từng side effect và compensation trước khi chạy workflow nghiệp vụ nhiều bước](/blog/ai-agent-compensation-transactions/hero.png)
+![AI agent vẽ lại từng side effect và compensation trước khi chạy workflow nghiệp vụ nhiều bước](/blog/ai-agent-compensation-transactions/hero.webp)
 
 Lúc 09:17, agent đã hoàn thành phần tốn kém nhất.
 
@@ -87,7 +87,7 @@ type CompensationContract = {
 };
 ```
 
-![Action ledger bền vững ghi plan, effect, provider reference, outcome, compensation và policy version trước recovery](/blog/ai-agent-compensation-transactions/action-ledger.png)
+![Action ledger bền vững ghi plan, effect, provider reference, outcome, compensation và policy version trước recovery](/blog/ai-agent-compensation-transactions/action-ledger.webp)
 
 Ledger được cố ý thiết kế rất buồn tẻ. Nó không lưu chain-of-thought. Nó lưu các operational fact tối thiểu cần để replay decision: action nào được yêu cầu, tool nào đã nhận, provider reference nào trả về, policy version nào áp dụng và recovery option nào đã được khai báo.
 
@@ -95,7 +95,7 @@ Ledger được cố ý thiết kế rất buồn tẻ. Nó không lưu chain-of
 
 ## Khai báo effect trước khi execute action
 
-![Compensation contract nối forward inventory reservation với controlled release, kèm outcome probe và authorization check](/blog/ai-agent-compensation-transactions/compensation-contract.png)
+![Compensation contract nối forward inventory reservation với controlled release, kèm outcome probe và authorization check](/blog/ai-agent-compensation-transactions/compensation-contract.webp)
 
 Một tool schema chỉ mô tả parameters là chưa đủ cho agent có hậu quả. Runtime cũng cần biết tool thay đổi business state nào và kiểm tra thay đổi ấy bằng cách nào.
 
@@ -263,7 +263,7 @@ Nếu bước ba definitive fail, recovery manager có thể cần compensate b�
 
 State machine đơn giản có thể như sau:
 
-![State machine recovery của AI agent tách definitive failure, unknown outcome, probe, compensation và human escalation](/blog/ai-agent-compensation-transactions/unknown-state-machine.png)
+![State machine recovery của AI agent tách definitive failure, unknown outcome, probe, compensation và human escalation](/blog/ai-agent-compensation-transactions/unknown-state-machine.webp)
 
 ```text
 planned

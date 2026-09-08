@@ -3,13 +3,13 @@ title: "AI Agent Compensation Transactions: Recovering from Partial Side Effects
 description: "A production playbook for recovering when an AI agent has already changed the world: compensation contracts, durable action ledgers, unknown outcomes, and safe reconciliation."
 pubDate: 2026-06-07
 category: "engineering"
-image: "/blog/ai-agent-compensation-transactions/hero.png"
+image: "/blog/ai-agent-compensation-transactions/hero.webp"
 lang: "en"
 translationKey: "ai-agent-compensation-transactions"
 draft: false
 ---
 
-![A hand-drawn AI agent records each side effect and its compensation before executing a multi-step business workflow](/blog/ai-agent-compensation-transactions/hero.png)
+![A hand-drawn AI agent records each side effect and its compensation before executing a multi-step business workflow](/blog/ai-agent-compensation-transactions/hero.webp)
 
 At 09:17, the agent had already done the expensive part.
 
@@ -87,7 +87,7 @@ type CompensationContract = {
 };
 ```
 
-![A durable action ledger records the plan, effect, provider reference, outcome, compensation, and policy version before recovery](/blog/ai-agent-compensation-transactions/action-ledger.png)
+![A durable action ledger records the plan, effect, provider reference, outcome, compensation, and policy version before recovery](/blog/ai-agent-compensation-transactions/action-ledger.webp)
 
 The ledger is deliberately boring. It does not store chain-of-thought. It stores the minimum operational facts required to replay a decision: which action was requested, which tool received it, which provider reference came back, which policy version applied, and what recovery options were declared.
 
@@ -95,7 +95,7 @@ The `requestHash` is useful for correlating retries without pretending that a ha
 
 ## Declare the effect before executing the action
 
-![An AI agent compensation contract connects a forward inventory reservation to a controlled release, with an outcome probe and authorization check](/blog/ai-agent-compensation-transactions/compensation-contract.png)
+![An AI agent compensation contract connects a forward inventory reservation to a controlled release, with an outcome probe and authorization check](/blog/ai-agent-compensation-transactions/compensation-contract.webp)
 
 A tool schema that describes only parameters is incomplete for a consequential agent. The runtime also needs to know what the tool changes and how the change can be verified.
 
@@ -263,7 +263,7 @@ If step three fails definitively, the recovery manager may need to compensate st
 
 A simple state machine looks like this:
 
-![An AI agent recovery state machine separates definitive failure, unknown outcomes, probes, compensation, and human escalation](/blog/ai-agent-compensation-transactions/unknown-state-machine.png)
+![An AI agent recovery state machine separates definitive failure, unknown outcomes, probes, compensation, and human escalation](/blog/ai-agent-compensation-transactions/unknown-state-machine.webp)
 
 ```text
 planned

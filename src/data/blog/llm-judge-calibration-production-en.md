@@ -3,13 +3,13 @@ title: "LLM-as-a-Judge Calibration in Production: Human Agreement, Drift, and th
 description: "A production playbook for calibrating LLM judges against human labels, detecting systematic bias and drift, and deciding when an evaluator should abstain instead of making a release decision."
 pubDate: 2026-09-06
 category: "engineering"
-image: "/blog/llm-judge-calibration/hero.png"
+image: "/blog/llm-judge-calibration/hero.webp"
 lang: "en"
 translationKey: "llm-judge-calibration-production"
 draft: false
 ---
 
-![An LLM judge sits between human reviewers, score bands, and a production calibration curve](/blog/llm-judge-calibration/hero.png)
+![An LLM judge sits between human reviewers, score bands, and a production calibration curve](/blog/llm-judge-calibration/hero.webp)
 
 A support agent shipped with a green evaluation dashboard. Its answer quality score was above the release threshold, latency stayed inside the SLO, and the judge marked almost every sampled trace as “pass.” Two days later, reviewers found that the agent was confidently skipping a required verification step whenever the customer sounded polite and detailed.
 
@@ -32,7 +32,7 @@ The practical loop is:
 5. Set thresholds that permit abstention.
 6. Re-check calibration after model, prompt, rubric, or traffic changes.
 
-![A production calibration loop connects sampled traces, human labels, judge scores, confusion matrices, and rubric updates](/blog/llm-judge-calibration/calibration-loop.png)
+![A production calibration loop connects sampled traces, human labels, judge scores, confusion matrices, and rubric updates](/blog/llm-judge-calibration/calibration-loop.webp)
 
 ## Calibration is not the same as validation or monitoring
 
@@ -132,7 +132,7 @@ The important property is not the number of fields. It is that a reviewer can un
 
 LLM judges can fail in ways that aggregate metrics conceal. In one evaluation, the judge may look accurate because most samples are easy while systematically failing one important cohort.
 
-![A bias matrix exposes mismatch cells across evaluation dimensions before a judge can silently gate production decisions](/blog/llm-judge-calibration/bias-matrix.png)
+![A bias matrix exposes mismatch cells across evaluation dimensions before a judge can silently gate production decisions](/blog/llm-judge-calibration/bias-matrix.webp)
 
 ### Position and order bias
 
@@ -172,7 +172,7 @@ Treat `needs_review` as a controlled state, not a failure of the system. Measure
 
 Thresholds should match the decision. A release gate may optimize for high precision on “safe pass,” accepting more review. An incident monitor may prefer recall for policy failures. A routing system may need stable rankings rather than categorical truth. There is no universal “good score.”
 
-![A calibrated judge routes traces into release, monitoring, and human-review gates according to evidence and thresholds](/blog/llm-judge-calibration/decision-gates.png)
+![A calibrated judge routes traces into release, monitoring, and human-review gates according to evidence and thresholds](/blog/llm-judge-calibration/decision-gates.webp)
 
 ## Use the judge for the job it can actually do
 

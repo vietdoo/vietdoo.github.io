@@ -3,13 +3,13 @@ title: "Idempotent AI Actions: Making Tool Calls Safe to Retry"
 description: "AI agents retry when networks fail, providers time out, and workers restart. This production playbook shows how to make write-oriented tool calls safe with idempotency keys, deduplication, outbox records, reconciliation, and compensating actions."
 pubDate: 2026-01-13
 category: "engineering"
-image: "/blog/idempotent-ai-actions/hero.png"
+image: "/blog/idempotent-ai-actions/hero.webp"
 lang: "en"
 translationKey: "idempotent-ai-actions"
 draft: false
 ---
 
-![A retry-safe AI action passes through an idempotency key and produces one committed effect](/blog/idempotent-ai-actions/hero.png)
+![A retry-safe AI action passes through an idempotency key and produces one committed effect](/blog/idempotent-ai-actions/hero.webp)
 
 I once watched an assistant create a support ticket twice for the same customer request. The model had made one perfectly reasonable tool call. The worker sent it to the ticketing API. Then the network went quiet.
 
@@ -118,7 +118,7 @@ type IdempotencyRecord = {
 
 The record is a **business safety boundary**. It should be scoped by tenant and actor where necessary, protected by a unique constraint, and retained for at least as long as a late retry can arrive. Stripe’s API documentation describes a similar contract: the first result is saved for a key, later requests with that key return the same result, and a parameter mismatch is rejected rather than treated as a new operation.[3]
 
-![Three transport attempts converge on one protected idempotency record, while a parameter mismatch is rejected](/blog/idempotent-ai-actions/dedup-record.png)
+![Three transport attempts converge on one protected idempotency record, while a parameter mismatch is rejected](/blog/idempotent-ai-actions/dedup-record.webp)
 
 ### The rules of a good idempotency key
 
@@ -143,7 +143,7 @@ This is the most important state-machine distinction in an agent workflow. A val
 
 Treating every error as “retry” is how duplicate charges, duplicate emails, and duplicate records happen. Treating every error as “stop” produces stuck workflows. The safe path is to classify the outcome and make reconciliation the fork before a dangerous retry.
 
-![A retry-safe state machine separates unknown outcomes from confirmed failures and reconciles before retrying](/blog/idempotent-ai-actions/retry-state-machine.png)
+![A retry-safe state machine separates unknown outcomes from confirmed failures and reconciles before retrying](/blog/idempotent-ai-actions/retry-state-machine.webp)
 
 ```text
 intent_created
@@ -216,7 +216,7 @@ Many AI actions update local state and then call an external tool. For example, 
 
 A transactional outbox reduces one half of this uncertainty. The application writes the business state and an outbox event in the same database transaction. A relay then delivers the event to the external system. The outbox pattern exists because a database and a message broker generally cannot share a practical two-phase transaction; it also acknowledges that the relay may publish an event more than once, so consumers still need idempotency.[4]
 
-![The agent intent is committed with an outbox event, relayed to an external API, then reconciled into a commit or compensation](/blog/idempotent-ai-actions/outbox-reconciliation.png)
+![The agent intent is committed with an outbox event, relayed to an external API, then reconciled into a commit or compensation](/blog/idempotent-ai-actions/outbox-reconciliation.webp)
 
 ```ts
 await db.transaction(async (tx) => {

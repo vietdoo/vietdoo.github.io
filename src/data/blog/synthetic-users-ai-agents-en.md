@@ -3,13 +3,13 @@ title: "Synthetic Users for AI Agents: Scenario Generation Without Evaluation Le
 description: "Synthetic users can scale end-to-end agent testing, but a simulator trained on the answer key can make an evaluation look better than it is. This production playbook covers grounded behavior, scenario factories, held-out partitions, leakage controls, fidelity checks, and continuous evaluation."
 pubDate: 2026-06-19
 category: "engineering"
-image: "/blog/synthetic-users-ai-agents/hero.png"
+image: "/blog/synthetic-users-ai-agents/hero.webp"
 lang: "en"
 translationKey: "synthetic-users-ai-agents"
 draft: false
 ---
 
-![A synthetic user scenario factory creates varied agent tasks while keeping a locked evaluation set behind a boundary](/blog/synthetic-users-ai-agents/hero.png)
+![A synthetic user scenario factory creates varied agent tasks while keeping a locked evaluation set behind a boundary](/blog/synthetic-users-ai-agents/hero.webp)
 
 I once watched an agent pass an evaluation suite so convincingly that the team almost promoted a new model the same afternoon. The dashboard was green. The user simulator sounded patient, the tool calls were valid, and the final answers matched the reference outputs.
 
@@ -110,7 +110,7 @@ For example, “frustrated user” alone is not a valuable scenario dimension. �
 
 Generate the structured state first, then render the initial user turn. If the LLM writes the state and the conversation in one pass, it will often repair contradictions by inventing facts. A deterministic validator should reject a scenario whose user goal, available facts, policy, and expected invariants do not agree.
 
-![A scenario factory separates stable task invariants from controlled user, world, policy, and tool variations](/blog/synthetic-users-ai-agents/scenario-factory.png)
+![A scenario factory separates stable task invariants from controlled user, world, policy, and tool variations](/blog/synthetic-users-ai-agents/scenario-factory.webp)
 
 ## Ground the user simulator in behavior without copying the test
 
@@ -175,7 +175,7 @@ scenario source families
                                        final report
 ```
 
-![The evaluation firewall keeps generator and development artifacts away from the locked test set and evaluator-only annotations](/blog/synthetic-users-ai-agents/split-and-lock.png)
+![The evaluation firewall keeps generator and development artifacts away from the locked test set and evaluator-only annotations](/blog/synthetic-users-ai-agents/split-and-lock.webp)
 
 A practical partitioning policy looks like this:
 
@@ -323,7 +323,7 @@ A team does not need a thousand scenarios on day one. Start with one workflow an
 
 After that, increase coverage based on observed failure modes rather than a vanity target such as “one million prompts.” A smaller suite with traceable invariants and honest partitions is more valuable than a huge suite whose answer key is everywhere.
 
-![A continuous evaluation loop feeds redacted production patterns into development and shadow sets while protecting the locked release gate](/blog/synthetic-users-ai-agents/fidelity-loop.png)
+![A continuous evaluation loop feeds redacted production patterns into development and shadow sets while protecting the locked release gate](/blog/synthetic-users-ai-agents/fidelity-loop.webp)
 
 ## The design rule to carry forward
 

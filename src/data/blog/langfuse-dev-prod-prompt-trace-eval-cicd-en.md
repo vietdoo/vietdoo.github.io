@@ -6,7 +6,7 @@ category: "engineering"
 lang: "en"
 translationKey: "langfuse-dev-prod-prompt-trace-eval-cicd"
 draft: false
-image: "/blog/langfuse-dev-prod-cicd/hero.png"
+image: "/blog/langfuse-dev-prod-cicd/hero.webp"
 ---
 
 The first sign that an AI team has outgrown ad hoc experimentation is usually not a model failure. It is a sentence in an incident channel: “Which prompt was production using?”
@@ -15,7 +15,7 @@ The question sounds simple until the team discovers that a developer edited a pr
 
 Langfuse is often introduced as a place to inspect traces and compare model outputs. That is useful, but it is not the whole operational problem. A mature AI system needs a release path that connects a prompt or model change to evidence, approval, deployment, observation, and rollback. Langfuse can provide important pieces of that path through prompt versioning, labels, datasets, experiments, scores, tracing, APIs, and CI/CD integrations.[1](https://langfuse.com/docs/prompt-management/features/prompt-version-control) [2](https://langfuse.com/docs/evaluation/experiments/datasets) [3](https://langfuse.com/docs/prompt-management/features/github-integration)
 
-![A Langfuse release system connects prompt versions, traces, datasets, evaluations, CI/CD gates, and production rollback](/blog/langfuse-dev-prod-cicd/hero.png)
+![A Langfuse release system connects prompt versions, traces, datasets, evaluations, CI/CD gates, and production rollback](/blog/langfuse-dev-prod-cicd/hero.webp)
 
 > **The thesis:** Langfuse should not be treated as a production dashboard that sits beside the release system. It should be part of the AI release system, while Git, the application runtime, and the data boundary each remain responsible for the things they are best suited to own.
 
@@ -160,7 +160,7 @@ Langfuse dataset changes create versions tracked by timestamps, and a dataset ca
 
 Do not use production as the default training ground for development. Instead, establish a controlled path from production observation to a redacted regression item. The path should include data owner approval, PII checks, tenant authorization, and a record of why the example is needed. A production trace is evidence, not automatically a permitted test fixture.
 
-![Environment promotion separates portable release artifacts from redacted data and environment-specific secrets](/blog/langfuse-dev-prod-cicd/environment-promotion.png)
+![Environment promotion separates portable release artifacts from redacted data and environment-specific secrets](/blog/langfuse-dev-prod-cicd/environment-promotion.webp)
 
 ## Build a trace contract before adding more dashboards
 
@@ -330,7 +330,7 @@ A release approval should include the diff, not just the score. Reviewers need t
 
 Protected production labels are useful because they turn a convention into a permission boundary. The label should be movable by the release identity and approved operators, not by every developer who can edit a prompt.[1](https://langfuse.com/docs/prompt-management/features/prompt-version-control)
 
-![CI/CD gates compare prompt versions on a pinned dataset before staging, approval, production promotion, and rollback](/blog/langfuse-dev-prod-cicd/ci-cd-gates.png)
+![CI/CD gates compare prompt versions on a pinned dataset before staging, approval, production promotion, and rollback](/blog/langfuse-dev-prod-cicd/ci-cd-gates.webp)
 
 ## Rollback is a label move plus an application check
 
@@ -371,7 +371,7 @@ If a user reports a bad answer, the first response should be to capture the trac
 
 Turn the incident into a dataset item only after the data boundary is reviewed. Redact or transform the input, preserve the failure property, define an expected behavior, and assign an owner. A regression item that no longer represents the original failure is worse than no item because it creates false confidence.
 
-![A production trace becomes a redacted regression case, is evaluated against a candidate, and links back to the release decision](/blog/langfuse-dev-prod-cicd/trace-to-regression.png)
+![A production trace becomes a redacted regression case, is evaluated against a candidate, and links back to the release decision](/blog/langfuse-dev-prod-cicd/trace-to-regression.webp)
 
 ## Common failure modes
 

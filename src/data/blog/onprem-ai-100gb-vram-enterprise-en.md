@@ -6,7 +6,7 @@ category: "engineering"
 lang: "en"
 translationKey: "onprem-ai-100gb-vram-enterprise"
 draft: false
-image: "/blog/onprem-ai-100gb/hero.png"
+image: "/blog/onprem-ai-100gb/hero.webp"
 ---
 
 Most on-premise AI proposals begin with a model name. Someone asks whether the company can run a 32B, 70B, or mixture-of-experts model, and the conversation immediately turns into a shopping list of GPUs.
@@ -15,7 +15,7 @@ That is the wrong first question.
 
 The first question is what the system must do, how many requests it must serve at the same time, how long the prompts are, how much latency the user can tolerate, and what evidence is required before an answer becomes an accepted business outcome. Only after those constraints are clear should the team decide whether a small model, a medium model, or a larger quantized model belongs on the server.
 
-![A production on-prem AI stack fits small and medium language models, routing, memory budgets, security controls, and enterprise workloads inside a bounded VRAM envelope](/blog/onprem-ai-100gb/hero.png)
+![A production on-prem AI stack fits small and medium language models, routing, memory budgets, security controls, and enterprise workloads inside a bounded VRAM envelope](/blog/onprem-ai-100gb/hero.webp)
 
 > **The thesis:** approximately 100 GB of total VRAM is not a promise to run a 100-billion-parameter model. It is a capacity envelope that must be divided between weights, runtime buffers, KV cache, concurrency, and operational headroom. Production success comes from workload-first sizing, not from filling every byte with model weights.
 
@@ -58,7 +58,7 @@ For rough model selection, weight memory is approximately parameter count multip
 
 The arithmetic is useful for rejecting impossible plans. It is not accurate enough to approve a production capacity target.
 
-![A VRAM budget separates model weights, KV cache, runtime buffers, communication overhead, and safety headroom instead of treating total GPU memory as model capacity](/blog/onprem-ai-100gb/vram-budget.png)
+![A VRAM budget separates model weights, KV cache, runtime buffers, communication overhead, and safety headroom instead of treating total GPU memory as model capacity](/blog/onprem-ai-100gb/vram-budget.webp)
 
 | Model class | Approximate raw weight size | Plausible role inside a 100 GB envelope | Main risk |
 |---|---:|---|---|
@@ -101,7 +101,7 @@ The second tier is where most enterprise teams should begin. It offers a meaning
 
 The third tier is a larger quantized model, such as a 70B-class model, reserved for difficult requests. A 70B INT4 model may fit within two 48 GB-class GPUs on paper, but the operational contract is tighter.
 
-![A model ladder routes high-volume work to a small model, harder work to a medium quantized model, and exceptional requests to a multi-GPU specialist tier](/blog/onprem-ai-100gb/model-ladder.png)
+![A model ladder routes high-volume work to a small model, harder work to a medium quantized model, and exceptional requests to a multi-GPU specialist tier](/blog/onprem-ai-100gb/model-ladder.webp)
 
 Long contexts, multiple concurrent sequences, and tensor-parallel communication can consume the margin quickly. Treat this tier as an exception path, not the default endpoint for every employee.
 
@@ -176,7 +176,7 @@ Availability also changes on-premise. The team owns GPU failures, driver compati
 
 Synthetic tokens-per-second numbers are not a capacity plan. Build a benchmark matrix from representative production traces with sensitive data removed. Include short and long prompts, single-turn and multi-turn conversations, tool schemas, retrieval payloads, structured output, and cancellation.
 
-![An on-prem AI rollout moves from anonymized workload traces through benchmark gates, shadow traffic, guarded production rollout, fallback, and human review](/blog/onprem-ai-100gb/benchmark-rollout.png)
+![An on-prem AI rollout moves from anonymized workload traces through benchmark gates, shadow traffic, guarded production rollout, fallback, and human review](/blog/onprem-ai-100gb/benchmark-rollout.webp)
 
 Measure time to first token, inter-token latency, end-to-end latency, throughput, queue wait, peak VRAM, KV-cache occupancy, error rate, OOM rate, and quality acceptance. Run at several concurrency levels. Repeat after changing quantization, context caps, batch limits, and model routing.
 

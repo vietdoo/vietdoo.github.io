@@ -3,13 +3,13 @@ title: "Event-driven AI Systems: Giải Quyết Bài Toán Timeout Khi LLM Proce
 description: "Xây dựng AI Agent không chỉ là gọi API OpenAI. Khi task mất đến 5 phút để hoàn thành, kiến trúc Request-Response truyền thống sẽ sụp đổ. Đây là lúc Event-driven Architecture lên ngôi."
 pubDate: 2026-07-15
 category: "engineering"
-image: "/blog/event-driven-ai-hero.jpg"
+image: "/blog/event-driven-ai-hero.webp"
 lang: "vi"
 translationKey: "event-driven-ai-systems"
 draft: false
 ---
 
-![Kiến trúc Event-driven cho AI Systems](/blog/event-driven-ai-hero.jpg)
+![Kiến trúc Event-driven cho AI Systems](/blog/event-driven-ai-hero.webp)
 
 Nếu bạn đã từng xây dựng một hệ thống AI đủ phức tạp, bạn chắc chắn đã gặp thông báo lỗi này: `504 Gateway Timeout`.
 

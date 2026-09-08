@@ -6,7 +6,7 @@ category: "architecture"
 lang: "vi"
 translationKey: "zero-downtime-canary-db-migration"
 draft: false
-image: "/blog/zero-downtime-canary/canary_release_sketch.jpg"
+image: "/blog/zero-downtime-canary/canary_release_sketch.webp"
 ---
 
 Mỗi khi hệ thống bước vào giai đoạn nâng cấp lớn, cơn ác mộng lớn nhất của các kỹ sư vận hành (SRE / Backend Engineer) là: **"Liệu lần release này có làm đứt gãy kết nối của khách hàng hay gây mất mát dữ liệu không?"**
@@ -17,7 +17,7 @@ Bài viết này chia sẻ hai trụ cột cốt lõi để đạt được zero
 1. **Canary Release Strategy** trên K8s với Traffic Splitting.
 2. **Expand-Contract Pattern** để Migration Database an toàn tuyệt đối.
 
-![Phác thảo mô hình Kubernetes Canary Release](/blog/zero-downtime-canary/canary_release_sketch.jpg)
+![Phác thảo mô hình Kubernetes Canary Release](/blog/zero-downtime-canary/canary_release_sketch.webp)
 
 ---
 
@@ -101,7 +101,7 @@ spec:
 
 Dù dùng Canary hay Rolling Update, nếu container khởi động xong mà ứng dụng chưa hoàn tất khởi tạo (chưa sẵn sàng nhận DB connection hay nạp Cache), K8s vẫn có thể dồn traffic vào làm rơi request ($502 / 503$).
 
-![Kỹ thuật cấu hình Probe trong K8s để chặn Traffic hỏng](/blog/zero-downtime-canary/k8s_probes_sketch.jpg)
+![Kỹ thuật cấu hình Probe trong K8s để chặn Traffic hỏng](/blog/zero-downtime-canary/k8s_probes_sketch.webp)
 
 ### Quy tắc cấu hình Probe chuẩn Production:
 
@@ -136,7 +136,7 @@ Giả sử phiên bản ứng dụng $V_1$ đang dùng bảng `users` với cộ
 
 Để giải quyết, chúng ta sử dụng **Expand-Contract Pattern (hoặc Parallel Change Pattern)** gồm 3 giai đoạn:
 
-![Mô hình Expand-Contract Database Migration 3 giai đoạn](/blog/zero-downtime-canary/db_migration_sketch.jpg)
+![Mô hình Expand-Contract Database Migration 3 giai đoạn](/blog/zero-downtime-canary/db_migration_sketch.webp)
 
 ### Giai đoạn 1: Expand (Mở rộng Schema)
 - Thêm cột mới `first_name` và `last_name` (allow NULL).
@@ -161,7 +161,7 @@ Giả sử phiên bản ứng dụng $V_1$ đang dùng bảng `users` với cộ
 
 Hệ thống nên tự động đo đạc chỉ số Prometheus và kích hoạt Rollback tự động khi vi phạm ngưỡng an toàn (SLA Breach).
 
-![Mô hình Tự động Rollback với Grafana/Prometheus Alerting](/blog/zero-downtime-canary/auto_rollback_sketch.jpg)
+![Mô hình Tự động Rollback với Grafana/Prometheus Alerting](/blog/zero-downtime-canary/auto_rollback_sketch.webp)
 
 Khi tích hợp công cụ như **Argo Rollouts** hoặc **Flagger**, bạn có thể khai báo chiến lược phân tích Metric tự động:
 

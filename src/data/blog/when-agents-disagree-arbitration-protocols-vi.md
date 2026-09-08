@@ -6,7 +6,7 @@ category: "engineering"
 lang: "vi"
 translationKey: "when-agents-disagree-arbitration-protocols"
 draft: false
-image: "/blog/agent-arbitration/hero.png"
+image: "/blog/agent-arbitration/hero.webp"
 ---
 
 Phiên bản đầu tiên của một multi-agent system thường trông đơn giản đến mức đáng ngờ. Một agent truy xuất evidence. Một agent khác đánh giá risk. Agent thứ ba đề xuất action. Một model cuối đọc toàn bộ output rồi chọn câu trả lời nghe thuyết phục nhất.
@@ -17,7 +17,7 @@ Fraud detector nói một giao dịch đáng ngờ. Agent hiểu customer contex
 
 Phản ứng nguy hiểm là bắt hệ thống vote mạnh hơn. Majority voting có thể che giấu lỗi tương quan, thưởng cho câu trả lời dài và biến một conflict chưa được giải quyết thành cảm giác chắc chắn giả. Production system cần một thứ có chủ đích hơn: **arbitration protocol** xác định cách phát hiện bất đồng, cách so sánh evidence, khi nào được commit decision và khi nào hệ thống phải abstain hoặc escalate.
 
-![Production AI system đưa các quyết định xung đột qua chuẩn hóa evidence, arbitration, abstention và human escalation](/blog/agent-arbitration/hero.png)
+![Production AI system đưa các quyết định xung đột qua chuẩn hóa evidence, arbitration, abstention và human escalation](/blog/agent-arbitration/hero.webp)
 
 > **Luận điểm chính:** Arbitration không phải là model call cuối cùng trong multi-agent workflow. Nó là một decision stage bị ràng buộc bởi policy, có input rõ ràng, state được bảo vệ, confidence đã calibrate và outcome an toàn khi consensus không đủ cơ sở.
 
@@ -39,7 +39,7 @@ Trước khi chọn cách arbitration, hãy phân loại conflict. Mỗi loại 
 | Confidence conflict | Các agent cùng chọn outcome nhưng khác nhau về mức chắc chắn. | Calibrate confidence và xem phân bố bất đồng. |
 | Correlated error | Các agent có vẻ đồng ý vì cùng mắc một blind spot. | Đa dạng hóa evidence hoặc thêm đường kiểm chứng độc lập. |
 
-![Conflict matrix vẽ tay so sánh evidence conflict, scope conflict, policy boundary và correlated agreement](/blog/agent-arbitration/conflict-matrix.png)
+![Conflict matrix vẽ tay so sánh evidence conflict, scope conflict, policy boundary và correlated agreement](/blog/agent-arbitration/conflict-matrix.webp)
 
 Sự phân biệt này quan trọng vì arbitration không thể sửa một input contract chưa từng tồn tại. Nếu một agent hiểu “approve the request” là duyệt document còn agent khác hiểu là duyệt payment, weighted average của hai score là vô nghĩa.
 
@@ -96,7 +96,7 @@ Claim {
 }
 ```
 
-![Evidence ladder tách unsupported claim khỏi evidence mới, độc lập và phù hợp policy](/blog/agent-arbitration/evidence-ladder.png)
+![Evidence ladder tách unsupported claim khỏi evidence mới, độc lập và phù hợp policy](/blog/agent-arbitration/evidence-ladder.webp)
 
 Packet cho arbiter thứ hữu ích hơn câu “Agent B nghĩ yes”. Arbiter có thể hỏi claim nào được chia sẻ, claim nào mâu thuẫn, evidence nào có authority và conflict có thực sự ảnh hưởng đến decision hay không.
 
@@ -157,7 +157,7 @@ Một rule hữu ích là **independent evidence trước additional opinions**.
 
 Một arbitration path đáng tin cậy thường có nhiều level. Mỗi level nên rẻ và nhanh hơn level tiếp theo, nhưng không level nào được bypass hard policy constraint.
 
-![Arbitration cascade nhiều lớp đi từ deterministic check qua evidence review, stronger judge đến human escalation](/blog/agent-arbitration/escalation-cascade.png)
+![Arbitration cascade nhiều lớp đi từ deterministic check qua evidence review, stronger judge đến human escalation](/blog/agent-arbitration/escalation-cascade.webp)
 
 ### Level 0: deterministic checks
 

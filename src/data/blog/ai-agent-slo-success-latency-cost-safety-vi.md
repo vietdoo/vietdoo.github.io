@@ -6,17 +6,17 @@ category: "engineering"
 lang: "vi"
 translationKey: "ai-agent-slo-success-latency-cost-safety"
 draft: false
-image: "/blog/ai-agent-slo/hero.png"
+image: "/blog/ai-agent-slo/hero.webp"
 ---
 
 Một API thông thường có contract khá rõ. Nó nhận request, trả response và expose những tín hiệu quen thuộc như error rate, latency và availability. AI Agent thì khác. Nó có thể gọi nhiều model, retrieve document, retry tool, hỏi lại người dùng rồi vẫn tạo ra một câu trả lời nghe có vẻ hợp lý.
 
 Vì vậy, “request trả về 200” là một định nghĩa rất kém cho reliability. Agent có thể nhanh nhưng sai, đúng nhưng quá đắt, hoặc hoàn thành task trong khi vi phạm policy. Một SLO hữu ích phải đại diện cho công việc mà người dùng thật sự quan tâm.
 
-![Một engineer theo dõi bốn đồng hồ success, latency, cost và safety xoay quanh một AI Agent production](/blog/ai-agent-slo/hero.png)
+![Một engineer theo dõi bốn đồng hồ success, latency, cost và safety xoay quanh một AI Agent production](/blog/ai-agent-slo/hero.webp)
 
 <figure class="blog-video">
-  <video controls preload="metadata" playsinline poster="/blog/ai-agent-slo/hero.png" aria-label="Video giải thích nội dung bài viết, phiên bản tiếng Việt">
+  <video controls preload="metadata" playsinline poster="/blog/ai-agent-slo/hero.webp" aria-label="Video giải thích nội dung bài viết, phiên bản tiếng Việt">
     <source src="/blog/ai-agent-slo-success-latency-cost-safety/video-vi.mp4" type="video/mp4" />
     Trình duyệt của bạn không hỗ trợ video HTML5.
   </video>
@@ -67,7 +67,7 @@ success =
 
 End-to-end latency là con số người dùng cảm nhận, nhưng engineer cần biết thời gian đã tiêu ở đâu. Một agent thường mất thời gian cho routing, retrieval, model call, tool execution, retry và đôi khi cả việc chờ người dùng.
 
-![Một agent trace chia request thành routing, retrieval, model, tool, retry và final response với latency budget rõ ràng](/blog/ai-agent-slo/trace-timeline.png)
+![Một agent trace chia request thành routing, retrieval, model, tool, retry và final response với latency budget rõ ràng](/blog/ai-agent-slo/trace-timeline.webp)
 
 Một budget có thể bắt đầu như sau:
 
@@ -91,7 +91,7 @@ Hãy track cost ở task level, không chỉ ở model-call level. Một task c�
 
 Một policy đơn giản có thể dùng soft threshold và hard threshold. Khi gần soft threshold, agent chuyển sang model rẻ hơn, giảm context hoặc hỏi user thu hẹp yêu cầu. Khi chạm hard threshold, agent dừng và trả partial result rõ ràng thay vì âm thầm loop tiếp.
 
-![Một agent nhỏ chạy vòng quanh các đồng hồ token, latency và cost cho tới khi budget gate dừng loop và ghi nhận partial outcome an toàn](/blog/ai-agent-slo/budget-guardrail.png)
+![Một agent nhỏ chạy vòng quanh các đồng hồ token, latency và cost cho tới khi budget gate dừng loop và ghi nhận partial outcome an toàn](/blog/ai-agent-slo/budget-guardrail.webp)
 
 Đừng tối ưu cost bằng cách che giấu work. Nếu bỏ bước summarization và người dùng nhận câu trả lời kém hơn, success metric phải cho thấy trade-off đó. Cost là một chiều của SLO vì nó cần được cân bằng với quality, không phải tối thiểu hóa một cách cô lập.
 

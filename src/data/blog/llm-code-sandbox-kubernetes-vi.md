@@ -3,16 +3,16 @@ title: "Sandbox cho Code do LLM tạo: Chạy Tool và Code Agent an toàn trên
 description: "Thiết kế runtime boundary thực tế cho code agent: process isolation, container, gVisor hoặc microVM, network egress, quota, artifact và cleanup."
 pubDate: 2026-07-27
 category: "security"
-image: "/blog/llm-code-sandbox/hero.jpg"
+image: "/blog/llm-code-sandbox/hero.webp"
 lang: "vi"
 translationKey: "llm-code-sandbox-kubernetes"
 draft: false
 ---
 
-![Một gói code do LLM tạo đi vào execution chamber nhiều lớp được bảo vệ](/blog/llm-code-sandbox/hero.jpg)
+![Một gói code do LLM tạo đi vào execution chamber nhiều lớp được bảo vệ](/blog/llm-code-sandbox/hero.webp)
 
 <figure class="blog-video">
-  <video controls preload="metadata" playsinline poster="/blog/llm-code-sandbox/hero.jpg" aria-label="Video giải thích nội dung bài viết, phiên bản tiếng Việt">
+  <video controls preload="metadata" playsinline poster="/blog/llm-code-sandbox/hero.webp" aria-label="Video giải thích nội dung bài viết, phiên bản tiếng Việt">
     <source src="/blog/llm-code-sandbox-kubernetes/video-vi.mp4" type="video/mp4" />
     Trình duyệt của bạn không hỗ trợ video HTML5.
   </video>
@@ -49,7 +49,7 @@ Threat model hữu ích phải bao gồm cả accident. Agent có thể viết v
 
 Từ “sandbox” che giấu những khác biệt quan trọng. Process boundary, container, gVisor và microVM không cung cấp cùng một security property.
 
-![Execution boundary nhiều lớp chặn network, filesystem, secret và identity quanh generated code](/blog/llm-code-sandbox/isolation-layers.png)
+![Execution boundary nhiều lớp chặn network, filesystem, secret và identity quanh generated code](/blog/llm-code-sandbox/isolation-layers.webp)
 
 | Lựa chọn | Cô lập gì | Điểm yếu chính | Trường hợp phù hợp |
 |---|---|---|---|
@@ -174,7 +174,7 @@ Phân biệt thời gian schedule, start, execution và collect artifact. Nếu 
 
 Cleanup phải chạy trên mọi terminal path: success, timeout, cancellation, admission rejection, node drain, worker crash và policy violation. Dùng finalizer hoặc controller có thể tìm execution mồ côi theo execution ID và tenant. Đừng dựa vào model để nói job đã hoàn tất.
 
-![Lifecycle đi từ code request qua policy check, ephemeral runtime, quota, artifact scan và teardown](/blog/llm-code-sandbox/policy-lifecycle.png)
+![Lifecycle đi từ code request qua policy check, ephemeral runtime, quota, artifact scan và teardown](/blog/llm-code-sandbox/policy-lifecycle.webp)
 
 ## Tool call cũng cần runtime boundary
 

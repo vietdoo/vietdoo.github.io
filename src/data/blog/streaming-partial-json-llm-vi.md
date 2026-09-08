@@ -3,13 +3,13 @@ title: "Xử lý partial JSON từ Streaming LLM Responses: Đừng để User p
 description: "Khi AI trả về một object JSON khổng lồ, làm sao để stream nó real-time lên UI mà không bị gãy format? Hãy cùng giải mã nghệ thuật streaming LLM output."
 pubDate: 2026-07-20
 category: "engineering"
-image: "/blog/streaming-llm-hero.jpg"
+image: "/blog/streaming-llm-hero.webp"
 lang: "vi"
 translationKey: "streaming-partial-json-llm"
 draft: false
 ---
 
-![Streaming LLM Responses](/blog/streaming-llm-hero.jpg)
+![Streaming LLM Responses](/blog/streaming-llm-hero.webp)
 
 Một trong những tiêu chuẩn của một ứng dụng AI hiện đại là khả năng "Streaming" (trả về từng từ giống như ChatGPT) thay vì buộc người dùng phải nhìn màn hình loading suốt 10 giây.
 

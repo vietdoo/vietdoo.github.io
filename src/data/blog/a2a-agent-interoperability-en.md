@@ -3,13 +3,13 @@ title: "Beyond Tool Calls: Designing Reliable Agent-to-Agent Collaboration with 
 description: "A practical system-design guide to Agent Cards, task lifecycles, capability negotiation, streaming, push updates, and trust boundaries in agent-to-agent systems."
 pubDate: 2026-05-26
 category: "architecture"
-image: "/blog/a2a-agent-interoperability/hero.png"
+image: "/blog/a2a-agent-interoperability/hero.webp"
 lang: "en"
 translationKey: "a2a-agent-interoperability"
 draft: false
 ---
 
-![A client agent delegates a bounded task to a remote agent through an A2A protocol boundary](/blog/a2a-agent-interoperability/hero.png)
+![A client agent delegates a bounded task to a remote agent through an A2A protocol boundary](/blog/a2a-agent-interoperability/hero.webp)
 
 I used to describe every AI integration as a tool call. It was a useful simplification: the model chooses a function, the function returns data, and the model continues. Then the system grows. A customer-support agent needs a specialist from another team. A research agent needs a compliance agent. A scheduling agent needs to ask a booking agent to hold an option for several minutes while a human confirms the details.
 
@@ -39,7 +39,7 @@ A useful abstraction is:
 
 That difference changes the architecture. The calling agent becomes a client. The remote agent becomes a server with its own policy and runtime. The message is an intent, but the task is a durable protocol object. The artifact is the result of work, not merely a return value.
 
-![The discovery and delegation path turns an Agent Card into a capability contract before a task begins](/blog/a2a-agent-interoperability/agent-card.png)
+![The discovery and delegation path turns an Agent Card into a capability contract before a task begins](/blog/a2a-agent-interoperability/agent-card.webp)
 
 _Figure 1. Discovery should narrow the delegation boundary before the client sends the task._
 
@@ -79,7 +79,7 @@ The sixth step matters more than it first appears. A remote agent does not need 
 
 The most important design shift is to stop treating a delegated request as a single response. The remote agent may return a **Task**, a stateful object that progresses through a defined lifecycle. The exact protocol vocabulary is less important than the engineering discipline behind it: the client needs to know whether the work was accepted, is active, needs input, completed, failed, or was canceled.[2]
 
-![A task moves through explicit states instead of being represented as one ambiguous response](/blog/a2a-agent-interoperability/task-lifecycle.png)
+![A task moves through explicit states instead of being represented as one ambiguous response](/blog/a2a-agent-interoperability/task-lifecycle.webp)
 
 _Figure 2. Explicit task states let the client distinguish progress, failure, cancellation, and a request for more input._
 
@@ -152,7 +152,7 @@ This is not an argument for exposing hidden reasoning. It is an argument for exp
 
 Once the basics work, teams usually discover that the protocol is not the hard part. The hard part is operating a boundary where two autonomous systems can each be locally reasonable and still produce a globally unsafe result.
 
-![The production path gates delegation on capability, authorization, retry safety, bounded work, and traceability](/blog/a2a-agent-interoperability/reliability-gates.png)
+![The production path gates delegation on capability, authorization, retry safety, bounded work, and traceability](/blog/a2a-agent-interoperability/reliability-gates.webp)
 
 _Figure 3. Reliability is a sequence of gates before delegation, not a single pass/fail prompt._
 

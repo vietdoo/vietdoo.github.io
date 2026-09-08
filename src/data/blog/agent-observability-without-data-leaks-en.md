@@ -3,16 +3,16 @@ title: "AI Agent Observability: Trace Prompts, Tool Calls, Tokens, and Cost With
 description: "A tool-calling agent must be explainable when it is slow, expensive, wrong, or unsafe. That does not require turning every prompt and tool payload into an ungoverned data lake. Here is a metadata-first blueprint for safe agent observability."
 pubDate: 2026-05-06
 category: "engineering"
-image: "/blog/agent-observability-hero.jpg"
+image: "/blog/agent-observability-hero.webp"
 lang: "en"
 translationKey: "agent-observability-without-data-leaks"
 draft: false
 ---
 
-![An engineer examines an AI-agent trace while a secure vault protects sensitive fragments](/blog/agent-observability-hero.jpg)
+![An engineer examines an AI-agent trace while a secure vault protects sensitive fragments](/blog/agent-observability-hero.webp)
 
 <figure class="blog-video">
-  <video controls preload="metadata" playsinline poster="/blog/agent-observability-hero.jpg" aria-label="Explainer video for this article, English version">
+  <video controls preload="metadata" playsinline poster="/blog/agent-observability-hero.webp" aria-label="Explainer video for this article, English version">
     <source src="/blog/agent-observability-without-data-leaks/video-en.mp4" type="video/mp4" />
     Your browser does not support HTML5 video.
   </video>
@@ -54,7 +54,7 @@ NIST frames post-deployment AI monitoring as more than infrastructure availabili
 
 A defensible design separates evidence by the question it serves, the people who may read it, and its retention policy. A single giant span JSON gives you the worst of both worlds: too little structure for operations and too much content to protect.
 
-![A privacy-first matrix separates trace spans, metrics, events, and restricted evidence by purpose, access, and retention](/blog/agent-observability-telemetry-matrix.png)
+![A privacy-first matrix separates trace spans, metrics, events, and restricted evidence by purpose, access, and retention](/blog/agent-observability-telemetry-matrix.webp)
 
 | Telemetry plane | Primary purpose | Unit of data | Default raw-content posture | Typical reader |
 |---|---|---|---|---|
@@ -81,7 +81,7 @@ agent.final.outcome_class   = refund_draft_created
 
 A model child span can include the deployment, template revision, token usage, finish reason, and estimated cost. A tool span can include tool name, capability class, schema revision, argument **shape**, result **class**, duration, retries, and effect. None of those fields requires a customer name, an entire prompt, or a raw JSON result.
 
-![An agent root span fans out through model, retrieval, and tool-call cards while raw content stays behind a privacy layer](/blog/agent-observability-trace-map.jpg)
+![An agent root span fans out through model, retrieval, and tool-call cards while raw content stays behind a privacy layer](/blog/agent-observability-trace-map.webp)
 
 OpenTelemetry’s GenAI observability walkthrough uses the same essential hierarchy: an agent/root invocation with child chat and tool-execution spans, plus attributes for model identity, tokens, and finish reasons. When content recording is enabled, full messages and tool information can be attached. That is a policy choice, not a harmless default.[1]
 
@@ -124,7 +124,7 @@ trace.id=7b4e…  agent.version=2026.08.13.3  tenant.tier=regulated
 
 That tells the on-call engineer that the agent retried once, ended with a staged—not externally executed—action, and spent more because of an additional model/tool path. It does not reveal the customer’s billing records, street address, email, or upstream header.
 
-![An illustrative safe agent trace shows nested spans, redaction, tokens, latency, cost, and a budget check without raw customer content](/blog/agent-observability-span-timeline.png)
+![An illustrative safe agent trace shows nested spans, redaction, tokens, latency, cost, and a budget check without raw customer content](/blog/agent-observability-span-timeline.webp)
 
 > A trace ID is a correlation handle. It is **not** a ticket that grants access to a transcript. Treating it as one collapses the boundary between normal observability and exceptional evidence access.
 
@@ -214,7 +214,7 @@ This is not a replacement for DLP or semantic PII detection. It establishes a sa
 
 ## Build a layered redaction pipeline because every layer has blind spots
 
-![A conveyor routes prompt and tool fragments through classification, redaction, an allowlist, a collector, and a vault while risky fragments are shredded](/blog/agent-observability-data-boundaries.jpg)
+![A conveyor routes prompt and tool fragments through classification, redaction, an allowlist, a collector, and a vault while risky fragments are shredded](/blog/agent-observability-data-boundaries.webp)
 
 A production design usually needs at least five checkpoints.
 
@@ -346,7 +346,7 @@ trace_cost_usd = Σ span_cost_usd + tool_metered_cost_usd
 
 Do not hard-code price in a dashboard query. Version a price card, attach `billing.price_card_version`, and label cost as an estimate when provider billing, caching, or rounding semantics differ. The numbers in this article’s charts are examples, not claims about a model’s current price.
 
-![A small agent runs around token, latency, and cost gauges while a guardrail prevents a runaway loop](/blog/agent-observability-budget-loop.jpg)
+![A small agent runs around token, latency, and cost gauges while a guardrail prevents a runaway loop](/blog/agent-observability-budget-loop.webp)
 
 ### Keep three budgets separate
 
@@ -389,7 +389,7 @@ Use a deliberately narrow workflow instead:
 5. The system logs requester, fields viewed, time, and operator; TTL expiry triggers verified deletion.
 6. The investigation produces a safe summary and—where valuable—a synthetic regression or evaluation case.
 
-![A locked debug cabinet represents time-bound break-glass access with two-person approval and an auditable evidence path](/blog/agent-observability-break-glass.jpg)
+![A locked debug cabinet represents time-bound break-glass access with two-person approval and an auditable evidence path](/blog/agent-observability-break-glass.webp)
 
 This design feels heavier than an unrestricted trace UI because it is. It creates an auditable boundary and prevents ordinary incident response from becoming routine bulk access to customer conversations. Grafana’s redaction documentation makes the limitation visible: SDK sanitizers and server guards have different coverage, and no single layer automatically covers response content, streaming, and model-thinking blocks in the same way.[3] Break-glass does not replace prevention; it acknowledges legitimate investigative needs without normalizing raw-content access.
 

@@ -3,13 +3,13 @@ title: "Handling Partial JSON from Streaming LLMs: Don't Keep Your Users Waiting
 description: "When an AI returns a massive JSON object, how do you stream it real-time to the UI without breaking the format? Let's decode the art of streaming LLM outputs."
 pubDate: 2026-07-20
 category: "engineering"
-image: "/blog/streaming-llm-hero.jpg"
+image: "/blog/streaming-llm-hero.webp"
 lang: "en"
 translationKey: "streaming-partial-json-llm"
 draft: false
 ---
 
-![Streaming LLM Responses](/blog/streaming-llm-hero.jpg)
+![Streaming LLM Responses](/blog/streaming-llm-hero.webp)
 
 One of the gold standards for a modern AI application is "Streaming" capability (returning responses word-by-word like ChatGPT) rather than forcing users to stare at a loading spinner for 10 seconds.
 

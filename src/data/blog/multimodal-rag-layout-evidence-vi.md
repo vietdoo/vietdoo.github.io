@@ -3,13 +3,13 @@ title: "Multimodal RAG hiểu Bảng, Hình và Bố cục Trang như thế nào
 description: "Text-only chunking thường làm hỏng các workflow AI dùng nhiều document. Đây là thiết kế layout-aware retrieval thực tế cho prose, table, figure, caption và page-level evidence."
 pubDate: 2026-07-11
 category: "engineering"
-image: "/blog/multimodal-rag-layout/hero.png"
+image: "/blog/multimodal-rag-layout/hero.webp"
 lang: "vi"
 translationKey: "multimodal-rag-layout-evidence"
 draft: false
 ---
 
-![Một AI robot đưa paragraph, table, figure và page layout vào một câu trả lời có grounding](/blog/multimodal-rag-layout/hero.png)
+![Một AI robot đưa paragraph, table, figure và page layout vào một câu trả lời có grounding](/blog/multimodal-rag-layout/hero.webp)
 
 Một document có thể chứa câu trả lời trong paragraph, exception trong table, definition trong caption, còn ý nghĩa của chart lại nằm ở layout xung quanh nó. Text-only RAG pipeline biến document thành một chuỗi chunk rồi hy vọng các mối quan hệ quan trọng vẫn còn nguyên.
 
@@ -25,7 +25,7 @@ Bài viết tập trung vào document-heavy workflow: technical manual, policy p
 
 Page không chỉ là một túi token. Nó là một evidence graph nhỏ. Heading định nghĩa scope cho paragraph bên dưới. Table header cho biết ý nghĩa của giá trị trong cell. Figure có caption, legend, axis và explanation gần đó. Footnote có thể thu hẹp claim được nêu ở phần thân.
 
-![Layout-aware index tách document page thành paragraph, table, figure, caption và sidebar trước khi retrieval](/blog/multimodal-rag-layout/layout-aware-index.png)
+![Layout-aware index tách document page thành paragraph, table, figure, caption và sidebar trước khi retrieval](/blog/multimodal-rag-layout/layout-aware-index.webp)
 
 Hãy hình dung page có cấu trúc sau:
 
@@ -112,7 +112,7 @@ Một bundle có thể gồm:
 
 Bundle phải có giới hạn. Trả về mọi thành phần trên page làm tăng token cost và có thể chôn evidence quan trọng. Expansion policy nên explicit: include table header, figure legend, nearest heading và footnote chỉ khi region có link đến nó.
 
-![Robot trả lời câu hỏi về table bằng cách kết hợp row được highlight, header và explanation gần đó thay vì dùng row một mình](/blog/multimodal-rag-layout/table-evidence.png)
+![Robot trả lời câu hỏi về table bằng cách kết hợp row được highlight, header và explanation gần đó thay vì dùng row một mình](/blog/multimodal-rag-layout/table-evidence.webp)
 
 ### Đừng nhầm visual retrieval với visual reasoning
 
@@ -155,7 +155,7 @@ Một evidence envelope có thể trông như sau:
 
 Text-only evaluator có thể đánh giá answer đúng vì final sentence giống reference answer. Nó có thể bỏ qua wrong table row, mất unit hoặc citation đúng page nhưng sai region.
 
-![Evaluation board so sánh answer được ground bằng paragraph, table và figure với answer chỉ dựa vào text](/blog/multimodal-rag-layout/evidence-evaluation.png)
+![Evaluation board so sánh answer được ground bằng paragraph, table và figure với answer chỉ dựa vào text](/blog/multimodal-rag-layout/evidence-evaluation.webp)
 
 Multimodal evaluation nên kết hợp deterministic và semantic check:
 

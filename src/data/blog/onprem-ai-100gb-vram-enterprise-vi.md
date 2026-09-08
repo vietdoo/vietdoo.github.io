@@ -6,7 +6,7 @@ category: "engineering"
 lang: "vi"
 translationKey: "onprem-ai-100gb-vram-enterprise"
 draft: false
-image: "/blog/onprem-ai-100gb/hero.png"
+image: "/blog/onprem-ai-100gb/hero.webp"
 ---
 
 Hầu hết đề xuất AI on-premise đều bắt đầu bằng tên model. Có người hỏi doanh nghiệp có thể chạy model 32B, 70B hay một mô hình mixture-of-experts hay không, rồi cuộc thảo luận lập tức biến thành danh sách GPU cần mua.
@@ -15,7 +15,7 @@ Hầu hết đề xuất AI on-premise đều bắt đầu bằng tên model. C�
 
 Câu hỏi đầu tiên phải là hệ thống cần làm gì, phải phục vụ bao nhiêu request đồng thời, prompt dài đến đâu, người dùng chấp nhận độ trễ nào và cần bằng chứng gì trước khi một câu trả lời được xem là kết quả nghiệp vụ hợp lệ. Chỉ sau khi các ràng buộc đó rõ ràng, team mới nên quyết định một model nhỏ, model trung hay model lớn đã quantize có phù hợp với server hay không.
 
-![Một AI stack on-prem production đặt model nhỏ và trung, routing, memory budget, security control và workload doanh nghiệp trong giới hạn VRAM cố định](/blog/onprem-ai-100gb/hero.png)
+![Một AI stack on-prem production đặt model nhỏ và trung, routing, memory budget, security control và workload doanh nghiệp trong giới hạn VRAM cố định](/blog/onprem-ai-100gb/hero.webp)
 
 > **Luận điểm chính:** khoảng 100 GB VRAM tổng không phải lời hứa rằng doanh nghiệp có thể chạy model 100 tỷ tham số. Đó là một capacity envelope phải được chia cho weight, runtime buffer, KV cache, concurrency và operational headroom. Production thành công nhờ sizing theo workload, không phải nhồi đầy mọi byte bằng trọng số model.
 
@@ -58,7 +58,7 @@ memory dành cho weight và KV cache
 
 Phép tính này hữu ích để loại bỏ các kế hoạch bất khả thi. Nó chưa đủ chính xác để phê duyệt một capacity target production.
 
-![Một VRAM budget tách model weight, KV cache, runtime buffer, communication overhead và safety headroom thay vì coi toàn bộ GPU memory là capacity cho model](/blog/onprem-ai-100gb/vram-budget.png)
+![Một VRAM budget tách model weight, KV cache, runtime buffer, communication overhead và safety headroom thay vì coi toàn bộ GPU memory là capacity cho model](/blog/onprem-ai-100gb/vram-budget.webp)
 
 | Nhóm model | Raw weight size xấp xỉ | Vai trò khả thi trong envelope 100 GB | Rủi ro chính |
 |---|---:|---|---|
@@ -101,7 +101,7 @@ Tier thứ hai là model 14B–32B. Model card của Qwen3-14B ghi nhận đây 
 
 Tier thứ ba là model lớn hơn đã quantize, chẳng hạn model 70B-class, chỉ dành cho request khó. Model 70B INT4 có thể vừa hai GPU 48 GB-class trên giấy tờ, nhưng contract vận hành chặt hơn.
 
-![Model ladder chuyển workload volume cao đến model nhỏ, tác vụ khó đến model trung quantized và request ngoại lệ đến tier chuyên biệt multi-GPU](/blog/onprem-ai-100gb/model-ladder.png)
+![Model ladder chuyển workload volume cao đến model nhỏ, tác vụ khó đến model trung quantized và request ngoại lệ đến tier chuyên biệt multi-GPU](/blog/onprem-ai-100gb/model-ladder.webp)
 
 Context dài, nhiều sequence đồng thời và communication tensor-parallel có thể nhanh chóng ăn hết margin. Hãy coi tier này là exception path, không phải endpoint mặc định cho mọi nhân viên.
 
@@ -176,7 +176,7 @@ Availability cũng thay đổi khi chạy on-premise. Team sở hữu GPU failur
 
 Con số tokens-per-second trong môi trường rỗng không phải capacity plan. Hãy xây benchmark matrix từ production trace đã loại dữ liệu nhạy cảm. Bao gồm prompt ngắn và dài, hội thoại một và nhiều lượt, tool schema, retrieval payload, structured output và cancellation.
 
-![Một on-prem AI rollout đi từ workload trace đã ẩn danh qua benchmark gate, shadow traffic, production rollout có kiểm soát, fallback và human review](/blog/onprem-ai-100gb/benchmark-rollout.png)
+![Một on-prem AI rollout đi từ workload trace đã ẩn danh qua benchmark gate, shadow traffic, production rollout có kiểm soát, fallback và human review](/blog/onprem-ai-100gb/benchmark-rollout.webp)
 
 Đo time to first token, inter-token latency, end-to-end latency, throughput, queue wait, peak VRAM, KV-cache occupancy, error rate, OOM rate và quality acceptance. Chạy ở nhiều mức concurrency. Lặp lại sau khi thay đổi quantization, context cap, batch limit và model routing.
 

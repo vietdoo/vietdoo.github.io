@@ -3,7 +3,7 @@ title: "Hiệu chỉnh LLM-as-a-Judge trong Production: Human Agreement, Drift v
 description: "Playbook production để hiệu chỉnh LLM judge với nhãn của con người, phát hiện bias và drift có hệ thống, đồng thời quyết định khi nào evaluator phải abstain thay vì tự đưa ra quyết định release."
 pubDate: 2026-09-06
 category: "engineering"
-image: "/blog/llm-judge-calibration/hero.png"
+image: "/blog/llm-judge-calibration/hero.webp"
 lang: "vi"
 translationKey: "llm-judge-calibration-production"
 draft: false
@@ -128,7 +128,7 @@ Schema hữu ích có thể là:
 
 LLM judge có thể thất bại theo những cách mà aggregate metric che mất. Trong một evaluation, judge trông chính xác vì phần lớn sample dễ, trong khi nó thất bại có hệ thống ở một cohort quan trọng.
 
-![Ma trận bias phơi bày các ô mismatch theo dimension evaluation trước khi judge âm thầm điều khiển quyết định production](/blog/llm-judge-calibration/bias-matrix.png)
+![Ma trận bias phơi bày các ô mismatch theo dimension evaluation trước khi judge âm thầm điều khiển quyết định production](/blog/llm-judge-calibration/bias-matrix.webp)
 
 ### Position và order bias
 
@@ -168,7 +168,7 @@ Hãy xem `needs_review` là một state được kiểm soát, không phải l�
 
 Threshold phải khớp với decision. Release gate có thể tối ưu precision cao cho `safe_pass` và chấp nhận nhiều review hơn. Incident monitor có thể ưu tiên recall cho policy failure. Routing cần ranking ổn định thay vì categorical truth. Không có một “good score” áp dụng cho mọi nơi.
 
-![Judge đã hiệu chỉnh chia trace vào các nhánh release, monitoring và human review dựa trên evidence và threshold](/blog/llm-judge-calibration/decision-gates.png)
+![Judge đã hiệu chỉnh chia trace vào các nhánh release, monitoring và human review dựa trên evidence và threshold](/blog/llm-judge-calibration/decision-gates.webp)
 
 ## Dùng judge đúng với khả năng của nó
 

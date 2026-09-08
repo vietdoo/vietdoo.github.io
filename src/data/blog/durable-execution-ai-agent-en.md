@@ -3,16 +3,16 @@ title: "Durable Execution for AI Agents: Checkpoints, Resume, and Safe Retries"
 description: "How to make a long-running AI workflow survive crashes, timeouts, duplicate delivery, and human waiting without turning recovery into a second application."
 pubDate: 2026-07-14
 category: "engineering"
-image: "/blog/durable-agent/hero.jpg"
+image: "/blog/durable-agent/hero.webp"
 lang: "en"
 translationKey: "durable-execution-ai-agent"
 draft: false
 ---
 
-![An AI agent workflow continues from durable checkpoints after a worker crash](/blog/durable-agent/hero.jpg)
+![An AI agent workflow continues from durable checkpoints after a worker crash](/blog/durable-agent/hero.webp)
 
 <figure class="blog-video">
-  <video controls preload="metadata" playsinline poster="/blog/durable-agent/hero.jpg" aria-label="Explainer video for this article, English version">
+  <video controls preload="metadata" playsinline poster="/blog/durable-agent/hero.webp" aria-label="Explainer video for this article, English version">
     <source src="/blog/durable-execution-ai-agent/video-en.mp4" type="video/mp4" />
     Your browser does not support HTML5 video.
   </video>
@@ -37,7 +37,7 @@ In a normal process, local variables, call stacks, and in-memory queues disappea
 
 A durable workflow changes the abstraction. The worker is replaceable; the workflow history is not. A new worker can reconstruct the state that matters and continue from a known point.
 
-![A workflow event history preserves checkpoints and lets a new worker replay completed steps](/blog/durable-agent/checkpoint-ledger.jpg)
+![A workflow event history preserves checkpoints and lets a new worker replay completed steps](/blog/durable-agent/checkpoint-ledger.webp)
 
 For an AI agent, the durable state should distinguish at least four layers:
 
@@ -103,7 +103,7 @@ RECEIVED
 
 Each transition needs a precondition and an evidence requirement. `EFFECT_CONFIRMED` must not be inferred from the model saying “done”; it needs a provider receipt, a database version, or a reconciliation result. If a worker crashes after sending an email but before writing the confirmation, recovery must consult the effect ledger before sending again.
 
-![A failed worker disappears, then a replacement worker replays the durable state and resumes from the last safe checkpoint](/blog/durable-agent/replay-recovery.jpg)
+![A failed worker disappears, then a replacement worker replays the durable state and resumes from the last safe checkpoint](/blog/durable-agent/replay-recovery.webp)
 
 The resume algorithm should be boring:
 
@@ -169,7 +169,7 @@ This does not make external providers transactional. It only prevents stale work
 
 An agent may need to wait for a human approval, a document, a scheduled date, or a slow external process. Keeping a worker thread alive is wasteful and fragile. Durable execution lets the workflow sleep without treating the sleep as a running process.
 
-![Long-running agent jobs wait, wake, retry, and move across a worker pool while sharing durable history](/blog/durable-agent/worker-pool.jpg)
+![Long-running agent jobs wait, wake, retry, and move across a worker pool while sharing durable history](/blog/durable-agent/worker-pool.webp)
 
 The workflow should persist the wake-up condition, not merely set an in-memory timer:
 

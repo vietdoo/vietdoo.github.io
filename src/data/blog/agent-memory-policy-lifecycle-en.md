@@ -3,13 +3,13 @@ title: "Your AI Agent Needs a Memory Policy, Not Just a Vector Database"
 description: "A practical design for deciding what an AI agent may remember, when memory should be consolidated or forgotten, and how to evaluate memory without turning every conversation into permanent storage."
 pubDate: 2026-02-14
 category: "engineering"
-image: "/blog/agent-memory-policy/hero.png"
+image: "/blog/agent-memory-policy/hero.webp"
 lang: "en"
 translationKey: "agent-memory-policy-lifecycle"
 draft: false
 ---
 
-![A small AI robot organizing memories into a lifecycle of capture, consolidation, decay, and deletion](/blog/agent-memory-policy/hero.png)
+![A small AI robot organizing memories into a lifecycle of capture, consolidation, decay, and deletion](/blog/agent-memory-policy/hero.webp)
 
 I have seen teams add a vector database to an AI assistant and call the problem “memory.” The demo usually looks convincing. The assistant remembers a preference from last week, retrieves a useful passage, and appears to become more personal over time. A few weeks later, the same system starts quoting an outdated project decision, carrying a private detail into the wrong workspace, or repeating a weak guess as if it were a fact.
 
@@ -41,7 +41,7 @@ A useful first design decision is to make long-term memory opt-in by class. Work
 
 The safest memory is often the memory that was never written. Before an agent stores a candidate, it should ask a few deterministic questions. This is not a second LLM prompt that says “please be careful.” It is a small policy component with observable outcomes.
 
-![The admission gate checks relevance, confidence, scope, and consent before a memory enters storage](/blog/agent-memory-policy/admission-gate.png)
+![The admission gate checks relevance, confidence, scope, and consent before a memory enters storage](/blog/agent-memory-policy/admission-gate.webp)
 
 For each candidate memory, the gate should consider:
 
@@ -83,7 +83,7 @@ As memories accumulate, systems often run a nightly job that summarizes them. Th
 
 Consolidation should therefore be treated as a **versioned transformation**. A new summary should point to the memories it replaces, preserve the strongest source references, and remain reversible until the team has confidence in the result.
 
-![A lifecycle loop turns raw memories into reviewed knowledge, then decays or deletes it when the policy says so](/blog/agent-memory-policy/lifecycle-loop.png)
+![A lifecycle loop turns raw memories into reviewed knowledge, then decays or deletes it when the policy says so](/blog/agent-memory-policy/lifecycle-loop.webp)
 
 A simple lifecycle might look like this:
 
@@ -133,7 +133,7 @@ The retrieval layer should also support negative results. “No eligible memory 
 
 A memory feature cannot be evaluated only with single-turn question-answer pairs. The feature exists to change behavior later, so its tests need at least two stages: write or update, then retrieve or deliberately refuse to retrieve.
 
-![A memory evaluation compares a supported path with a stale-memory path before release](/blog/agent-memory-policy/evaluation-matrix.png)
+![A memory evaluation compares a supported path with a stale-memory path before release](/blog/agent-memory-policy/evaluation-matrix.webp)
 
 | Test family | Example | What should be graded |
 |---|---|---|

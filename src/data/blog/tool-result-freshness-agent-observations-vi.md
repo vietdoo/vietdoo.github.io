@@ -3,13 +3,13 @@ title: "Freshness của Tool Result: Ngăn Agent hành động trên Observation
 description: "Playbook production để xem kết quả từ tool như một observation có thời hạn—với freshness budget, version check, revalidation ngay trước action, fail-closed và các metric cho AI agent an toàn."
 pubDate: 2026-04-20
 category: "engineering"
-image: "/blog/tool-result-freshness/hero.png"
+image: "/blog/tool-result-freshness/hero.webp"
 lang: "vi"
 translationKey: "tool-result-freshness-agent-observations"
 draft: false
 ---
 
-![AI agent kiểm tra tool observation qua freshness gate trước khi thực hiện action](/blog/tool-result-freshness/hero.png)
+![AI agent kiểm tra tool observation qua freshness gate trước khi thực hiện action](/blog/tool-result-freshness/hero.webp)
 
 Agent không hiểu sai yêu cầu của khách hàng. Nó hiểu sai **tuổi của câu trả lời**.
 
@@ -84,7 +84,7 @@ Một model hữu ích nên có nhiều hơn hai trạng thái. Tôi thường d
 2. **Soft stale:** observation vẫn có thể giúp agent giải thích, so sánh hoặc tạo một read request mới, nhưng không thể authorize write.
 3. **Hard expired:** observation không được dùng để ra quyết định; hệ thống phải refresh hoặc yêu cầu user thử lại.
 
-![Vòng đời của một AI agent tool observation từ lúc capture đến fresh, soft-stale và hard-expired](/blog/tool-result-freshness/observation-lifecycle.png)
+![Vòng đời của một AI agent tool observation từ lúc capture đến fresh, soft-stale và hard-expired](/blog/tool-result-freshness/observation-lifecycle.webp)
 
 Soft-stale state quan trọng cho user experience. Nếu user hỏi “Inventory trông như thế nào lúc tôi kiểm tra khi nãy?”, một observation cũ chính là thứ họ muốn. Nếu user hỏi “Hãy mua những sản phẩm còn lại”, observation đó không đủ. Reuse cho explanation và reuse để authorization là hai operation khác nhau.
 
@@ -118,7 +118,7 @@ user intent
    -> chỉ execute action sau khi gate pass
 ```
 
-![Action gate kiểm tra freshness, scope, version và authority trước khi revalidate rồi mới safe action](/blog/tool-result-freshness/revalidation-gate.png)
+![Action gate kiểm tra freshness, scope, version và authority trước khi revalidate rồi mới safe action](/blog/tool-result-freshness/revalidation-gate.webp)
 
 Gate nên nhận một action envelope có cấu trúc thay vì một model message tự do:
 
@@ -200,7 +200,7 @@ Team thường nói: “Chúng tôi đã refresh data trước action rồi.” 
 
 Read thêm một lần giúp tăng xác suất đúng nhưng chưa tạo ra guarantee. Precondition phải được evaluate ở write boundary, không chỉ ở một bước nào đó sớm hơn trong workflow.
 
-![Timeline mô tả AI agent đọc inventory version 42, concurrent update lên version 43, version mismatch và refresh an toàn](/blog/tool-result-freshness/race-window.png)
+![Timeline mô tả AI agent đọc inventory version 42, concurrent update lên version 43, version mismatch và refresh an toàn](/blog/tool-result-freshness/race-window.webp)
 
 Đây là nơi freshness gặp concurrency control. Freshness trả lời: “Observation này có đủ mới cho action class này không?” Version check trả lời: “Target còn là version đã tạo ra decision không?” Với high-impact write, thường cần cả hai.
 

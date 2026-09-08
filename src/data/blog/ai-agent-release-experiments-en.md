@@ -3,13 +3,13 @@ title: "AI Agent Release Experiments: Shadow Traffic, Counterfactual Replay, and
 description: "A production playbook for changing models, prompts, tools, retrieval, and policies without making real users the test harness. Learn how to combine offline evals, shadow traffic, counterfactual replay, canary cohorts, and abort-first promotion gates."
 pubDate: 2026-07-24
 category: "engineering"
-image: "/blog/ai-agent-release-experiments/hero.png"
+image: "/blog/ai-agent-release-experiments/hero.webp"
 lang: "en"
 translationKey: "ai-agent-release-experiments"
 draft: false
 ---
 
-![A hand-drawn release board routes an AI agent through production, shadow traffic, replay, canary, and promote-or-abort gates](/blog/ai-agent-release-experiments/hero.png)
+![A hand-drawn release board routes an AI agent through production, shadow traffic, replay, canary, and promote-or-abort gates](/blog/ai-agent-release-experiments/hero.webp)
 
 The first time I saw a model release go wrong, the dashboard looked healthy.
 
@@ -59,7 +59,7 @@ This does not mean every release needs a heavyweight platform. It means the rele
 
 Offline evals, shadow traffic, replay, canary, and full rollout are often described as one progressive ladder. They are related, but they answer different questions.
 
-![Three experiment modes separate fixed offline tasks, side-effect-free shadow traffic, and guarded canary writes](/blog/ai-agent-release-experiments/experiment-modes.png)
+![Three experiment modes separate fixed offline tasks, side-effect-free shadow traffic, and guarded canary writes](/blog/ai-agent-release-experiments/experiment-modes.webp)
 
 | Mode | Question | What is real | What must be isolated |
 |---|---|---|---|
@@ -176,7 +176,7 @@ Shadow traffic is especially good at finding operational differences: latency ta
 
 A production trace is not automatically replayable. It may contain a prompt without the exact retrieved context, a tool call without the tool response, or a response without the policy version that allowed it. A useful replay envelope captures the inputs that determined the decision, while removing secrets and unstable identifiers.
 
-![A recorded envelope feeds the candidate agent with replayed tool results and a comparison ledger, while a no-external-writes boundary prevents new side effects](/blog/ai-agent-release-experiments/counterfactual-replay.png)
+![A recorded envelope feeds the candidate agent with replayed tool results and a comparison ledger, while a no-external-writes boundary prevents new side effects](/blog/ai-agent-release-experiments/counterfactual-replay.webp)
 
 ```ts
 type ReplayEnvelope = {
@@ -236,7 +236,7 @@ The stable release should remain warm enough to receive an immediate rollback. A
 
 Quality is usually a gradual signal. Safety is often not. A small improvement in answer helpfulness cannot compensate for an unauthorized write.
 
-![A release decision board separates quality, safety, latency-cost, and health gates, with UNKNOWN routed to human review and critical violations routed to ABORT](/blog/ai-agent-release-experiments/promotion-gates.png)
+![A release decision board separates quality, safety, latency-cost, and health gates, with UNKNOWN routed to human review and critical violations routed to ABORT](/blog/ai-agent-release-experiments/promotion-gates.webp)
 
 Use at least three outcomes for a gate: continue, abort, and unknown. “Unknown” is not green. It means the evidence is insufficient, the data is delayed, or the system cannot establish whether the candidate is safe. Route it to a pause or a named human owner.
 

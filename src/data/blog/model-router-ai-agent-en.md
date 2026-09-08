@@ -3,16 +3,16 @@ title: "Model Router for AI Agents: Choosing by Capability, Cost, and Latency"
 description: "A production design for routing each agent step to the right model without turning quality, latency, and cost into guesswork."
 pubDate: 2026-07-08
 category: "engineering"
-image: "/blog/model-router/hero.jpg"
+image: "/blog/model-router/hero.webp"
 lang: "en"
 translationKey: "model-router-ai-agent"
 draft: false
 ---
 
-![An engineer designing a model router that sends agent work to models with different capability, cost, and latency profiles](/blog/model-router/hero.jpg)
+![An engineer designing a model router that sends agent work to models with different capability, cost, and latency profiles](/blog/model-router/hero.webp)
 
 <figure class="blog-video">
-  <video controls preload="metadata" playsinline poster="/blog/model-router/hero.jpg" aria-label="Explainer video for this article, English version">
+  <video controls preload="metadata" playsinline poster="/blog/model-router/hero.webp" aria-label="Explainer video for this article, English version">
     <source src="/blog/model-router-ai-agent/video-en.mp4" type="video/mp4" />
     Your browser does not support HTML5 video.
   </video>
@@ -37,7 +37,7 @@ A useful router sits between the agent runtime and the model gateway. The runtim
 
 This separation matters because model identifiers change more often than the agent’s business contract. It also creates a place to enforce policy: a sensitive tenant may require a region, a long-running workflow may require session affinity, and a low-value classification step may have a hard cost ceiling.
 
-![Capability, cost, latency, and infrastructure signals converge at one routing decision](/blog/model-router/decision-signals.jpg)
+![Capability, cost, latency, and infrastructure signals converge at one routing decision](/blog/model-router/decision-signals.webp)
 
 A router should therefore be treated like admission control in a distributed system. It decides whether a request can enter a model pool, which pool is appropriate, and what happens when the preferred pool is saturated. This is different from simply retrying a failed HTTP request. A retry says, “try the same dependency again.” A router says, “reconsider which dependency is appropriate.”
 
@@ -118,7 +118,7 @@ A prompt classifier sees the user’s words. An agent runtime sees more: the num
 
 A stage router can therefore choose a smaller model during routine work and escalate when the trajectory becomes difficult. For example, exploration may need stronger reasoning, while formatting a validated result can use a faster model. A tool error followed by another tool error is a stronger escalation signal than a complicated sentence in the user’s first message.
 
-![A model cascade escalates difficult or unhealthy routes while preserving a cheaper path for routine work](/blog/model-router/fallback-cascade.jpg)
+![A model cascade escalates difficult or unhealthy routes while preserving a cheaper path for routine work](/blog/model-router/fallback-cascade.webp)
 
 Useful escalation signals include:
 
@@ -151,7 +151,7 @@ The first dashboard should answer operational questions, not celebrate a lower a
 
 Track route choice, model outcome, validation result, time to first token, total latency, input and output tokens, retry count, escalation count, provider errors, and the final business outcome. Break them down by task kind, tenant, region, workflow stage, and model pair. Averages hide exactly the cases that cause user-visible pain, so include p50, p95, and tail error rates.
 
-![An engineer compares route outcomes with latency, cost, health, and shadow evaluation signals](/blog/model-router/route-dashboard.jpg)
+![An engineer compares route outcomes with latency, cost, health, and shadow evaluation signals](/blog/model-router/route-dashboard.webp)
 
 Shadow traffic is a useful bridge between intuition and production decisions. The primary model serves the user; a second candidate receives a privacy-safe or sampled copy and is evaluated without affecting the outcome. Shadow evaluation should be bounded by cost and must not accidentally execute tools or mutate state. It can compare structured outputs, rubric scores, latency, token use, and failure modes.
 

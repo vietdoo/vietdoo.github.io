@@ -6,7 +6,7 @@ category: "security"
 lang: "en"
 translationKey: "ai-agent-registry-shadow-ai"
 draft: false
-image: "/blog/agent-registry/hero.png"
+image: "/blog/agent-registry/hero.webp"
 ---
 
 Most organizations know how many human users have access to a production system. Far fewer can answer the same question about their AI agents.
@@ -21,7 +21,7 @@ An agent that can read a customer database, open a ticket, send an email, execut
 
 This is the fleet-level layer that sits above individual agent security. Existing controls such as policy-as-code, observability, memory protection, and incident response remain necessary. The registry makes those controls addressable: they need to know which agent they are protecting, who can change its policy, and whether it is still allowed to run.
 
-![A dark control-plane dashboard maps sanctioned and unsanctioned AI agents across an enterprise](/blog/agent-registry/hero.png)
+![A dark control-plane dashboard maps sanctioned and unsanctioned AI agents across an enterprise](/blog/agent-registry/hero.webp)
 
 *The registry is not a catalog page. It is the control plane for non-human actors.*
 
@@ -86,7 +86,7 @@ A production discovery pass should combine several signals. Scan deployment mani
 
 Do not treat every model call as a separate agent. A single application may make many model calls. Conversely, a single agent may move across several services. The goal is to identify a durable actor with a purpose, an authority boundary, and a repeatable execution path.
 
-![Multiple telemetry sources converge into one agent registry with confidence and ownership states](/blog/agent-registry/discovery-map.png)
+![Multiple telemetry sources converge into one agent registry with confidence and ownership states](/blog/agent-registry/discovery-map.webp)
 
 *Discovery is a correlation problem: declarations, credentials, deployments, and observed actions must point to the same actor.*
 
@@ -156,11 +156,11 @@ observed -> candidate -> attested -> approved -> restricted -> retired
 
 **Observed** means telemetry has found an actor but no owner has accepted responsibility. **Candidate** means the actor has enough information for review. **Attested** means an owner has declared purpose, capabilities, and dependencies. **Approved** means policy has granted a bounded runtime scope. **Restricted** means the agent can run only in a reduced mode while a problem is investigated. **Quarantined** means execution or egress is blocked while evidence is preserved. **Retired** means the agent is no longer allowed to run, though its registry and audit records remain.
 
-![The lifecycle of an AI agent moves from observation through approval, restriction, quarantine, and retirement](/blog/agent-registry/lifecycle-state-machine.png)
+![The lifecycle of an AI agent moves from observation through approval, restriction, quarantine, and retirement](/blog/agent-registry/lifecycle-state-machine.webp)
 
 *Lifecycle states turn an inventory into an operational decision system.*
 
-![A quarantine funnel blocks unowned agents while preserving evidence for review and recovery](/blog/agent-registry/quarantine-funnel.png)
+![A quarantine funnel blocks unowned agents while preserving evidence for review and recovery](/blog/agent-registry/quarantine-funnel.webp)
 
 *Quarantine should reduce authority without destroying the evidence needed to understand why the agent appeared.*
 

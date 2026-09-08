@@ -6,7 +6,7 @@ category: "engineering"
 lang: "vi"
 translationKey: "agent-receipts-user-readable-proof"
 draft: false
-image: "/blog/agent-receipts/hero.png"
+image: "/blog/agent-receipts/hero.webp"
 ---
 
 Câu hỏi đầu tiên sau khi một AI agent thay đổi hồ sơ khách hàng hiếm khi là “Tôi có thể tìm trace ở đâu?”. Câu hỏi thường đơn giản hơn nhiều: **đã thay đổi điều gì, vì sao thay đổi và ai đã cho phép?**
@@ -15,7 +15,7 @@ Trace có thể trả lời những câu hỏi đó, nhưng chỉ sau khi ai đ�
 
 Đó là vai trò của **agent receipt**: một bằng chứng ngắn gọn, dễ đọc về một outcome quan trọng do agent tạo ra. Receipt không phải transcript, dashboard, bản dump chain-of-thought hay sự thay thế cho audit trail. Nó là lớp cuối cùng nối một workflow tự động phức tạp với người cần hiểu tác động của nó.
 
-![AI agent biến một action thành receipt dễ đọc với shield, timestamp, action summary và các evidence liên kết](/blog/agent-receipts/hero.png)
+![AI agent biến một action thành receipt dễ đọc với shield, timestamp, action summary và các evidence liên kết](/blog/agent-receipts/hero.webp)
 
 > **Luận điểm chính:** Agent receipt phải làm cho state đã thay đổi, authority, evidence và uncertainty trở nên dễ hiểu trong cùng một nơi. Người đọc có thể quyết định chấp nhận, điều tra, hoàn tác hoặc chuyển escalation mà không cần đọc toàn bộ execution trace.
 
@@ -63,7 +63,7 @@ Receipt nên tách **intent**, **authorization**, **execution** và **observed r
 
 Một thiết kế hữu ích có hai representation: view dành cho người đọc và machine-verifiable envelope. Chúng dùng chung identifier và fact, nhưng phục vụ hai nhóm người khác nhau.
 
-![Receipt envelope được tách lớp gồm action summary, actor và scope, evidence hash, policy decision cùng verification seal](/blog/agent-receipts/receipt-envelope.png)
+![Receipt envelope được tách lớp gồm action summary, actor và scope, evidence hash, policy decision cùng verification seal](/blog/agent-receipts/receipt-envelope.webp)
 
 View cho người đọc có thể được render thành card nhỏ, một phần của email, activity entry hoặc file tải về. Envelope có thể được lưu trữ và verify độc lập.
 
@@ -160,7 +160,7 @@ Evidence: 3 references
 
 Receipt có thể verify về mặt kỹ thuật nhưng vẫn thất bại nếu trên giao diện không ai biết cách verify. Sản phẩm nên có đường dẫn rõ ràng như “xem evidence”, “verify integrity”, “request review” hoặc “undo”, tùy risk của action.
 
-![Verification flow đi từ agent gateway qua canonicalization và hash check đến reviewer, với các kết quả pass, warning và unverifiable](/blog/agent-receipts/verification-flow.png)
+![Verification flow đi từ agent gateway qua canonicalization và hash check đến reviewer, với các kết quả pass, warning và unverifiable](/blog/agent-receipts/verification-flow.webp)
 
 Verification service nên đủ độc lập để cùng team hoặc cùng process tạo action không thể âm thầm viết lại evidence. Một flow điển hình là:
 
@@ -201,7 +201,7 @@ Cách này hữu ích hơn “failed” hoặc “completed”. “Failed” có
 
 Một agent platform trưởng thành có thể đã có identity, policy, observability, evidence và recovery system. Receipt nên nối các hệ thống đó ở một boundary ổn định.
 
-![Một người dùng review receipt bên cạnh customer record trước và sau khi thay đổi, evidence trail và vùng uncertainty hiển thị rõ](/blog/agent-receipts/receipt-ux.png)
+![Một người dùng review receipt bên cạnh customer record trước và sau khi thay đổi, evidence trail và vùng uncertainty hiển thị rõ](/blog/agent-receipts/receipt-ux.webp)
 
 Pattern triển khai hữu ích nhất là chỉ generate receipt sau khi hệ thống có authoritative action result — hoặc phát provisional receipt một cách rõ ràng khi result chưa biết. Receipt generator nên đọc structured event, không nên yêu cầu model tự nhớ và tóm tắt hành vi của chính nó.
 

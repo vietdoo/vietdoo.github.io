@@ -3,13 +3,13 @@ title: "Contract Testing cho AI Tool: Chứng minh Agent gọi cùng một capab
 description: "Hướng dẫn production về cách kiểm thử compatibility của AI tool qua model, provider, MCP server và nhiều phiên bản implementation bằng schema contract, semantic invariant, negative path và release gate."
 pubDate: 2026-07-06
 category: "engineering"
-image: "/blog/ai-tool-contract-testing/hero.png"
+image: "/blog/ai-tool-contract-testing/hero.webp"
 lang: "vi"
 translationKey: "ai-tool-contract-testing"
 draft: false
 ---
 
-![Whiteboard vẽ tay mô tả AI agent gọi cùng một tool qua hai provider với các contract gate trước side effect](/blog/ai-tool-contract-testing/hero.png)
+![Whiteboard vẽ tay mô tả AI agent gọi cùng một tool qua hai provider với các contract gate trước side effect](/blog/ai-tool-contract-testing/hero.webp)
 
 Tôi từng chứng kiến một agent vượt qua toàn bộ happy-path test nhưng vẫn thất bại ngay lần đầu đổi provider. Tool schema hợp lệ. JSON parse được. HTTP trả về 200. Thế nhưng assistant gửi ngày tháng ở sai timezone, coi một business rejection là lỗi transport, rồi retry một operation mà hệ thống phía sau đã tiếp nhận.
 
@@ -64,7 +64,7 @@ Payload có thể validate nhưng vẫn vi phạm product contract:
 
 Một contract thực tế cho AI capability có ít nhất năm lớp. Mỗi lớp nên được kiểm thử độc lập và gắn với một release gate.
 
-![Whiteboard vẽ tay phân tách schema, semantic, policy, side-effect và operational contract của một AI tool](/blog/ai-tool-contract-testing/contract-matrix.png)
+![Whiteboard vẽ tay phân tách schema, semantic, policy, side-effect và operational contract của một AI tool](/blog/ai-tool-contract-testing/contract-matrix.webp)
 
 ### 1. Shape contract
 
@@ -198,7 +198,7 @@ Consumer là agent runtime. Nó có thể kỳ vọng:
 
 Provider là tool server hoặc adapter. Provider verification chạy consumer contract với implementation thật, test environment hoặc deterministic simulator. Đây là cách bắt một loại regression khó chịu: provider vẫn “hợp lệ” theo schema riêng nhưng phá đúng interaction mà agent đang sử dụng.
 
-![Whiteboard vẽ tay mô tả pipeline từ consumer examples tới provider verification, semantic assertion và release gate trước production](/blog/ai-tool-contract-testing/contract-test-pipeline.png)
+![Whiteboard vẽ tay mô tả pipeline từ consumer examples tới provider verification, semantic assertion và release gate trước production](/blog/ai-tool-contract-testing/contract-test-pipeline.webp)
 
 Một consumer contract đơn giản có thể được biểu diễn như fixture:
 

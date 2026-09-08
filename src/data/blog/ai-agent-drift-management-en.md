@@ -3,13 +3,13 @@ title: "AI Agent Change Management: Detecting Drift Before Actions Break"
 description: "A production playbook for detecting tool, policy, schema, permission, and world-state drift before an AI agent turns a previously valid plan into a broken or unsafe action."
 pubDate: 2026-04-22
 category: "engineering"
-image: "/blog/ai-agent-drift/hero.png"
+image: "/blog/ai-agent-drift/hero.webp"
 lang: "en"
 translationKey: "ai-agent-drift-management"
 draft: false
 ---
 
-![A hand-drawn AI agent compares a saved plan with changing tools, policies, permissions, and world state before taking action](/blog/ai-agent-drift/hero.png)
+![A hand-drawn AI agent compares a saved plan with changing tools, policies, permissions, and world state before taking action](/blog/ai-agent-drift/hero.webp)
 
 The incident looked like a tool failure.
 
@@ -39,7 +39,7 @@ Teams often use “drift” as a synonym for model quality degradation. That is 
 
 These categories can overlap. A policy deployment may change the required permission. A tool schema change may expose a new side effect. A retrieval refresh may reveal that an earlier recommendation is no longer valid. The point of the taxonomy is not to create seven dashboards. It is to make the invalidation rule explicit.
 
-![A layered drift map connects tool contracts, policies, permissions, data, models, and world state to one agent plan](/blog/ai-agent-drift/drift-map.png)
+![A layered drift map connects tool contracts, policies, permissions, data, models, and world state to one agent plan](/blog/ai-agent-drift/drift-map.webp)
 
 ## A plan needs a dependency manifest
 
@@ -220,7 +220,7 @@ If the affected-row count is zero, the action did not prove its preconditions. D
 
 This pattern is more than a database optimization. It turns world-state drift into a bounded state transition. The agent can be smart about choosing a new path, but the commit boundary remains boring and deterministic.
 
-![A preflight gate compares plan fingerprints and current versions before routing the run to continue, refresh, replan, downgrade, or refuse](/blog/ai-agent-drift/preflight-gate.png)
+![A preflight gate compares plan fingerprints and current versions before routing the run to continue, refresh, replan, downgrade, or refuse](/blog/ai-agent-drift/preflight-gate.webp)
 
 ## Not every drift requires a full replan
 
@@ -236,7 +236,7 @@ Overreacting to every change creates unnecessary latency and cost. Underreacting
 
 **Refuse or escalate** when the action is irreversible, authorization is missing, policy is ambiguous, or the system cannot establish a trustworthy current state.
 
-![A five-path response ladder shows continue, refresh, replan, downgrade, and refuse as increasingly conservative responses to drift](/blog/ai-agent-drift/response-ladder.png)
+![A five-path response ladder shows continue, refresh, replan, downgrade, and refuse as increasingly conservative responses to drift](/blog/ai-agent-drift/response-ladder.webp)
 
 The user experience should make these outcomes understandable. “I stopped because the order changed while I was waiting; here is the current state” is better than a generic tool error. The message should not expose sensitive policy internals, but it should give the user a useful next step.
 

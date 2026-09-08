@@ -3,13 +3,13 @@ title: "Incident Response cho AI Agent: Kill Switch, Evidence Pack và Degradati
 description: "Playbook production để cô lập sự cố AI agent bằng kill switch nhiều lớp, evidence pack, degradation an toàn và quy trình phục hồi giảm blast radius mà không xóa mất dữ kiện cần để học hỏi."
 pubDate: 2026-02-21
 category: "engineering"
-image: "/blog/ai-agent-incident-response/hero.png"
+image: "/blog/ai-agent-incident-response/hero.webp"
 lang: "vi"
 translationKey: "ai-agent-incident-response"
 draft: false
 ---
 
-![Phòng điều phối sự cố AI được vẽ tay với công tắc cô lập, sổ ghi evidence và các nhánh degradation an toàn](/blog/ai-agent-incident-response/hero.png)
+![Phòng điều phối sự cố AI được vẽ tay với công tắc cô lập, sổ ghi evidence và các nhánh degradation an toàn](/blog/ai-agent-incident-response/hero.webp)
 
 Dấu hiệu đầu tiên cho thấy agent hỗ trợ khách hàng của chúng tôi đang có một buổi sáng tệ hại không phải là một dashboard đỏ. Đó là một câu trong ticket: “Nó nói hoàn tiền đã xong, nhưng tài khoản của tôi chưa thay đổi.”
 
@@ -41,7 +41,7 @@ Phân biệt hữu ích nhất là giữa **availability** và **authority**. Av
 
 Kill switch nên có nhiều lớp vì không phải incident nào cũng cần cùng một bán kính gián đoạn. Hãy bắt đầu bằng switch nhỏ nhất đủ dừng effect nguy hiểm, sau đó mở rộng nếu tín hiệu mơ hồ hoặc đang lan. Các lớp dưới đây đi từ rộng nhất đến cụ thể nhất, nhưng thứ tự kích hoạt thực tế phụ thuộc incident.
 
-![Năm lớp containment đi từ global stop qua tenant pause, tool revoke, fallback đến human escalation](/blog/ai-agent-incident-response/containment-layers.png)
+![Năm lớp containment đi từ global stop qua tenant pause, tool revoke, fallback đến human escalation](/blog/ai-agent-incident-response/containment-layers.webp)
 
 ### 1. Global stop
 
@@ -73,7 +73,7 @@ Escalation là product path chứ không phải một error message chung chung.
 
 Trong incident, đội ngũ thường muốn xóa trace nhạy cảm ngay lập tức. Đôi khi xóa là cần thiết, nhưng xóa trước có thể làm failure không thể tái dựng. Hãy tách **containment** khỏi **quyết định retention**. Đóng băng và phân loại evidence trước khi áp dụng cleanup policy thông thường, sau đó giới hạn quyền truy cập vào incident bundle.
 
-![Evidence pack gom request, version, policy, tool, context, response và timeline thành một bundle được niêm phong](/blog/ai-agent-incident-response/evidence-pack.png)
+![Evidence pack gom request, version, policy, tool, context, response và timeline thành một bundle được niêm phong](/blog/ai-agent-incident-response/evidence-pack.webp)
 
 Evidence pack phải trả lời được “agent đã biết gì và đã thử làm gì?” mà không giả định cần lưu chain-of-thought riêng tư. Bộ tối thiểu hữu ích thường gồm:
 
@@ -114,7 +114,7 @@ Evidence pack nên append-only từ góc nhìn incident responder. Operator có 
 
 Degraded mode an toàn nhất không phải mode giữ lại nhiều feature nhất. Đó là mode giữ lại nhiều hành vi hữu ích nhất **mà không vượt qua boundary đang chưa chắc chắn**. Support agent có thể trả lời câu hỏi policy từ tài liệu đã verify trong khi từ chối mutate account state. Coding agent có thể chuẩn bị patch nhưng tắt merge và deployment. Browser agent có thể thu thập thông tin nhưng dừng trước submit.
 
-![Cây quyết định degradation an toàn đi từ full action đến read-only, draft, handoff và safe stop khi uncertainty tăng](/blog/ai-agent-incident-response/safe-degradation.png)
+![Cây quyết định degradation an toàn đi từ full action đến read-only, draft, handoff và safe stop khi uncertainty tăng](/blog/ai-agent-incident-response/safe-degradation.webp)
 
 Model uncertainty chỉ là một input. Hệ thống cần xét tool health, độ mới của context, độ tin cậy của authorization, tính reversible của action và khả năng verify target state. Model có confidence cao vẫn có thể không an toàn khi database stale hoặc tool result mơ hồ.
 
@@ -160,7 +160,7 @@ Trong giai đoạn điều tra, hãy tạo evidence pack, xác định cohort nh
 
 Trong recovery, dùng cùng authority ladder theo chiều ngược lại. Bắt đầu bằng read-only hoặc draft, replay các case đại diện trên snapshot cố định, sau đó cho một cohort nội bộ nhỏ dùng action path. Bật lại từng tool hoặc workflow. Giữ safe path cũ cho đến khi path mới chứng minh rằng nó có thể tự xác nhận effect của chính mình.
 
-![Vòng lặp recovery dừng, quan sát lại, lập kế hoạch, xác nhận rồi retry an toàn hoặc abort](/blog/ai-agent-incident-response/recovery-loop.png)
+![Vòng lặp recovery dừng, quan sát lại, lập kế hoạch, xác nhận rồi retry an toàn hoặc abort](/blog/ai-agent-incident-response/recovery-loop.webp)
 
 Recovery gate cần rõ ràng:
 

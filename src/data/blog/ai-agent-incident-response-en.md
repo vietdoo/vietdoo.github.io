@@ -3,13 +3,13 @@ title: "AI Agent Incident Response: Kill Switches, Evidence Packs, and Safe Degr
 description: "A production playbook for containing AI agent incidents with layered kill switches, evidence packs, safe degradation, and recovery paths that reduce blast radius without erasing the facts needed to learn."
 pubDate: 2026-02-21
 category: "engineering"
-image: "/blog/ai-agent-incident-response/hero.png"
+image: "/blog/ai-agent-incident-response/hero.webp"
 lang: "en"
 translationKey: "ai-agent-incident-response"
 draft: false
 ---
 
-![A hand-drawn AI incident-response control room with containment switches, evidence notes, and safe-degradation paths](/blog/ai-agent-incident-response/hero.png)
+![A hand-drawn AI incident-response control room with containment switches, evidence notes, and safe-degradation paths](/blog/ai-agent-incident-response/hero.webp)
 
 The first sign that our customer-support agent was having a bad morning was not a red dashboard. It was a sentence in a ticket: “It told me the refund was complete, but nothing changed.”
 
@@ -41,7 +41,7 @@ The most useful distinction is between **availability** and **authority**. Avail
 
 A kill switch should be layered because incidents do not all require the same radius of interruption. Start with the smallest switch that stops the dangerous effect, then widen containment if the signal is ambiguous or spreading. The layers below are ordered from broadest to most targeted, but the correct activation order depends on the incident.
 
-![Five containment layers move from a global stop through tenant pause, tool revocation, fallback, and human escalation](/blog/ai-agent-incident-response/containment-layers.png)
+![Five containment layers move from a global stop through tenant pause, tool revocation, fallback, and human escalation](/blog/ai-agent-incident-response/containment-layers.webp)
 
 ### 1. Global stop
 
@@ -73,7 +73,7 @@ Escalation is a product path, not a generic error message. The operator needs th
 
 During an incident, teams often want to delete sensitive traces immediately. Sometimes deletion is necessary, but deleting first can make the failure impossible to reconstruct. Separate **containment** from **retention decisions**. Freeze and classify evidence before applying the normal cleanup policy, then restrict access to the incident bundle.
 
-![An evidence pack assembles request, version, policy, tool, context, response, and timeline records into a sealed incident bundle](/blog/ai-agent-incident-response/evidence-pack.png)
+![An evidence pack assembles request, version, policy, tool, context, response, and timeline records into a sealed incident bundle](/blog/ai-agent-incident-response/evidence-pack.webp)
 
 An evidence pack should answer “what did the agent know and what did it attempt?” without pretending that a private chain-of-thought transcript is required. The minimum useful set is usually:
 
@@ -114,7 +114,7 @@ The evidence pack should be append-only from the incident responder’s perspect
 
 The safest degraded mode is not the one that keeps the most features. It is the one that keeps the most useful behavior **without crossing the uncertain boundary**. A support agent may answer policy questions from verified documents while refusing to mutate account state. A coding agent may prepare a patch while disabling merge and deployment. A browser agent may collect information while stopping before submit.
 
-![A safe-degradation decision tree moves from full action to read-only, draft, handoff, and safe stop as uncertainty rises](/blog/ai-agent-incident-response/safe-degradation.png)
+![A safe-degradation decision tree moves from full action to read-only, draft, handoff, and safe stop as uncertainty rises](/blog/ai-agent-incident-response/safe-degradation.webp)
 
 Model uncertainty is only one input. The system should consider tool health, context freshness, authorization confidence, action reversibility, and whether the target state can be verified. A high-confidence model can still be unsafe when the database is stale or the tool result is ambiguous.
 
@@ -160,7 +160,7 @@ During investigation, build the evidence pack, identify the smallest affected co
 
 During recovery, use the same authority ladder in reverse. Start with read-only or draft mode, replay representative cases against a fixed snapshot, then allow a small internal cohort to use the action path. Re-enable one tool or workflow at a time. Keep the old safe path available until the new path proves that it can confirm its own effects.
 
-![An incident recovery loop stops, re-observes, re-plans, confirms, and either retries safely or aborts](/blog/ai-agent-incident-response/recovery-loop.png)
+![An incident recovery loop stops, re-observes, re-plans, confirms, and either retries safely or aborts](/blog/ai-agent-incident-response/recovery-loop.webp)
 
 A recovery gate should be explicit. For example:
 

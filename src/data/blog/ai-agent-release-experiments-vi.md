@@ -3,13 +3,13 @@ title: "Thử nghiệm Release cho AI Agent: Shadow Traffic, Counterfactual Repl
 description: "Production playbook cho việc thay đổi model, prompt, tool, retrieval và policy mà không biến người dùng thật thành bộ phận kiểm thử. Bài viết trình bày offline eval, shadow traffic, counterfactual replay, canary cohort và promotion gate theo hướng abort-first."
 pubDate: 2026-07-24
 category: "engineering"
-image: "/blog/ai-agent-release-experiments/hero.png"
+image: "/blog/ai-agent-release-experiments/hero.webp"
 lang: "vi"
 translationKey: "ai-agent-release-experiments"
 draft: false
 ---
 
-![Bảng release vẽ tay dẫn AI agent qua production, shadow traffic, replay, canary và các cổng promote hoặc abort](/blog/ai-agent-release-experiments/hero.png)
+![Bảng release vẽ tay dẫn AI agent qua production, shadow traffic, replay, canary và các cổng promote hoặc abort](/blog/ai-agent-release-experiments/hero.webp)
 
 Lần đầu tôi thấy một lần release model đi sai, dashboard vẫn xanh.
 
@@ -59,7 +59,7 @@ Khi có incident, câu “chúng tôi vừa upgrade model” không đủ để 
 
 Offline eval, shadow traffic, replay, canary và full rollout thường được mô tả như một chiếc thang progressive. Chúng liên quan với nhau, nhưng mỗi mode trả lời một câu hỏi khác.
 
-![Ba experiment mode tách fixed offline task, shadow traffic không side effect và canary có guarded write](/blog/ai-agent-release-experiments/experiment-modes.png)
+![Ba experiment mode tách fixed offline task, shadow traffic không side effect và canary có guarded write](/blog/ai-agent-release-experiments/experiment-modes.webp)
 
 | Mode | Câu hỏi | Thứ gì là thật | Thứ gì phải cô lập |
 |---|---|---|---|
@@ -176,7 +176,7 @@ Shadow traffic đặc biệt tốt trong việc tìm operational difference: lat
 
 Production trace không tự động replay được. Nó có thể chứa prompt nhưng thiếu retrieved context chính xác, có tool call nhưng thiếu tool response, hoặc có response mà không có policy version đã cho phép. Một replay envelope hữu ích ghi lại các input quyết định behavior, đồng thời bỏ secret và identifier không ổn định.
 
-![Recorded envelope đưa candidate agent qua các tool result được replay và comparison ledger, trong khi no-external-writes boundary ngăn side effect mới](/blog/ai-agent-release-experiments/counterfactual-replay.png)
+![Recorded envelope đưa candidate agent qua các tool result được replay và comparison ledger, trong khi no-external-writes boundary ngăn side effect mới](/blog/ai-agent-release-experiments/counterfactual-replay.webp)
 
 ```ts
 type ReplayEnvelope = {
@@ -236,7 +236,7 @@ Stable release phải đủ “ấm” để nhận rollback ngay lập tức. R
 
 Quality thường là gradual signal. Safety thường không phải vậy. Một cải thiện nhỏ về helpfulness không thể bù cho một unauthorized write.
 
-![Release decision board tách quality, safety, latency-cost và health gate; UNKNOWN đi tới human review, critical violation đi thẳng tới ABORT](/blog/ai-agent-release-experiments/promotion-gates.png)
+![Release decision board tách quality, safety, latency-cost và health gate; UNKNOWN đi tới human review, critical violation đi thẳng tới ABORT](/blog/ai-agent-release-experiments/promotion-gates.webp)
 
 Mỗi gate nên có ít nhất ba outcome: continue, abort và unknown. “Unknown” không phải green. Nó có nghĩa evidence chưa đủ, data đến trễ hoặc hệ thống không thể xác nhận candidate an toàn. Hãy pause và giao cho một human owner có tên.
 

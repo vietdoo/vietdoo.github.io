@@ -3,13 +3,13 @@ title: "Voice Agent khi bị ngắt lời: Turn-Taking, Barge-In và Handoff an 
 description: "Playbook production cho voice agent biết nhận diện ranh giới lượt nói, dừng ngay khi người dùng barge-in, sửa intent dang dở và handoff an toàn mà không làm mất context cuộc hội thoại."
 pubDate: 2026-07-30
 category: "engineering"
-image: "/blog/voice-agents-interruption/hero.png"
+image: "/blog/voice-agents-interruption/hero.webp"
 lang: "vi"
 translationKey: "voice-agents-interruption"
 draft: false
 ---
 
-![Voice agent xử lý interruption bằng turn detection, cancellation, repair và human handoff trong một minh họa vẽ tay](/blog/voice-agents-interruption/hero.png)
+![Voice agent xử lý interruption bằng turn detection, cancellation, repair và human handoff trong một minh họa vẽ tay](/blog/voice-agents-interruption/hero.webp)
 
 Về mặt kỹ thuật, voice agent vẫn đang nghe. Nhưng nó không lắng nghe người đang nói.
 
@@ -37,7 +37,7 @@ Voice conversation thường được vẽ như chuỗi gọn gàng: user nói, 
 
 Ứng dụng nên biểu diễn các khả năng này rõ ràng thay vì để một boolean `isSpeaking` điều khiển cả pipeline. Mô hình hữu ích tách việc user đang làm khỏi việc agent đang làm.
 
-![State machine của voice agent đi qua listening, thinking, speaking, interrupted, repair và handoff](/blog/voice-agents-interruption/turn-state-machine.png)
+![State machine của voice agent đi qua listening, thinking, speaking, interrupted, repair và handoff](/blog/voice-agents-interruption/turn-state-machine.webp)
 
 ```ts
 type TurnState =
@@ -80,7 +80,7 @@ Ba thời điểm có thể chỉ cách nhau vài mili-giây hoặc một human 
 
 Barge-in không chỉ là hạ volume của agent. Nó là một cancellation transaction xuyên qua audio, synthesis, generation và action đang xếp hàng.
 
-![Audio pipeline đi từ microphone qua VAD, turn detection, STT, LLM, TTS với cancellation path nhanh khi có interruption](/blog/voice-agents-interruption/audio-pipeline.png)
+![Audio pipeline đi từ microphone qua VAD, turn detection, STT, LLM, TTS với cancellation path nhanh khi có interruption](/blog/voice-agents-interruption/audio-pipeline.webp)
 
 Khi user speech vượt qua interruption policy, hệ thống nên:
 
@@ -138,7 +138,7 @@ Agent không nên lặp lại toàn bộ câu trả lời cũ sau mỗi interrup
 
 Latency voice thường được nói đến như time to first response. Với interruption, time to yield cũng quan trọng không kém. Response đầu tiên chậm thì khó chịu; dừng chậm sau khi user nói “không” là mất niềm tin.
 
-![Timeline latency voice mang tính khái niệm gồm stop, endpoint, partial STT, first token, first audio và agent response cùng barge-in cancellation path](/blog/voice-agents-interruption/latency-budget.png)
+![Timeline latency voice mang tính khái niệm gồm stop, endpoint, partial STT, first token, first audio và agent response cùng barge-in cancellation path](/blog/voice-agents-interruption/latency-budget.webp)
 
 Ít nhất hãy đo bốn khoảng thời gian:
 

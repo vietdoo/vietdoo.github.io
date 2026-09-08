@@ -6,17 +6,17 @@ category: "architecture"
 lang: "en"
 translationKey: "prompt-injection-tool-boundaries"
 draft: false
-image: "/blog/prompt-injection-tool-boundaries/hero.png"
+image: "/blog/prompt-injection-tool-boundaries/hero.webp"
 ---
 
 A tool-using agent can read a support ticket, inspect a document, query a database, and send a message on someone’s behalf. That flexibility is what makes the system useful. It is also what turns a piece of text into a possible control surface.
 
 The dangerous mistake is to treat every piece of text that reaches the model as if it had the same authority. A system instruction, a customer message, a retrieved document, a tool description, and a proposed API call may all appear in one context window, but they should not be allowed to cross the same boundary.
 
-![A hand-drawn AI agent passes through separate instruction, data, and action gates before reaching a protected external system](/blog/prompt-injection-tool-boundaries/hero.png)
+![A hand-drawn AI agent passes through separate instruction, data, and action gates before reaching a protected external system](/blog/prompt-injection-tool-boundaries/hero.webp)
 
 <figure class="blog-video">
-  <video controls preload="metadata" playsinline poster="/blog/prompt-injection-tool-boundaries/hero.png" aria-label="Explainer video for this article, English version">
+  <video controls preload="metadata" playsinline poster="/blog/prompt-injection-tool-boundaries/hero.webp" aria-label="Explainer video for this article, English version">
     <source src="/blog/prompt-injection-tool-boundaries/video-en.mp4" type="video/mp4" />
     Your browser does not support HTML5 video.
   </video>
@@ -49,7 +49,7 @@ A safer agent makes three boundaries explicit.
 
 The boundaries do not mean that the model must be blind to data. The model needs data to reason. They mean that data cannot silently promote itself into an instruction, and an instruction cannot silently promote itself into an action.
 
-![A conveyor separates trusted instructions, untrusted data, proposed actions, and policy decisions before anything reaches an external side effect](/blog/prompt-injection-tool-boundaries/boundary-conveyor.png)
+![A conveyor separates trusted instructions, untrusted data, proposed actions, and policy decisions before anything reaches an external side effect](/blog/prompt-injection-tool-boundaries/boundary-conveyor.webp)
 
 In code, this distinction can be represented as an action envelope rather than a raw tool call:
 
@@ -109,7 +109,7 @@ That is why the system should carry a lightweight taint signal through retrieval
 - Did a low-trust input attempt to change policy, identity, or tool selection?
 - Does the action require a human gate because its evidence is tainted?
 
-![A tainted agent trace stops at a policy wall before an external message is sent, while the evidence remains available for review](/blog/prompt-injection-tool-boundaries/taint-stop.png)
+![A tainted agent trace stops at a policy wall before an external message is sent, while the evidence remains available for review](/blog/prompt-injection-tool-boundaries/taint-stop.webp)
 
 This model also improves debugging. When an action is blocked, engineers can see whether the problem came from retrieval, memory, tool output, prompt construction, or authorization. That is much more actionable than a generic “the model made a bad decision” label.
 

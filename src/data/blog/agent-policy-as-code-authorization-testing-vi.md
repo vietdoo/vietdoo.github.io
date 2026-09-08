@@ -3,13 +3,13 @@ title: "Policy-as-Code cho AI Agent: Kiểm thử Authorization như Software"
 description: "Playbook production biến yêu cầu authorization của AI agent thành policy có thể chạy, test, rollout an toàn và enforce rõ ràng trước mỗi tool call."
 pubDate: 2026-01-02
 category: "security"
-image: "/blog/agent-policy-as-code-authorization-testing/hero.png"
+image: "/blog/agent-policy-as-code-authorization-testing/hero.webp"
 lang: "vi"
 translationKey: "agent-policy-as-code-authorization-testing"
 draft: false
 ---
 
-![AI agent biến một quy tắc tenant thành policy được kiểm thử trước khi đi tới tool gateway](/blog/agent-policy-as-code-authorization-testing/hero.png)
+![AI agent biến một quy tắc tenant thành policy được kiểm thử trước khi đi tới tool gateway](/blog/agent-policy-as-code-authorization-testing/hero.webp)
 
 Incident nhìn giống một vụ rò rỉ dữ liệu, nhưng manh mối đầu tiên nhỏ hơn nhiều: một agent được phép gọi một tool mà không ai nhớ đã từng phê duyệt.
 
@@ -137,7 +137,7 @@ Tôi thường thiết kế request matrix trước khi viết allow rule cuối
 | Thiếu tenant context | `customer.read` | Không biết | Deny | Scope thiếu không được biến thành global scope. |
 | Support agent | `customer.update` | Cùng tenant | Cần policy mạnh hơn | Read và write thuộc hai risk class khác nhau. |
 
-![Ma trận test policy vẽ tay thể hiện allow path, deny path, unknown tool, grant hết hạn và tenant context bị thiếu](/blog/agent-policy-as-code-authorization-testing/policy-test-matrix.png)
+![Ma trận test policy vẽ tay thể hiện allow path, deny path, unknown tool, grant hết hạn và tenant context bị thiếu](/blog/agent-policy-as-code-authorization-testing/policy-test-matrix.webp)
 
 Tên action sẽ khác tùy hệ thống, nhưng hình dạng của matrix rất bền vững. Mỗi test cung cấp một input hoàn chỉnh và assert cả decision lẫn reason. Test không chỉ nên hỏi “rule nào đó có match không”; nó phải nói rõ safety property mà product đang phụ thuộc.
 
@@ -232,7 +232,7 @@ user intent
    -> tool chỉ chạy sau explicit allow
 ```
 
-![Ranh giới enforcement vẽ tay tách model output không đáng tin khỏi policy decision của application trước khi tool tạo side effect](/blog/agent-policy-as-code-authorization-testing/enforcement-boundary.png)
+![Ranh giới enforcement vẽ tay tách model output không đáng tin khỏi policy decision của application trước khi tool tạo side effect](/blog/agent-policy-as-code-authorization-testing/enforcement-boundary.webp)
 
 Model output không phải authority. Tool description không phải authority. Một call từng được allow không phải authority cho resource khác. Decision phải được tạo lại lúc application sắp vượt qua side-effect boundary.
 
@@ -352,7 +352,7 @@ Candidate comparison cũng cần stable replay corpus. Hãy đưa vào đó prod
 
 Policy là code, nhưng nó cũng là control plane cho action thật. Rollout an toàn cần một promotion gate rõ ràng.
 
-![Rollout policy vẽ tay đi từ version 12 qua semantic diff, shadow evaluation, promotion gate, canary 5% và rollback](/blog/agent-policy-as-code-authorization-testing/policy-rollout-diff.png)
+![Rollout policy vẽ tay đi từ version 12 qua semantic diff, shadow evaluation, promotion gate, canary 5% và rollback](/blog/agent-policy-as-code-authorization-testing/policy-rollout-diff.webp)
 
 Một sequence thực tế có thể là:
 

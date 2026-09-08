@@ -6,14 +6,14 @@ category: "security"
 lang: "en"
 translationKey: "context-firewall-pre-inference-data-governance"
 draft: false
-image: "/blog/context-firewall/hero.png"
+image: "/blog/context-firewall/hero.webp"
 ---
 
 An AI agent can have the right identity, the right tool allow-list, and a well-written system prompt—and still receive far more data than the task requires.
 
 A support agent may only need to know whether an order is refundable. The retrieval layer sends the full customer profile, the last twenty tickets, an internal fraud note, a payment token, and a verbose tool response. Nothing in that packet is necessarily malicious. The problem is that the model has been given a larger view of the world than the decision deserves.
 
-![A hand-drawn context firewall filters mixed data sources into a small, purpose-bound model context](/blog/context-firewall/hero.png)
+![A hand-drawn context firewall filters mixed data sources into a small, purpose-bound model context](/blog/context-firewall/hero.webp)
 
 > **Thesis:** Treat the boundary before inference as a security control. A context firewall decides what may enter the model, why it is needed, how it should be transformed, how long it remains valid, and what evidence proves that the decision happened.
 
@@ -93,7 +93,7 @@ Purpose is also a useful answer to the question, “Why are we sending this fiel
 
 A practical firewall can be implemented as a pipeline with six decisions. The pipeline does not have to be a separate service on day one. It can begin as a library in the application, as long as the decision is outside the model and produces an inspectable record.
 
-![An editorial pipeline narrows raw records through purpose, scope, and transformation gates before creating a model context](/blog/context-firewall/admission-pipeline.png)
+![An editorial pipeline narrows raw records through purpose, scope, and transformation gates before creating a model context](/blog/context-firewall/admission-pipeline.webp)
 
 ### 1. Identify the decision
 
@@ -180,7 +180,7 @@ Transformation also needs provenance. The envelope should record that `adult: tr
 
 The model should receive a context object that makes purpose and limits visible without exposing the rejected pool.
 
-![A bounded context envelope keeps only purpose-approved evidence inside a clocked and auditable perimeter](/blog/context-firewall/context-envelope.png)
+![A bounded context envelope keeps only purpose-approved evidence inside a clocked and auditable perimeter](/blog/context-firewall/context-envelope.webp)
 
 ```json
 {
@@ -339,7 +339,7 @@ A hash is not magic privacy protection. If the original value is easy to guess, 
 
 When a user later requests deletion, the admission ledger also becomes part of the retention design. It should have its own retention class and a documented relationship to the [agent deletion guarantees pattern](/blog/ai-agent-deletion-guarantees). A record that proves a field was excluded may not need the field itself; a record that contains a raw excerpt does.
 
-![A denied context fragment is quarantined while a minimal evidence token travels through an audit loop](/blog/context-firewall/deny-audit-loop.png)
+![A denied context fragment is quarantined while a minimal evidence token travels through an audit loop](/blog/context-firewall/deny-audit-loop.webp)
 
 ## Test the boundary with decision fixtures
 

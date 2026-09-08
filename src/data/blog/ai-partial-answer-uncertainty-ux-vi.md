@@ -3,13 +3,13 @@ title: "Khi AI chỉ trả lời được một phần: Thiết kế UX cho sự
 description: "Một sản phẩm AI đáng tin không che giấu sự không chắc chắn sau một đoạn văn trôi chảy. Nó làm rõ phần thiếu bằng chứng, chọn đường phục hồi an toàn và giúp người dùng biết bước tiếp theo."
 pubDate: 2026-04-19
 category: "engineering"
-image: "/blog/ai-partial-answer-uncertainty/hero.png"
+image: "/blog/ai-partial-answer-uncertainty/hero.webp"
 lang: "vi"
 translationKey: "ai-partial-answer-uncertainty-ux"
 draft: false
 ---
 
-![Khay bằng chứng đi qua cổng quyết định để dẫn tới câu trả lời, câu hỏi làm rõ hoặc chuyển cho con người](/blog/ai-partial-answer-uncertainty/hero.png)
+![Khay bằng chứng đi qua cổng quyết định để dẫn tới câu trả lời, câu hỏi làm rõ hoặc chuyển cho con người](/blog/ai-partial-answer-uncertainty/hero.webp)
 
 Tôi từng thấy một trợ lý tạo ra một câu trả lời được viết rất đẹp nhưng đáng lẽ không bao giờ được hiển thị như một kết quả hoàn chỉnh.
 
@@ -29,7 +29,7 @@ Phần mềm truyền thống thường có điều kiện thành công tương 
 
 Điểm này quan trọng vì con người sẽ điều chỉnh hành vi dựa trên thông điệp của AI. Nghiên cứu về selective prediction cho thấy quyết định defer của hệ thống và cách quyết định đó được truyền đạt có thể thay đổi hiệu quả của con người. Trong một nghiên cứu của AAAI, khi được cho biết AI đã chuyển một trường hợp cho con người—nhưng không đơn giản là phơi ra dự đoán thiếu chắc chắn của mô hình—nhóm người và AI đạt kết quả tốt hơn.[1] Như vậy, giao diện là một phần của cơ chế tin cậy chứ không phải lớp trang trí thêm vào sau mô hình.
 
-![Bốn trạng thái bằng chứng tiến tới quyết định trả lời mà không giả vờ rằng mọi trạng thái đều hoàn chỉnh](/blog/ai-partial-answer-uncertainty/evidence-states.png)
+![Bốn trạng thái bằng chứng tiến tới quyết định trả lời mà không giả vờ rằng mọi trạng thái đều hoàn chỉnh](/blog/ai-partial-answer-uncertainty/evidence-states.webp)
 
 ## Mô hình hóa trạng thái bằng chứng thay vì một con số confidence chung chung
 
@@ -98,7 +98,7 @@ Nhiều sản phẩm AI xem failure UX như một câu: “Xin lỗi, tôi khôn
 
 Đường phục hồi nên trả lời bốn câu hỏi. Hệ thống đã hiểu phần nào? Phần nào đang bị chặn? Vì sao bị chặn theo cách người dùng có thể hành động? Bước tiếp theo ít tốn công nhất có thể làm thay đổi trạng thái là gì?
 
-![Vòng phục hồi biến một câu trả lời bị chặn thành làm rõ, bổ sung bằng chứng, phản hồi giới hạn hoặc handoff](/blog/ai-partial-answer-uncertainty/recovery-loop.png)
+![Vòng phục hồi biến một câu trả lời bị chặn thành làm rõ, bổ sung bằng chứng, phản hồi giới hạn hoặc handoff](/blog/ai-partial-answer-uncertainty/recovery-loop.webp)
 
 Một trình tự thực tế gồm:
 
@@ -134,7 +134,7 @@ Kết quả từ nghiên cứu selective prediction của AAAI nhắc chúng ta 
 
 Các hướng dẫn về human-AI interaction khuyến nghị hiển thị thông tin phù hợp với ngữ cảnh và giới hạn phạm vi dịch vụ khi hệ thống không chắc chắn.[2] Trong thực tế, điều đó nghĩa là hiển thị mẩu bằng chứng nhỏ nhất cần thiết cho quyết định tiếp theo—không đổ cả trace, không giấu ranh giới và không bắt người dùng giải mã jargon thống kê.
 
-![Bảng evaluation bốn phần so sánh correctness, abstention, độ hữu ích của recovery và chất lượng quyết định của con người](/blog/ai-partial-answer-uncertainty/evaluation-matrix.png)
+![Bảng evaluation bốn phần so sánh correctness, abstention, độ hữu ích của recovery và chất lượng quyết định của con người](/blog/ai-partial-answer-uncertainty/evaluation-matrix.webp)
 
 ## Một pattern triển khai cho hệ thống production
 

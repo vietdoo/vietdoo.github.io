@@ -3,13 +3,13 @@ title: "Temporal RAG: Dạy hệ thống truy hồi hiểu điều gì đúng �
 description: "Hướng dẫn xây dựng retrieval có nhận thức về thời gian: valid-time, transaction-time, xử lý mâu thuẫn và đánh giá câu hỏi lịch sử trong production."
 pubDate: 2026-07-07
 category: "engineering"
-image: "/blog/temporal-rag-time-aware-retrieval/hero.png"
+image: "/blog/temporal-rag-time-aware-retrieval/hero.webp"
 lang: "vi"
 translationKey: "temporal-rag-time-aware-retrieval"
 draft: false
 ---
 
-![Minh họa nét vẽ tay về hệ thống RAG nhận thức thời gian nối tài liệu có ngày, timeline và câu trả lời có bằng chứng](/blog/temporal-rag-time-aware-retrieval/hero.png)
+![Minh họa nét vẽ tay về hệ thống RAG nhận thức thời gian nối tài liệu có ngày, timeline và câu trả lời có bằng chứng](/blog/temporal-rag-time-aware-retrieval/hero.webp)
 
 Một hệ thống RAG thông thường trả lời câu hỏi: “Tài liệu nào có ngữ nghĩa giống query này nhất?” Nhưng một knowledge system production thường phải trả lời câu hỏi khó hơn: **tài liệu nào đúng tại thời điểm mà user đang nói đến?**
 
@@ -115,7 +115,7 @@ Tầng đầu tiên thu hẹp candidate theo temporal relation. Với câu hỏi
 
 Tầng thứ hai xếp hạng các candidate hợp lệ theo semantic relevance, source authority, granularity và coverage. Tầng thứ ba kiểm tra candidate có mâu thuẫn, overlap mơ hồ hoặc có khoảng trống không.
 
-![Minh họa nét vẽ tay về pipeline lọc evidence theo thời gian trước khi semantic ranking và contradiction review](/blog/temporal-rag-time-aware-retrieval/pipeline.png)
+![Minh họa nét vẽ tay về pipeline lọc evidence theo thời gian trước khi semantic ranking và contradiction review](/blog/temporal-rag-time-aware-retrieval/pipeline.webp)
 
 | Tầng                  | Input                         | Output                       | Failure chính được ngăn               |
 | --------------------- | ----------------------------- | ---------------------------- | ------------------------------------- |
@@ -180,7 +180,7 @@ Một test matrix nhỏ có thể bao phủ phần lớn bug rủi ro cao:
 
 Đây là nơi Temporal RAG nối tự nhiên với eval-driven system design. Mỗi temporal case không chỉ lưu prose cuối cùng, mà còn lưu interval được suy ra, source version và evidence chain.
 
-![Minh họa nét vẽ tay về benchmark timeline gồm historical query, validity window chồng lấn và evidence kỳ vọng](/blog/temporal-rag-time-aware-retrieval/benchmark.png)
+![Minh họa nét vẽ tay về benchmark timeline gồm historical query, validity window chồng lấn và evidence kỳ vọng](/blog/temporal-rag-time-aware-retrieval/benchmark.webp)
 
 Hard grader có thể kiểm tra interval inclusion và source ID. Semantic grader đánh giá giải thích về thay đổi có dễ hiểu không. Nếu system chọn source không valid tại reference time, đó phải là hard failure dù câu trả lời nghe rất thuyết phục.
 

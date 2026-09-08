@@ -6,17 +6,17 @@ category: "engineering"
 lang: "vi"
 translationKey: "nlu-from-utterance-to-safe-action"
 draft: false
-image: "/blog/nlu-production/hero.png"
+image: "/blog/nlu-production/hero.webp"
 ---
 
 Natural Language Understanding thường được giới thiệu là phần giúp một conversational system “hiểu người dùng muốn nói gì”. Định nghĩa đó nghe hấp dẫn nhưng tạo ra một kỳ vọng bất khả thi. Production software không cần hiểu mọi sắc thái của ngôn ngữ. Nó cần biến một câu nói lộn xộn thành một contract nhỏ, rõ ràng để phần còn lại của hệ thống validate.
 
 Một lớp NLU hữu ích trả lời ba câu hỏi: **người dùng đang muốn làm gì, cần những giá trị nào và phần nào vẫn còn mơ hồ?** Sau đó nó bàn giao structured result cho policy và application code, thay vì tự quyết định side effect cần thực hiện.
 
-![Một câu nói tự nhiên đi qua các cổng intent, entity, context và policy trước khi trở thành typed action](/blog/nlu-production/hero.png)
+![Một câu nói tự nhiên đi qua các cổng intent, entity, context và policy trước khi trở thành typed action](/blog/nlu-production/hero.webp)
 
 <figure class="blog-video">
-  <video controls preload="metadata" playsinline poster="/blog/nlu-production/hero.png" aria-label="Video giải thích NLU từ câu nói tự nhiên đến action an toàn">
+  <video controls preload="metadata" playsinline poster="/blog/nlu-production/hero.webp" aria-label="Video giải thích NLU từ câu nói tự nhiên đến action an toàn">
     <source src="/blog/nlu-production/nlu-from-utterance-to-safe-action-vi.mp4" type="video/mp4" />
     Trình duyệt của bạn không hỗ trợ video HTML5.
   </video>
@@ -63,7 +63,7 @@ Nên dùng các tên như `reschedule_meeting`, `refund_order`, `check_delivery_
 
 Taxonomy phải đủ hẹp để mỗi intent có next step khác nhau. Nếu hai intent luôn đi tới cùng policy và action, có thể chúng không cần tách. Nếu một intent chứa nhiều effect có risk khác nhau, hãy split trước khi ambiguity đi tới execution.
 
-![Một intent taxonomy tỏa ra từ user goal thành các workflow nhỏ có thể test thay vì một danh sách label mơ hồ khổng lồ](/blog/nlu-production/taxonomy-map.png)
+![Một intent taxonomy tỏa ra từ user goal thành các workflow nhỏ có thể test thay vì một danh sách label mơ hồ khổng lồ](/blog/nlu-production/taxonomy-map.webp)
 
 Một taxonomy review thực tế nên hỏi:
 

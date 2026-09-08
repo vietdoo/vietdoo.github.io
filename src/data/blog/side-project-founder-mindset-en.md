@@ -3,13 +3,13 @@ title: "The Developer-Founder Mindset: Building Side-Projects from 0 to 1 on a $
 description: "Practical insights from a Founder @ VNDO: How to choose a lean tech stack, design pragmatic system architectures, manage time effectively, and ship products to Production."
 pubDate: 2026-01-27
 category: "engineering"
-image: "/blog/side-project-founder-mindset/hero.jpg"
+image: "/blog/side-project-founder-mindset/hero.webp"
 lang: "en"
 translationKey: "side-project-founder-mindset"
 draft: false
 ---
 
-![The Developer-Founder Mindset in Side Projects](/blog/side-project-founder-mindset/hero.jpg)
+![The Developer-Founder Mindset in Side Projects](/blog/side-project-founder-mindset/hero.webp)
 
 > **TL;DR** — Have you ever started an ambitious side-project only to abandon it two weeks later due to burnout, endless framework debates, or designing microservices for zero users? This article condenses practical insights from a Founder @ VNDO on shifting from a *"coding for fun"* mindset to a *"product founder"* mindset—building a lean tech stack (Astro, SolidJS, FastAPI, Docker), deploying to Production on a $0 budget, and managing time as a full-time software engineer.
 
@@ -32,7 +32,7 @@ Founder Mindset   : Problem ──▶ Core Feature (MVP) ──▶ Production Re
 
 A working application with 10 lines of unpolished code deployed in production delivers infinitely more value than an unreleased, over-engineered microservices cluster.
 
-![Over-Engineering vs MVP Mindset](/blog/side-project-founder-mindset/over-engineering-vs-mvp.jpg)
+![Over-Engineering vs MVP Mindset](/blog/side-project-founder-mindset/over-engineering-vs-mvp.webp)
 
 ---
 
@@ -52,7 +52,7 @@ To optimize development speed and keep operating costs near $0, an ideal stack n
 * **Frontend**: Vercel / Cloudflare Pages (Free tier, global Edge CDN).
 * **Backend API**: Cloudflare Workers (Serverless) or a low-cost VPS ($3 - $5/month on Hetzner/DigitalOcean) running Docker Compose with Nginx/Traefik reverse proxy.
 
-![The Lean Tech Stack Architecture](/blog/side-project-founder-mindset/lean-tech-stack.jpg)
+![The Lean Tech Stack Architecture](/blog/side-project-founder-mindset/lean-tech-stack.webp)
 
 ---
 
@@ -85,7 +85,7 @@ Avoid jumping straight into microservices or Kubernetes for early-stage side pro
 2. **Stateless Backend**: Design stateless API servers so deployments and restarts cause zero data loss.
 3. **Environment Isolation**: Maintain strict `.env` configurations for Local and Production environments.
 
-![Pragmatic Infrastructure Architecture](/blog/side-project-founder-mindset/pragmatic-architecture.jpg)
+![Pragmatic Infrastructure Architecture](/blog/side-project-founder-mindset/pragmatic-architecture.webp)
 
 ---
 
@@ -103,7 +103,7 @@ Break tasks into micro-deliverables achievable in 30–45 minutes:
 * **AI Pair Programming**: Utilize specialized AI coding assistants for boilerplate generation, test creation, and API documentation.
 * **Automated CI/CD**: Configure GitHub Actions to run linting and deploy to Production on every push to `main`.
 
-![AI Pair Programming Workspace](/blog/side-project-founder-mindset/ai-pair-programming.jpg)
+![AI Pair Programming Workspace](/blog/side-project-founder-mindset/ai-pair-programming.webp)
 
 ---
 

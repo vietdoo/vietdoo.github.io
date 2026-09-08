@@ -3,13 +3,13 @@ title: "AI Agents Have a Clock: Deadlines, Leases, and Stale Plans"
 description: "An AI agent does not only need better reasoning. It needs time semantics: business deadlines, expiring execution leases, freshness-aware observations, and a refusal path for plans that are no longer safe to execute."
 pubDate: 2026-03-12
 category: "engineering"
-image: "/blog/ai-agent-clock/hero.png"
+image: "/blog/ai-agent-clock/hero.webp"
 lang: "en"
 translationKey: "ai-agent-time-semantics"
 draft: false
 ---
 
-![A hand-drawn AI agent works beside a clock, a plan and four time boundaries: business deadline, execution lease, observation TTL and stale plan](/blog/ai-agent-clock/hero.png)
+![A hand-drawn AI agent works beside a clock, a plan and four time boundaries: business deadline, execution lease, observation TTL and stale plan](/blog/ai-agent-clock/hero.webp)
 
 The incident did not begin with a hallucination.
 
@@ -40,7 +40,7 @@ These clocks can be related, but they should remain explicit. Martin Fowler's de
 
 An AI agent adds a fifth concern: its plan is an interpretation of observations. A timer can tell us that five minutes passed. It cannot tell us whether the evidence behind a plan is still applicable. That is why a resumed run needs both mechanical timers and semantic revalidation.
 
-![A timeline separates the business deadline of a run from the acquire, renew, release and stop points of an execution lease](/blog/ai-agent-clock/time-contract.png)
+![A timeline separates the business deadline of a run from the acquire, renew, release and stop points of an execution lease](/blog/ai-agent-clock/time-contract.webp)
 
 ## Start with a time contract, not a timeout constant
 
@@ -170,7 +170,7 @@ The useful question is not “Is this data fresh?” It is “Fresh enough for w
 
 Do not make the language model infer freshness from prose. Put freshness in a machine-checkable envelope and make the tool gateway reject expired evidence for high-impact operations.
 
-![A plan becomes stale as the clock advances; a decision gate routes it to revalidation or refusal instead of executing blindly](/blog/ai-agent-clock/stale-plan.png)
+![A plan becomes stale as the clock advances; a decision gate routes it to revalidation or refusal instead of executing blindly](/blog/ai-agent-clock/stale-plan.webp)
 
 ## The resumed plan must earn the right to continue
 
@@ -207,7 +207,7 @@ When a predicate fails, preserve the plan as historical evidence but do not exec
 
 Time-related transitions should appear in the workflow state machine, not only in logs. A minimal action lifecycle might include `PROPOSED`, `LEASED`, `EXECUTING`, `COMMITTED`, and `EXPIRED_RECONCILE`. The expiry state is not a generic error bucket. It tells operators and recovery code that the agent lost the right to continue with the old assumptions.
 
-![A hand-drawn state machine shows an agent moving from proposed to leased, executing and committed, with timeout transitions into expired and reconcile](/blog/ai-agent-clock/lease-state-machine.png)
+![A hand-drawn state machine shows an agent moving from proposed to leased, executing and committed, with timeout transitions into expired and reconcile](/blog/ai-agent-clock/lease-state-machine.webp)
 
 ```text
 PROPOSED

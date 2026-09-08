@@ -6,17 +6,17 @@ category: "architecture"
 lang: "vi"
 translationKey: "prompt-injection-tool-boundaries"
 draft: false
-image: "/blog/prompt-injection-tool-boundaries/hero.png"
+image: "/blog/prompt-injection-tool-boundaries/hero.webp"
 ---
 
 Một agent có tool có thể đọc ticket hỗ trợ, xem tài liệu, truy vấn database và gửi tin nhắn thay cho người dùng. Chính khả năng đó làm agent hữu ích. Nhưng nó cũng biến một đoạn text bình thường thành một bề mặt điều khiển tiềm ẩn.
 
 Sai lầm nguy hiểm nhất là xem mọi text đi vào model như thể chúng có cùng một mức độ tin cậy. System instruction, tin nhắn khách hàng, tài liệu được retrieve, mô tả tool và một API call do model đề xuất có thể cùng xuất hiện trong một context window. Tuy nhiên, chúng không nên được phép đi qua cùng một boundary.
 
-![Một AI agent đi qua ba cổng instruction, data và action trước khi chạm tới hệ thống bên ngoài được bảo vệ](/blog/prompt-injection-tool-boundaries/hero.png)
+![Một AI agent đi qua ba cổng instruction, data và action trước khi chạm tới hệ thống bên ngoài được bảo vệ](/blog/prompt-injection-tool-boundaries/hero.webp)
 
 <figure class="blog-video">
-  <video controls preload="metadata" playsinline poster="/blog/prompt-injection-tool-boundaries/hero.png" aria-label="Video giải thích nội dung bài viết, phiên bản tiếng Việt">
+  <video controls preload="metadata" playsinline poster="/blog/prompt-injection-tool-boundaries/hero.webp" aria-label="Video giải thích nội dung bài viết, phiên bản tiếng Việt">
     <source src="/blog/prompt-injection-tool-boundaries/video-vi.mp4" type="video/mp4" />
     Trình duyệt của bạn không hỗ trợ video HTML5.
   </video>
@@ -49,7 +49,7 @@ Một agent an toàn hơn cần làm rõ ba boundary.
 
 Ba boundary này không có nghĩa model phải mù trước dữ liệu. Model cần dữ liệu để suy luận. Ý nghĩa của chúng là data không thể tự nâng cấp thành instruction, và instruction không thể tự nâng cấp thành action.
 
-![Một conveyor tách trusted instruction, untrusted data, action proposal và policy decision trước khi cho phép side effect](/blog/prompt-injection-tool-boundaries/boundary-conveyor.png)
+![Một conveyor tách trusted instruction, untrusted data, action proposal và policy decision trước khi cho phép side effect](/blog/prompt-injection-tool-boundaries/boundary-conveyor.webp)
 
 Trong code, sự phân biệt này nên được biểu diễn bằng một action envelope thay vì một tool call thô:
 
@@ -109,7 +109,7 @@ Vì vậy, hệ thống nên mang theo một tín hiệu taint nhẹ qua retriev
 - Low-trust input có cố thay đổi policy, identity hoặc tool selection không?
 - Action này có cần human gate vì evidence bị taint không?
 
-![Một agent trace bị taint dừng lại ở policy wall trước khi gửi message ra ngoài, trong khi evidence vẫn được giữ để review](/blog/prompt-injection-tool-boundaries/taint-stop.png)
+![Một agent trace bị taint dừng lại ở policy wall trước khi gửi message ra ngoài, trong khi evidence vẫn được giữ để review](/blog/prompt-injection-tool-boundaries/taint-stop.webp)
 
 Mô hình này cũng giúp debug tốt hơn. Khi action bị block, engineer có thể thấy vấn đề đến từ retrieval, memory, tool output, prompt construction hay authorization. Điều đó hữu ích hơn nhiều so với nhãn chung chung “model đã quyết định sai”.
 

@@ -6,14 +6,14 @@ category: "architecture"
 lang: "en"
 translationKey: "mcp-tool-poisoning-description-payload"
 draft: false
-image: "/blog/mcp-tool-poisoning/hero.png"
+image: "/blog/mcp-tool-poisoning/hero.webp"
 ---
 
 A tool description looks harmless. It usually contains a name, a short explanation, an input schema, and perhaps a few usage notes. In an MCP-connected agent, however, that description is not just documentation. The model reads it as part of the context it uses to decide what to do.
 
 That changes the security question. A malicious or compromised server does not need to return an obviously dangerous result. It may place an instruction inside the description that encourages the model to reveal secrets, call another tool, or bypass a review step. The text is shown as metadata, but it behaves like a payload inside the model’s reasoning context.
 
-![A friendly robot reads a tool card while hidden instruction fragments leak from the card toward an agent control panel](/blog/mcp-tool-poisoning/hero.png)
+![A friendly robot reads a tool card while hidden instruction fragments leak from the card toward an agent control panel](/blog/mcp-tool-poisoning/hero.webp)
 
 The practical rule is straightforward: **tool metadata is untrusted input**. Discovery tells the client what a server claims to offer. It must not, by itself, grant permission to execute a capability.
 
@@ -25,7 +25,7 @@ This creates a shortcut from text to behavior. A description such as “Use this
 
 The problem becomes more subtle when the malicious instruction is hidden in a long description, encoded in an example, or introduced only after a server update. The tool name may remain familiar while its description quietly changes.
 
-![A clean tool catalog and a poisoned catalog look similar at discovery time, but only the approved capability snapshot can pass into execution](/blog/mcp-tool-poisoning/catalog-diff.png)
+![A clean tool catalog and a poisoned catalog look similar at discovery time, but only the approved capability snapshot can pass into execution](/blog/mcp-tool-poisoning/catalog-diff.webp)
 
 A client should therefore distinguish four states:
 

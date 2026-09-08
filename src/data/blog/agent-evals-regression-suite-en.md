@@ -3,16 +3,16 @@ title: "Do Not Ship a Tool-Calling AI Agent Without Evals: Designing a Regressio
 description: "A correct final answer can still hide the wrong tool call, an unsafe state change, a retry loop, or an unbounded bill. Here is how to turn those failures into a regression suite that belongs in CI/CD."
 pubDate: 2026-05-18
 category: "engineering"
-image: "/blog/agent-evals-hero.jpg"
+image: "/blog/agent-evals-hero.webp"
 lang: "en"
 translationKey: "agent-evals-regression-suite"
 draft: false
 ---
 
-![An engineer inspecting an AI agent regression suite before release](/blog/agent-evals-hero.jpg)
+![An engineer inspecting an AI agent regression suite before release](/blog/agent-evals-hero.webp)
 
 <figure class="blog-video">
-  <video controls preload="metadata" playsinline poster="/blog/agent-evals-hero.jpg" aria-label="Explainer video for this article, English version">
+  <video controls preload="metadata" playsinline poster="/blog/agent-evals-hero.webp" aria-label="Explainer video for this article, English version">
     <source src="/blog/agent-evals-regression-suite/video-en.mp4" type="video/mp4" />
     Your browser does not support HTML5 video.
   </video>
@@ -35,7 +35,7 @@ This article shows how to turn that insight into a **regression suite**: a set o
 
 Agents differ from prompt chains because they make decisions over multiple steps. Every step introduces another place for nondeterminism and failure: the model can pick the wrong tool, choose the right tool with malformed arguments, misinterpret an observation, loop uselessly, or mutate state before validating a condition. An agent can therefore pass a final-answer check while remaining fragile when the input, time, tool response, or session state changes slightly.[1] [2]
 
-![The final answer is only the visible tip; tool use, state, safety, and cost sit beneath the surface](/blog/agent-evals-iceberg.jpg)
+![The final answer is only the visible tip; tool use, state, safety, and cost sit beneath the surface](/blog/agent-evals-iceberg.webp)
 
 Use a realistic fictional system throughout the article: **CaseOps Agent**, an internal assistant for processing administrative cases. It has four tools:
 
@@ -71,7 +71,7 @@ A **capability eval** asks, *Which hard tasks can the agent perform today?* It i
 
 A **regression eval** asks, *Do behaviors that were previously accepted still work?* It is a guardrail. For critical conditions, it should have an almost-perfect pass expectation. Anthropic recommends keeping these suites separate and allowing robust capability cases to graduate into regression cases once they represent behavior the team is committed to preserving.[1]
 
-![A capability suite explores the mountain; a regression suite protects the safe route](/blog/agent-evals-two-suites.jpg)
+![A capability suite explores the mountain; a regression suite protects the safe route](/blog/agent-evals-two-suites.webp)
 
 ### A useful admission rule
 
@@ -107,7 +107,7 @@ Instead, split trajectory rules into three classes:
 
 Strict, ordered tool-call matching should be reserved for sequences where order genuinely matters for correctness or safety. In most other cases, outcome and the quality of decisions matter more than a single pre-planned route.[2]
 
-![A trace can have several valid routes, but dangerous routes must be blocked before they touch state](/blog/agent-evals-trace.jpg)
+![A trace can have several valid routes, but dangerous routes must be blocked before they touch state](/blog/agent-evals-trace.webp)
 
 ---
 
@@ -313,7 +313,7 @@ Two principles are worth defending aggressively.
 
 ## CI/CD: make the regression suite a release contract
 
-![An illustrative four-layer release gate; tune this policy to your own baseline and risk appetite](/blog/agent-evals-release-chart.png)
+![An illustrative four-layer release gate; tune this policy to your own baseline and risk appetite](/blog/agent-evals-release-chart.webp)
 
 Do not run an expensive full suite on every commit. Also do not reduce evals to a manual ceremony before release. Divide gates by risk and feedback requirement.
 
@@ -370,7 +370,7 @@ When CI is red, the team needs a resolution path instead of “rerun until green
 
 An offline suite knows only the failures you have already imagined. Production reveals what users actually ask, where tools really time out, how retrieval really drifts, and how an agent actually abuses retries at peak load. Offline and online evaluation are complementary: offline protects known behavior before deployment, while online evaluation discovers unknown failures after it.[2]
 
-![A production incident should become a minimal fixture and a release gate in a continuous-improvement flywheel](/blog/agent-evals-flywheel.jpg)
+![A production incident should become a minimal fixture and a release gate in a continuous-improvement flywheel](/blog/agent-evals-flywheel.webp)
 
 Use a five-step ritual for every agent incident.
 

@@ -3,12 +3,12 @@ title: "Semantic Diffs for AI Agents: Review Intent, Not Just JSON"
 description: "A production design for turning an AI agent’s proposed tool call into a human-readable semantic diff: affected entities, invariants, risk, and a safe write boundary."
 pubDate: 2026-09-01
 category: "engineering"
-image: "/blog/semantic-diff-agents/hero.png"
+image: "/blog/semantic-diff-agents/hero.webp"
 lang: "en"
 translationKey: "semantic-diff-agents"
 draft: false
 ---
-![An AI agent and a human reviewer compare a proposed semantic change across before and after system diagrams](/blog/semantic-diff-agents/hero.png)
+![An AI agent and a human reviewer compare a proposed semantic change across before and after system diagrams](/blog/semantic-diff-agents/hero.webp)
 
 The approval screen showed valid JSON. Every required field was present, the schema validator returned green, and the agent’s explanation sounded reasonable. A reviewer clicked **Approve**.
 
@@ -36,7 +36,7 @@ A semantic diff is a translation layer. It preserves the machine request, but ad
 | What must remain true? | Invariants and policy checks |
 | Who or what may approve it? | Risk class, required authority, and expiry |
 
-![A raw tool-call card transforms into an entity-level semantic change map with fields, relationships, and state transitions](/blog/semantic-diff-agents/semantic-diff-map.png)
+![A raw tool-call card transforms into an entity-level semantic change map with fields, relationships, and state transitions](/blog/semantic-diff-agents/semantic-diff-map.webp)
 
 ## Start with a canonical change set
 
@@ -101,7 +101,7 @@ A useful impact record is small and explicit:
 
 The presence of an unknown is not a defect in the UI. It is an honest boundary around what the system can prove. A high-impact unknown should route to a human or block the write. A low-impact unknown may be accepted with an audit note. The policy, not the model’s confidence, makes that decision.
 
-![An impact panel shows one target entity, related records, invariants, unknowns, and a reviewer marking the blast radius](/blog/semantic-diff-agents/impact-panel.png)
+![An impact panel shows one target entity, related records, invariants, unknowns, and a reviewer marking the blast radius](/blog/semantic-diff-agents/impact-panel.webp)
 
 ## Compute the diff outside the model
 
@@ -136,7 +136,7 @@ One workable policy matrix looks like this:
 
 The review surface should not hide low-risk noise behind a wall of high-risk details. It should show a compact summary first, then let the reviewer expand the exact fields, relationships, evidence, and policy decisions. The goal is not maximal information. It is **decision-relevant information**.
 
-![A risk-weighted approval ladder separates automatic low-risk changes, human review, and blocked high-risk actions](/blog/semantic-diff-agents/approval-ladder.png)
+![A risk-weighted approval ladder separates automatic low-risk changes, human review, and blocked high-risk actions](/blog/semantic-diff-agents/approval-ladder.webp)
 
 ## Preserve intent without pretending to read thoughts
 
@@ -162,7 +162,7 @@ type ReviewSummary = {
 
 A semantic diff is useful before approval, but it is not a permanent authorization. The world can change while a person is reviewing a request. Another worker may update the record, the user’s permission may be revoked, or a policy may become effective. The final adapter must recompute or revalidate the diff immediately before the side effect.
 
-![A guarded write boundary compares before and after state, checks invariants, creates an audit receipt, and only then commits](/blog/semantic-diff-agents/write-boundary.png)
+![A guarded write boundary compares before and after state, checks invariants, creates an audit receipt, and only then commits](/blog/semantic-diff-agents/write-boundary.webp)
 
 ```ts
 async function commit(changeSet: ChangeSet) {

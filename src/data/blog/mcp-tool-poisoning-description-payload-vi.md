@@ -6,14 +6,14 @@ category: "architecture"
 lang: "vi"
 translationKey: "mcp-tool-poisoning-description-payload"
 draft: false
-image: "/blog/mcp-tool-poisoning/hero.png"
+image: "/blog/mcp-tool-poisoning/hero.webp"
 ---
 
 Mô tả của một tool nhìn có vẻ vô hại. Nó thường có tên, một đoạn giải thích ngắn, input schema và vài ghi chú sử dụng. Nhưng trong một agent kết nối MCP, description không chỉ là tài liệu. Model đọc nó như một phần context để quyết định bước tiếp theo.
 
 Điều đó làm thay đổi câu hỏi về security. Một server độc hại hoặc đã bị compromise không cần trả về một result rõ ràng nguy hiểm. Nó có thể nhét instruction vào description để khuyến khích model tiết lộ secret, gọi một tool khác hoặc bỏ qua bước review. Text đó xuất hiện dưới dạng metadata, nhưng hoạt động như payload bên trong context suy luận của model.
 
-![Một robot thân thiện đọc tool card trong khi các mảnh instruction ẩn rò rỉ từ card về phía bảng điều khiển của agent](/blog/mcp-tool-poisoning/hero.png)
+![Một robot thân thiện đọc tool card trong khi các mảnh instruction ẩn rò rỉ từ card về phía bảng điều khiển của agent](/blog/mcp-tool-poisoning/hero.webp)
 
 Quy tắc thực tế rất rõ: **tool metadata là untrusted input**. Discovery chỉ cho client biết server tuyên bố đang cung cấp capability gì. Nó không được tự động cấp quyền execute capability đó.
 
@@ -25,7 +25,7 @@ API documentation truyền thống dành cho developer. Developer đọc nó, so
 
 Vấn đề còn khó hơn khi malicious instruction được giấu trong một description dài, được viết trong một example hoặc chỉ xuất hiện sau khi server update. Tool name vẫn quen thuộc, trong khi description âm thầm thay đổi.
 
-![Clean tool catalog và poisoned catalog trông gần giống nhau ở discovery, nhưng chỉ capability snapshot đã được approve mới được đi vào execution](/blog/mcp-tool-poisoning/catalog-diff.png)
+![Clean tool catalog và poisoned catalog trông gần giống nhau ở discovery, nhưng chỉ capability snapshot đã được approve mới được đi vào execution](/blog/mcp-tool-poisoning/catalog-diff.webp)
 
 Client vì thế nên phân biệt bốn trạng thái:
 

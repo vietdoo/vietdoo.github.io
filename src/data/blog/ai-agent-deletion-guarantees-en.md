@@ -3,13 +3,13 @@ title: "AI Agent Deletion Guarantees: Memory Erasure, Tombstones, and Audit Evid
 description: "A production playbook for honoring AI-agent deletion requests across memories, vector indexes, caches, traces, and derived artifacts—with immediate retrieval blocking and verifiable evidence."
 pubDate: 2026-07-15
 category: "engineering"
-image: "/blog/ai-agent-deletion-guarantees/hero.png"
+image: "/blog/ai-agent-deletion-guarantees/hero.webp"
 lang: "en"
 translationKey: "ai-agent-deletion-guarantees"
 draft: false
 ---
 
-![A hand-drawn AI deletion graph propagates an erasure request from a source record through memory, vector index, cache, trace, and audit evidence](/blog/ai-agent-deletion-guarantees/hero.png)
+![A hand-drawn AI deletion graph propagates an erasure request from a source record through memory, vector index, cache, trace, and audit evidence](/blog/ai-agent-deletion-guarantees/hero.webp)
 
 The first deletion request arrived as an ordinary support ticket.
 
@@ -29,7 +29,7 @@ A conversational AI product rarely stores “the user’s data” in one place. 
 
 The system may not consider all of these copies equally sensitive, but a deletion workflow must know that they exist. Otherwise, it will declare success at the first storage layer that returns `200 OK`.
 
-![An AI data deletion graph connects source conversation data to durable memory, summaries, embeddings, caches, traces, exports, and derived evaluation artifacts](/blog/ai-agent-deletion-guarantees/deletion-graph.png)
+![An AI data deletion graph connects source conversation data to durable memory, summaries, embeddings, caches, traces, exports, and derived evaluation artifacts](/blog/ai-agent-deletion-guarantees/deletion-graph.webp)
 
 A useful inventory classifies each node by how it can reproduce or influence the deleted information:
 
@@ -96,7 +96,7 @@ async function canRetrieve(ref: DataRef): Promise<boolean> {
 
 The check belongs at the retrieval boundary, not only in the UI. A cached result, a vector search response, or a memory lookup must be rejected if its source reference is tombstoned. If a component cannot evaluate the tombstone, it should fail closed for high-risk data or return an empty result with an observable reason.
 
-![A tombstone blocks retrieval immediately while asynchronous workers remove vectors, caches, summaries, traces, and exports](/blog/ai-agent-deletion-guarantees/tombstone-retrieval-gate.png)
+![A tombstone blocks retrieval immediately while asynchronous workers remove vectors, caches, summaries, traces, and exports](/blog/ai-agent-deletion-guarantees/tombstone-retrieval-gate.webp)
 
 ## Provider delete APIs are projection operations
 
@@ -197,7 +197,7 @@ An audit record should answer five questions:
 
 It should not answer those questions by copying the deleted text into a permanent log. Store references, counts, hashes of canonical identifiers where appropriate, timestamps, worker versions, policy versions, and terminal outcomes. Keep the evidence ledger append-only if that matches your audit model, but give it a separate retention policy.
 
-![An append-only evidence ledger records deletion scope, worker outcomes, retries, policy versions, and completion without retaining the deleted content](/blog/ai-agent-deletion-guarantees/evidence-ledger.png)
+![An append-only evidence ledger records deletion scope, worker outcomes, retries, policy versions, and completion without retaining the deleted content](/blog/ai-agent-deletion-guarantees/evidence-ledger.webp)
 
 ```ts
 type DeletionEvidence = {

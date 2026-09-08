@@ -3,13 +3,13 @@ title: "Làm Chủ Cursor AI: Quy Trình 3 Lớp, UI Pipeline & Zero Trust Secur
 description: "Cẩm nang thực chiến để 'thu phục' Cursor AI bằng mô hình 3 lớp, pipeline UI 3 bước và Zero Trust Security, giúp dev không phải đi dọn rác code AI."
 pubDate: 2026-02-26
 category: "engineering"
-image: "/blog/cursor-ai-guideline/hero.jpg"
+image: "/blog/cursor-ai-guideline/hero.webp"
 lang: "vi"
 translationKey: "cursor-ai-guideline"
 draft: false
 ---
 
-![Meme Cursor AI: Khi AI sinh rác code và dev phải đi dọn](/blog/cursor-ai-guideline/hero.jpg)
+![Meme Cursor AI: Khi AI sinh rác code và dev phải đi dọn](/blog/cursor-ai-guideline/hero.webp)
 
 > **TL;DR** — Cấp tài khoản Cursor AI cho dev mà không kèm "luật chơi" cũng giống như đưa một chiếc Ferrari cho người chưa có bằng lái: sướng được 5 phút đầu, sau đó là nát bét. Mã AI sinh ra trông có vẻ chạy được, nhưng bên dưới là một bãi rác kiến trúc, logic nghiệp vụ "ảo tưởng" (hallucination), và rủi ro rò rỉ API key nội bộ cực kỳ cao. Bài viết này trình bày một cẩm nang engineering thực chiến: từ chiến lược phân lớp công cụ, quy trình Backend/Frontend song song, cơ chế Zero Trust cho đến hệ thống phân cấp Rules & Skills giúp AI sinh mã chuẩn đét ngay từ cú gõ đầu tiên.
 
@@ -21,7 +21,7 @@ draft: false
 
 Bạn gõ một prompt dài ngoẵng vào Cursor: *"Hãy viết cho tôi một service quản lý hóa đơn thanh toán hỗ trợ Kafka và Redis cache"*. Cursor nháy mắt vài giây, nhả ra 500 dòng code hoành tráng. Bạn sướng tê người bấm **Accept**. Nhưng 10 phút sau, khi ấn `run`, server nổ tung với 40 lỗi syntax, class import bậy bạ, và luồng trừ tiền trong DB bị bypass sạch sẽ!
 
-![Quy trình song song Cursor vs IDE](/blog/cursor-ai-guideline/dual-window-loop.jpg)
+![Quy trình song song Cursor vs IDE](/blog/cursor-ai-guideline/dual-window-loop.webp)
 
 ### Bản chất vấn đề nằm ở đâu?
 Cursor **KHÔNG PHẢI** là một Senior Engineer ngồi trong máy tính của bạn. Bản chất của LLM là một cỗ máy dự đoán từ vựng tiếp theo dựa trên xác suất trên GitHub. Khi bạn hỏi một câu mơ hồ, nó sẽ "chém gió" ra một giải pháp generic nhất — thứ chắc chắn vỡ vụn khi đụng vào hệ thống Microservices phức tạp thực tế.
@@ -76,7 +76,7 @@ Thảm họa Frontend bằng AI thường chia làm 2 kịch bản:
 1. Nâng cấp CSS bằng prompt khiến giao diện vỡ nát trên mobile.
 2. Thấy trang Lovable/v0 dựng UI đẹp quá, copy thẳng toàn bộ code HTML/React rác vào dự án, làm nhân bản 50 dòng CSS trùng lặp và vỡ sạch convention dự án.
 
-![Pipeline 3 bước chuyển đổi UI](/blog/cursor-ai-guideline/ui-pipeline.jpg)
+![Pipeline 3 bước chuyển đổi UI](/blog/cursor-ai-guideline/ui-pipeline.webp)
 
 Để giải quyết triệt để, chúng tôi áp dụng **Pipeline 3 bước chuyển đổi UI**:
 
@@ -107,7 +107,7 @@ Kết quả: AI sinh ra đoạn code đúng 100% style, đúng convention và s�
 
 Trong môi trường doanh nghiệp (Viễn thông, Tài chính, Y tế, Chính phủ), bảo mật là sinh mệnh. Một kỹ sư vô tình paste đoạn code chứa `JWT_SECRET` hay `DB_PASSWORD` vào prompt AI có thể khiến toàn bộ hệ thống bị tuột quần trên internet.
 
-![Bảo mật Zero Trust trong Cursor AI](/blog/cursor-ai-guideline/zero-trust.jpg)
+![Bảo mật Zero Trust trong Cursor AI](/blog/cursor-ai-guideline/zero-trust.webp)
 
 Chúng tôi áp dụng mô hình **Zero Trust Security** khắt khe khi cấu hình Cursor cho toàn bộ máy tính kỹ sư:
 

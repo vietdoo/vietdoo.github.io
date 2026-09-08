@@ -3,13 +3,13 @@ title: "Mastering Cursor AI: 3-Layer Model, UI Pipeline & Zero Trust Security"
 description: "A practical engineering playbook for taming Cursor AI with a 3-layer model, 3-step UI pipeline, and Zero Trust Security so developers spend less time cleaning up AI-generated code."
 pubDate: 2026-02-26
 category: "engineering"
-image: "/blog/cursor-ai-guideline/hero.jpg"
+image: "/blog/cursor-ai-guideline/hero.webp"
 lang: "en"
 translationKey: "cursor-ai-guideline"
 draft: false
 ---
 
-![Cursor AI Meme: When AI generates spaghetti code and dev has to clean it up](/blog/cursor-ai-guideline/hero.jpg)
+![Cursor AI Meme: When AI generates spaghetti code and dev has to clean it up](/blog/cursor-ai-guideline/hero.webp)
 
 > **TL;DR** — Handing Cursor AI accounts to developers without strict rules is like giving a Ferrari to someone without a driver's license: thrilling for 5 minutes, followed by a total wreck. AI-generated code looks functional on the surface, but underneath lies architectural spaghetti, hallucinatory business logic, and extreme risks of leaking internal API keys. This post breaks down a practical engineering playbook: from layered tooling strategies and dual-window workflows to Zero Trust security and a 2-tier Rules & Skills framework that gets AI code right on the very first prompt.
 
@@ -21,7 +21,7 @@ Have you ever been caught in this nightmare?
 
 You type a massive prompt into Cursor: *"Build me an invoice payment service with Kafka and Redis caching support"*. Cursor blinks for a few seconds and spits out 500 lines of impressive-looking code. You happily click **Accept**. But 10 minutes later, when you hit `run`, the server explodes with 40 syntax errors, bizarre class imports, and the database payment logic completely bypassed!
 
-![Dual Window Loop: Cursor vs IDE](/blog/cursor-ai-guideline/dual-window-loop.jpg)
+![Dual Window Loop: Cursor vs IDE](/blog/cursor-ai-guideline/dual-window-loop.webp)
 
 ### What is the root cause?
 Cursor is **NOT** a Senior Engineer sitting inside your computer. At its core, an LLM is a next-token prediction engine based on GitHub probabilities. When given a vague question, it hallucinates the most generic solution possible — one that inevitably shatters when dropped into a complex real-world microservices architecture.
@@ -76,7 +76,7 @@ Frontend AI disasters usually fall into two categories:
 1. Prompting CSS tweaks until the responsive layout collapses on mobile.
 2. Seeing a beautiful v0/Lovable mockup and copy-pasting raw HTML/React garbage directly into the project repo, duplicating CSS and destroying project conventions.
 
-![3-Step UI Pipeline](/blog/cursor-ai-guideline/ui-pipeline.jpg)
+![3-Step UI Pipeline](/blog/cursor-ai-guideline/ui-pipeline.webp)
 
 To solve this permanently, we enforce a **3-Step UI Conversion Pipeline**:
 
@@ -107,7 +107,7 @@ Result: AI outputs code that is 100% styled correctly, follows project conventio
 
 In enterprise environments (Telecom, Finance, Healthcare, Government), security is survival. An engineer accidentally pasting a code snippet containing `JWT_SECRET` or `DB_PASSWORD` into an AI prompt can expose an entire infrastructure on the internet.
 
-![Zero Trust Security in Cursor AI](/blog/cursor-ai-guideline/zero-trust.jpg)
+![Zero Trust Security in Cursor AI](/blog/cursor-ai-guideline/zero-trust.webp)
 
 We enforce a strict **Zero Trust Security** model across all developer workstations:
 

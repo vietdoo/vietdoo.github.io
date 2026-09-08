@@ -3,13 +3,13 @@ title: "AI Agent Identity Is Not a User ID: Designing Delegation, Scope, and Rev
 description: "A production guide to separating user, client, and AI agent identities, enforcing delegated authority with scoped tokens, preserving attribution across services, and revoking access safely."
 pubDate: 2026-06-18
 category: "security"
-image: "/blog/agent-identity-delegation-revocation/hero-playwright.png"
+image: "/blog/agent-identity-delegation-revocation/hero-playwright.webp"
 lang: "en"
 translationKey: "agent-identity-delegation-revocation"
 draft: false
 ---
 
-![An identity triangle connecting user, client, AI agent, authorization server, and protected resource](/blog/agent-identity-delegation-revocation/hero-playwright.png)
+![An identity triangle connecting user, client, AI agent, authorization server, and protected resource](/blog/agent-identity-delegation-revocation/hero-playwright.webp)
 
 An AI agent should not become a user ID simply because a user clicked “Run.” That shortcut is attractive: the application already has a session, the downstream API already accepts a bearer token, and the first demo works without a new identity model. The trouble starts when the agent is allowed to interpret natural language, call several tools, and continue working after the user has stopped watching.
 
@@ -70,7 +70,7 @@ Effective authority =
 
 Suppose an engineer can read deployments, roll back a release and delete cloud resources. A deployment assistant may be configured only for read-only post-deploy checks. The user’s authority is broad, but the agent’s role is narrow. The effective token should contain only the overlap. Conversely, if the agent role allows a rollback but the user’s current role does not, the call must still be denied.
 
-![The intersection of user permission, agent role, task scope, audience, and environment](/blog/agent-identity-delegation-revocation/intersection-authority-playwright.png)
+![The intersection of user permission, agent role, task scope, audience, and environment](/blog/agent-identity-delegation-revocation/intersection-authority-playwright.webp)
 
 WorkOS describes this as an intersection rule: the user’s permissions are a ceiling, not a complete grant. The agent’s own configured scope is a second ceiling.[4] This prevents a common failure mode in which a privileged employee unintentionally gives a general-purpose agent the ability to perform every privileged action the employee can perform.
 
@@ -131,7 +131,7 @@ actor_token_type=urn:ietf:params:oauth:token-type:jwt
 
 This example is illustrative rather than a drop-in provider configuration. The authorization server must validate the client, the subject token, the actor token, the requested audience, the task scope and local policy before issuing anything. The user’s original session credential should not become a universal pass for every tool.
 
-![A four-step token exchange flow from user delegation to resource API enforcement](/blog/agent-identity-delegation-revocation/token-exchange-playwright.png)
+![A four-step token exchange flow from user delegation to resource API enforcement](/blog/agent-identity-delegation-revocation/token-exchange-playwright.webp)
 
 
 An issued token or equivalent authorization context should make the relationship inspectable. Exact claim names vary by provider and profile, but the semantics should resemble this:
@@ -201,7 +201,7 @@ A token is also not a revocation system by itself. A short expiry limits the dam
 
 Revocation should be modeled as a state transition, not as an administrative button hidden in an identity console. The authorization service and downstream resource boundary need a clear answer to the question: “Is this delegation still valid right now?”
 
-![A revocation timeline showing task cancel, role change, token expiry, policy denial, and safe stop](/blog/agent-identity-delegation-revocation/revocation-timeline-playwright.png)
+![A revocation timeline showing task cancel, role change, token expiry, policy denial, and safe stop](/blog/agent-identity-delegation-revocation/revocation-timeline-playwright.webp)
 
 A robust design usually combines several controls:
 

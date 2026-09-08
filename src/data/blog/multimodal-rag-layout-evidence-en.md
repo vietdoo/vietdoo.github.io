@@ -3,13 +3,13 @@ title: "Multimodal RAG That Understands Tables, Figures, and Page Layout"
 description: "Text-only chunking breaks document-heavy AI products. Here is a practical layout-aware retrieval design for prose, tables, figures, captions, and page-level evidence."
 pubDate: 2026-07-11
 category: "engineering"
-image: "/blog/multimodal-rag-layout/hero.png"
+image: "/blog/multimodal-rag-layout/hero.webp"
 lang: "en"
 translationKey: "multimodal-rag-layout-evidence"
 draft: false
 ---
 
-![A small AI robot routing paragraphs, tables, figures, and page layout into a grounded answer](/blog/multimodal-rag-layout/hero.png)
+![A small AI robot routing paragraphs, tables, figures, and page layout into a grounded answer](/blog/multimodal-rag-layout/hero.webp)
 
 A document can contain the answer in a paragraph, the exception in a table, the definition in a caption, and the meaning of the chart in the page layout around it. A text-only RAG pipeline turns that document into a sequence of chunks and hopes the important relationships survive.
 
@@ -25,7 +25,7 @@ This article focuses on document-heavy workflows: technical manuals, policy pack
 
 A page is not merely a bag of tokens. It is a small evidence graph. A heading scopes the paragraphs below it. A table header gives meaning to the values in its cells. A figure has a caption, legend, axes, and nearby explanation. A footnote may narrow the claim made by the main body.
 
-![A layout-aware index separates a document page into paragraph, table, figure, caption, and sidebar regions before retrieval](/blog/multimodal-rag-layout/layout-aware-index.png)
+![A layout-aware index separates a document page into paragraph, table, figure, caption, and sidebar regions before retrieval](/blog/multimodal-rag-layout/layout-aware-index.webp)
 
 Consider a page with this structure:
 
@@ -112,7 +112,7 @@ A bundle can include:
 
 The bundle should be bounded. Returning every element on the page increases token cost and can bury the evidence that mattered. A good expansion policy is explicit: include the table header, the figure legend, the nearest heading, and a footnote only when the region links to it.
 
-![A robot answers a table question by combining the highlighted row, its header, and a nearby explanation rather than using the row alone](/blog/multimodal-rag-layout/table-evidence.png)
+![A robot answers a table question by combining the highlighted row, its header, and a nearby explanation rather than using the row alone](/blog/multimodal-rag-layout/table-evidence.webp)
 
 ### Do not confuse visual retrieval with visual reasoning
 
@@ -155,7 +155,7 @@ This also helps with corrections. If the chart is replaced, the product can iden
 
 A text-only evaluator may judge an answer correct because the final sentence resembles a reference answer. It can miss a wrong table row, a lost unit, or an answer that cites the right page but the wrong region.
 
-![An evaluation board compares an answer grounded in paragraph, table, and figure evidence with one that relies on text alone](/blog/multimodal-rag-layout/evidence-evaluation.png)
+![An evaluation board compares an answer grounded in paragraph, table, and figure evidence with one that relies on text alone](/blog/multimodal-rag-layout/evidence-evaluation.webp)
 
 Multimodal evaluation should combine deterministic and semantic checks:
 

@@ -6,7 +6,7 @@ category: "security"
 lang: "vi"
 translationKey: "ai-agent-registry-shadow-ai"
 draft: false
-image: "/blog/agent-registry/hero.png"
+image: "/blog/agent-registry/hero.webp"
 ---
 
 Phần lớn tổ chức biết có bao nhiêu người dùng có quyền truy cập vào một hệ thống production. Nhưng rất ít tổ chức trả lời được câu hỏi tương tự cho AI agent.
@@ -21,7 +21,7 @@ Một agent có thể đọc customer database, mở ticket, gửi email, chạy
 
 Đây là lớp fleet-level nằm phía trên security của từng agent. Những control như policy-as-code, observability, memory protection và incident response vẫn cần thiết. Registry làm cho các control đó có địa chỉ rõ ràng: chúng đang bảo vệ agent nào, ai được đổi policy của agent, và agent đó còn được phép chạy hay không.
 
-![Bảng điều khiển control plane nền tối lập bản đồ các AI agent được phê duyệt và chưa được phê duyệt trong doanh nghiệp](/blog/agent-registry/hero.png)
+![Bảng điều khiển control plane nền tối lập bản đồ các AI agent được phê duyệt và chưa được phê duyệt trong doanh nghiệp](/blog/agent-registry/hero.webp)
 
 *Registry không phải một trang catalog. Nó là control plane dành cho các non-human actor.*
 
@@ -86,7 +86,7 @@ Một discovery pass cho production nên kết hợp nhiều signal. Hãy scan d
 
 Không nên xem mọi model call là một agent riêng. Một application có thể tạo nhiều model call. Ngược lại, một agent có thể đi qua nhiều service. Mục tiêu là nhận diện một actor bền vững, có purpose, authority boundary và execution path có thể lặp lại.
 
-![Nhiều nguồn telemetry hội tụ về một agent registry với trạng thái confidence và ownership](/blog/agent-registry/discovery-map.png)
+![Nhiều nguồn telemetry hội tụ về một agent registry với trạng thái confidence và ownership](/blog/agent-registry/discovery-map.webp)
 
 *Discovery là bài toán correlation: declaration, credential, deployment và action được quan sát phải trỏ về cùng một actor.*
 
@@ -156,11 +156,11 @@ observed -> candidate -> attested -> approved -> restricted -> retired
 
 **Observed** nghĩa là telemetry đã tìm thấy actor nhưng chưa có owner nhận trách nhiệm. **Candidate** nghĩa là đã có đủ thông tin cho review. **Attested** nghĩa là owner đã khai báo purpose, capability và dependency. **Approved** nghĩa là policy đã cấp runtime scope có giới hạn. **Restricted** nghĩa là agent chỉ được chạy ở reduced mode trong khi vấn đề được điều tra. **Quarantined** nghĩa là execution hoặc egress bị block nhưng evidence vẫn được giữ. **Retired** nghĩa là agent không còn được phép chạy, dù registry và audit record vẫn được lưu.
 
-![Lifecycle của AI agent đi từ quan sát qua approval, restriction, quarantine và retirement](/blog/agent-registry/lifecycle-state-machine.png)
+![Lifecycle của AI agent đi từ quan sát qua approval, restriction, quarantine và retirement](/blog/agent-registry/lifecycle-state-machine.webp)
 
 *Lifecycle state biến một inventory thành một hệ thống ra quyết định có thể vận hành.*
 
-![Phễu quarantine chặn agent không có owner nhưng vẫn giữ evidence để review và recovery](/blog/agent-registry/quarantine-funnel.png)
+![Phễu quarantine chặn agent không có owner nhưng vẫn giữ evidence để review và recovery](/blog/agent-registry/quarantine-funnel.webp)
 
 *Quarantine phải giảm authority mà không phá hủy evidence cần thiết để hiểu agent xuất hiện vì sao.*
 

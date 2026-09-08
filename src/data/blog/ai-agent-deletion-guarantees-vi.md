@@ -3,13 +3,13 @@ title: "Deletion Guarantee cho AI Agent: Xóa Memory, Tombstone và Audit Eviden
 description: "Playbook production để thực hiện yêu cầu xóa xuyên qua memory, vector index, cache, trace và dữ liệu dẫn xuất của AI agent—chặn retrieval ngay và tạo bằng chứng có thể kiểm chứng."
 pubDate: 2026-07-15
 category: "engineering"
-image: "/blog/ai-agent-deletion-guarantees/hero.png"
+image: "/blog/ai-agent-deletion-guarantees/hero.webp"
 lang: "vi"
 translationKey: "ai-agent-deletion-guarantees"
 draft: false
 ---
 
-![Deletion graph vẽ tay cho AI agent truyền yêu cầu xóa từ source record qua memory, vector index, cache, trace và audit evidence](/blog/ai-agent-deletion-guarantees/hero.png)
+![Deletion graph vẽ tay cho AI agent truyền yêu cầu xóa từ source record qua memory, vector index, cache, trace và audit evidence](/blog/ai-agent-deletion-guarantees/hero.webp)
 
 Yêu cầu xóa đầu tiên đến dưới dạng một ticket support rất bình thường.
 
@@ -29,7 +29,7 @@ Một sản phẩm conversational AI hiếm khi chỉ lưu “dữ liệu của 
 
 Hệ thống không nhất thiết xem mọi bản sao có cùng mức độ nhạy cảm, nhưng deletion workflow phải biết chúng tồn tại. Nếu không, workflow sẽ báo thành công ngay tại storage layer đầu tiên trả về `200 OK`.
 
-![Deletion graph của AI nối conversation data với durable memory, summary, embedding, cache, trace, export và evaluation artifact dẫn xuất](/blog/ai-agent-deletion-guarantees/deletion-graph.png)
+![Deletion graph của AI nối conversation data với durable memory, summary, embedding, cache, trace, export và evaluation artifact dẫn xuất](/blog/ai-agent-deletion-guarantees/deletion-graph.webp)
 
 Một inventory hữu ích sẽ phân loại mỗi node theo khả năng tái tạo hoặc ảnh hưởng đến thông tin đã xóa:
 
@@ -96,7 +96,7 @@ async function canRetrieve(ref: DataRef): Promise<boolean> {
 
 Check này phải nằm ở retrieval boundary, không chỉ trong UI. Cached result, vector search response hoặc memory lookup đều phải bị từ chối nếu source reference đã có tombstone. Nếu một component không thể evaluate tombstone, component đó nên fail closed với dữ liệu rủi ro cao hoặc trả về empty result kèm lý do có thể quan sát.
 
-![Tombstone chặn retrieval tức thời trong khi worker bất đồng bộ xóa vector, cache, summary, trace và export](/blog/ai-agent-deletion-guarantees/tombstone-retrieval-gate.png)
+![Tombstone chặn retrieval tức thời trong khi worker bất đồng bộ xóa vector, cache, summary, trace và export](/blog/ai-agent-deletion-guarantees/tombstone-retrieval-gate.webp)
 
 ## Delete API của provider chỉ xử lý một projection
 
@@ -197,7 +197,7 @@ Một audit record nên trả lời năm câu hỏi:
 
 Nó không nên trả lời bằng cách copy deleted text vào một log lâu dài. Hãy lưu reference, count, hash của canonical identifier khi phù hợp, timestamp, worker version, policy version và terminal outcome. Có thể giữ evidence ledger append-only nếu phù hợp với audit model, nhưng ledger cũng phải có retention policy riêng.
 
-![Evidence ledger dạng append-only ghi deletion scope, worker outcome, retry, policy version và completion mà không giữ content đã xóa](/blog/ai-agent-deletion-guarantees/evidence-ledger.png)
+![Evidence ledger dạng append-only ghi deletion scope, worker outcome, retry, policy version và completion mà không giữ content đã xóa](/blog/ai-agent-deletion-guarantees/evidence-ledger.webp)
 
 ```ts
 type DeletionEvidence = {

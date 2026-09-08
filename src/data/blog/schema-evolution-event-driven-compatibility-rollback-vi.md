@@ -6,17 +6,17 @@ category: "architecture"
 lang: "vi"
 translationKey: "schema-evolution-event-driven-compatibility-rollback"
 draft: false
-image: "/blog/schema-evolution/hero.png"
+image: "/blog/schema-evolution/hero.webp"
 ---
 
 Event schema nhìn giống một chi tiết serialization cho tới khi hệ thống thật sự phải thay đổi nó. Khi đó schema trở thành một public API được dùng chung bởi producer, consumer, dashboard, replay job, data warehouse và incident tool, trong khi những thành phần này có thể thuộc các team hoàn toàn khác nhau.
 
 Phần khó của Schema Evolution không phải thêm một field vào JSON object. Phần khó là điều phối consumer cũ, producer mới, event được replay, ownership và rollback trong khi message vẫn tiếp tục chạy qua hệ thống.
 
-![Một event stream đi qua các version gate trong khi consumer cũ và mới vẫn hoạt động theo một contract rõ ràng](/blog/schema-evolution/hero.png)
+![Một event stream đi qua các version gate trong khi consumer cũ và mới vẫn hoạt động theo một contract rõ ràng](/blog/schema-evolution/hero.webp)
 
 <figure class="blog-video">
-  <video controls preload="metadata" playsinline poster="/blog/schema-evolution/hero.png" aria-label="Video giải thích nội dung bài viết, phiên bản tiếng Việt">
+  <video controls preload="metadata" playsinline poster="/blog/schema-evolution/hero.webp" aria-label="Video giải thích nội dung bài viết, phiên bản tiếng Việt">
     <source src="/blog/schema-evolution-event-driven-compatibility-rollback/video-vi.mp4" type="video/mp4" />
     Trình duyệt của bạn không hỗ trợ video HTML5.
   </video>
@@ -65,7 +65,7 @@ Tên gọi hữu ích, nhưng team thường dùng sai. Schema có thể compati
 
 Vì thế, schema check phải chạy cùng semantic test. Registry bảo vệ shape; consumer test bảo vệ behavior.
 
-![Một compatibility matrix cho thấy producer và consumer V1/V2 đi qua các cổng backward, forward và full compatibility](/blog/schema-evolution/compatibility-matrix.png)
+![Một compatibility matrix cho thấy producer và consumer V1/V2 đi qua các cổng backward, forward và full compatibility](/blog/schema-evolution/compatibility-matrix.webp)
 
 ## Thay đổi an toàn vẫn là thay đổi
 
@@ -122,7 +122,7 @@ Rollback plan phải trả lời ba câu hỏi:
 
 Đôi khi hành động an toàn nhất không phải schema rollback ngay. Có thể cần dừng write mới, quarantine một consumer, deploy bridge normalize version hoặc replay event sang topic mới sau khi sửa data.
 
-![Một rollback conveyor dừng producer, quarantine event incompatible, normalize record an toàn và replay qua consumer đã verify](/blog/schema-evolution/rollback-replay.png)
+![Một rollback conveyor dừng producer, quarantine event incompatible, normalize record an toàn và replay qua consumer đã verify](/blog/schema-evolution/rollback-replay.webp)
 
 Điểm quan trọng là phân biệt reverse code với reverse fact. Fact đã publish vào event log cần một correction strategy rõ ràng.
 

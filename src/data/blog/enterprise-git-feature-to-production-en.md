@@ -3,13 +3,13 @@ title: "From Feature Branch to Production: How My Company Ships a Public-Service
 description: "A practical enterprise Git and release playbook, illustrated by an iGate step-3 feature that lets an officer send a status email to a citizen without bypassing authorization, audit, or deployment controls."
 pubDate: 2026-08-26
 category: "architecture"
-image: "/blog/enterprise-git-feature-to-production/branch-flow.png"
+image: "/blog/enterprise-git-feature-to-production/branch-flow.webp"
 lang: "en"
 translationKey: "enterprise-git-feature-to-production"
 draft: false
 ---
 
-![An enterprise Git workflow moves an iGate step-3 citizen email feature from a short-lived feature branch through review, integration, release, and verified production](/blog/enterprise-git-feature-to-production/branch-flow.png)
+![An enterprise Git workflow moves an iGate step-3 citizen email feature from a short-lived feature branch through review, integration, release, and verified production](/blog/enterprise-git-feature-to-production/branch-flow.webp)
 
 At my company, a feature request can look deceptively small.
 
@@ -53,7 +53,7 @@ Browser button -> POST /send-email -> mail provider
 
 The browser should not decide whether an email is permitted, which application is in scope, or whether the current workflow step is 3. A safer design makes the browser a request surface and keeps authority in the backend:
 
-![The step-3 email feature validates the officer, application scope, workflow state, outbox event, idempotency, provider delivery, and audit trail](/blog/enterprise-git-feature-to-production/email-feature-flow.png)
+![The step-3 email feature validates the officer, application scope, workflow state, outbox event, idempotency, provider delivery, and audit trail](/blog/enterprise-git-feature-to-production/email-feature-flow.webp)
 
 ```text
 Officer clicks button
@@ -325,7 +325,7 @@ These words describe different events:
 
 The production pipeline should make these boundaries visible. A typical sequence is:
 
-![The deployment pipeline gates source changes with CI, immutable artifacts, staging/UAT, approval, canary or rolling rollout, smoke tests, metrics, and rollback](/blog/enterprise-git-feature-to-production/deploy-gates.png)
+![The deployment pipeline gates source changes with CI, immutable artifacts, staging/UAT, approval, canary or rolling rollout, smoke tests, metrics, and rollback](/blog/enterprise-git-feature-to-production/deploy-gates.webp)
 
 ```text
 PR checks

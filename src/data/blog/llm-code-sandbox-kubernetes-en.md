@@ -3,16 +3,16 @@ title: "Sandboxing LLM-Generated Code: Running Agent Tools Safely on Kubernetes"
 description: "A practical runtime boundary for code agents: process isolation, containers, gVisor or microVMs, network egress, quotas, artifacts, and cleanup."
 pubDate: 2026-07-27
 category: "security"
-image: "/blog/llm-code-sandbox/hero.jpg"
+image: "/blog/llm-code-sandbox/hero.webp"
 lang: "en"
 translationKey: "llm-code-sandbox-kubernetes"
 draft: false
 ---
 
-![An LLM-generated code package entering a layered guarded execution chamber](/blog/llm-code-sandbox/hero.jpg)
+![An LLM-generated code package entering a layered guarded execution chamber](/blog/llm-code-sandbox/hero.webp)
 
 <figure class="blog-video">
-  <video controls preload="metadata" playsinline poster="/blog/llm-code-sandbox/hero.jpg" aria-label="Explainer video for this article, English version">
+  <video controls preload="metadata" playsinline poster="/blog/llm-code-sandbox/hero.webp" aria-label="Explainer video for this article, English version">
     <source src="/blog/llm-code-sandbox-kubernetes/video-en.mp4" type="video/mp4" />
     Your browser does not support HTML5 video.
   </video>
@@ -49,7 +49,7 @@ A useful threat model includes accidents. An agent may write a loop because the 
 
 The word “sandbox” hides important differences. A process boundary, a container, gVisor, and a microVM do not provide the same security properties.
 
-![A layered execution boundary blocks network, filesystem, secret, and identity access around generated code](/blog/llm-code-sandbox/isolation-layers.png)
+![A layered execution boundary blocks network, filesystem, secret, and identity access around generated code](/blog/llm-code-sandbox/isolation-layers.webp)
 
 | Option | What it isolates | Main weakness | Appropriate use |
 |---|---|---|---|
@@ -174,7 +174,7 @@ Distinguish time to schedule, time to start, execution time, and time to collect
 
 Cleanup should happen on every terminal path: success, timeout, cancellation, admission rejection, node drain, worker crash, and policy violation. Use a finalizer or controller that can find orphaned executions by execution ID and tenant. Do not rely on the model to say that the job is complete.
 
-![The execution lifecycle moves from code request through policy checks, ephemeral runtime, quotas, artifact scan, and teardown](/blog/llm-code-sandbox/policy-lifecycle.png)
+![The execution lifecycle moves from code request through policy checks, ephemeral runtime, quotas, artifact scan, and teardown](/blog/llm-code-sandbox/policy-lifecycle.webp)
 
 ## Tool calls need a runtime boundary too
 

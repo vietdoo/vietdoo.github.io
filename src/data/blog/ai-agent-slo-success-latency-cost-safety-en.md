@@ -6,17 +6,17 @@ category: "engineering"
 lang: "en"
 translationKey: "ai-agent-slo-success-latency-cost-safety"
 draft: false
-image: "/blog/ai-agent-slo/hero.png"
+image: "/blog/ai-agent-slo/hero.webp"
 ---
 
 A normal API has a fairly clear contract. It receives a request, returns a response, and exposes familiar signals such as error rate, latency, and availability. An AI agent is different. It may call several models, retrieve documents, retry a tool, ask a clarification question, and still produce an answer that looks plausible.
 
 That makes “the request returned 200” a poor definition of reliability. An agent can be fast and wrong, accurate and too expensive, or successful while violating a policy boundary. A useful SLO must represent the work the user actually cares about.
 
-![An engineer watches four hand-drawn gauges for task success, latency, cost, and safety around a production AI agent](/blog/ai-agent-slo/hero.png)
+![An engineer watches four hand-drawn gauges for task success, latency, cost, and safety around a production AI agent](/blog/ai-agent-slo/hero.webp)
 
 <figure class="blog-video">
-  <video controls preload="metadata" playsinline poster="/blog/ai-agent-slo/hero.png" aria-label="Explainer video for this article, English version">
+  <video controls preload="metadata" playsinline poster="/blog/ai-agent-slo/hero.webp" aria-label="Explainer video for this article, English version">
     <source src="/blog/ai-agent-slo-success-latency-cost-safety/video-en.mp4" type="video/mp4" />
     Your browser does not support HTML5 video.
   </video>
@@ -67,7 +67,7 @@ A [regression suite](/blog/agent-evals-regression-suite) can provide the pre-rel
 
 End-to-end latency is the number the user feels, but it is not the only number engineers need. An agent’s time is usually divided among routing, retrieval, model calls, tool execution, retries, and human waiting.
 
-![A hand-drawn agent trace breaks a request into routing, retrieval, model, tool, retry, and final-response stages with a visible latency budget](/blog/ai-agent-slo/trace-timeline.png)
+![A hand-drawn agent trace breaks a request into routing, retrieval, model, tool, retry, and final-response stages with a visible latency budget](/blog/ai-agent-slo/trace-timeline.webp)
 
 A useful budget might look like this:
 
@@ -91,7 +91,7 @@ Track cost at the task level, not only at the model-call level. A task may inclu
 
 A simple budget policy can combine a soft threshold and a hard threshold. Near the soft threshold, the agent switches to a cheaper model, reduces context, or asks the user to narrow the request. At the hard threshold, it stops and returns a clear partial result rather than continuing an invisible loop.
 
-![A small agent circles between token, latency, and cost gauges until a budget gate stops the loop and records a safe partial outcome](/blog/ai-agent-slo/budget-guardrail.png)
+![A small agent circles between token, latency, and cost gauges until a budget gate stops the loop and records a safe partial outcome](/blog/ai-agent-slo/budget-guardrail.webp)
 
 Do not optimize cost by hiding work. If a summarization step is removed and the user receives a lower-quality answer, the success metric should show that trade-off. Cost is a dimension of the SLO because it must be balanced against outcome quality, not minimized in isolation.
 

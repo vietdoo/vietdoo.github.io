@@ -3,16 +3,16 @@ title: "Multi-Tenant AI Agent Platform: Cô lập Prompt, Tool, Memory và Cost 
 description: "Thiết kế platform phục vụ nhiều tenant mà không để prompt, tool, memory, trace hay noisy neighbor vượt qua ranh giới."
 pubDate: 2026-07-21
 category: "architecture"
-image: "/blog/multi-tenant-agent/hero.jpg"
+image: "/blog/multi-tenant-agent/hero.webp"
 lang: "vi"
 translationKey: "multi-tenant-ai-agent-platform"
 draft: false
 ---
 
-![Multi-tenant AI platform với các workspace tenant riêng biệt kết nối tới shared control plane](/blog/multi-tenant-agent/hero.jpg)
+![Multi-tenant AI platform với các workspace tenant riêng biệt kết nối tới shared control plane](/blog/multi-tenant-agent/hero.webp)
 
 <figure class="blog-video">
-  <video controls preload="metadata" playsinline poster="/blog/multi-tenant-agent/hero.jpg" aria-label="Video giải thích nội dung bài viết, phiên bản tiếng Việt">
+  <video controls preload="metadata" playsinline poster="/blog/multi-tenant-agent/hero.webp" aria-label="Video giải thích nội dung bài viết, phiên bản tiếng Việt">
     <source src="/blog/multi-tenant-ai-agent-platform/video-vi.mp4" type="video/mp4" />
     Trình duyệt của bạn không hỗ trợ video HTML5.
   </video>
@@ -52,7 +52,7 @@ Request envelope nên mang tenant identity và policy context từ edge tới m�
 
 Envelope không tự nó là security boundary. Nó là carrier cho các decision phải được enforce ở downstream. Mỗi service phải nhận verified envelope hoặc reject request. Việc reconstruct `tenant_id` từ một header không đáng tin giữa request không phải propagation; đó là confused-deputy risk.
 
-![Control plane quản lý onboarding, policy, routing, audit và billing trong khi workspace tenant vẫn được cô lập](/blog/multi-tenant-agent/control-plane.jpg)
+![Control plane quản lý onboarding, policy, routing, audit và billing trong khi workspace tenant vẫn được cô lập](/blog/multi-tenant-agent/control-plane.webp)
 
 Một platform thường có hai plane:
 
@@ -148,7 +148,7 @@ Platform cũng cần deletion semantics. Nếu tenant xóa document, source bi�
 
 Tenant gửi batch lớn có thể ảnh hưởng mọi người qua model concurrency, queue depth, vector search, GPU memory hoặc database connection. Đây thường được gọi là noisy-neighbor problem, nhưng gọi là “performance issue” thì quá nhẹ. Dưới áp lực, team có thể tắt limit, tăng timeout hoặc đi fallback path làm yếu data và policy control.
 
-![Fair scheduling, budget theo tenant, queue và rate limit bảo vệ platform trước tenant tạo burst](/blog/multi-tenant-agent/noisy-neighbor.jpg)
+![Fair scheduling, budget theo tenant, queue và rate limit bảo vệ platform trước tenant tạo burst](/blog/multi-tenant-agent/noisy-neighbor.webp)
 
 Dùng nhiều control cùng lúc:
 

@@ -3,13 +3,13 @@ title: "Tool Result Freshness: Preventing Agents from Acting on Expired Observat
 description: "A production playbook for treating tool results as expiring observations—with freshness budgets, version checks, action-time revalidation, fail-closed behavior, and metrics for safe AI-agent actions."
 pubDate: 2026-04-20
 category: "engineering"
-image: "/blog/tool-result-freshness/hero.png"
+image: "/blog/tool-result-freshness/hero.webp"
 lang: "en"
 translationKey: "tool-result-freshness-agent-observations"
 draft: false
 ---
 
-![A hand-drawn AI agent checks a tool observation against a freshness gate before acting](/blog/tool-result-freshness/hero.png)
+![A hand-drawn AI agent checks a tool observation against a freshness gate before acting](/blog/tool-result-freshness/hero.webp)
 
 The agent did not misunderstand the customer. It misunderstood the age of the answer.
 
@@ -84,7 +84,7 @@ A useful model has more than two states. I use three:
 2. **Soft stale:** the observation may still help the agent explain, compare, or form a new read request, but it cannot authorize a write.
 3. **Hard expired:** the observation must not be used to make a decision; the system must refresh or ask the user to try again.
 
-![The lifecycle of an AI agent tool observation from capture to fresh, soft-stale, and hard-expired states](/blog/tool-result-freshness/observation-lifecycle.png)
+![The lifecycle of an AI agent tool observation from capture to fresh, soft-stale, and hard-expired states](/blog/tool-result-freshness/observation-lifecycle.webp)
 
 The soft-stale state is important for user experience. If a user asks, “What did the inventory look like when I checked earlier?”, an old observation is exactly what they want. If the user asks, “Buy the remaining units,” the same observation is not enough. Reusing it for explanation and reusing it for authorization are different operations.
 
@@ -118,7 +118,7 @@ user intent
    -> action executes only after the gate passes
 ```
 
-![An action gate checks freshness, scope, version, and authority before revalidation and a safe action](/blog/tool-result-freshness/revalidation-gate.png)
+![An action gate checks freshness, scope, version, and authority before revalidation and a safe action](/blog/tool-result-freshness/revalidation-gate.webp)
 
 The gate should receive a structured action envelope rather than a free-form model message:
 
@@ -200,7 +200,7 @@ Teams often say, “We already refresh the data before the action.” That may s
 
 The extra read improved the odds but did not create a guarantee. The precondition must be evaluated at the write boundary, not merely somewhere earlier in the workflow.
 
-![A timeline shows an AI agent reading inventory version 42, a concurrent update to version 43, a version mismatch, and a safe refresh](/blog/tool-result-freshness/race-window.png)
+![A timeline shows an AI agent reading inventory version 42, a concurrent update to version 43, a version mismatch, and a safe refresh](/blog/tool-result-freshness/race-window.webp)
 
 This is where freshness and concurrency control meet. Freshness answers, “Is this observation young enough for this class of action?” Version checking answers, “Is the target still the same version that produced the decision?” For high-impact writes, you usually need both.
 

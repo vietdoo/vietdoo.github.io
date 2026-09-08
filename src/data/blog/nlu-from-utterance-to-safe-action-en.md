@@ -6,14 +6,14 @@ category: "engineering"
 lang: "en"
 translationKey: "nlu-from-utterance-to-safe-action"
 draft: false
-image: "/blog/nlu-production/hero.png"
+image: "/blog/nlu-production/hero.webp"
 ---
 
 Natural Language Understanding is often introduced as the part of a conversational system that “understands what the user means.” That definition is attractive, but it sets an impossible expectation. Production software does not need to understand every nuance of language. It needs to convert a messy utterance into a small, explicit contract that the rest of the system can validate.
 
 A useful NLU layer answers three questions: **what is the user trying to do, which values are needed, and what remains ambiguous?** It should then hand a structured result to policy and application code instead of directly deciding what side effect to perform.
 
-![A natural-language utterance flows through intent, entity, context, and policy gates before becoming a typed action](/blog/nlu-production/hero.png)
+![A natural-language utterance flows through intent, entity, context, and policy gates before becoming a typed action](/blog/nlu-production/hero.webp)
 
 The production model is simple:
 
@@ -55,7 +55,7 @@ Prefer names such as `reschedule_meeting`, `refund_order`, `check_delivery_statu
 
 The taxonomy should be narrow enough that each intent has a different next step. If two intents always lead to the same policy and action, they may not need to be separate. If one intent contains several effects with different risk, split it before the ambiguity reaches execution.
 
-![An intent taxonomy fans out from a user goal into a small set of testable workflows instead of a giant list of vague labels](/blog/nlu-production/taxonomy-map.png)
+![An intent taxonomy fans out from a user goal into a small set of testable workflows instead of a giant list of vague labels](/blog/nlu-production/taxonomy-map.webp)
 
 A practical taxonomy review asks:
 

@@ -6,7 +6,7 @@ category: "engineering"
 lang: "en"
 translationKey: "agent-receipts-user-readable-proof"
 draft: false
-image: "/blog/agent-receipts/hero.png"
+image: "/blog/agent-receipts/hero.webp"
 ---
 
 The first question after an AI agent changes a customer record is rarely “Can I search the trace?” It is usually much simpler: **What changed, why did it change, and who allowed it?**
@@ -15,7 +15,7 @@ A trace can answer those questions, but only after someone knows which trace to 
 
 That is the job of an **agent receipt**: a compact, user-readable proof of an important agent outcome. It is not a transcript, a dashboard, a chain-of-thought dump, or a replacement for an audit trail. It is the last mile between a complex automated workflow and the person who needs to understand its effect.
 
-![An AI agent action becomes a compact, human-readable receipt with a shield, timestamp, action summary, and linked evidence](/blog/agent-receipts/hero.png)
+![An AI agent action becomes a compact, human-readable receipt with a shield, timestamp, action summary, and linked evidence](/blog/agent-receipts/hero.webp)
 
 > **The thesis:** An agent receipt should make the changed state, authority, evidence, and uncertainty legible in one place. It should help a human decide whether to accept, investigate, reverse, or escalate an outcome without reading the entire execution trace.
 
@@ -63,7 +63,7 @@ A receipt should separate **intent**, **authorization**, **execution**, and **ob
 
 A useful design has two representations: a human-facing view and a machine-verifiable envelope. They share identifiers and facts, but they serve different readers.
 
-![An exploded receipt envelope assembles action summary, actor and scope, evidence hashes, policy decision, and verification seal](/blog/agent-receipts/receipt-envelope.png)
+![An exploded receipt envelope assembles action summary, actor and scope, evidence hashes, policy decision, and verification seal](/blog/agent-receipts/receipt-envelope.webp)
 
 The human-facing view can be rendered as a small card, email section, activity entry, or downloadable artifact. The envelope can be stored and verified independently.
 
@@ -160,7 +160,7 @@ Do not use the receipt as a side channel for sensitive data. Even a hash can bec
 
 A receipt that is technically verifiable but practically impossible to verify has failed its audience. The product should offer a simple “view evidence,” “verify integrity,” “request review,” or “undo” path, depending on the action’s risk.
 
-![A verification flow moves from an agent gateway through canonicalization and hash checks to a human reviewer who sees pass, warning, or unverifiable outcomes](/blog/agent-receipts/verification-flow.png)
+![A verification flow moves from an agent gateway through canonicalization and hash checks to a human reviewer who sees pass, warning, or unverifiable outcomes](/blog/agent-receipts/verification-flow.webp)
 
 The verification service should operate independently enough that the same team or process that produced the action cannot silently rewrite the evidence. A typical flow is:
 
@@ -201,7 +201,7 @@ The same design applies to reversals. If the action is reversible, the receipt s
 
 A mature agent platform may already have identity, policy, observability, evidence, and recovery systems. The receipt should join those systems at a stable boundary.
 
-![A human reviews a receipt beside a before-and-after customer record, evidence trail, and visible uncertainty boundary](/blog/agent-receipts/receipt-ux.png)
+![A human reviews a receipt beside a before-and-after customer record, evidence trail, and visible uncertainty boundary](/blog/agent-receipts/receipt-ux.webp)
 
 The most useful implementation pattern is to generate the receipt only after the system has an authoritative action result—or to issue an explicitly provisional receipt when the result is not yet known. The receipt generator should consume structured events, not ask the model to summarize its own behavior from memory.
 

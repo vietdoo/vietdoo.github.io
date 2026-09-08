@@ -3,13 +3,13 @@ title: "Eval-Driven AI Systems: From Tiny Golden Sets to Business-Level Rollouts
 description: "A senior engineer's playbook for turning a small golden set into release gates, business metrics, and a production learning loop for AI systems."
 pubDate: 2026-07-05
 category: "engineering"
-image: "/blog/eval-driven-ai-system-design/hero.png"
+image: "/blog/eval-driven-ai-system-design/hero.webp"
 lang: "en"
 translationKey: "eval-driven-ai-system-design"
 draft: false
 ---
 
-![A hand-drawn production AI evaluation loop connecting a golden set, traces, release gates, and business outcomes](/blog/eval-driven-ai-system-design/hero.png)
+![A hand-drawn production AI evaluation loop connecting a golden set, traces, release gates, and business outcomes](/blog/eval-driven-ai-system-design/hero.webp)
 
 The first production AI system I trusted was not the one with the most impressive demo. It was the one whose team could answer a less glamorous question: **what exactly would make us stop a release?**
 
@@ -72,7 +72,7 @@ A **regression evaluation** asks, “Did we preserve behavior that we already pr
 
 This distinction is particularly important for agentic systems. A model upgrade may improve answer quality while changing tool selection, retry behavior, or the amount of data it places into a prompt. If the dashboard collapses everything into one score, the team cannot see what it gained and what it quietly broke.
 
-![A hand-drawn illustration showing capability tests climbing upward while regression tests protect a release path](/blog/eval-driven-ai-system-design/capability-regression.png)
+![A hand-drawn illustration showing capability tests climbing upward while regression tests protect a release path](/blog/eval-driven-ai-system-design/capability-regression.webp)
 
 The release suite should therefore have at least two lanes:
 
@@ -135,7 +135,7 @@ case -> trace -> technical graders -> reviewer action -> customer outcome
 
 The technical graders can check citation coverage, policy compliance, and tool behavior. The reviewer action can record accepted, edited, rejected, or escalated. The customer outcome can record reopened ticket, time to resolution, or satisfaction signal. The chain is not proof that the model caused every business result, but it gives the team a way to investigate whether improvements survive contact with work.
 
-![A hand-drawn bridge from model traces to reviewer actions, operational metrics, and business outcomes](/blog/eval-driven-ai-system-design/kpi-bridge.png)
+![A hand-drawn bridge from model traces to reviewer actions, operational metrics, and business outcomes](/blog/eval-driven-ai-system-design/kpi-bridge.webp)
 
 | Technical signal         | Operational signal       | Business question                                     |
 | ------------------------ | ------------------------ | ----------------------------------------------------- |
@@ -153,7 +153,7 @@ The right release gate depends on the risk of the behavior. A low-risk internal 
 
 Use hard gates for properties that are non-negotiable. Use soft thresholds for qualities that can improve gradually. Send ambiguous results to review instead of turning uncertainty into a false pass.
 
-![A hand-drawn release-gate matrix mapping risk tiers to deterministic failures, quality thresholds, and review paths](/blog/eval-driven-ai-system-design/release-gate-matrix.png)
+![A hand-drawn release-gate matrix mapping risk tiers to deterministic failures, quality thresholds, and review paths](/blog/eval-driven-ai-system-design/release-gate-matrix.webp)
 
 | Risk tier | Hard gate                                        | Soft gate                               | Promotion policy                         |
 | --------- | ------------------------------------------------ | --------------------------------------- | ---------------------------------------- |

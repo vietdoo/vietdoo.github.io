@@ -3,7 +3,7 @@ title: "MCP không chỉ là API Wrapper: Least Privilege, OAuth Consent và Hum
 description: "MCP biến đề xuất của model thành đường đi có thể đọc dữ liệu, sửa hệ thống và tạo hiệu ứng bên ngoài. Blueprint này tách OAuth delegation, server-side policy và approval theo từng hành động để agent không có quyền lớn hơn ý định người dùng."
 pubDate: 2026-04-06
 category: "engineering"
-image: "/blog/mcp-security-hero.jpg"
+image: "/blog/mcp-security-hero.webp"
 lang: "vi"
 translationKey: "mcp-is-not-an-api-wrapper"
 draft: false
@@ -14,7 +14,7 @@ draft: false
   Your browser does not support the video tag.
 </video>
 
-![Một AI agent đi qua ba cổng Scope, Policy và Approve trước khi chạm vào hành động có tác động bên ngoài](/blog/mcp-security-hero.jpg)
+![Một AI agent đi qua ba cổng Scope, Policy và Approve trước khi chạm vào hành động có tác động bên ngoài](/blog/mcp-security-hero.webp)
 
 Một agent vận hành vừa đọc một issue: *“Khách hàng này rất bức xúc. Hãy hoàn tiền ngay để giữ họ.”* Model chọn tool `send_refund`; MCP server có endpoint gọi payment provider; OAuth token còn hạn; HTTP trả về `200`. Mọi thứ trông giống một chuỗi API hợp lệ—cho đến khi đội tài chính hỏi: **ai** ủy quyền, **đúng tenant nào**, **đúng số tiền nào**, **vì sao làm ngay lúc này**, và **ai đã thấy hiệu ứng trước khi nó xảy ra**?
 
@@ -54,7 +54,7 @@ MCP cho phép `tools/list` thay đổi theo authorization có mặt trên reques
 
 Một tool đơn giản, schema chặt và tên rõ ràng là bề mặt policy dễ bảo vệ hơn một `execute_anything` hay `ops:*`. OWASP cũng khuyến nghị per-tool scoping, toolset tách theo trust level và explicit authorization cho sensitive operation.[6]
 
-![So sánh master key ops:* mở mọi ngăn kéo với bộ capability key hẹp cho từng loại tool](/blog/mcp-security-capability-map.jpg)
+![So sánh master key ops:* mở mọi ngăn kéo với bộ capability key hẹp cho từng loại tool](/blog/mcp-security-capability-map.webp)
 
 ---
 
@@ -117,7 +117,7 @@ Consent không phải checkbox trang trí. Nó là hồ sơ về relationship gi
 
 RFC 9700 yêu cầu redirect URI phải exact-match với URI đã đăng ký (ngoại trừ port localhost cho native app), cấm open redirector, và nhấn mạnh PKCE cho public client; với confidential client, PKCE vẫn được khuyến nghị. `S256` là phương thức phù hợp vì không lộ verifier trong authorization request.[5] Những chi tiết này nghe giống “OAuth plumbing”, nhưng chính chúng ngăn code/token rơi vào redirect URI của kẻ khác.
 
-![Luồng OAuth consent an toàn: client identity, scope, redirect URI chính xác, MCP proxy và authorization server](/blog/mcp-security-consent-proxy.jpg)
+![Luồng OAuth consent an toàn: client identity, scope, redirect URI chính xác, MCP proxy và authorization server](/blog/mcp-security-consent-proxy.webp)
 
 ### Bẫy MCP proxy: consent ở upstream không đồng nghĩa consent cho mọi MCP client
 
@@ -154,7 +154,7 @@ Một popup chỉ ghi “Agent wants to send refund” bị replay, bị đổi 
 | Expiry + single-use nonce | Chặn replay và approval cũ | 5 phút, consume-on-execute |
 | Risk/session context | Chống approval bị tái dùng sau taint | `taint=external_content` |
 
-![Approval envelope gắn với digest, tenant, expiry và policy version trước khi mở khóa hành động tài chính](/blog/mcp-security-approval-envelope.jpg)
+![Approval envelope gắn với digest, tenant, expiry và policy version trước khi mở khóa hành động tài chính](/blog/mcp-security-approval-envelope.webp)
 
 Dưới đây là pseudocode TypeScript minh họa. Nó không thay thế thư viện canonical JSON, key management, audit storage hoặc security review của bạn; mục tiêu là chỉ ra **điểm enforcement**.
 
@@ -235,7 +235,7 @@ MCP tool annotations như `readOnlyHint`, `destructiveHint`, `idempotentHint` v�
 
 Rủi ro còn là thuộc tính của **path**, không chỉ của một tool. Khi một session có private-data read, access tới untrusted content và external communication, prompt injection có thể ghép ba capability thành exfiltration path. MCP blog gọi đây là “lethal trifecta” trong bối cảnh agentic tooling.[4]
 
-![Một session bị taint bởi nội dung không tin cậy; đường từ private data sang external communication bị policy chặn](/blog/mcp-security-taint-path.jpg)
+![Một session bị taint bởi nội dung không tin cậy; đường từ private data sang external communication bị policy chặn](/blog/mcp-security-taint-path.webp)
 
 Một policy engine nên carry context như `session.taint`, `data.classification`, `destination.trust` và `effect.class`. Sau khi agent đọc email/web page/imported ticket, hãy coi content là untrusted data, không phải instruction. Nếu session sau đó có private data, external write phải bị block hoặc escalated. Đây là defense-in-depth ngoài model: model không cần “nhận biết” attack để server ngăn hành vi nguy hiểm.
 
@@ -260,7 +260,7 @@ Security regressions hay xuất hiện khi thêm tool, đổi scope, đổi serv
 
 Biểu đồ dưới đây không phải benchmark industry; nó là một **example policy table** cho phép bạn debate hành vi trước khi code. Điều quan trọng là mỗi cell có owner và test.
 
-![Ma trận quyết định từ effect class và runtime context, phân biệt auto, policy, approval và block](/blog/mcp-security-risk-matrix.png)
+![Ma trận quyết định từ effect class và runtime context, phân biệt auto, policy, approval và block](/blog/mcp-security-risk-matrix.webp)
 
 Hãy instrument cả deny. Một deny rate tăng sau khi rollout có thể là tấn công, scope migration hỏng hoặc UI consent gây nhầm lẫn. Một approval latency tăng có thể là process bottleneck. Nhưng log không nên trở thành tập hợp raw tool payload vô kiểm soát; lưu correlation ID, capability, decision, policy revision, approver role và digest là đủ cho phần lớn audit/debug.
 
@@ -274,7 +274,7 @@ Tiếp theo, chuẩn hóa authorization contract: resource metadata/discovery, s
 
 Sau đó đưa policy engine vào đường đi trước provider call. Policy phải biết subject, client, tool, capability, tenant/resource, state, destination, amount, taint và policy version. Cuối cùng mới thêm approval envelope cho effect high impact—và đừng quên consume-once + revalidation.
 
-![Timeline từ tool discovery qua scope, OAuth consent, policy, human approval đến audit evidence](/blog/mcp-security-authorization-timeline.png)
+![Timeline từ tool discovery qua scope, OAuth consent, policy, human approval đến audit evidence](/blog/mcp-security-authorization-timeline.webp)
 
 > **Definition of done:** Model có thể đề xuất tool call; chỉ server mới có thể thực thi side effect. Và server chỉ thực thi khi token, policy, approval (nếu cần) và current state cùng đồng ý.
 

@@ -3,16 +3,16 @@ title: "Model Router cho AI Agent: Chọn Model theo Capability, Cost và Latenc
 description: "Thiết kế production để định tuyến từng bước của agent tới model phù hợp mà không biến chất lượng, độ trễ và chi phí thành phỏng đoán."
 pubDate: 2026-07-08
 category: "engineering"
-image: "/blog/model-router/hero.jpg"
+image: "/blog/model-router/hero.webp"
 lang: "vi"
 translationKey: "model-router-ai-agent"
 draft: false
 ---
 
-![Một kỹ sư thiết kế model router để gửi từng tác vụ của agent tới các model có capability, cost và latency khác nhau](/blog/model-router/hero.jpg)
+![Một kỹ sư thiết kế model router để gửi từng tác vụ của agent tới các model có capability, cost và latency khác nhau](/blog/model-router/hero.webp)
 
 <figure class="blog-video">
-  <video controls preload="metadata" playsinline poster="/blog/model-router/hero.jpg" aria-label="Video giải thích nội dung bài viết, phiên bản tiếng Việt">
+  <video controls preload="metadata" playsinline poster="/blog/model-router/hero.webp" aria-label="Video giải thích nội dung bài viết, phiên bản tiếng Việt">
     <source src="/blog/model-router-ai-agent/video-vi.mp4" type="video/mp4" />
     Trình duyệt của bạn không hỗ trợ video HTML5.
   </video>
@@ -37,7 +37,7 @@ Một router hữu ích nằm giữa agent runtime và model gateway. Runtime g�
 
 Sự tách biệt này quan trọng vì model identifier thay đổi thường xuyên hơn business contract của agent. Nó cũng tạo ra một nơi để áp policy: tenant nhạy cảm có thể yêu cầu một vùng dữ liệu, workflow dài có thể cần session affinity, còn bước phân loại có giá trị thấp có thể chịu hard cost ceiling.
 
-![Các tín hiệu capability, cost, latency và infrastructure hội tụ vào một quyết định định tuyến](/blog/model-router/decision-signals.jpg)
+![Các tín hiệu capability, cost, latency và infrastructure hội tụ vào một quyết định định tuyến](/blog/model-router/decision-signals.webp)
 
 Vì vậy, hãy xem router như admission control trong hệ phân tán. Nó quyết định request được vào model pool nào, pool nào phù hợp và điều gì xảy ra khi pool ưu tiên bị bão hòa. Đây không giống việc retry một HTTP request lỗi. Retry nói rằng “hãy thử lại cùng dependency”. Router nói rằng “hãy xem lại dependency nào phù hợp”.
 
@@ -118,7 +118,7 @@ Prompt classifier nhìn thấy câu chữ của người dùng. Agent runtime nh
 
 Vì vậy, stage router có thể chọn model nhỏ ở phần việc thường lệ và escalate khi trajectory trở nên khó. Exploration có thể cần reasoning mạnh; format một kết quả đã được validate có thể dùng model nhanh hơn. Một tool error lặp lại là tín hiệu escalation mạnh hơn một câu phức tạp trong prompt đầu tiên.
 
-![Model cascade escalate các route khó hoặc không khỏe nhưng vẫn giữ đường rẻ cho tác vụ thường lệ](/blog/model-router/fallback-cascade.jpg)
+![Model cascade escalate các route khó hoặc không khỏe nhưng vẫn giữ đường rẻ cho tác vụ thường lệ](/blog/model-router/fallback-cascade.webp)
 
 Các tín hiệu escalation hữu ích gồm:
 
@@ -151,7 +151,7 @@ Dashboard đầu tiên phải trả lời câu hỏi vận hành, không chỉ �
 
 Hãy theo dõi route choice, model outcome, validation result, time to first token, total latency, input/output token, retry count, escalation count, provider error và business outcome cuối. Tách theo task kind, tenant, region, workflow stage và model pair. Average che giấu đúng những ca làm người dùng khó chịu, vì vậy cần p50, p95 và tail error rate.
 
-![Kỹ sư so sánh kết quả route bằng latency, cost, health và tín hiệu shadow evaluation](/blog/model-router/route-dashboard.jpg)
+![Kỹ sư so sánh kết quả route bằng latency, cost, health và tín hiệu shadow evaluation](/blog/model-router/route-dashboard.webp)
 
 Shadow traffic là cầu nối giữa trực giác và quyết định production. Model chính phục vụ người dùng; candidate thứ hai nhận bản sao đã bảo vệ quyền riêng tư và được đánh giá mà không ảnh hưởng outcome. Shadow evaluation phải giới hạn cost và tuyệt đối không được vô tình execute tool hoặc mutate state. Có thể so sánh structured output, rubric score, latency, token và failure mode.
 

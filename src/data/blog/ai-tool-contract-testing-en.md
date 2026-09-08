@@ -3,13 +3,13 @@ title: "Contract Testing for AI Tools: Proving an Agent Can Safely Call the Same
 description: "A production guide to testing AI tool compatibility across models, providers, MCP servers, and implementation versions—with schema contracts, semantic invariants, negative paths, and release gates."
 pubDate: 2026-07-06
 category: "engineering"
-image: "/blog/ai-tool-contract-testing/hero.png"
+image: "/blog/ai-tool-contract-testing/hero.webp"
 lang: "en"
 translationKey: "ai-tool-contract-testing"
 draft: false
 ---
 
-![A hand-drawn whiteboard showing an AI agent calling the same tool through two providers, with contract gates between the model and the side effect](/blog/ai-tool-contract-testing/hero.png)
+![A hand-drawn whiteboard showing an AI agent calling the same tool through two providers, with contract gates between the model and the side effect](/blog/ai-tool-contract-testing/hero.webp)
 
 I once watched an agent pass every happy-path test and still fail in production on its first provider change. The tool schema was valid. The JSON parsed. The HTTP request returned 200. Yet the assistant sent a date in the wrong timezone, treated a business rejection as a transport error, and retried an operation that had already been accepted by the downstream system.
 
@@ -64,7 +64,7 @@ This is why AI tool contracts should be layered instead of collapsed into one gi
 
 A practical contract for an AI capability has at least five layers. Each layer should be testable in isolation and linked to a release gate.
 
-![A hand-drawn whiteboard matrix separating schema, semantic, policy, side-effect, and operational contracts for an AI tool](/blog/ai-tool-contract-testing/contract-matrix.png)
+![A hand-drawn whiteboard matrix separating schema, semantic, policy, side-effect, and operational contracts for an AI tool](/blog/ai-tool-contract-testing/contract-matrix.webp)
 
 ### 1. Shape contract
 
@@ -198,7 +198,7 @@ The consumer is the agent runtime. It might expect:
 
 The provider is the tool server or adapter. Provider verification then runs the consumer contract against the real implementation, a test environment, or a deterministic simulator. This catches a subtle class of regressions: the tool provider may remain “valid” according to its own schema while breaking the exact interaction the agent uses.
 
-![A hand-drawn whiteboard pipeline showing consumer examples, provider verification, semantic assertions, and a release gate before production](/blog/ai-tool-contract-testing/contract-test-pipeline.png)
+![A hand-drawn whiteboard pipeline showing consumer examples, provider verification, semantic assertions, and a release gate before production](/blog/ai-tool-contract-testing/contract-test-pipeline.webp)
 
 A simple consumer contract can be represented as a fixture:
 

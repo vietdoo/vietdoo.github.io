@@ -3,13 +3,13 @@ title: "Multi-Model Failover Without Route Flapping: Provider Rotation, Stateful
 description: "A production guide to rotating AI models and providers without turning fallback into route flapping, retry storms, broken tool contracts, or silent quality regressions."
 pubDate: 2026-08-19
 category: "engineering"
-image: "/blog/provider-rotation/hero.png"
+image: "/blog/provider-rotation/hero.webp"
 lang: "en"
 translationKey: "provider-rotation-multi-model-failover"
 draft: false
 ---
 
-![A hand-drawn whiteboard showing several AI providers, model pools, circuit breakers, retry budgets, and a stateful failover path](/blog/provider-rotation/hero.png)
+![A hand-drawn whiteboard showing several AI providers, model pools, circuit breakers, retry budgets, and a stateful failover path](/blog/provider-rotation/hero.webp)
 
 I once watched a perfectly healthy-looking AI service lose a conversation without ever returning a 5xx. The primary provider slowed down, the gateway moved the request to a backup, and the backup returned HTTP 200. The dashboard celebrated availability. The user saw an assistant that had forgotten the last six turns.
 
@@ -42,7 +42,7 @@ OpenRouter documents this distinction directly: provider routing can try availab
 
 A common design mistake is to place all five decisions in a single `fallbacks: [...]` array. That array may be convenient, but it is not a reliability policy. A route must explain why a candidate was eligible, what failure triggered the transition, and what invariants must remain true after the transition.
 
-![A hand-drawn comparison of provider rotation, which keeps the same model capability, versus model fallback, which changes capability only when necessary](/blog/provider-rotation/provider-pools.png)
+![A hand-drawn comparison of provider rotation, which keeps the same model capability, versus model fallback, which changes capability only when necessary](/blog/provider-rotation/provider-pools.webp)
 
 The visual distinction is worth keeping in the architecture documentation because it prevents a very expensive ambiguity: are we moving traffic, or are we changing what the assistant is capable of doing?
 
@@ -129,7 +129,7 @@ A circuit breaker protects a provider pool from being hammered while it is faili
 
 The failure classifier matters. A connection reset, timeout, 429, 401, context overflow, content refusal, schema error, and business validation failure do not mean the same thing. A 401 usually needs credential or configuration action. A context overflow may be recoverable by compaction or a larger-context model, not by repeating the same request on another provider. A schema failure may point to capability drift rather than provider health.
 
-![A hand-drawn resilient AI gateway with circuit-breaker states, a bounded retry budget, jittered backoff, and a retry-storm warning](/blog/provider-rotation/circuit-breaker-retry-budget.png)
+![A hand-drawn resilient AI gateway with circuit-breaker states, a bounded retry budget, jittered backoff, and a retry-storm warning](/blog/provider-rotation/circuit-breaker-retry-budget.webp)
 
 The drawing is intentionally operational rather than decorative: the breaker, admission budget, and backoff policy are three different controls. Combining them into one “retry” switch makes incidents harder to contain.
 
@@ -190,7 +190,7 @@ A fallback can return a response while still losing the task. This is especially
 
 ContinuityBench frames this as a measurable distinction between availability and conversational continuity. Its paper proposes forwarding enough history to reconstruct state across heterogeneous endpoints and reports a 99.20% Continuity Preservation Rate in its own evaluation of 750 failover events.[5] That result is useful as evidence that continuity can be measured; it is not a guarantee that any implementation will achieve the same number.
 
-![A hand-drawn stateful failover timeline showing immutable tool events, a state hash, a route lease, and a broken stream boundary](/blog/provider-rotation/stateful-failover.png)
+![A hand-drawn stateful failover timeline showing immutable tool events, a state hash, a route lease, and a broken stream boundary](/blog/provider-rotation/stateful-failover.webp)
 
 The important object in this diagram is not the arrow between providers. It is the state hash and the immutable event trail that make the arrow safe to follow.
 

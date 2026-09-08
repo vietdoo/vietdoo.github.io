@@ -3,13 +3,13 @@ title: "Semantic Caching for LLM Apps: The Freshness, Safety, and Evaluation Pla
 description: "Semantic caching can make an LLM application faster and cheaper, but a cache hit is not proof of a correct answer. This production playbook covers freshness, invalidation, scope, poisoning, intermediate context, and evaluation."
 pubDate: 2026-07-03
 category: "engineering"
-image: "/blog/semantic-caching/hero.jpg"
+image: "/blog/semantic-caching/hero.webp"
 lang: "en"
 translationKey: "semantic-caching-llm-freshness-safety"
 draft: false
 ---
 
-![A semantic cache protects an LLM application with freshness, authorization, and evaluation gates](/blog/semantic-caching/hero.jpg)
+![A semantic cache protects an LLM application with freshness, authorization, and evaluation gates](/blog/semantic-caching/hero.webp)
 
 I once watched a support assistant answer a customer’s question in less than 100 milliseconds. The latency graph looked beautiful. The token bill had dropped. The cache hit rate was high enough to make the dashboard feel like a success story.
 
@@ -31,7 +31,7 @@ LLM requests are less repetitive at the string level. A customer may ask “Can 
 
 Redis describes the basic semantic-cache flow as embedding the incoming query, searching stored vectors, returning a cached response when the similarity is above a threshold, and calling the LLM on a miss.[2] That is the useful starting point. It is not the full production contract.
 
-![A request moves through normalization, scope checks, semantic lookup, freshness validation, and either a safe cache hit or a new model run](/blog/semantic-caching/pipeline.jpg)
+![A request moves through normalization, scope checks, semantic lookup, freshness validation, and either a safe cache hit or a new model run](/blog/semantic-caching/pipeline.webp)
 
 A production cache has to answer questions that similarity alone cannot answer:
 
@@ -128,7 +128,7 @@ Use several freshness signals together:
 | Risk class | How costly a stale answer would be | Use shorter TTL or no final-answer reuse for high risk. |
 | Validation result | Whether the candidate still matches current evidence | Allow, downgrade to context-only, or miss. |
 
-![A freshness matrix combines source version, TTL, risk class, and validation result before allowing reuse](/blog/semantic-caching/freshness-matrix.jpg)
+![A freshness matrix combines source version, TTL, risk class, and validation result before allowing reuse](/blog/semantic-caching/freshness-matrix.webp)
 
 A good invalidation rule is often more specific than “delete everything every hour.” If document `refund-policy-v42` changes, invalidate entries whose provenance includes that document. If a user’s role is revoked, invalidate entries scoped to that subject. If the prompt changes from `support-v7` to `support-v8`, either namespace the cache or deliberately run a migration job that regrades existing entries.
 
@@ -221,7 +221,7 @@ A cache dashboard with only hit rate and latency is an invitation to optimize th
 
 Do not put raw private prompts and answers into every trace by default. The folio’s existing observability principles apply here: record shape, versions, IDs, hashes, counts, and policy decisions first; keep content behind restricted access and an explicit break-glass path.
 
-![A cache-quality dashboard tracks hits, safe-reuse precision, stale responses, invalidations, and cost savings together](/blog/semantic-caching/quality-dashboard.jpg)
+![A cache-quality dashboard tracks hits, safe-reuse precision, stale responses, invalidations, and cost savings together](/blog/semantic-caching/quality-dashboard.webp)
 
 A cache hit should be considered successful only when the downstream quality signal agrees. Useful feedback loops include user corrections, citation checks, deterministic policy validators, sampled human review, and regression cases. When a cache hit fails, store a minimal failure fixture: query shape, scope, entry metadata, source versions, score, and observed outcome. The answer text may be restricted or redacted, but the failure should still become testable.
 

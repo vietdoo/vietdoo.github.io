@@ -3,13 +3,13 @@ title: "AI Agent có một chiếc đồng hồ: Deadline, Lease và Plan hết 
 description: "AI agent không chỉ cần reasoning tốt hơn. Nó cần time semantics: business deadline, execution lease có thời hạn, observation có freshness và một đường refuse khi plan không còn an toàn để thực thi."
 pubDate: 2026-03-12
 category: "engineering"
-image: "/blog/ai-agent-clock/hero.png"
+image: "/blog/ai-agent-clock/hero.webp"
 lang: "vi"
 translationKey: "ai-agent-time-semantics"
 draft: false
 ---
 
-![Minh họa AI agent làm việc cạnh đồng hồ, plan và bốn ranh giới thời gian: business deadline, execution lease, observation TTL và stale plan](/blog/ai-agent-clock/hero.png)
+![Minh họa AI agent làm việc cạnh đồng hồ, plan và bốn ranh giới thời gian: business deadline, execution lease, observation TTL và stale plan](/blog/ai-agent-clock/hero.webp)
 
 Sự cố không bắt đầu bằng một hallucination.
 
@@ -40,7 +40,7 @@ Các clock có thể liên quan, nhưng nên được biểu diễn riêng. Mô 
 
 AI agent còn thêm một vấn đề thứ năm: plan là cách diễn giải các observation. Timer có thể nói rằng năm phút đã trôi qua. Nó không thể nói evidence đứng sau plan còn áp dụng hay không. Vì vậy, một run được resume cần cả timer cơ học lẫn semantic revalidation.
 
-![Timeline tách business deadline của run khỏi các mốc acquire, renew, release và stop của execution lease](/blog/ai-agent-clock/time-contract.png)
+![Timeline tách business deadline của run khỏi các mốc acquire, renew, release và stop của execution lease](/blog/ai-agent-clock/time-contract.webp)
 
 ## Bắt đầu bằng time contract, không phải timeout constant
 
@@ -170,7 +170,7 @@ Câu hỏi hữu ích không phải “Data có fresh không?” mà là “Fres
 
 Đừng bắt language model tự suy freshness từ prose. Hãy đặt freshness vào một envelope máy đọc được và để tool gateway reject evidence hết hạn với các operation có impact cao.
 
-![Plan trở nên stale khi đồng hồ chạy; decision gate đưa plan về revalidation hoặc refusal thay vì thực thi mù quáng](/blog/ai-agent-clock/stale-plan.png)
+![Plan trở nên stale khi đồng hồ chạy; decision gate đưa plan về revalidation hoặc refusal thay vì thực thi mù quáng](/blog/ai-agent-clock/stale-plan.webp)
 
 ## Plan được resume phải giành lại quyền được tiếp tục
 
@@ -207,7 +207,7 @@ Khi predicate fail, hãy giữ plan làm historical evidence nhưng không thự
 
 Các time-related transition nên xuất hiện trong state machine của workflow, không chỉ trong log. Một action lifecycle tối thiểu có thể gồm `PROPOSED`, `LEASED`, `EXECUTING`, `COMMITTED` và `EXPIRED_RECONCILE`. Expiry state không phải generic error bucket. Nó nói cho operator và recovery code biết agent đã mất quyền tiếp tục với các assumption cũ.
 
-![State machine dạng sketch cho thấy agent đi từ proposed đến leased, executing và committed, với timeout transition sang expired và reconcile](/blog/ai-agent-clock/lease-state-machine.png)
+![State machine dạng sketch cho thấy agent đi từ proposed đến leased, executing và committed, với timeout transition sang expired và reconcile](/blog/ai-agent-clock/lease-state-machine.webp)
 
 ```text
 PROPOSED

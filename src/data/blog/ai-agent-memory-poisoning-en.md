@@ -6,7 +6,7 @@ category: "security"
 lang: "en"
 translationKey: "ai-agent-memory-poisoning"
 draft: false
-image: "/blog/memory-poisoning/hero.png"
+image: "/blog/memory-poisoning/hero.webp"
 ---
 
 A stateless chatbot forgets a bad instruction when the conversation ends. An agent with persistent memory can carry it into tomorrow's work, a different user session, or an entirely different workflow.
@@ -21,7 +21,7 @@ A recent systematic study identifies four memory-write channels and nine structu
 
 The practical implication is uncomfortable but useful: **the memory database is part of the agent's security perimeter**.
 
-![A corrupted memory card approaches a protected agent memory vault](/blog/memory-poisoning/hero.png)
+![A corrupted memory card approaches a protected agent memory vault](/blog/memory-poisoning/hero.webp)
 
 *The dangerous moment is not retrieval. It is the transition from untrusted input to trusted memory.*
 
@@ -54,7 +54,7 @@ The important distinction is **source versus authority**. A CRM response may be 
 
 The safest architecture I have found is deliberately boring. New memories do not go straight into the trusted store. They pass through a quarantine pipeline that records their origin, evaluates policy, and assigns a trust state.
 
-![Untrusted inputs flow through quarantine and policy gates before reaching trusted memory](/blog/memory-poisoning/quarantine-pipeline.png)
+![Untrusted inputs flow through quarantine and policy gates before reaching trusted memory](/blog/memory-poisoning/quarantine-pipeline.webp)
 
 *Quarantine is not a rejection of automation. It is the missing middle state between “write” and “never use.”*
 
@@ -122,7 +122,7 @@ Recall should therefore apply four filters before ranking by similarity:
 3. **Freshness:** Is it still valid, and is the source version current?
 4. **Impact:** Is the requested action too consequential to rely on one memory item?
 
-![A retrieval lens selects only fresh, signed and policy-approved memory cards](/blog/memory-poisoning/recall-trust-layers.png)
+![A retrieval lens selects only fresh, signed and policy-approved memory cards](/blog/memory-poisoning/recall-trust-layers.webp)
 
 *Similarity answers “does this look relevant?” It does not answer “may this influence an action?”*
 
@@ -153,7 +153,7 @@ If memory can change behavior, users need a way to understand and reverse those 
 
 The rollback target should be a known-good state, not simply “delete the newest row.” A malicious write can trigger a summarization job, which creates a second derived memory. Deleting one row while leaving its descendants produces false recovery.
 
-![A forensic timeline identifies an anomalous write and rolls the agent back to a known-good snapshot](/blog/memory-poisoning/rollback-forensics.png)
+![A forensic timeline identifies an anomalous write and rolls the agent back to a known-good snapshot](/blog/memory-poisoning/rollback-forensics.webp)
 
 *Forensics should explain not only which memory was poisoned, but which later memories inherited it.*
 

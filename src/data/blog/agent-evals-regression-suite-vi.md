@@ -3,16 +3,16 @@ title: "Đừng đưa AI Agent lên Production khi chưa có Evals: Thiết kế
 description: "Một agent có thể trả lời đúng nhưng vẫn gọi nhầm tool, làm sai state, lặp vô hạn hoặc đốt quá ngân sách. Bài viết này biến những lỗi đó thành regression suite có thể chạy trong CI/CD."
 pubDate: 2026-05-18
 category: "engineering"
-image: "/blog/agent-evals-hero.jpg"
+image: "/blog/agent-evals-hero.webp"
 lang: "vi"
 translationKey: "agent-evals-regression-suite"
 draft: false
 ---
 
-![Kỹ sư kiểm tra regression suite cho AI agent trước khi release](/blog/agent-evals-hero.jpg)
+![Kỹ sư kiểm tra regression suite cho AI agent trước khi release](/blog/agent-evals-hero.webp)
 
 <figure class="blog-video">
-  <video controls preload="metadata" playsinline poster="/blog/agent-evals-hero.jpg" aria-label="Video giải thích nội dung bài viết, phiên bản tiếng Việt">
+  <video controls preload="metadata" playsinline poster="/blog/agent-evals-hero.webp" aria-label="Video giải thích nội dung bài viết, phiên bản tiếng Việt">
     <source src="/blog/agent-evals-regression-suite/video-vi.mp4" type="video/mp4" />
     Trình duyệt của bạn không hỗ trợ video HTML5.
   </video>
@@ -35,7 +35,7 @@ Bài này trình bày một cách thực dụng để biến điều đó thành
 
 Agent khác prompt chain ở chỗ nó tự chọn hành động trong nhiều bước. Mỗi bước đưa thêm một biến ngẫu nhiên vào hệ thống: có thể chọn sai tool, chọn đúng tool nhưng truyền sai arguments, diễn giải sai observation, lặp vô ích, hoặc thao tác state trước khi xác thực điều kiện. Vì vậy, một agent có thể “pass” khi nhìn vào final answer nhưng vẫn dễ vỡ khi input, thời điểm, tool response hoặc session state hơi khác đi.[1] [2]
 
-![Final answer chỉ là phần nổi; tool, state, safety và cost nằm phía dưới mặt nước](/blog/agent-evals-iceberg.jpg)
+![Final answer chỉ là phần nổi; tool, state, safety và cost nằm phía dưới mặt nước](/blog/agent-evals-iceberg.webp)
 
 Hãy dùng một case study giả định xuyên suốt bài: **CaseOps Agent**. Đây là trợ lý nội bộ giúp nhân viên tra cứu và xử lý hồ sơ. Agent có bốn tool:
 
@@ -72,7 +72,7 @@ Sai lầm phổ biến nhất là gom hai mục tiêu khác nhau vào một dash
 
 Anthropic khuyến nghị tách hai loại này: case capability khi đã đạt chất lượng bền vững có thể “tốt nghiệp” thành regression case.[1] Đây là cách tránh hai thái cực: viết một suite quá dễ để luôn xanh, hoặc dùng toàn task frontier khó đến mức CI đỏ liên tục và mọi người tắt nó đi.
 
-![Capability suite là đường khám phá; regression suite là lan can bảo toàn điều đã đúng](/blog/agent-evals-two-suites.jpg)
+![Capability suite là đường khám phá; regression suite là lan can bảo toàn điều đã đúng](/blog/agent-evals-two-suites.webp)
 
 ### Một nguyên tắc quyết định rất hữu ích
 
@@ -108,7 +108,7 @@ Thay vào đó, hãy tách trajectory thành ba loại luật:
 
 Đúng như khuyến nghị cho agent eval, strict ordered tool-call matching chỉ nên dùng khi thứ tự thật sự có ý nghĩa về correctness hoặc safety; ở các trường hợp còn lại, outcome và chất lượng quyết định quan trọng hơn exact path.[2]
 
-![Một trace có nhiều đường đi hợp lệ, nhưng các đường nguy hiểm phải bị chặn trước khi chạm vào state](/blog/agent-evals-trace.jpg)
+![Một trace có nhiều đường đi hợp lệ, nhưng các đường nguy hiểm phải bị chặn trước khi chạm vào state](/blog/agent-evals-trace.webp)
 
 ---
 
@@ -314,7 +314,7 @@ Hai nguyên tắc ở đây đáng giữ bằng mọi giá.
 
 ## CI/CD: biến regression suite thành release contract
 
-![Biểu đồ minh họa bốn lớp release gate; đây là policy mẫu cần điều chỉnh theo baseline và risk appetite](/blog/agent-evals-release-chart.png)
+![Biểu đồ minh họa bốn lớp release gate; đây là policy mẫu cần điều chỉnh theo baseline và risk appetite](/blog/agent-evals-release-chart.webp)
 
 Không nên chạy full expensive suite mỗi commit. Cũng không nên để eval thành nghi lễ chạy tay trước release. Hãy chia gate theo mức rủi ro và phản hồi cần có.
 
@@ -372,7 +372,7 @@ Khi CI đỏ, team cần biết cách xử lý thay vì “re-run until green”
 
 Offline suite chỉ biết những case bạn đã nghĩ ra. Production mới cho bạn biết user thực sự nói gì, tool thực sự timeout ở đâu, retrieval thực sự drift thế nào và agent thực sự lạm dụng retry trong giờ cao điểm. Offline và online không thay thế nhau: offline bảo vệ known behavior trước deploy; online tìm unknown failure sau deploy.[2]
 
-![Incident production phải quay về thành fixture tối giản và release gate, tạo vòng lặp cải thiện liên tục](/blog/agent-evals-flywheel.jpg)
+![Incident production phải quay về thành fixture tối giản và release gate, tạo vòng lặp cải thiện liên tục](/blog/agent-evals-flywheel.webp)
 
 Tôi dùng quy trình năm bước cho mỗi incident agent:
 

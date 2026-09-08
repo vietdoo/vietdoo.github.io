@@ -3,13 +3,13 @@ title: "Stop AI Agent Amnesia: The Handover Architecture Pattern"
 description: "A repo-level pattern that lets any AI agent pick up work where another one dropped it: one constitution, a handover ledger, a routing map, and a non-AI forcing function."
 pubDate: 2026-02-16
 category: "architecture"
-image: "/blog/agent-handover-architecture.jpg"
+image: "/blog/agent-handover-architecture.webp"
 lang: "en"
 translationKey: "agent-handover-architecture"
 draft: false
 ---
 
-![AI Agent Handover Architecture](/blog/agent-handover-architecture.jpg)
+![AI Agent Handover Architecture](/blog/agent-handover-architecture.webp)
 
 Every AI coding agent is brilliant for exactly one session and then gets amnesia. You spend forty minutes explaining why the repository is feature-sliced instead of layered, the agent does great work, the window closes — and tomorrow a different agent (or the same one, fresh) walks in and proposes a `services/` folder again.
 
@@ -23,7 +23,7 @@ Agents are stateless. The repository is not. So every piece of context that matt
 
 Four planes, each with a distinct job:
 
-![Four Pillars of Handover Architecture](/blog/handover-four-pillars.jpg)
+![Four Pillars of Handover Architecture](/blog/handover-four-pillars.webp)
 
 Miss any one of them and the system leaks: rules without a ledger means agents repeat decisions; a ledger without a forcing function means nobody writes to it.
 
@@ -154,7 +154,7 @@ That's it — a `git status` parser with a regex list. It cannot be sweet-talked
 
 Put the four planes together and every agent, regardless of vendor, runs the same cycle:
 
-![Session Loop Workflow](/blog/handover-session-loop.jpg)
+![Session Loop Workflow](/blog/handover-session-loop.webp)
 
 Read context → route → change code **and** docs together → append the ledger entry → let a non-AI script certify it. The loop closes: the output of one session is precisely the input format of the next.
 

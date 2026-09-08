@@ -6,14 +6,14 @@ category: "security"
 lang: "vi"
 translationKey: "context-firewall-pre-inference-data-governance"
 draft: false
-image: "/blog/context-firewall/hero.png"
+image: "/blog/context-firewall/hero.webp"
 ---
 
 Một AI agent có thể sở hữu identity đúng, allow-list tool đúng và system prompt được viết cẩn thận—nhưng vẫn nhận nhiều dữ liệu hơn mức task cần.
 
 Một support agent có thể chỉ cần biết một order có đủ điều kiện refund hay không. Retrieval layer lại gửi cả profile khách hàng, hai mươi ticket gần nhất, ghi chú fraud nội bộ, payment token và một tool response dài dòng. Không nhất thiết có dữ liệu nào trong packet đó là độc hại. Vấn đề là model đã được nhìn thấy một thế giới rộng hơn mức quyết định hiện tại cho phép.
 
-![Minh họa Context Firewall dạng hand-drawn lọc nhiều nguồn dữ liệu thành một context nhỏ, đúng mục đích cho model](/blog/context-firewall/hero.png)
+![Minh họa Context Firewall dạng hand-drawn lọc nhiều nguồn dữ liệu thành một context nhỏ, đúng mục đích cho model](/blog/context-firewall/hero.webp)
 
 > **Luận điểm:** Hãy xem boundary trước inference là một security control. Context firewall quyết định dữ liệu nào được phép đi vào model, vì sao cần nó, nên biến đổi ra sao, có hiệu lực trong bao lâu và bằng chứng nào chứng minh quyết định đã được thực thi.
 
@@ -93,7 +93,7 @@ Purpose cũng là câu trả lời hữu ích cho câu hỏi: “Vì sao ta gử
 
 Một firewall thực tế có thể được triển khai như pipeline gồm sáu quyết định. Nó không nhất thiết phải là một service riêng ngay từ ngày đầu. Có thể bắt đầu bằng một library trong application, miễn là decision nằm ngoài model và tạo ra record có thể inspect.
 
-![Minh họa pipeline editorial thu hẹp các record thô qua các gate purpose, scope và transformation trước khi tạo model context](/blog/context-firewall/admission-pipeline.png)
+![Minh họa pipeline editorial thu hẹp các record thô qua các gate purpose, scope và transformation trước khi tạo model context](/blog/context-firewall/admission-pipeline.webp)
 
 ### 1. Xác định decision
 
@@ -180,7 +180,7 @@ Transformation cũng cần provenance. Envelope phải ghi nhận `adult: true` 
 
 Model nên nhận một context object làm rõ purpose và giới hạn mà không expose candidate pool bị từ chối.
 
-![Minh họa context envelope giữ lại chỉ evidence đúng purpose bên trong một perimeter có clock và audit](/blog/context-firewall/context-envelope.png)
+![Minh họa context envelope giữ lại chỉ evidence đúng purpose bên trong một perimeter có clock và audit](/blog/context-firewall/context-envelope.webp)
 
 ```json
 {
@@ -339,7 +339,7 @@ Hash không phải phép thuật bảo vệ privacy. Nếu original value dễ �
 
 Khi người dùng sau đó yêu cầu deletion, admission ledger cũng trở thành một phần của retention design. Nó cần retention class riêng và mối quan hệ rõ ràng với [pattern deletion guarantee cho agent](/blog/ai-agent-deletion-guarantees). Record chứng minh một field đã bị exclude có thể không cần field đó; record chứa raw excerpt thì có.
 
-![Minh họa context fragment bị deny được đưa vào quarantine trong khi evidence token tối thiểu đi qua audit loop](/blog/context-firewall/deny-audit-loop.png)
+![Minh họa context fragment bị deny được đưa vào quarantine trong khi evidence token tối thiểu đi qua audit loop](/blog/context-firewall/deny-audit-loop.webp)
 
 ## Test boundary bằng decision fixture
 

@@ -3,13 +3,13 @@ title: "Queue cũng là Policy: Admission Control, Backpressure và Fairness cho
 description: "Hướng dẫn production về cách xem queue như một policy của AI agent: admission control, backpressure, fair scheduling, bảo vệ tail-SLO và graceful load shedding."
 pubDate: 2026-07-03
 category: "engineering"
-image: "/blog/ai-admission-control/hero.png"
+image: "/blog/ai-admission-control/hero.webp"
 lang: "vi"
 translationKey: "ai-admission-control-backpressure-fairness"
 draft: false
 ---
 
-![Whiteboard vẽ tay mô tả AI agent gateway, fair queue, admission gate, tín hiệu backpressure và load shedding có kiểm soát](/blog/ai-admission-control/hero.png)
+![Whiteboard vẽ tay mô tả AI agent gateway, fair queue, admission gate, tín hiệu backpressure và load shedding có kiểm soát](/blog/ai-admission-control/hero.webp)
 
 Trong một sơ đồ kiến trúc, queue thường chỉ là một hình chữ nhật nhỏ nằm giữa API gateway và worker pool. Một mũi tên đi vào bên trái, một mũi tên đi ra bên phải. Cách vẽ đó dễ khiến chúng ta nghĩ queue chỉ là nơi cất request tạm thời, đợi hệ thống rảnh thì xử lý.
 
@@ -122,7 +122,7 @@ Global FIFO dễ hiểu nhưng thường không công bằng. Tenant gửi 10.00
 
 Mô tả của Cohere về LLM serving nhiều tenant đưa ra một pattern đáng chú ý: admission control, performance tier, Deficit Round Robin và priority/deadline ordering. Lựa chọn cốt lõi là đơn vị fairness. Một request không phải lúc nào cũng tương đương với một lượng work. Với request generative kích thước khác nhau, token hoặc measured cost thường trung thực hơn số request.
 
-![Whiteboard vẽ tay mô tả fair queue theo tenant, weighted quantum, token budget và priority trong từng lane](/blog/ai-admission-control/fair-queue-token-budget.png)
+![Whiteboard vẽ tay mô tả fair queue theo tenant, weighted quantum, token budget và priority trong từng lane](/blog/ai-admission-control/fair-queue-token-budget.webp)
 
 Một fair scheduler đơn giản có thể như sau:
 
@@ -177,7 +177,7 @@ def can_meet_deadline(job, state):
 
 Đây không phải lời hứa rằng mọi request đều hoàn thành đúng hạn. Đây là nguyên tắc không chủ động bắt đầu một việc mà hệ thống đã biết là không thể đáp ứng deadline.
 
-![Minh họa whiteboard về admission theo deadline, gồm queue wait p95, model execution p95, tool path p95 và cổng defer hoặc reject](/blog/ai-admission-control/tail-slo-scheduler.png)
+![Minh họa whiteboard về admission theo deadline, gồm queue wait p95, model execution p95, tool path p95 và cổng defer hoặc reject](/blog/ai-admission-control/tail-slo-scheduler.webp)
 
 Hãy tách **admission SLO** khỏi **completion SLO**:
 
@@ -195,7 +195,7 @@ Nếu không thể đạt deadline, reject sớm đôi khi tử tế hơn nhận
 
 “Reject tất cả” không phải load-shedding strategy. Đó là emergency brake. Production cần một cái thang để bảo vệ việc quan trọng nhất trước và loại bỏ việc tùy chọn trước việc critical.
 
-![Whiteboard vẽ tay mô tả graceful degradation ladder từ full agent execution tới async handoff, bounded rejection và recovery](/blog/ai-admission-control/admission-backpressure-ladder.png)
+![Whiteboard vẽ tay mô tả graceful degradation ladder từ full agent execution tới async handoff, bounded rejection và recovery](/blog/ai-admission-control/admission-backpressure-ladder.webp)
 
 Một ladder có thể gồm:
 

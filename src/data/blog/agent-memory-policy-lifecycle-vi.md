@@ -3,13 +3,13 @@ title: "AI Agent cần Memory Policy, không chỉ một Vector Database"
 description: "Thiết kế thực tế để quyết định AI agent được phép ghi nhớ gì, khi nào memory nên được hợp nhất hoặc quên đi, và cách đánh giá memory mà không biến mọi cuộc trò chuyện thành kho lưu trữ vĩnh viễn."
 pubDate: 2026-02-14
 category: "engineering"
-image: "/blog/agent-memory-policy/hero.png"
+image: "/blog/agent-memory-policy/hero.webp"
 lang: "vi"
 translationKey: "agent-memory-policy-lifecycle"
 draft: false
 ---
 
-![Một AI robot nhỏ đang sắp xếp memory theo vòng đời ghi nhận, hợp nhất, suy giảm và xóa](/blog/agent-memory-policy/hero.png)
+![Một AI robot nhỏ đang sắp xếp memory theo vòng đời ghi nhận, hợp nhất, suy giảm và xóa](/blog/agent-memory-policy/hero.webp)
 
 Tôi từng thấy nhiều team thêm một vector database vào AI assistant rồi gọi đó là “memory”. Demo thường rất thuyết phục. Assistant nhớ một sở thích từ tuần trước, lấy lại đúng một đoạn thông tin, và trông như ngày càng hiểu người dùng hơn. Vài tuần sau, chính hệ thống đó bắt đầu nhắc lại một quyết định dự án đã lỗi thời, mang thông tin riêng tư sang nhầm workspace, hoặc lặp lại một phỏng đoán yếu như thể đó là sự thật.
 
@@ -41,7 +41,7 @@ Một quyết định khởi đầu hữu ích là cho phép long-term memory th
 
 Memory an toàn nhất nhiều khi là memory chưa từng được ghi. Trước khi lưu một candidate, agent nên trả lời một số câu hỏi có tính xác định. Đây không phải một prompt thứ hai bảo model “hãy cẩn thận”. Đây là một policy component nhỏ với kết quả quan sát được.
 
-![Admission gate kiểm tra relevance, confidence, scope và consent trước khi memory được lưu](/blog/agent-memory-policy/admission-gate.png)
+![Admission gate kiểm tra relevance, confidence, scope và consent trước khi memory được lưu](/blog/agent-memory-policy/admission-gate.webp)
 
 Với mỗi candidate memory, admission gate nên xem xét:
 
@@ -83,7 +83,7 @@ Khi memory tăng dần, nhiều hệ thống chạy nightly job để summarize.
 
 Vì vậy, consolidation nên được coi là một **versioned transformation**. Summary mới cần trỏ đến các memory mà nó thay thế, giữ lại source reference mạnh nhất và có thể revert trong thời gian team còn kiểm tra kết quả.
 
-![Lifecycle loop biến memory thô thành knowledge đã review, sau đó làm suy giảm hoặc xóa theo policy](/blog/agent-memory-policy/lifecycle-loop.png)
+![Lifecycle loop biến memory thô thành knowledge đã review, sau đó làm suy giảm hoặc xóa theo policy](/blog/agent-memory-policy/lifecycle-loop.webp)
 
 Một lifecycle đơn giản có thể gồm:
 
@@ -133,7 +133,7 @@ Retrieval layer cũng nên hỗ trợ negative result. “Không tìm thấy mem
 
 Không thể đánh giá memory feature chỉ bằng các cặp hỏi–đáp một turn. Feature tồn tại để thay đổi hành vi về sau, nên test cần ít nhất hai giai đoạn: write hoặc update, rồi retrieve hoặc chủ động từ chối retrieve.
 
-![Bộ đánh giá memory so sánh đường đi có bằng chứng với đường đi dùng stale memory trước khi release](/blog/agent-memory-policy/evaluation-matrix.png)
+![Bộ đánh giá memory so sánh đường đi có bằng chứng với đường đi dùng stale memory trước khi release](/blog/agent-memory-policy/evaluation-matrix.webp)
 
 | Nhóm test | Ví dụ | Cần grade điều gì |
 |---|---|---|

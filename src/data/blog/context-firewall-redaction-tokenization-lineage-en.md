@@ -3,7 +3,7 @@ title: "The Context Firewall: Redaction, Tokenization, and Data Lineage Before t
 description: "A production playbook for treating AI context as a governed data plane—with field-level minimization, redaction, tokenization, tenant and purpose checks, lineage, expiry, and fail-closed behavior before inference."
 pubDate: 2026-09-05
 category: "engineering"
-image: "/blog/context-firewall/hero.png"
+image: "/blog/context-firewall/hero.webp"
 lang: "en"
 translationKey: "context-firewall-redaction-tokenization-lineage"
 draft: false
@@ -38,7 +38,7 @@ The distinction prevents a common category error. Retrieval relevance answers, �
 
 A production pipeline can be implemented as five stages. The names are less important than the invariants: every accepted item must carry its decision context, and every rejection must be observable without leaking the rejected payload.
 
-![A three-stage illustration showing raw records transformed through filtering and tokenization into a safe model context](/blog/context-firewall/redaction-tokenization.png)
+![A three-stage illustration showing raw records transformed through filtering and tokenization into a safe model context](/blog/context-firewall/redaction-tokenization.webp)
 
 ### 1. Classify before retrieving broadly
 
@@ -123,7 +123,7 @@ A model-facing prompt does not need to contain every audit detail, but the syste
 
 The manifest should be append-only or content-addressed when it is used for audit. It should not copy rejected payloads into a new log. A safe denial record can include a stable source reference, rule code, policy version, and hashed field identifier without retaining the sensitive value.
 
-![An illustration of source records connected through a lineage ledger into a context manifest with purpose, tenant, transformation, and expiry markers](/blog/context-firewall/lineage-manifest.png)
+![An illustration of source records connected through a lineage ledger into a context manifest with purpose, tenant, transformation, and expiry markers](/blog/context-firewall/lineage-manifest.webp)
 
 ## Purpose is a security boundary
 
@@ -143,7 +143,7 @@ A stale item should not necessarily disappear without explanation. The firewall 
 
 “Fail closed” does not mean returning an empty prompt and leaving the user confused. It means refusing an unsafe inclusion while returning enough structured information for the workflow to recover.
 
-![Three panels showing cross-tenant blocking, stale-context expiry, and a clean fail-closed path into human review](/blog/context-firewall/failure-modes.png)
+![Three panels showing cross-tenant blocking, stale-context expiry, and a clean fail-closed path into human review](/blog/context-firewall/failure-modes.webp)
 
 A useful response envelope might look like this:
 

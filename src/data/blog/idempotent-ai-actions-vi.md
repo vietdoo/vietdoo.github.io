@@ -3,13 +3,13 @@ title: "AI Action có tính Idempotent: Retry Tool Call mà không nhân đôi S
 description: "AI agent sẽ retry khi mạng lỗi, provider timeout hoặc worker restart. Playbook production này trình bày cách làm cho tool call ghi dữ liệu trở nên an toàn với idempotency key, deduplication, outbox, reconciliation và compensating action."
 pubDate: 2026-01-13
 category: "engineering"
-image: "/blog/idempotent-ai-actions/hero.png"
+image: "/blog/idempotent-ai-actions/hero.webp"
 lang: "vi"
 translationKey: "idempotent-ai-actions"
 draft: false
 ---
 
-![AI action đi qua idempotency key và tạo ra đúng một side effect đã commit](/blog/idempotent-ai-actions/hero.png)
+![AI action đi qua idempotency key và tạo ra đúng một side effect đã commit](/blog/idempotent-ai-actions/hero.webp)
 
 Tôi từng thấy một assistant tạo hai support ticket cho cùng một yêu cầu của khách hàng. Model đã sinh ra một tool call hoàn toàn hợp lý. Worker gửi request tới ticketing API. Sau đó mạng im lặng.
 
@@ -118,7 +118,7 @@ type IdempotencyRecord = {
 
 Record này là một **business safety boundary**. Nó cần được scope theo tenant và actor khi cần, được bảo vệ bằng unique constraint, và được giữ ít nhất lâu bằng khoảng thời gian một late retry có thể xuất hiện. Tài liệu API của Stripe mô tả một contract tương tự: kết quả đầu tiên được lưu cho một key, request sau với cùng key nhận lại cùng kết quả, còn parameter mismatch bị reject thay vì được coi là một operation mới.[3]
 
-![Ba transport attempt hội tụ vào một idempotency record được bảo vệ, còn parameter mismatch bị từ chối](/blog/idempotent-ai-actions/dedup-record.png)
+![Ba transport attempt hội tụ vào một idempotency record được bảo vệ, còn parameter mismatch bị từ chối](/blog/idempotent-ai-actions/dedup-record.webp)
 
 ### Quy tắc của một idempotency key tốt
 
@@ -143,7 +143,7 @@ Contract có thể tóm tắt như sau:
 
 Coi mọi error là “retry” là cách tạo ra duplicate charge, duplicate email và duplicate record. Coi mọi error là “stop” lại khiến workflow bị kẹt. Con đường an toàn là phân loại outcome rồi biến reconciliation thành fork trước một retry nguy hiểm.
 
-![Retry-safe state machine tách unknown outcome khỏi confirmed failure và reconcile trước khi retry](/blog/idempotent-ai-actions/retry-state-machine.png)
+![Retry-safe state machine tách unknown outcome khỏi confirmed failure và reconcile trước khi retry](/blog/idempotent-ai-actions/retry-state-machine.webp)
 
 ```text
 intent_created
@@ -216,7 +216,7 @@ Nhiều AI action vừa cập nhật local state vừa gọi external tool. Ví 
 
 Transactional outbox giảm một nửa sự không chắc chắn này. Application ghi business state và outbox event trong cùng database transaction. Sau đó relay giao event tới external system. Outbox tồn tại vì database và message broker thường không thể dùng một two-phase transaction thực tế; pattern này cũng thừa nhận relay có thể publish event nhiều lần, nên consumer vẫn cần idempotency.[4]
 
-![Agent intent được commit cùng outbox event, relay tới external API, rồi reconcile thành commit hoặc compensation](/blog/idempotent-ai-actions/outbox-reconciliation.png)
+![Agent intent được commit cùng outbox event, relay tới external API, rồi reconcile thành commit hoặc compensation](/blog/idempotent-ai-actions/outbox-reconciliation.webp)
 
 ```ts
 await db.transaction(async (tx) => {

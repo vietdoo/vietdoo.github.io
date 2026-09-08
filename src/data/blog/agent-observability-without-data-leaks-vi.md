@@ -3,16 +3,16 @@ title: "Observability cho AI Agent: Trace Prompt, Tool Call, Token và Cost mà 
 description: "Một trace agent cần giải thích được vì sao hệ thống chậm, đắt, sai hoặc nguy hiểm—nhưng không được biến prompt, tool payload và response thành một data lake không kiểm soát. Đây là blueprint metadata-first để quan sát an toàn."
 pubDate: 2026-05-06
 category: "engineering"
-image: "/blog/agent-observability-hero.jpg"
+image: "/blog/agent-observability-hero.webp"
 lang: "vi"
 translationKey: "agent-observability-without-data-leaks"
 draft: false
 ---
 
-![Kỹ sư quan sát trace AI agent trong khi kho dữ liệu nhạy cảm được bảo vệ](/blog/agent-observability-hero.jpg)
+![Kỹ sư quan sát trace AI agent trong khi kho dữ liệu nhạy cảm được bảo vệ](/blog/agent-observability-hero.webp)
 
 <figure class="blog-video">
-  <video controls preload="metadata" playsinline poster="/blog/agent-observability-hero.jpg" aria-label="Video giải thích nội dung bài viết, phiên bản tiếng Việt">
+  <video controls preload="metadata" playsinline poster="/blog/agent-observability-hero.webp" aria-label="Video giải thích nội dung bài viết, phiên bản tiếng Việt">
     <source src="/blog/agent-observability-without-data-leaks/video-vi.mp4" type="video/mp4" />
     Trình duyệt của bạn không hỗ trợ video HTML5.
   </video>
@@ -54,7 +54,7 @@ NIST mô tả monitoring sau triển khai của AI không chỉ là operational 
 
 Một hệ thống lành mạnh tách các loại bằng chứng theo câu hỏi, access và retention. Nếu mọi thứ bị nhét vào một span JSON, bạn sẽ hoặc không có đủ dữ liệu để vận hành, hoặc có quá nhiều dữ liệu để bảo vệ.
 
-![Ma trận bốn mặt phẳng telemetry với chính sách raw content, quyền truy cập và retention khác nhau](/blog/agent-observability-telemetry-matrix.png)
+![Ma trận bốn mặt phẳng telemetry với chính sách raw content, quyền truy cập và retention khác nhau](/blog/agent-observability-telemetry-matrix.webp)
 
 | Mặt phẳng | Dùng để trả lời | Đơn vị dữ liệu | Default raw content | Người nên xem |
 |---|---|---|---|---|
@@ -81,7 +81,7 @@ agent.final.outcome_class   = refund_draft_created
 
 Một child LLM span có thể mang model, temperature band, prompt template version, token usage, finish reason và cost. Một tool span mang tool name, capability class, schema version, argument **shape**, result **class**, duration, retry count và effect. Không field nào ở trên cần chứa tên khách hàng, nguyên câu prompt hay JSON tool result.
 
-![Bản đồ trace cho thấy agent root span, LLM, retrieval và tool call được quan sát qua metadata an toàn](/blog/agent-observability-trace-map.jpg)
+![Bản đồ trace cho thấy agent root span, LLM, retrieval và tool call được quan sát qua metadata an toàn](/blog/agent-observability-trace-map.webp)
 
 Cách này vẫn cho bạn đúng hierarchy: `invoke_agent → plan → retrieve_policy → get_customer_profile → draft_refund`. Bài viết về GenAI telemetry của OpenTelemetry cũng minh họa đúng cấu trúc root agent span với child chat và execute-tool spans, cùng token count, model và finish reason. Khi content capture được bật, prompt/tool content có thể xuất hiện—đó phải là một quyết định policy, không phải side effect mặc định.[1]
 
@@ -124,7 +124,7 @@ trace.id=7b4e…  agent.version=2026.08.13.3  tenant.tier=regulated
 
 Bạn biết retry đã xảy ra, có một pending approval, và cost tăng vì một LLM turn cùng tool retry. Bạn **không** biết số thẻ, email, địa chỉ hay header upstream—và ở đa số incident vận hành, bạn không cần biết.
 
-![Timeline trace minh họa nested span, event redaction, token, latency, cost và budget check](/blog/agent-observability-span-timeline.png)
+![Timeline trace minh họa nested span, event redaction, token, latency, cost và budget check](/blog/agent-observability-span-timeline.webp)
 
 > **Điểm cần nhớ:** `trace.id` là correlation key. Nó không phải quyền truy cập vào raw content. Khi team coi một ID là “vé xem transcript”, họ đã phá ranh giới observability và evidence vault.
 
@@ -214,7 +214,7 @@ Pattern này không thay thế DLP hay semantic PII detection. Nó đặt một 
 
 ## Redaction pipeline: phải có nhiều lớp vì mỗi lớp đều có blind spot
 
-![Conveyor belt đưa prompt và tool payload qua classify, redact, allowlist, collector và vault trước khi vào telemetry](/blog/agent-observability-data-boundaries.jpg)
+![Conveyor belt đưa prompt và tool payload qua classify, redact, allowlist, collector và vault trước khi vào telemetry](/blog/agent-observability-data-boundaries.webp)
 
 Một thiết kế production thường cần ít nhất năm checkpoint.
 
@@ -347,7 +347,7 @@ trace_cost_usd = Σ span_cost_usd + tool_metered_cost_usd
 
 Không hardcode price trong dashboard query. Hãy version hóa price card, capture `billing.price_card_version`, và coi cost là estimate nếu provider billing hoặc cache semantics không đồng nhất. Numeric cost trong chart bài này là **minh họa**, không phải claim về giá model.
 
-![Robot agent chạy quanh token meter, latency stopwatch, cost gauge và một guardrail chặn loop](/blog/agent-observability-budget-loop.jpg)
+![Robot agent chạy quanh token meter, latency stopwatch, cost gauge và một guardrail chặn loop](/blog/agent-observability-budget-loop.webp)
 
 ### Ba budget phải tách riêng
 
@@ -390,7 +390,7 @@ Thiết kế một flow nhỏ, có chủ đích:
 5. Access, fields viewed, thời điểm và operator được log; TTL hết thì delete có bằng chứng.
 6. Kết quả điều tra được chuẩn hóa thành safe summary và, nếu phù hợp, regression/eval case synthetic.
 
-![Tủ debug khóa bằng break-glass, approval hai người và time-boxed access cho evidence nhạy cảm](/blog/agent-observability-break-glass.jpg)
+![Tủ debug khóa bằng break-glass, approval hai người và time-boxed access cho evidence nhạy cảm](/blog/agent-observability-break-glass.webp)
 
 Cách làm này nghe “nặng”, nhưng nó tạo một boundary có thể audit. Nó cũng ngăn incident response bình thường trở thành pretext xem customer conversation hàng loạt. Tài liệu về redaction của Grafana nêu rõ SDK sanitizer và server guard có coverage khác nhau; không layer nào tự động bảo đảm response, streaming hay model thinking block đều đã được xử lý.[3] Break-glass không thay thế prevention, nhưng là cách thừa nhận nhu cầu điều tra mà không bình thường hóa raw-content access.
 

@@ -3,14 +3,14 @@ title: "Dùng thử Manus: Từ một ý tưởng mơ hồ đến kết quả c�
 description: "Một quy trình thực tế để bắt đầu với Manus: chọn bài toán nhỏ, viết yêu cầu có ngữ cảnh, duyệt kế hoạch, kiểm tra đầu ra và lặp lại một cách có chủ đích."
 pubDate: 2026-03-26
 category: "engineering"
-image: "/blog/thu-nghiem-manus/hero.jpg"
+image: "/blog/thu-nghiem-manus/hero.webp"
 lang: "vi"
 draft: false
 ---
 
 > **TL;DR** — Manus phát huy giá trị khi được xem như một cộng sự thực thi, không phải một ô chat để hỏi đáp. Lần dùng thử đầu tiên nên bắt đầu từ một bài toán nhỏ nhưng có đầu ra kiểm chứng được. Hãy mô tả rõ mục tiêu, dữ liệu đầu vào, tiêu chí hoàn thành và giới hạn; sau đó đọc kế hoạch, kiểm tra kết quả, rồi lặp lại bằng phản hồi cụ thể.
 
-![Một người làm sản phẩm quan sát ý tưởng được chuyển thành brief, kế hoạch, mã nguồn và trang web hoàn chỉnh](/blog/thu-nghiem-manus/hero.jpg)
+![Một người làm sản phẩm quan sát ý tưởng được chuyển thành brief, kế hoạch, mã nguồn và trang web hoàn chỉnh](/blog/thu-nghiem-manus/hero.webp)
 
 ## 1. Vì sao nên dùng thử Manus bằng một bài toán thật?
 
@@ -37,7 +37,7 @@ Một brief tốt không cần dài; nó chỉ cần loại bỏ những mơ h�
 | **Ràng buộc** | Điều gì bắt buộc hoặc không được làm? | “Viết bằng tiếng Việt, không nêu số liệu không có nguồn.” |
 | **Tiêu chí hoàn thành** | Khi nào xem là xong? | “Có tiêu đề, dàn ý rõ, ví dụ thực hành và danh sách nguồn.” |
 
-![Ý tưởng mơ hồ được hệ thống hóa thành bốn phần của một brief thực thi: mục tiêu, bối cảnh, ràng buộc và tiêu chí hoàn thành](/blog/thu-nghiem-manus/structured-brief.jpg)
+![Ý tưởng mơ hồ được hệ thống hóa thành bốn phần của một brief thực thi: mục tiêu, bối cảnh, ràng buộc và tiêu chí hoàn thành](/blog/thu-nghiem-manus/structured-brief.webp)
 
 Một prompt có thể bắt đầu như sau:
 
@@ -63,7 +63,7 @@ Với bất kỳ bài toán nào, hãy đọc kế hoạch bằng ba câu hỏi:
 
 Việc điều chỉnh ở giai đoạn kế hoạch rẻ hơn rất nhiều so với việc sửa một đầu ra đã đi chệch hướng. Đây cũng là lúc bạn biến AI từ một “hộp đen” thành một quy trình cộng tác có thể quan sát.
 
-![Người dùng xem luồng kế hoạch của tác vụ AI và xác nhận một điểm phê duyệt trước khi thực thi](/blog/thu-nghiem-manus/plan-review.jpg)
+![Người dùng xem luồng kế hoạch của tác vụ AI và xác nhận một điểm phê duyệt trước khi thực thi](/blog/thu-nghiem-manus/plan-review.webp)
 
 ## 4. Ba bài toán phù hợp để bắt đầu
 
@@ -109,7 +109,7 @@ Một kết quả trông hoàn chỉnh vẫn cần được xác nhận. Đây l
 
 Một checklist ngắn nhưng hữu ích là: **đọc, kiểm chứng, chạy thử, rồi mới dùng**. Nếu phát hiện vấn đề, đừng chỉ nói “sai”; hãy nêu vị trí, lý do và kết quả mong muốn. Phản hồi cụ thể là dữ liệu tốt nhất cho vòng lặp tiếp theo.
 
-![Người dùng kiểm chứng tài liệu nguồn, phần thay đổi mã nguồn và bản xem trước trên thiết bị trước khi sử dụng kết quả](/blog/thu-nghiem-manus/validate-output.jpg)
+![Người dùng kiểm chứng tài liệu nguồn, phần thay đổi mã nguồn và bản xem trước trên thiết bị trước khi sử dụng kết quả](/blog/thu-nghiem-manus/validate-output.webp)
 
 ## 6. Những thói quen giúp lần dùng thử có giá trị hơn
 

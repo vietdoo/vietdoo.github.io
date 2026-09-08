@@ -3,13 +3,13 @@ title: "From RAG Chunk to Cited Answer: Building Provenance for AI Outputs"
 description: "A practical provenance layer that connects retrieved sources, transformations, claims, and citations so an AI answer can be inspected instead of merely trusted."
 pubDate: 2026-05-23
 category: "engineering"
-image: "/blog/ai-output-provenance/hero.png"
+image: "/blog/ai-output-provenance/hero.webp"
 lang: "en"
 translationKey: "ai-output-provenance-cited-answers"
 draft: false
 ---
 
-![An engineer and an AI robot tracing a generated answer back to documents, tables, and source evidence](/blog/ai-output-provenance/hero.png)
+![An engineer and an AI robot tracing a generated answer back to documents, tables, and source evidence](/blog/ai-output-provenance/hero.webp)
 
 A RAG demo often ends with a reassuring sentence: “The answer is grounded in your documents.” That sentence can be true and still be difficult to verify.
 
@@ -42,7 +42,7 @@ This is more detailed than a trace span, but it does not replace the trace. The 
 
 A useful first step is to represent an answer as a collection of claims. A claim can be a sentence, a table value, a recommendation, or a statement of uncertainty. Each claim receives one or more evidence links and a status.
 
-![A provenance lineage map connects a source document through extraction and model transformation to a final claim](/blog/ai-output-provenance/lineage-map.png)
+![A provenance lineage map connects a source document through extraction and model transformation to a final claim](/blog/ai-output-provenance/lineage-map.webp)
 
 ```ts
 type Claim = {
@@ -136,7 +136,7 @@ This contract does not require the model to become timid. It requires the interf
 
 The provenance record may be graph-shaped, but the user interface does not need to expose a graph database. A citation drawer can show the claim, the source region, the document version, and a compact “how this was formed” summary. For a table or figure, the product can highlight the exact region used.
 
-![A provenance envelope packages claim, source, transformation, timestamp, and confidence into an inspectable answer artifact](/blog/ai-output-provenance/provenance-envelope.png)
+![A provenance envelope packages claim, source, transformation, timestamp, and confidence into an inspectable answer artifact](/blog/ai-output-provenance/provenance-envelope.webp)
 
 The interface should make three states visually distinct:
 

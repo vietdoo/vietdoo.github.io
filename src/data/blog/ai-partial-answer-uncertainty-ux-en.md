@@ -3,13 +3,13 @@ title: "When AI Gives a Partial Answer: Designing Failure UX for Uncertainty"
 description: "A trustworthy AI product does not hide uncertainty behind a fluent paragraph. It makes missing evidence visible, chooses a safe recovery path, and helps people decide what to do next."
 pubDate: 2026-04-19
 category: "engineering"
-image: "/blog/ai-partial-answer-uncertainty/hero.png"
+image: "/blog/ai-partial-answer-uncertainty/hero.webp"
 lang: "en"
 translationKey: "ai-partial-answer-uncertainty-ux"
 draft: false
 ---
 
-![A hand-drawn evidence tray flows through a decision gate into an answer, clarification, or human handoff](/blog/ai-partial-answer-uncertainty/hero.png)
+![A hand-drawn evidence tray flows through a decision gate into an answer, clarification, or human handoff](/blog/ai-partial-answer-uncertainty/hero.webp)
 
 I have watched an assistant produce a beautifully written answer that should never have been shown as complete.
 
@@ -29,7 +29,7 @@ That changes what “done” means. The answer is not done merely because a toke
 
 The distinction matters because people adapt their behavior around AI messages. Research on selective prediction shows that a system’s decision to defer, and the way that decision is communicated, can change human performance. In an AAAI study, informing people that the AI had deferred—without simply exposing the model’s uncertain prediction—improved the performance of the human-AI team.[1] The interface is therefore part of the reliability mechanism, not a decorative layer added after the model.
 
-![Four evidence states move toward a final answer decision without pretending that every state is complete](/blog/ai-partial-answer-uncertainty/evidence-states.png)
+![Four evidence states move toward a final answer decision without pretending that every state is complete](/blog/ai-partial-answer-uncertainty/evidence-states.webp)
 
 ## Model evidence states, not one generic confidence number
 
@@ -98,7 +98,7 @@ Many AI products treat failure UX as a sentence: “I’m sorry, I couldn’t an
 
 The recovery loop should answer four questions. What part did the system understand? What part is blocked? Why is it blocked in terms the user can act on? What is the next lowest-effort step that can change the state?
 
-![A recovery loop turns a blocked answer into clarification, more evidence, a bounded response, or a human handoff](/blog/ai-partial-answer-uncertainty/recovery-loop.png)
+![A recovery loop turns a blocked answer into clarification, more evidence, a bounded response, or a human handoff](/blog/ai-partial-answer-uncertainty/recovery-loop.webp)
 
 A practical sequence is:
 
@@ -134,7 +134,7 @@ The AAAI evidence on selective prediction is a reminder that the message itself 
 
 Human-AI interaction guidance recommends showing contextually relevant information and scoping services when the system is uncertain.[2] In practical terms, this means showing the smallest piece of evidence needed to make the next decision—not dumping a trace, not hiding the boundary, and not forcing the user to interpret statistical jargon.
 
-![A four-part evaluation board compares correctness, abstention, recovery usefulness, and human decision quality](/blog/ai-partial-answer-uncertainty/evaluation-matrix.png)
+![A four-part evaluation board compares correctness, abstention, recovery usefulness, and human decision quality](/blog/ai-partial-answer-uncertainty/evaluation-matrix.webp)
 
 ## An implementation pattern for production systems
 

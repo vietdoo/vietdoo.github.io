@@ -3,13 +3,13 @@ title: "Decision Trace cho AI Agent: Event Sourcing đường đi của Action m
 description: "Hướng dẫn production về decision trace theo mô hình event sourcing cho AI Agent: audit đường đi của action, điều tra incident, bảo vệ privacy và giải thích kết quả mà không biến chain-of-thought riêng tư thành schema log."
 pubDate: 2026-07-29
 category: "engineering"
-image: "/blog/decision-traces/hero.png"
+image: "/blog/decision-traces/hero.webp"
 lang: "vi"
 translationKey: "decision-traces-ai-agent-event-sourcing"
 draft: false
 ---
 
-![Whiteboard vẽ tay mô tả decision ledger của AI Agent, evidence reference, policy gate và đường replay](/blog/decision-traces/hero.png)
+![Whiteboard vẽ tay mô tả decision ledger của AI Agent, evidence reference, policy gate và đường replay](/blog/decision-traces/hero.webp)
 
 Tôi từng debug một automation đã làm đúng về mặt kỹ thuật, nhưng lại làm đúng vì một lý do sai. Action cuối cùng nhìn khá vô hại. Request trả về `200`, một dòng trong database đã được cập nhật, người dùng nhận được tin nhắn xác nhận lịch sự. Ba tiếng sau, có người đặt câu hỏi quan trọng nhất sau khi một hệ thống tự động đã thay đổi thế giới:
 
@@ -61,7 +61,7 @@ RequestReceived
 
 Thứ tự có ý nghĩa. Agent có thể tạo candidate action trước khi con người approve, nhưng candidate không giống accepted decision. Tool invocation có thể timeout sau khi hệ thống remote đã commit thay đổi, vì vậy `ToolInvocationTimedOut` không thể được coi là bằng chứng rằng chưa có gì xảy ra. Trace phải làm rõ các khác biệt này, thay vì ép mọi thứ vào một success flag.
 
-![Whiteboard vẽ tay event ledger cho AI Agent, nối request, evidence, policy, approval, tool execution và outcome bằng các mũi tên nhân quả](/blog/decision-traces/decision-ledger.png)
+![Whiteboard vẽ tay event ledger cho AI Agent, nối request, evidence, policy, approval, tool execution và outcome bằng các mũi tên nhân quả](/blog/decision-traces/decision-ledger.webp)
 
 Bài viết về decision trace của Streamkap mô tả một chuỗi tương tự, bắt đầu từ data event, đi qua context lookup, reasoning, action rồi tới outcome.[2] Bài học production không phải là copy nguyên tên event của một vendor. Điều quan trọng là chuỗi phải đủ rõ để người điều tra incident lần theo cùng một request qua data access, policy layer, agent runtime và business system.
 
@@ -132,7 +132,7 @@ Câu hỏi “có thể replay agent không?” vốn không rõ nghĩa. Có ít
 2. **Decision-path replay:** tái dựng evidence, policy, route, approval và tool outcome đã được ghi nhận tại thời điểm đó. Đây là operation điều tra.
 3. **Re-execution:** gọi lại model hoặc tool. Thế giới có thể đã thay đổi, provider có thể trả lời khác, operation có thể tạo side effect.
 
-![Whiteboard vẽ tay so sánh projection replay và decision-path replay an toàn với model re-execution và duplicate side effect có rủi ro](/blog/decision-traces/replay-vs-reexecute.png)
+![Whiteboard vẽ tay so sánh projection replay và decision-path replay an toàn với model re-execution và duplicate side effect có rủi ro](/blog/decision-traces/replay-vs-reexecute.webp)
 
 Incident console tốt nên có các button tách biệt cho ba operation này. “Rebuild projection” phải an toàn. “Show decision path” phải read-only. “Re-run tool” phải yêu cầu authorization rõ ràng, idempotency key mới hoặc reconciliation step, cùng cảnh báo blast radius dễ nhìn.
 
@@ -144,7 +144,7 @@ Audit system dễ xây nhất thường là hệ thống kém an toàn nhất: c
 
 Hướng dẫn minimum audit trail của ARMO phân biệt infrastructure log với application-layer agent-action log. Nguồn này khuyến nghị redact tại source và lưu data shape, sensitivity classification, semantic tag, byte count hoặc hash thay vì plaintext khi content không thực sự cần thiết.[3]
 
-![Whiteboard vẽ tay privacy boundary giữa prompt/tool content riêng tư và decision ledger đã redact, với hash và sensitivity label đi qua ranh giới](/blog/decision-traces/privacy-boundary.png)
+![Whiteboard vẽ tay privacy boundary giữa prompt/tool content riêng tư và decision ledger đã redact, với hash và sensitivity label đi qua ranh giới](/blog/decision-traces/privacy-boundary.webp)
 
 Retention đúng phụ thuộc domain. Healthcare workflow, public-sector service và developer sandbox không có cùng nghĩa vụ. Thiết kế nên trả lời bốn câu hỏi cho từng field:
 

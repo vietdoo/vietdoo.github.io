@@ -3,13 +3,13 @@ title: "Agent Policy as Code: Testing Authorization Rules Like Software"
 description: "A production playbook for turning AI-agent authorization requirements into executable policies, negative tests, safe rollouts, and enforceable decision boundaries."
 pubDate: 2026-01-02
 category: "security"
-image: "/blog/agent-policy-as-code-authorization-testing/hero.png"
+image: "/blog/agent-policy-as-code-authorization-testing/hero.webp"
 lang: "en"
 translationKey: "agent-policy-as-code-authorization-testing"
 draft: false
 ---
 
-![A hand-drawn AI agent turns a tenant rule into tested policy before reaching a tool gateway](/blog/agent-policy-as-code-authorization-testing/hero.png)
+![A hand-drawn AI agent turns a tenant rule into tested policy before reaching a tool gateway](/blog/agent-policy-as-code-authorization-testing/hero.webp)
 
 The incident looked like a data leak, but the first clue was smaller: an agent was allowed to call a tool that nobody remembered approving.
 
@@ -137,7 +137,7 @@ I prefer to design a request matrix before writing the final allow rule:
 | Missing tenant context | `customer.read` | Unknown | Deny | Missing scope must not become global scope. |
 | Support agent | `customer.update` | Same tenant | Require stronger policy | Read and write are different risk classes. |
 
-![A hand-drawn policy test matrix shows allow paths, deny paths, unknown tools, expired grants, and missing tenant context](/blog/agent-policy-as-code-authorization-testing/policy-test-matrix.png)
+![A hand-drawn policy test matrix shows allow paths, deny paths, unknown tools, expired grants, and missing tenant context](/blog/agent-policy-as-code-authorization-testing/policy-test-matrix.webp)
 
 The names will vary by system, but the shape is durable. Each test supplies a complete request input and asserts a decision plus a reason. The test should not merely assert that “some rule matched.” It should state the safety property the product depends on.
 
@@ -232,7 +232,7 @@ user intent
    -> tool executes only after an explicit allow
 ```
 
-![A hand-drawn enforcement boundary separates untrusted model output from the trusted application policy decision before a tool side effect](/blog/agent-policy-as-code-authorization-testing/enforcement-boundary.png)
+![A hand-drawn enforcement boundary separates untrusted model output from the trusted application policy decision before a tool side effect](/blog/agent-policy-as-code-authorization-testing/enforcement-boundary.webp)
 
 The model output is not authority. A tool description is not authority. A previously allowed call is not authority for a different resource. The decision must be made again when the application is about to cross the side-effect boundary.
 
@@ -352,7 +352,7 @@ The candidate comparison also benefits from a stable replay corpus. Include rece
 
 A policy is code, but it is also a control plane for real actions. A safe rollout has an explicit promotion gate.
 
-![A hand-drawn policy rollout moves from version 12 through a semantic diff, shadow evaluation, a promotion gate, a 5% canary, and rollback](/blog/agent-policy-as-code-authorization-testing/policy-rollout-diff.png)
+![A hand-drawn policy rollout moves from version 12 through a semantic diff, shadow evaluation, a promotion gate, a 5% canary, and rollback](/blog/agent-policy-as-code-authorization-testing/policy-rollout-diff.webp)
 
 A practical sequence is:
 

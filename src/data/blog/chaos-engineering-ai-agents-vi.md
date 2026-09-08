@@ -3,13 +3,13 @@ title: "Chaos Engineering cho AI Agent: Chủ động tiêm những lỗi produc
 description: "Playbook fault injection thực tế cho AI agent: tool timeout, provider outage, response sai cấu trúc, context stale, invariant phục hồi và promotion gate an toàn."
 pubDate: 2026-08-31
 category: "engineering"
-image: "/blog/chaos-engineering-ai-agents/hero.jpg"
+image: "/blog/chaos-engineering-ai-agents/hero.webp"
 lang: "vi"
 translationKey: "chaos-engineering-ai-agents"
 draft: false
 ---
 
-![Tín hiệu lỗi có kiểm soát đi qua workflow AI agent tới một release gate được bảo vệ](/blog/chaos-engineering-ai-agents/hero.jpg)
+![Tín hiệu lỗi có kiểm soát đi qua workflow AI agent tới một release gate được bảo vệ](/blog/chaos-engineering-ai-agents/hero.webp)
 
 AI agent trong production hiếm khi hỏng vì model bỗng nhiên không còn biết nói tiếng Anh. Nó hỏng vì dependency timeout sau khi agent đã lập kế hoạch, tool trả về một trang rỗng nhưng HTTP status vẫn là thành công, provider đổi shape của một field, hoặc context tưởng là mới thực ra đã stale.
 
@@ -49,7 +49,7 @@ Hãy tách workflow thành các boundary nơi action tiếp theo có thể thay 
 
 Matrix này có giá trị hơn danh sách dài các HTTP error vì nó nối fault với decision. Cùng là timeout nhưng vô hại với weather lookup chỉ đọc, còn nguy hiểm khi payment provider có thể đã nhận charge.
 
-![Fault matrix định tuyến timeout, rate limit, outage, malformed data, stale context và worker restart qua những agent run có thể quan sát](/blog/chaos-engineering-ai-agents/fault-matrix.png)
+![Fault matrix định tuyến timeout, rate limit, outage, malformed data, stale context và worker restart qua những agent run có thể quan sát](/blog/chaos-engineering-ai-agents/fault-matrix.webp)
 
 ## Định nghĩa safety envelope trước khi tiêm fault
 
@@ -64,7 +64,7 @@ Một safety envelope thực tế có bốn lớp:
 
 Experiment cần được version hóa. Ghi lại agent build, model identifier, prompt và tool version, fault profile, seed hoặc replay input, environment và oracle version. Không có evidence này, một pass khó tái lập còn một failure khó giải thích.
 
-![Synthetic data và reversible tool bao quanh một agent laboratory cô lập, có human approval gate và hard stop](/blog/chaos-engineering-ai-agents/safety-envelope.png)
+![Synthetic data và reversible tool bao quanh một agent laboratory cô lập, có human approval gate và hard stop](/blog/chaos-engineering-ai-agents/safety-envelope.webp)
 
 ## Fault profile phải mô hình hóa semantics, không chỉ transport error
 
@@ -131,7 +131,7 @@ Một recovery message trôi chảy không phải bằng chứng recovery đã x
 
 Action metamorphic relation trong ReliabilityBench gợi ý một pattern tốt: sau fault hoặc perturbation tương đương, correctness được quyết định bằng end-state equivalence thay vì wording giống nhau.[1] Ví dụ agent có thể nói “Tôi không thể hoàn tất reservation” hoặc “Reservation đang pending trong lúc inventory được refresh.” Cả hai đều có thể chấp nhận nếu state là pending, không có duplicate reservation và user nhận được next step trung thực.
 
-![State snapshot, invariant check, evidence capture và release gate xác minh agent có thật sự recover sau fault hay không](/blog/chaos-engineering-ai-agents/verification-oracle.png)
+![State snapshot, invariant check, evidence capture và release gate xác minh agent có thật sự recover sau fault hay không](/blog/chaos-engineering-ai-agents/verification-oracle.webp)
 
 Một oracle record tối thiểu có thể như sau:
 

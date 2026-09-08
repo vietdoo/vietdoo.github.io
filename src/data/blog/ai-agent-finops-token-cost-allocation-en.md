@@ -6,7 +6,7 @@ category: "engineering"
 lang: "en"
 translationKey: "ai-agent-finops-token-cost-allocation"
 draft: false
-image: "/blog/ai-agent-finops/hero.png"
+image: "/blog/ai-agent-finops/hero.webp"
 ---
 
 The first AI cost report I usually see is a monthly number: model spend went up 37 percent. It is precise enough to alarm finance and too vague to help engineering.
@@ -15,7 +15,7 @@ Which tenant caused the increase? Which workflow became more expensive? Did the 
 
 A monthly total cannot answer those questions. An AI agent is not one API call with one owner. It is a workflow that may route between models, retrieve context, call tools, retry after a timeout, ask for clarification, wait for a human, and produce an outcome whose business value is very different from the cost of the tokens used to reach it.
 
-![An AI agent FinOps ledger connects tenants and workflows to token usage, tool calls, shared infrastructure, budgets, and business outcomes](/blog/ai-agent-finops/hero.png)
+![An AI agent FinOps ledger connects tenants and workflows to token usage, tool calls, shared infrastructure, budgets, and business outcomes](/blog/ai-agent-finops/hero.webp)
 
 > **The thesis:** AI FinOps becomes useful when cost is allocated to the same dimensions by which the business manages work: tenant, workflow, outcome, and owner. Token usage is the meter, but accountable unit economics is the product.
 
@@ -116,7 +116,7 @@ CostEvent {
 }
 ```
 
-![An allocation ledger routes tenant, workflow, model, tool, and shared-platform usage into direct and shared cost buckets](/blog/ai-agent-finops/allocation-ledger.png)
+![An allocation ledger routes tenant, workflow, model, tool, and shared-platform usage into direct and shared cost buckets](/blog/ai-agent-finops/allocation-ledger.webp)
 
 A ledger event should preserve the quantity and price version used to calculate the amount. Provider pricing can change. A historical report should remain reproducible even after the provider publishes a new rate card.
 
@@ -278,7 +278,7 @@ BudgetEnvelope {
 }
 ```
 
-![A runtime budget envelope surrounds an AI workflow with soft limits, hard limits, optional work stopping, and a protected safety path](/blog/ai-agent-finops/budget-envelope.png)
+![A runtime budget envelope surrounds an AI workflow with soft limits, hard limits, optional work stopping, and a protected safety path](/blog/ai-agent-finops/budget-envelope.webp)
 
 The envelope can trigger actions at different thresholds.
 
@@ -321,7 +321,7 @@ Chargeback also needs a dispute process. A tenant should be able to ask which tr
 
 AI cost optimization is not one model swap. It is a sequence of decisions across the workflow.
 
-![A cost optimization frontier compares model quality, latency, token spend, cache reuse, tool fan-out, and accepted outcome rate](/blog/ai-agent-finops/optimization-frontier.png)
+![A cost optimization frontier compares model quality, latency, token spend, cache reuse, tool fan-out, and accepted outcome rate](/blog/ai-agent-finops/optimization-frontier.webp)
 
 ### Remove work that should not happen
 

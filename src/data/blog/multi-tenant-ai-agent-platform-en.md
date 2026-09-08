@@ -3,16 +3,16 @@ title: "Multi-Tenant AI Agent Platforms: Isolating Prompt, Tool, Memory, and Cos
 description: "A platform design for serving many tenants without letting prompts, tools, memories, traces, or noisy neighbors cross the boundary."
 pubDate: 2026-07-21
 category: "architecture"
-image: "/blog/multi-tenant-agent/hero.jpg"
+image: "/blog/multi-tenant-agent/hero.webp"
 lang: "en"
 translationKey: "multi-tenant-ai-agent-platform"
 draft: false
 ---
 
-![A multi-tenant AI platform with separate tenant workspaces connected to a shared control plane](/blog/multi-tenant-agent/hero.jpg)
+![A multi-tenant AI platform with separate tenant workspaces connected to a shared control plane](/blog/multi-tenant-agent/hero.webp)
 
 <figure class="blog-video">
-  <video controls preload="metadata" playsinline poster="/blog/multi-tenant-agent/hero.jpg" aria-label="Explainer video for this article, English version">
+  <video controls preload="metadata" playsinline poster="/blog/multi-tenant-agent/hero.webp" aria-label="Explainer video for this article, English version">
     <source src="/blog/multi-tenant-ai-agent-platform/video-en.mp4" type="video/mp4" />
     Your browser does not support HTML5 video.
   </video>
@@ -52,7 +52,7 @@ A useful request envelope should carry tenant identity and policy context from t
 
 The envelope is not a security boundary by itself. It is a carrier for decisions that must be enforced downstream. Every service should either receive a verified envelope or reject the request. Reconstructing `tenant_id` from an untrusted header in the middle of the request is not propagation; it is a confused-deputy risk.
 
-![A control plane governs onboarding, policy, routing, audit, and billing while tenant workspaces remain isolated](/blog/multi-tenant-agent/control-plane.jpg)
+![A control plane governs onboarding, policy, routing, audit, and billing while tenant workspaces remain isolated](/blog/multi-tenant-agent/control-plane.webp)
 
 A platform usually has two broad planes:
 
@@ -148,7 +148,7 @@ The platform also needs deletion semantics. If a tenant removes a document, does
 
 A tenant that submits a large batch can affect everyone through shared model concurrency, queue depth, vector search, GPU memory, or database connections. This is usually called the noisy-neighbor problem, but “performance issue” is too weak. Under pressure, teams disable limits, increase timeouts, or take fallback paths that can weaken data and policy controls.
 
-![Fair scheduling, per-tenant budgets, queues, and rate limits protect the platform from a bursty tenant](/blog/multi-tenant-agent/noisy-neighbor.jpg)
+![Fair scheduling, per-tenant budgets, queues, and rate limits protect the platform from a bursty tenant](/blog/multi-tenant-agent/noisy-neighbor.webp)
 
 Use several controls together:
 

@@ -3,13 +3,13 @@ title: "Mentor một RAG system: những gì production dạy mà tutorial khôn
 description: "Kiến trúc, sự cố production, và những gì tôi rút ra khi hướng dẫn một thực tập sinh xây chatbot RAG + dashboard trên Cloud — viết cho các kỹ sư khác đọc, không phải để kể lể."
 pubDate: 2026-02-06
 category: "engineering"
-image: "/blog/hanh-trinh-mentor-thuc-tap-sinh-ai/hero.jpg"
+image: "/blog/hanh-trinh-mentor-thuc-tap-sinh-ai/hero.webp"
 lang: "vi"
 translationKey: "hanh-trinh-mentor-thuc-tap-sinh-ai"
 draft: false
 ---
 
-![Mentor RAG pipeline từ zero đến production](/blog/hanh-trinh-mentor-thuc-tap-sinh-ai/hero.jpg)
+![Mentor RAG pipeline từ zero đến production](/blog/hanh-trinh-mentor-thuc-tap-sinh-ai/hero.webp)
 
 > **TL;DR** — 8 tuần, 1 thực tập sinh năm cuối, 1 hệ thống RAG + Dashboard được triển khai và chạy thật trên Cloud. Kết quả: 2.639 thủ tục hành chính được index thành 20.916+ vector, độ chính xác retrieval 90,8% trên 308 phiên chat thực tế, latency truy vấn giảm ~70% sau một vòng tối ưu pipeline. Bài viết này không phải retrospective cảm tính — nó là log kỹ thuật của những quyết định đúng, sai, và cách tôi mentor một người mới vào nghề qua từng quyết định đó.
 
@@ -56,7 +56,7 @@ Mỗi chunk được enrich thêm metadata (`ma_thu_tuc`, `section_type`, `so_va
 
 ## Khi hệ thống chạm production: log các sự cố thật
 
-![Sự cố production 3h sáng](/blog/hanh-trinh-mentor-thuc-tap-sinh-ai/production-incident.jpg)
+![Sự cố production 3h sáng](/blog/hanh-trinh-mentor-thuc-tap-sinh-ai/production-incident.webp)
 
 Đây là phần tôi nghĩ có giá trị nhất cho dev đọc, vì nó không nằm trong sách nào cả:
 
@@ -91,7 +91,7 @@ Con số quan trọng nhất với tôi không phải 90,8% — mà là **Dashbo
 
 ## Kết
 
-![Mentor và thực tập sinh hoàn thành hành trình](/blog/hanh-trinh-mentor-thuc-tap-sinh-ai/ending.jpg)
+![Mentor và thực tập sinh hoàn thành hành trình](/blog/hanh-trinh-mentor-thuc-tap-sinh-ai/ending.webp)
 
 Điểm cuối tôi chấm: 8.x/10. Không phải điểm tuyệt đối — vẫn còn latency cần tối ưu thêm, vẫn còn vài chi tiết trình bày cần rà soát. Nhưng tôi tin một đánh giá trung thực, có cả điểm mạnh lẫn điểm cần cải thiện cụ thể, có giá trị hơn nhiều so với một bảng điểm đẹp không phản ánh đúng thực tế.
 

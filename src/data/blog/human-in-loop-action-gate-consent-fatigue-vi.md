@@ -6,17 +6,17 @@ category: "architecture"
 lang: "vi"
 translationKey: "human-in-loop-action-gate-consent-fatigue"
 draft: false
-image: "/blog/human-action-gate/hero.png"
+image: "/blog/human-action-gate/hero.webp"
 ---
 
 “Human-in-the-loop” thường được triển khai thành một nút **Approve**. Agent đề xuất một việc, con người click một lần rồi hệ thống chạy tiếp. Trên diagram, thiết kế này trông có trách nhiệm. Trong production, nó rất dễ trở thành một nghi thức mà người ta thực hiện mà không đọc.
 
 Vấn đề không phải con người bất cẩn. Vấn đề là approval request chung chung đòi hỏi quá nhiều trust nhưng cung cấp quá ít context. Nếu cùng một người nhìn thấy năm mươi prompt đều có chữ “approve agent action”, hành vi an toàn nhất có thể biến thành click cho xong.
 
-![Một reviewer đứng trước action gate rõ ràng, nhìn thấy target, effect, risk và expiry trước khi action được execute](/blog/human-action-gate/hero.png)
+![Một reviewer đứng trước action gate rõ ràng, nhìn thấy target, effect, risk và expiry trước khi action được execute](/blog/human-action-gate/hero.webp)
 
 <figure class="blog-video">
-  <video controls preload="metadata" playsinline poster="/blog/human-action-gate/hero.png" aria-label="Video giải thích nội dung bài viết, phiên bản tiếng Việt">
+  <video controls preload="metadata" playsinline poster="/blog/human-action-gate/hero.webp" aria-label="Video giải thích nội dung bài viết, phiên bản tiếng Việt">
     <source src="/blog/human-in-loop-action-gate-consent-fatigue/video-vi.mp4" type="video/mp4" />
     Trình duyệt của bạn không hỗ trợ video HTML5.
   </video>
@@ -63,7 +63,7 @@ Risk tier giúp rule trở nên rõ ràng:
 
 Tier nên mô tả effect, không phải confidence của model. Model tự tin vẫn có thể sai. Một read có confidence thấp có thể vô hại, trong khi một delete có confidence cao vẫn là high impact.
 
-![Một risk ladder đưa action ít impact đi tự động, action trung bình tới policy review và action impact cao tới human approval có context](/blog/human-action-gate/risk-ladder.png)
+![Một risk ladder đưa action ít impact đi tự động, action trung bình tới policy review và action impact cao tới human approval có context](/blog/human-action-gate/risk-ladder.webp)
 
 Risk cũng nên tính target, data classification, khả năng reverse, blast radius và action có mới với user hoặc tenant không. Cùng một tool có thể low risk ở context này nhưng critical ở context khác.
 

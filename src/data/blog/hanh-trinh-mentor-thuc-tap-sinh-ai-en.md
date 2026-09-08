@@ -3,13 +3,13 @@ title: "Mentoring a RAG System: What Production Teaches That Tutorials Don't"
 description: "Architecture, production incidents, and key takeaways from guiding a senior intern to build a RAG chatbot + dashboard on Cloud — written for engineers, not to brag."
 pubDate: 2026-02-06
 category: "engineering"
-image: "/blog/hanh-trinh-mentor-thuc-tap-sinh-ai/hero.jpg"
+image: "/blog/hanh-trinh-mentor-thuc-tap-sinh-ai/hero.webp"
 lang: "en"
 translationKey: "hanh-trinh-mentor-thuc-tap-sinh-ai"
 draft: false
 ---
 
-![Mentoring a RAG pipeline from zero to production](/blog/hanh-trinh-mentor-thuc-tap-sinh-ai/hero.jpg)
+![Mentoring a RAG pipeline from zero to production](/blog/hanh-trinh-mentor-thuc-tap-sinh-ai/hero.webp)
 
 > **TL;DR** — 8 weeks, 1 senior intern, 1 RAG + Dashboard system running live in production on Cloud. Results: 2,639 public administrative procedures indexed into 20,916+ vectors, 90.8% retrieval accuracy over 308 real chat sessions, query latency reduced by ~70% after one round of pipeline optimization. This article isn't an emotional retrospective — it's an engineering log of decisions made right and wrong, and how I mentored a newcomer through each decision.
 
@@ -56,7 +56,7 @@ Each chunk was enriched with metadata (`ma_thu_tuc`, `section_type`, `so_van_ban
 
 ## When the System Hit Production: Live Incident Logs
 
-![3 AM production incident](/blog/hanh-trinh-mentor-thuc-tap-sinh-ai/production-incident.jpg)
+![3 AM production incident](/blog/hanh-trinh-mentor-thuc-tap-sinh-ai/production-incident.webp)
 
 This is the section I believe carries the most value for developers, as it isn't found in any textbook:
 
@@ -91,7 +91,7 @@ The most important metric to me wasn't 90.8% — it was that the **Ministry/Depa
 
 ## Conclusion
 
-![Mentor and mentee finishing the journey](/blog/hanh-trinh-mentor-thuc-tap-sinh-ai/ending.jpg)
+![Mentor and mentee finishing the journey](/blog/hanh-trinh-mentor-thuc-tap-sinh-ai/ending.webp)
 
 Final grade I awarded: 8.x/10. Not a perfect score — there is still latency to optimize and presentation details to refine. But I believe an honest evaluation, highlighting both strengths and specific areas for improvement, is far more valuable than a padded report card that doesn't reflect reality.
 

@@ -3,13 +3,13 @@ title: "Quản trị thay đổi cho AI Agent: Phát hiện Drift trước khi A
 description: "Playbook production để phát hiện drift ở tool, policy, schema, permission và world state trước khi AI agent biến một plan từng hợp lệ thành action hỏng hoặc không an toàn."
 pubDate: 2026-04-22
 category: "engineering"
-image: "/blog/ai-agent-drift/hero.png"
+image: "/blog/ai-agent-drift/hero.webp"
 lang: "vi"
 translationKey: "ai-agent-drift-management"
 draft: false
 ---
 
-![AI agent đối chiếu plan đã lưu với tool, policy, permission và world state đang thay đổi trước khi thực hiện action](/blog/ai-agent-drift/hero.png)
+![AI agent đối chiếu plan đã lưu với tool, policy, permission và world state đang thay đổi trước khi thực hiện action](/blog/ai-agent-drift/hero.webp)
 
 Sự cố nhìn bề ngoài giống như một tool bị lỗi.
 
@@ -39,7 +39,7 @@ Nhiều team dùng “drift” như từ đồng nghĩa với việc chất lư�
 
 Các nhóm này có thể chồng lên nhau. Một policy deployment có thể làm thay đổi permission cần thiết. Một schema change có thể mở ra side effect mới. Một retrieval refresh có thể cho thấy recommendation cũ không còn đúng. Mục đích của taxonomy không phải là tạo bảy dashboard. Mục đích là buộc hệ thống khai báo rõ **thay đổi nào sẽ invalidate plan**.
 
-![Bản đồ drift nhiều lớp nối tool contract, policy, permission, data, model và world state vào một agent plan](/blog/ai-agent-drift/drift-map.png)
+![Bản đồ drift nhiều lớp nối tool contract, policy, permission, data, model và world state vào một agent plan](/blog/ai-agent-drift/drift-map.webp)
 
 ## Plan cần một dependency manifest
 
@@ -220,7 +220,7 @@ Nếu số affected row bằng zero, action chưa chứng minh được precondi
 
 Pattern này không chỉ là database optimization. Nó biến world-state drift thành một state transition có giới hạn. Agent có thể thông minh trong việc chọn path mới, nhưng commit boundary vẫn nên boring và deterministic.
 
-![Preflight gate so sánh plan fingerprint và version hiện tại trước khi route run sang continue, refresh, replan, downgrade hoặc refuse](/blog/ai-agent-drift/preflight-gate.png)
+![Preflight gate so sánh plan fingerprint và version hiện tại trước khi route run sang continue, refresh, replan, downgrade hoặc refuse](/blog/ai-agent-drift/preflight-gate.webp)
 
 ## Không phải drift nào cũng cần full replan
 
@@ -236,7 +236,7 @@ Phản ứng thái quá với mọi thay đổi sẽ tạo thêm latency và cos
 
 **Refuse hoặc escalate** khi action irreversible, authorization bị thiếu, policy mơ hồ hoặc hệ thống không chứng minh được current state đáng tin.
 
-![Response ladder gồm continue, refresh, replan, downgrade và refuse, tăng dần mức thận trọng trước drift](/blog/ai-agent-drift/response-ladder.png)
+![Response ladder gồm continue, refresh, replan, downgrade và refuse, tăng dần mức thận trọng trước drift](/blog/ai-agent-drift/response-ladder.webp)
 
 UX nên làm cho các kết quả này dễ hiểu. “Tôi dừng lại vì order đã thay đổi trong lúc chờ; đây là state hiện tại” tốt hơn một tool error chung chung. Thông báo không cần lộ policy nội bộ nhạy cảm, nhưng phải cho user biết bước tiếp theo hữu ích.
 

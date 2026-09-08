@@ -3,16 +3,16 @@ title: "Durable Execution cho AI Agent: Checkpoint, Resume và Retry an toàn"
 description: "Cách giúp workflow AI dài hạn sống sót qua crash, timeout, duplicate delivery và thời gian chờ human mà không biến recovery thành một ứng dụng thứ hai."
 pubDate: 2026-07-14
 category: "engineering"
-image: "/blog/durable-agent/hero.jpg"
+image: "/blog/durable-agent/hero.webp"
 lang: "vi"
 translationKey: "durable-execution-ai-agent"
 draft: false
 ---
 
-![Workflow AI agent tiếp tục từ checkpoint bền vững sau khi worker bị crash](/blog/durable-agent/hero.jpg)
+![Workflow AI agent tiếp tục từ checkpoint bền vững sau khi worker bị crash](/blog/durable-agent/hero.webp)
 
 <figure class="blog-video">
-  <video controls preload="metadata" playsinline poster="/blog/durable-agent/hero.jpg" aria-label="Video giải thích nội dung bài viết, phiên bản tiếng Việt">
+  <video controls preload="metadata" playsinline poster="/blog/durable-agent/hero.webp" aria-label="Video giải thích nội dung bài viết, phiên bản tiếng Việt">
     <source src="/blog/durable-execution-ai-agent/video-vi.mp4" type="video/mp4" />
     Trình duyệt của bạn không hỗ trợ video HTML5.
   </video>
@@ -37,7 +37,7 @@ Trong một process bình thường, local variable, call stack và in-memory qu
 
 Durable workflow thay đổi abstraction. Worker có thể thay thế; workflow history thì không. Worker mới có thể reconstruct state cần thiết và tiếp tục từ một điểm đã biết.
 
-![Event history của workflow giữ checkpoint và cho worker mới replay các bước đã hoàn thành](/blog/durable-agent/checkpoint-ledger.jpg)
+![Event history của workflow giữ checkpoint và cho worker mới replay các bước đã hoàn thành](/blog/durable-agent/checkpoint-ledger.webp)
 
 Với AI agent, durable state nên phân biệt ít nhất bốn lớp:
 
@@ -103,7 +103,7 @@ RECEIVED
 
 Mỗi transition cần precondition và evidence. `EFFECT_CONFIRMED` không thể suy ra từ việc model nói “done”; nó cần provider receipt, database version hoặc reconciliation result. Nếu worker crash sau khi gửi email nhưng trước khi ghi confirmation, recovery phải kiểm tra effect ledger trước khi gửi lại.
 
-![Worker lỗi biến mất, worker thay thế replay durable state và resume từ checkpoint an toàn cuối cùng](/blog/durable-agent/replay-recovery.jpg)
+![Worker lỗi biến mất, worker thay thế replay durable state và resume từ checkpoint an toàn cuối cùng](/blog/durable-agent/replay-recovery.webp)
 
 Resume algorithm nên nhàm chán:
 
@@ -169,7 +169,7 @@ Cách này không biến external provider thành transaction. Nó chỉ ngăn w
 
 Agent có thể phải chờ human approval, tài liệu, ngày đã định hoặc external process chậm. Giữ một worker thread sống là tốn kém và dễ lỗi. Durable execution cho workflow ngủ mà không xem sleep như một process đang chạy.
 
-![Các agent job dài hạn chờ, thức dậy, retry và di chuyển qua worker pool trong khi dùng chung durable history](/blog/durable-agent/worker-pool.jpg)
+![Các agent job dài hạn chờ, thức dậy, retry và di chuyển qua worker pool trong khi dùng chung durable history](/blog/durable-agent/worker-pool.webp)
 
 Workflow nên lưu điều kiện thức dậy, không chỉ đặt timer trong memory:
 

@@ -3,13 +3,13 @@ title: "Token-Optimized Spring Boot Codebase Architecture"
 description: "A guide to structuring source code to help AI understand faster, generate accurately, and reduce token costs throughout the product development lifecycle with Java 21 & Spring Boot 3.x."
 pubDate: 2026-03-06
 category: "architecture"
-image: "/blog/spring-boot-ai-code-structure/springboot-ai-cover.jpg"
+image: "/blog/spring-boot-ai-code-structure/springboot-ai-cover.webp"
 lang: "en"
 translationKey: "spring-boot-ai-code-structure"
 draft: false
 ---
 
-![Token-Optimized Spring Boot Codebase Architecture](/blog/spring-boot-ai-code-structure/springboot-ai-cover.jpg)
+![Token-Optimized Spring Boot Codebase Architecture](/blog/spring-boot-ai-code-structure/springboot-ai-cover.webp)
 
 * **Audience**: Developers & Tech Leads
 * **Tech Stack**: Java 21 · Spring Boot 3.x
@@ -80,7 +80,7 @@ Each feature is a self-contained vertical slice: `controller` → `service` → 
 
 ### COMPARISON: Layered (Traditional) vs Feature-based
 
-![Layered Architecture vs Feature-based AI-Friendly Architecture](/blog/spring-boot-ai-code-structure/layered-vs-feature.jpg)
+![Layered Architecture vs Feature-based AI-Friendly Architecture](/blog/spring-boot-ai-code-structure/layered-vs-feature.webp)
 
 For the same business change — the number of files AI must load is vastly different.
 
@@ -179,7 +179,7 @@ CHANGELOG.md           · Public API change history.
 
 External code only sees `api/` — the rest is a black box for both developers and AI.
 
-![Module Boundary Contract Architecture Diagram](/blog/spring-boot-ai-code-structure/module-boundary-contract.jpg)
+![Module Boundary Contract Architecture Diagram](/blog/spring-boot-ai-code-structure/module-boundary-contract.webp)
 
 ```text
 OrderModule ──> billing/api ──> [ billing (internal) ]
@@ -235,7 +235,7 @@ Each anti-pattern below pulls excessive files into context.
 
 Leverage feature folders to save tokens at every step.
 
-![5-Step AI Prompting Workflow Diagram](/blog/spring-boot-ai-code-structure/ai-prompting-workflow.jpg)
+![5-Step AI Prompting Workflow Diagram](/blog/spring-boot-ai-code-structure/ai-prompting-workflow.webp)
 
 1. **Locate**: Target only the specific feature folder — don't paste the whole repo.
 2. **Anchor**: Attach `README.md` + `ARCHITECTURE.md` of that feature.
