@@ -969,6 +969,26 @@ html[data-ui-theme="light"]
   border-color: var(--light-line-strong) !important;
 }
 
+/* Intro card Tooltip popup (face button easter egg) — light mode */
+html[data-ui-theme="light"] .intro-tooltip-bubble {
+  background: var(--light-card) !important;
+  color: var(--light-ink-strong) !important;
+  border-color: var(--light-accent) !important;
+  box-shadow: 2px 2px 0 var(--light-accent) !important;
+}
+
+html[data-ui-theme="light"] .intro-tooltip-bubble::after {
+  background: var(--light-card) !important;
+  box-shadow: 2px 2px 0 var(--light-accent) !important;
+}
+
+/* Intro card social Button (bg-darkslate-900) — light mode */
+html[data-ui-theme="light"] .card:has(#memoji-avatar) button.bg-darkslate-900,
+html[data-ui-theme="light"] .card:has(#memoji-avatar) [class*="bg-darkslate-9"] {
+  background: var(--light-surface-strong) !important;
+  color: var(--light-ink-strong) !important;
+}
+
 /* Blog: keep the photograph dramatic, but make the surrounding feed paper-clear. */
 html[data-ui-theme="light"] .blog-card-shell .blog-recent-feed {
   border-color: var(--light-line) !important;
@@ -1008,95 +1028,38 @@ html[data-ui-theme="light"] .blog-billboard-container .text-white\/40 {
 html[data-ui-theme="light"] .card:has(.visit-card-bg) {
   background: var(--light-card) !important;
   color: var(--light-ink-strong) !important;
-  border-color: var(--light-line-strong) !important;
+  border-color: var(--light-line) !important;
+  border-radius: 14px !important;
   box-shadow:
-    0 12px 28px rgba(76, 57, 51, 0.14),
-    inset 0 1px 0 rgba(255, 250, 241, 0.7) !important;
+    0 12px 28px var(--light-shadow),
+    0 1px 0 rgba(255, 255, 255, 0.55) inset !important;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease, background 0.2s ease !important;
 }
 
 html[data-ui-theme="light"] .card:has(.visit-card-bg) .visit-card-bg {
-  background:
-    radial-gradient(
-      circle at 78% 20%,
-      rgba(184, 117, 88, 0.24),
-      transparent 34%
-    ),
-    linear-gradient(135deg, #e8d8c3 0%, #d7c0a7 54%, #c99f87 100%) !important;
-}
-
-html[data-ui-theme="light"] .card:has(.visit-card-bg) .visit-card-vignette {
-  background: radial-gradient(
-    ellipse at center,
-    rgba(255, 249, 240, 0.12) 0%,
-    rgba(102, 67, 56, 0.18) 100%
-  ) !important;
-}
-
-html[data-ui-theme="light"] .card:has(.visit-card-bg) .visit-card-edge-fade {
-  background: linear-gradient(
-    to bottom,
-    rgba(118, 76, 60, 0.16),
-    transparent
-  ) !important;
-}
-
-html[data-ui-theme="light"]
-  .card:has(.visit-card-bg)
-  .visit-card-edge-fade.bottom-0 {
-  background: linear-gradient(
-    to top,
-    rgba(118, 76, 60, 0.16),
-    transparent
-  ) !important;
+  background: transparent !important;
 }
 
 html[data-ui-theme="light"] .card:has(.visit-card-bg) h2 {
   color: var(--light-ink-strong) !important;
-  text-shadow: 0 1px 0 rgba(255, 250, 241, 0.55);
-}
-
-html[data-ui-theme="light"] .card:has(.visit-card-bg) .visit-card-count {
-  color: var(--light-ink-strong) !important;
-  font-weight: 700;
-  letter-spacing: 0.01em;
-  text-shadow: 0 1px 0 rgba(255, 250, 241, 0.45);
-}
-
-html[data-ui-theme="light"] .card:has(.visit-card-bg) .visit-card-marquee {
-  opacity: 0.28;
-}
-
-html[data-ui-theme="light"]
-  .card:has(.visit-card-bg)
-  .visit-card-marquee
-  .text-primary-400,
-html[data-ui-theme="light"]
-  .card:has(.visit-card-bg)
-  .visit-card-marquee
-  .text-white\/30 {
-  color: var(--light-accent-strong) !important;
-}
-
-html[data-ui-theme="light"]
-  .card:has(.visit-card-bg)
-  .visit-card-marquee
-  .text-white\/80,
-html[data-ui-theme="light"]
-  .card:has(.visit-card-bg)
-  .visit-card-marquee
-  .text-white\/15 {
-  color: var(--light-ink-soft) !important;
 }
 
 html[data-ui-theme="light"] .card:has(.visit-card-bg) > a > svg {
   color: var(--light-accent-strong) !important;
+  transition: color 0.2s ease, transform 0.1s ease-in-out !important;
 }
 
 html[data-ui-theme="light"] .card:has(.visit-card-bg):hover {
-  border-color: var(--light-accent) !important;
+  background: var(--light-card-hover) !important;
+  border-color: #dc2626 !important;
   box-shadow:
-    0 16px 30px rgba(76, 57, 51, 0.18),
-    inset 0 1px 0 rgba(255, 250, 241, 0.82) !important;
+    0 0 0 1.5px rgba(220, 38, 38, 0.4),
+    0 16px 34px rgba(220, 38, 38, 0.16),
+    0 1px 0 rgba(255, 255, 255, 0.7) inset !important;
+}
+
+html[data-ui-theme="light"] .card:has(.visit-card-bg):hover > a > svg {
+  color: #dc2626 !important;
 }
 
 /* ── Header navigation light mode refinement ───────────────── */
@@ -1452,6 +1415,21 @@ html[data-ui-theme="light"] .blog-reading-content a {
   ) !important;
 }
 
+/* ── Dark-mode: code block (pre) visual improvements ────────────── */
+.blog-reading-content pre {
+  /* Fix: bẻ dòng khi chuỗi quá dài (URL, transform string, v.v.) */
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+  overflow-x: hidden;
+
+  /* Subtle border + depth */
+  border: 1px solid rgba(255, 255, 255, 0.07);
+  border-radius: 0.6rem;
+  box-shadow:
+    0 4px 20px rgba(0, 0, 0, 0.35),
+    inset 0 1px 0 rgba(255, 255, 255, 0.04);
+}
+
 html[data-ui-theme="light"] .blog-reading-content blockquote {
   border-left-color: var(--light-accent) !important;
   background: #f0e6d8 !important;
@@ -1465,6 +1443,10 @@ html[data-ui-theme="light"] .blog-reading-content pre {
   background: #2b2928 !important;
   color: #fbf4e9 !important;
   box-shadow: 0 8px 18px rgba(54, 45, 42, 0.13) !important;
+  /* Fix: bẻ dòng khi chuỗi quá dài */
+  white-space: pre-wrap !important;
+  overflow-wrap: anywhere !important;
+  overflow-x: hidden !important;
 }
 
 html[data-ui-theme="light"] .blog-reading-content pre code {
