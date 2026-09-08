@@ -46,14 +46,14 @@ const { colSpan = "md:col-span-1 lg:col-span-2" } = Astro.props;
       const ctx = canvas.getContext("2d");
       if (!ctx) return;
 
-      const CELL_SIZE = 22;
+      let cellSize = 18;
       let width = 0;
       let height = 0;
       let cols = 0;
-      let rows = 0;
+      let rows = 5;
       let offsetX = 0;
       let offsetY = 0;
-      const obstacles = new Set();
+      const obstacles = new Map();
       let start = { c: 0, r: 0 };
       let target = { c: 0, r: 0 };
       let exploredNodes = [];
@@ -115,10 +115,13 @@ const { colSpan = "md:col-span-1 lg:col-span-2" } = Astro.props;
         canvas.height = Math.floor(height * dpr);
         ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
 
-        cols = Math.max(6, Math.floor((width - 16) / CELL_SIZE));
-        rows = Math.max(3, Math.floor((height - 12) / CELL_SIZE));
-        offsetX = (width - cols * CELL_SIZE) / 2 + CELL_SIZE / 2;
-        offsetY = (height - rows * CELL_SIZE) / 2 + CELL_SIZE / 2;
+        // Fixed to exactly 5 rows as requested
+        rows = 5;
+        const padY = 16;
+        cellSize = Math.max(14, Math.min(21, Math.floor((height - padY) / (rows - 1))));
+        cols = Math.max(8, Math.floor((width - 24) / cellSize) + 1);
+        offsetX = (width - (cols - 1) * cellSize) / 2;
+        offsetY = (height - (rows - 1) * cellSize) / 2;
 
         startNewJourney(true);
       }
@@ -137,11 +140,15 @@ const { colSpan = "md:col-span-1 lg:col-span-2" } = Astro.props;
 
       function generateObstacles() {
         obstacles.clear();
-        const count = Math.floor(cols * rows * 0.12);
+        // Number of obstacles: about 11% of cells
+        const count = Math.floor(cols * rows * 0.11);
         for (let i = 0; i < count; i++) {
           const c = Math.floor(Math.random() * cols);
           const r = Math.floor(Math.random() * rows);
-          obstacles.add(key(c, r));
+          // 60% trees, 40% rocks
+          const type = Math.random() < 0.6 ? "tree" : "rock";
+          const variant = Math.random() < 0.5 ? 0 : 1;
+          obstacles.set(key(c, r), { type, variant });
         }
       }
 
@@ -242,8 +249,8 @@ const { colSpan = "md:col-span-1 lg:col-span-2" } = Astro.props;
 
       function pos(c, r) {
         return {
-          x: offsetX + c * CELL_SIZE,
-          y: offsetY + r * CELL_SIZE,
+          x: offsetX + c * cellSize,
+          y: offsetY + r * cellSize,
         };
       }
 
@@ -253,8 +260,8 @@ const { colSpan = "md:col-span-1 lg:col-span-2" } = Astro.props;
           const rect = canvas.getBoundingClientRect();
           const mx = e.clientX - rect.left;
           const my = e.clientY - rect.top;
-          const c = Math.round((mx - offsetX) / CELL_SIZE);
-          const r = Math.round((my - offsetY) / CELL_SIZE);
+          const c = Math.round((mx - offsetX) / cellSize);
+          const r = Math.round((my - offsetY) / cellSize);
 
           if (c >= 0 && c < cols && r >= 0 && r < rows) {
             if (!hoverTarget || hoverTarget.c !== c || hoverTarget.r !== r) {
@@ -280,6 +287,87 @@ const { colSpan = "md:col-span-1 lg:col-span-2" } = Astro.props;
           isHovered = false;
           hoverTarget = null;
         });
+      }
+
+      function drawObstacle(p, item, isLight) {
+        if (!item) return;
+        ctx.save();
+        if (item.type === "tree") {
+          if (item.variant === 0) {
+            // Pine tree (cây thông)
+            ctx.fillStyle = isLight ? "rgba(120, 80, 50, 0.7)" : "rgba(160, 110, 70, 0.5)";
+            ctx.fillRect(p.x - 0.75, p.y + 1, 1.5, 3.5);
+
+            // Tier 1 (bottom)
+            ctx.fillStyle = isLight ? "rgba(22, 101, 52, 0.75)" : "rgba(16, 185, 129, 0.5)";
+            ctx.beginPath();
+            ctx.moveTo(p.x, p.y - 4);
+            ctx.lineTo(p.x + 3.8, p.y + 1.8);
+            ctx.lineTo(p.x - 3.8, p.y + 1.8);
+            ctx.closePath();
+            ctx.fill();
+
+            // Tier 2 (top)
+            ctx.fillStyle = isLight ? "rgba(34, 197, 94, 0.85)" : "rgba(52, 211, 153, 0.65)";
+            ctx.beginPath();
+            ctx.moveTo(p.x, p.y - 6);
+            ctx.lineTo(p.x + 2.8, p.y - 1);
+            ctx.lineTo(p.x - 2.8, p.y - 1);
+            ctx.closePath();
+            ctx.fill();
+          } else {
+            // Round canopy tree (cây tán tròn)
+            ctx.fillStyle = isLight ? "rgba(120, 80, 50, 0.7)" : "rgba(160, 110, 70, 0.5)";
+            ctx.fillRect(p.x - 0.75, p.y + 1, 1.5, 3.5);
+
+            ctx.fillStyle = isLight ? "rgba(34, 197, 94, 0.7)" : "rgba(34, 197, 94, 0.5)";
+            ctx.beginPath();
+            ctx.arc(p.x, p.y - 1.5, 4, 0, Math.PI * 2);
+            ctx.fill();
+
+            // Foliage highlight
+            ctx.fillStyle = isLight ? "rgba(74, 222, 128, 0.8)" : "rgba(110, 231, 183, 0.65)";
+            ctx.beginPath();
+            ctx.arc(p.x - 1, p.y - 2.5, 1.6, 0, Math.PI * 2);
+            ctx.fill();
+          }
+        } else {
+          // Rock (cục đá)
+          if (item.variant === 0) {
+            // Faceted boulder (tảng đá góc cạnh)
+            ctx.fillStyle = isLight ? "rgba(100, 116, 139, 0.55)" : "rgba(148, 163, 184, 0.45)";
+            ctx.beginPath();
+            ctx.moveTo(p.x - 3.5, p.y + 2.5);
+            ctx.lineTo(p.x - 2.8, p.y - 1.8);
+            ctx.lineTo(p.x + 1.2, p.y - 3.2);
+            ctx.lineTo(p.x + 3.8, p.y - 0.5);
+            ctx.lineTo(p.x + 3.0, p.y + 2.8);
+            ctx.closePath();
+            ctx.fill();
+
+            // Light facet
+            ctx.fillStyle = isLight ? "rgba(148, 163, 184, 0.5)" : "rgba(203, 213, 225, 0.6)";
+            ctx.beginPath();
+            ctx.moveTo(p.x - 2.8, p.y - 1.8);
+            ctx.lineTo(p.x + 1.2, p.y - 3.2);
+            ctx.lineTo(p.x + 0.2, p.y + 0.2);
+            ctx.lineTo(p.x - 3.5, p.y + 2.5);
+            ctx.closePath();
+            ctx.fill();
+          } else {
+            // Twin pebbles (cặp đá nhỏ)
+            ctx.fillStyle = isLight ? "rgba(113, 113, 122, 0.55)" : "rgba(161, 161, 170, 0.45)";
+            ctx.beginPath();
+            ctx.ellipse(p.x - 1.6, p.y + 0.8, 3, 2.2, -0.2, 0, Math.PI * 2);
+            ctx.fill();
+
+            ctx.fillStyle = isLight ? "rgba(161, 161, 170, 0.65)" : "rgba(212, 212, 216, 0.6)";
+            ctx.beginPath();
+            ctx.ellipse(p.x + 2.2, p.y + 1.4, 2.2, 1.6, 0.3, 0, Math.PI * 2);
+            ctx.fill();
+          }
+        }
+        ctx.restore();
       }
 
       function draw() {
@@ -315,24 +403,18 @@ const { colSpan = "md:col-span-1 lg:col-span-2" } = Astro.props;
         }
         ctx.stroke();
 
-        // 2. Draw subtle grid node dots & obstacles
+        // 2. Draw subtle grid node dots & obstacles (trees & rocks)
         const dotColor = isLight
           ? "rgba(76, 57, 51, 0.16)"
           : "rgba(255, 255, 255, 0.1)";
-        const obstacleColor = isLight
-          ? "rgba(76, 57, 51, 0.08)"
-          : "rgba(255, 255, 255, 0.035)";
 
         for (let c = 0; c < cols; c++) {
           for (let r = 0; r < rows; r++) {
             const p = pos(c, r);
-            const isObstacle = obstacles.has(key(c, r));
+            const obstacle = obstacles.get(key(c, r));
 
-            if (isObstacle) {
-              ctx.fillStyle = obstacleColor;
-              ctx.beginPath();
-              ctx.arc(p.x, p.y, 1.8, 0, Math.PI * 2);
-              ctx.fill();
+            if (obstacle) {
+              drawObstacle(p, obstacle, isLight);
             } else {
               ctx.fillStyle = dotColor;
               ctx.beginPath();
