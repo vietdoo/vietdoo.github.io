@@ -622,12 +622,15 @@ export default function VietnamMap() {
         }[] = [];
         const subdomains = ["a", "b", "c"];
 
+        const cartoApiKey = import.meta.env.PUBLIC_CARTO_API_KEY || "";
+        const keyParam = cartoApiKey ? `?key=${cartoApiKey}` : "";
+
         for (let tyIdx = minTileY; tyIdx <= maxTileY; tyIdx++) {
           for (let txIdx = minTileX; txIdx <= maxTileX; txIdx++) {
             const tileX = x0 + txIdx * tileSizeProj;
             const tileY = y0 + tyIdx * tileSizeProj;
             const subdomain = subdomains[(txIdx + tyIdx) % subdomains.length];
-            const url = `https://${subdomain}.basemaps.cartocdn.com/dark_nolabels/${z}/${txIdx}/${tyIdx}.png`;
+            const url = `https://${subdomain}.basemaps.cartocdn.com/dark_nolabels/${z}/${txIdx}/${tyIdx}.png${keyParam}`;
             tiles.push({
               id: `${z}-${txIdx}-${tyIdx}`,
               url,
@@ -1392,6 +1395,28 @@ export default function VietnamMap() {
             </div>
           </>
         )}
+      </div>
+
+      {/* Basemap Attribution */}
+      <div class="absolute bottom-2 left-3 z-10 text-[10px] text-slate-500/80 pointer-events-auto select-none flex items-center gap-1 font-mono">
+        <span>©</span>
+        <a
+          href="https://carto.com/attributions"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="hover:text-slate-400 underline decoration-slate-600/50"
+        >
+          CARTO
+        </a>
+        <span>•</span>
+        <a
+          href="https://www.openstreetmap.org/copyright"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="hover:text-slate-400 underline decoration-slate-600/50"
+        >
+          OpenStreetMap
+        </a>
       </div>
     </div>
   );
