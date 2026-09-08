@@ -140,9 +140,11 @@ const { colSpan = "md:col-span-1 lg:col-span-2" } = Astro.props;
 
       function generateObstacles() {
         obstacles.clear();
-        // Number of obstacles: about 11% of cells
-        const count = Math.floor(cols * rows * 0.11);
-        for (let i = 0; i < count; i++) {
+        // Number of obstacles: x2 (~22% of cells)
+        const targetCount = Math.floor(cols * rows * 0.22);
+        let attempts = 0;
+        while (obstacles.size < targetCount && attempts < targetCount * 4) {
+          attempts++;
           const c = Math.floor(Math.random() * cols);
           const r = Math.floor(Math.random() * rows);
           // 60% trees, 40% rocks
@@ -238,10 +240,12 @@ const { colSpan = "md:col-span-1 lg:col-span-2" } = Astro.props;
         target = bestT || { c: 0, r: 0 };
 
         let res = solveBFS(start, target);
-        if (res.path.length === 0) {
+        let retries = 0;
+        while (res.path.length === 0 && retries < 8) {
           // If completely boxed in, regenerate
           generateObstacles();
           res = solveBFS(start, target);
+          retries++;
         }
 
         exploredNodes = res.order;
