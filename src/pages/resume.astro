@@ -328,7 +328,7 @@ const resumeData = {
         <p
           class="text-darkslate-200 text-xs sm:text-sm leading-relaxed print:text-gray-800"
         >
-          {resumeData.summary}
+          Data & Software Engineer with <span data-exp-years>{SITE.author.yearsOfExperience}</span> YOE specializing in high-performance backend systems, Big Data pipelines, cloud-native microservices, and AI agent architectures. Currently engineering the National Public Service Portal at VNPT, serving millions of citizens nationwide.
         </p>
       </section>
 
@@ -487,3 +487,14 @@ const resumeData = {
     </div>
   </main>
 </Layout>
+
+<script>
+  import { calculateYearsOfExperience } from "../lib/helpers";
+  import { SITE } from "../site-config";
+
+  const expEls = document.querySelectorAll<HTMLElement>("[data-exp-years]");
+  expEls.forEach((el) => {
+    const years = calculateYearsOfExperience(SITE.author.careerStartDate);
+    el.textContent = `${years}+`;
+  });
+</script>
