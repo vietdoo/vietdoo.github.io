@@ -7,6 +7,7 @@ import GridTransition from "../components/GridTransition.astro";
 import StylePanel from "../components/StylePanel.astro";
 import { Navigation } from "../components/landing/navigation";
 import { SubpageNavigation, type SubpageNavCta } from "../components/site/subpage-navigation";
+import Analytics from "@vercel/analytics/astro";
 
 interface Props {
   title: string;
@@ -245,6 +246,7 @@ const jsonLdGraph = {
   <head>
     <meta charset="UTF-8" />
     <ClientRouter />
+    <Analytics />
     <meta content="width=device-width, initial-scale=1.0" name="viewport" />
     <link rel="canonical" href={canonicalUrl} />
     <link rel="alternate" hreflang="en" href={canonicalUrl} />

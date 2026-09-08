@@ -26,9 +26,7 @@ export default defineConfig({
   output: isGitHubPages ? "static" : "server",
   adapter: isGitHubPages
     ? undefined
-    : vercel({
-        webAnalytics: { enabled: true },
-      }),
+    : vercel(),
   base: "/",
   redirects: {
     "/design-works": "/engineering-showcase",
