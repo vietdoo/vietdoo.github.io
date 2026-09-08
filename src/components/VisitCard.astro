@@ -224,14 +224,23 @@ const { colSpan = "md:col-span-1 lg:col-span-2" } = Astro.props;
             bestT = candidate;
           }
         }
-        target = bestT || { c: cols - 1, r: rows - 1 };
-
-        obstacles.delete(key(start.c, start.r));
-        obstacles.delete(key(target.c, target.r));
+        if (!bestT) {
+          for (let c = cols - 1; c >= 0; c--) {
+            for (let r = rows - 1; r >= 0; r--) {
+              if (!obstacles.has(key(c, r))) {
+                bestT = { c, r };
+                break;
+              }
+            }
+            if (bestT) break;
+          }
+        }
+        target = bestT || { c: 0, r: 0 };
 
         let res = solveBFS(start, target);
         if (res.path.length === 0) {
-          obstacles.clear();
+          // If completely boxed in, regenerate
+          generateObstacles();
           res = solveBFS(start, target);
         }
 
@@ -254,30 +263,53 @@ const { colSpan = "md:col-span-1 lg:col-span-2" } = Astro.props;
         };
       }
 
+      function getClosestFreeCell(c, r) {
+        if (!obstacles.has(key(c, r))) return { c, r };
+
+        // If cursor is on an obstacle (rock/tree), find closest passable neighbor
+        const candidates = [];
+        for (let dc = -2; dc <= 2; dc++) {
+          for (let dr = -2; dr <= 2; dr++) {
+            const nc = c + dc;
+            const nr = r + dr;
+            if (nc >= 0 && nc < cols && nr >= 0 && nr < rows) {
+              if (!obstacles.has(key(nc, nr))) {
+                candidates.push({ c: nc, r: nr, dist: Math.hypot(dc, dr) });
+              }
+            }
+          }
+        }
+        candidates.sort((a, b) => a.dist - b.dist);
+        return candidates.length > 0 ? { c: candidates[0].c, r: candidates[0].r } : null;
+      }
+
       // Mouse interactivity
       if (card) {
         card.addEventListener("mousemove", (e) => {
           const rect = canvas.getBoundingClientRect();
           const mx = e.clientX - rect.left;
           const my = e.clientY - rect.top;
-          const c = Math.round((mx - offsetX) / cellSize);
-          const r = Math.round((my - offsetY) / cellSize);
+          const rawC = Math.round((mx - offsetX) / cellSize);
+          const rawR = Math.round((my - offsetY) / cellSize);
 
-          if (c >= 0 && c < cols && r >= 0 && r < rows) {
-            if (!hoverTarget || hoverTarget.c !== c || hoverTarget.r !== r) {
-              hoverTarget = { c, r };
-              obstacles.delete(key(c, r));
-              target = { c, r };
-              const res = solveBFS(start, target);
-              if (res.path.length > 0) {
-                shortestPath = res.path;
-                exploredNodes = [];
-                exploreIndex = 0;
-                pathLengthDrawn = shortestPath.length;
-                runnerPos = 0;
-                state = "RUNNER";
-                stateTime = performance.now();
-                isHovered = true;
+          if (rawC >= 0 && rawC < cols && rawR >= 0 && rawR < rows) {
+            const freeCell = getClosestFreeCell(rawC, rawR);
+            if (freeCell) {
+              const { c, r } = freeCell;
+              if (!hoverTarget || hoverTarget.c !== c || hoverTarget.r !== r) {
+                hoverTarget = { c, r };
+                target = { c, r };
+                const res = solveBFS(start, target);
+                if (res.path.length > 0) {
+                  shortestPath = res.path;
+                  exploredNodes = [];
+                  exploreIndex = 0;
+                  pathLengthDrawn = shortestPath.length;
+                  runnerPos = 0;
+                  state = "RUNNER";
+                  stateTime = performance.now();
+                  isHovered = true;
+                }
               }
             }
           }
