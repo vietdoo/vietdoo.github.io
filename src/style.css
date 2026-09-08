@@ -2205,6 +2205,26 @@ html[data-ui-theme="light"] .now-card-title,
 html[data-ui-theme="light"] .playground-card-title,
 html[data-ui-theme="light"] .guestbook-card-title {
   color: var(--light-ink-strong) !important;
+  text-shadow: 0 1px 0 rgba(255, 250, 241, 0.7);
+}
+
+/* Light mode refinement for Playground & Guestbook background elements */
+html[data-ui-theme="light"] .playground-grid-container {
+  opacity: 0.75;
+}
+
+html[data-ui-theme="light"] .pg-tile:not(.active) {
+  background-color: rgba(76, 57, 51, 0.05) !important;
+  border-color: rgba(76, 57, 51, 0.08) !important;
+}
+
+html[data-ui-theme="light"] .guestbook-grid-container {
+  opacity: 0.75;
+}
+
+html[data-ui-theme="light"] .gb-dot:not(.active) {
+  background-color: rgba(76, 57, 51, 0.07) !important;
+  border-color: rgba(76, 57, 51, 0.09) !important;
 }
 
 html[data-ui-theme="light"] .now-card-date {
