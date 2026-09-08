@@ -6,29 +6,6 @@ interface Props {
 }
 
 const { colSpan = "md:col-span-1 lg:col-span-2" } = Astro.props;
-
-const visitedNames = [
-  "HÀ NỘI",
-  "ĐÀ NẴNG",
-  "TP. HỒ CHÍ MINH",
-  "HẢI PHÒNG",
-  "LÂM ĐỒNG",
-  "ĐỒNG NAI",
-  "TÂY NINH",
-  "KHÁNH HOÀ",
-  "THANH HOÁ",
-  "NINH BÌNH",
-];
-const textRow1 =
-  [...visitedNames, ...visitedNames, ...visitedNames, ...visitedNames].join(
-    " • ",
-  ) + " • ";
-const textRow2 =
-  [...visitedNames]
-    .reverse()
-    .concat([...visitedNames].reverse())
-    .concat([...visitedNames].reverse())
-    .join(" • ") + " • ";
 ---
 
 <Card
@@ -42,85 +19,578 @@ const textRow2 =
 >
   <div
     slot="background"
-    class="visit-card-bg absolute inset-0 -z-10 flex flex-col justify-center overflow-hidden bg-[#0a0a0a]"
+    class="visit-card-bg absolute inset-0 -z-10 overflow-hidden pointer-events-none"
+    aria-hidden="true"
   >
-    <!-- Vignette / Radial Gradient Overlay for depth -->
-    <div
-      class="visit-card-vignette pointer-events-none absolute inset-0 z-10 bg-[radial-gradient(ellipse_at_center,_transparent_15%,_#0a0a0a_85%)]"
-    >
-    </div>
-
-    <!-- Edge Fades -->
-    <div
-      class="visit-card-edge-fade pointer-events-none absolute inset-x-0 top-0 z-10 h-6 bg-gradient-to-b from-[#0a0a0a] to-transparent"
-    >
-    </div>
-    <div
-      class="visit-card-edge-fade pointer-events-none absolute inset-x-0 bottom-0 z-10 h-6 bg-gradient-to-t from-[#0a0a0a] to-transparent"
-    >
-    </div>
-
-    <!-- Rotated Marquee Text Container (-rotate-12 for diagonal slant) -->
-    <div
-      class="visit-card-marquee transform -rotate-12 scale-110 select-none flex flex-col gap-2.5 opacity-20 transition-opacity duration-500 group-hover:opacity-35 sm:scale-125 sm:gap-3"
-    >
-      <!-- Row 1: Left Scrolling -->
-      <div
-        class="flex whitespace-nowrap gap-3 sm:gap-4 marquee-left text-[10px] sm:text-xs font-extrabold uppercase tracking-widest text-white/30"
-      >
-        <span>{textRow1}</span>
-        <span>{textRow1}</span>
-      </div>
-
-      <!-- Row 2: Right Scrolling -->
-      <div
-        class="flex whitespace-nowrap gap-3 sm:gap-4 marquee-right text-[10px] sm:text-xs font-bold uppercase tracking-widest text-white/15"
-      >
-        <span>{textRow2}</span>
-        <span>{textRow2}</span>
-      </div>
-
-      <!-- Row 3: Left Scrolling -->
-      <div
-        class="flex whitespace-nowrap gap-3 sm:gap-4 marquee-left text-[10px] sm:text-xs font-extrabold uppercase tracking-widest text-white/30"
-      >
-        <span>{textRow1}</span>
-        <span>{textRow1}</span>
-      </div>
-    </div>
+    <canvas class="journey-path-canvas absolute inset-0 w-full h-full"></canvas>
   </div>
 </Card>
 
-<style>
-  @keyframes marquee-left {
-    0% {
-      transform: translateX(0);
-    }
-    100% {
-      transform: translateX(-50%);
-    }
-  }
-  @keyframes marquee-right {
-    0% {
-      transform: translateX(-50%);
-    }
-    100% {
-      transform: translateX(0);
-    }
-  }
-  .marquee-left {
-    animation: marquee-left 22s linear infinite;
-  }
-  .marquee-right {
-    animation: marquee-right 18s linear infinite;
-  }
+<script is:inline>
+  (function setupJourneyPathfinder() {
+    let animId = null;
+    let resizeObserver = null;
+    let intersectionObserver = null;
+    let isVisible = true;
 
-  @media (max-width: 420px) {
-    .marquee-left {
-      animation-duration: 30s;
+    function init() {
+      const container = document.querySelector(".visit-card-bg");
+      if (!container) return;
+      const canvas = container.querySelector(".journey-path-canvas");
+      if (!canvas) return;
+
+      if (canvas.dataset.initialized === "true") return;
+      canvas.dataset.initialized = "true";
+
+      const card = container.closest(".card");
+      const ctx = canvas.getContext("2d");
+      if (!ctx) return;
+
+      const CELL_SIZE = 22;
+      let width = 0;
+      let height = 0;
+      let cols = 0;
+      let rows = 0;
+      let offsetX = 0;
+      let offsetY = 0;
+      const obstacles = new Set();
+      let start = { c: 0, r: 0 };
+      let target = { c: 0, r: 0 };
+      let exploredNodes = [];
+      let shortestPath = [];
+      let state = "SEARCHING"; // SEARCHING, PATH_DRAW, RUNNER, HOLD, FADING
+      let stateTime = performance.now();
+      let exploreIndex = 0;
+      let pathLengthDrawn = 0;
+      let runnerPos = 0;
+      let rippleR = 0;
+      let rippleAlpha = 0;
+      let fadeAlpha = 1;
+      let isHovered = false;
+      let hoverTarget = null;
+      let holdDuration = 1800;
+
+      function getPrimaryColor() {
+        const isLight = document.documentElement.dataset.uiTheme === "light";
+        if (isLight) return "#8b493b";
+        const style = getComputedStyle(document.body);
+        const p = style.getPropertyValue("--primary-500")?.trim();
+        return p || "#38bdf8";
+      }
+
+      function getRgb(color) {
+        if (color.startsWith("#")) {
+          const hex = color.slice(1);
+          if (hex.length === 3) {
+            return [
+              parseInt(hex[0] + hex[0], 16),
+              parseInt(hex[1] + hex[1], 16),
+              parseInt(hex[2] + hex[2], 16),
+            ];
+          }
+          if (hex.length >= 6) {
+            return [
+              parseInt(hex.slice(0, 2), 16),
+              parseInt(hex.slice(2, 4), 16),
+              parseInt(hex.slice(4, 6), 16),
+            ];
+          }
+        }
+        if (color.startsWith("rgb")) {
+          const match = color.match(/\d+/g);
+          if (match && match.length >= 3) {
+            return [Number(match[0]), Number(match[1]), Number(match[2])];
+          }
+        }
+        return [56, 189, 248];
+      }
+
+      function resize() {
+        const rect = container.getBoundingClientRect();
+        if (rect.width === 0 || rect.height === 0) return;
+        const dpr = Math.min(window.devicePixelRatio || 1, 2);
+        width = rect.width;
+        height = rect.height;
+        canvas.width = Math.floor(width * dpr);
+        canvas.height = Math.floor(height * dpr);
+        ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+
+        cols = Math.max(6, Math.floor((width - 16) / CELL_SIZE));
+        rows = Math.max(3, Math.floor((height - 12) / CELL_SIZE));
+        offsetX = (width - cols * CELL_SIZE) / 2 + CELL_SIZE / 2;
+        offsetY = (height - rows * CELL_SIZE) / 2 + CELL_SIZE / 2;
+
+        startNewJourney(true);
+      }
+
+      function key(c, r) {
+        return `${c},${r}`;
+      }
+
+      function parseKey(k) {
+        const idx = k.indexOf(",");
+        return {
+          c: Number(k.slice(0, idx)),
+          r: Number(k.slice(idx + 1)),
+        };
+      }
+
+      function generateObstacles() {
+        obstacles.clear();
+        const count = Math.floor(cols * rows * 0.12);
+        for (let i = 0; i < count; i++) {
+          const c = Math.floor(Math.random() * cols);
+          const r = Math.floor(Math.random() * rows);
+          obstacles.add(key(c, r));
+        }
+      }
+
+      function solveBFS(s, t) {
+        const targetK = key(t.c, t.r);
+        const q = [key(s.c, s.r)];
+        const visited = new Set([key(s.c, s.r)]);
+        const parent = new Map();
+        const order = [];
+
+        while (q.length > 0) {
+          const currK = q.shift();
+          if (currK === targetK) break;
+          const { c, r } = parseKey(currK);
+          const neighbors = [
+            { c: c + 1, r },
+            { c: c - 1, r },
+            { c, r: r + 1 },
+            { c, r: r - 1 },
+          ];
+
+          for (let i = 0; i < neighbors.length; i++) {
+            const n = neighbors[i];
+            if (n.c >= 0 && n.c < cols && n.r >= 0 && n.r < rows) {
+              const nK = key(n.c, n.r);
+              if (!obstacles.has(nK) && !visited.has(nK)) {
+                visited.add(nK);
+                parent.set(nK, currK);
+                q.push(nK);
+                order.push(n);
+              }
+            }
+          }
+        }
+
+        const path = [];
+        if (parent.has(targetK) || targetK === key(s.c, s.r)) {
+          let curr = targetK;
+          while (curr) {
+            path.unshift(parseKey(curr));
+            curr = parent.get(curr);
+          }
+        }
+        return { path, order };
+      }
+
+      function startNewJourney(fullReset = false) {
+        if (fullReset || obstacles.size === 0) {
+          generateObstacles();
+        }
+
+        if (shortestPath.length > 0 && !fullReset) {
+          start = { ...shortestPath[shortestPath.length - 1] };
+        } else {
+          do {
+            start = {
+              c: Math.floor(Math.random() * Math.max(1, Math.floor(cols * 0.35))),
+              r: Math.floor(Math.random() * rows),
+            };
+          } while (obstacles.has(key(start.c, start.r)));
+        }
+
+        let bestT = null;
+        let bestDist = 0;
+        for (let tries = 0; tries < 25; tries++) {
+          const candidate = {
+            c: Math.floor(Math.random() * cols),
+            r: Math.floor(Math.random() * rows),
+          };
+          const dist = Math.abs(candidate.c - start.c) + Math.abs(candidate.r - start.r);
+          if (!obstacles.has(key(candidate.c, candidate.r)) && dist > bestDist) {
+            bestDist = dist;
+            bestT = candidate;
+          }
+        }
+        target = bestT || { c: cols - 1, r: rows - 1 };
+
+        obstacles.delete(key(start.c, start.r));
+        obstacles.delete(key(target.c, target.r));
+
+        let res = solveBFS(start, target);
+        if (res.path.length === 0) {
+          obstacles.clear();
+          res = solveBFS(start, target);
+        }
+
+        exploredNodes = res.order;
+        shortestPath = res.path;
+        exploreIndex = 0;
+        pathLengthDrawn = 0;
+        runnerPos = 0;
+        rippleR = 0;
+        rippleAlpha = 0;
+        fadeAlpha = 1;
+        state = "SEARCHING";
+        stateTime = performance.now();
+      }
+
+      function pos(c, r) {
+        return {
+          x: offsetX + c * CELL_SIZE,
+          y: offsetY + r * CELL_SIZE,
+        };
+      }
+
+      // Mouse interactivity
+      if (card) {
+        card.addEventListener("mousemove", (e) => {
+          const rect = canvas.getBoundingClientRect();
+          const mx = e.clientX - rect.left;
+          const my = e.clientY - rect.top;
+          const c = Math.round((mx - offsetX) / CELL_SIZE);
+          const r = Math.round((my - offsetY) / CELL_SIZE);
+
+          if (c >= 0 && c < cols && r >= 0 && r < rows) {
+            if (!hoverTarget || hoverTarget.c !== c || hoverTarget.r !== r) {
+              hoverTarget = { c, r };
+              obstacles.delete(key(c, r));
+              target = { c, r };
+              const res = solveBFS(start, target);
+              if (res.path.length > 0) {
+                shortestPath = res.path;
+                exploredNodes = [];
+                exploreIndex = 0;
+                pathLengthDrawn = shortestPath.length;
+                runnerPos = 0;
+                state = "RUNNER";
+                stateTime = performance.now();
+                isHovered = true;
+              }
+            }
+          }
+        });
+
+        card.addEventListener("mouseleave", () => {
+          isHovered = false;
+          hoverTarget = null;
+        });
+      }
+
+      function draw() {
+        if (!isVisible) {
+          animId = requestAnimationFrame(draw);
+          return;
+        }
+
+        const now = performance.now();
+        const primaryHex = getPrimaryColor();
+        const [pr, pg, pb] = getRgb(primaryHex);
+        const isLight = document.documentElement.dataset.uiTheme === "light";
+
+        ctx.clearRect(0, 0, width, height);
+
+        // 1. Draw subtle background grid lines
+        ctx.lineWidth = 1;
+        ctx.strokeStyle = isLight
+          ? "rgba(76, 57, 51, 0.04)"
+          : "rgba(255, 255, 255, 0.02)";
+        ctx.beginPath();
+        for (let c = 0; c < cols; c++) {
+          const p1 = pos(c, 0);
+          const p2 = pos(c, rows - 1);
+          ctx.moveTo(p1.x, p1.y);
+          ctx.lineTo(p2.x, p2.y);
+        }
+        for (let r = 0; r < rows; r++) {
+          const p1 = pos(0, r);
+          const p2 = pos(cols - 1, r);
+          ctx.moveTo(p1.x, p1.y);
+          ctx.lineTo(p2.x, p2.y);
+        }
+        ctx.stroke();
+
+        // 2. Draw subtle grid node dots & obstacles
+        const dotColor = isLight
+          ? "rgba(76, 57, 51, 0.16)"
+          : "rgba(255, 255, 255, 0.1)";
+        const obstacleColor = isLight
+          ? "rgba(76, 57, 51, 0.08)"
+          : "rgba(255, 255, 255, 0.035)";
+
+        for (let c = 0; c < cols; c++) {
+          for (let r = 0; r < rows; r++) {
+            const p = pos(c, r);
+            const isObstacle = obstacles.has(key(c, r));
+
+            if (isObstacle) {
+              ctx.fillStyle = obstacleColor;
+              ctx.beginPath();
+              ctx.arc(p.x, p.y, 1.8, 0, Math.PI * 2);
+              ctx.fill();
+            } else {
+              ctx.fillStyle = dotColor;
+              ctx.beginPath();
+              ctx.arc(p.x, p.y, 1.2, 0, Math.PI * 2);
+              ctx.fill();
+            }
+          }
+        }
+
+        // 3. State Machine Progression
+        if (state === "SEARCHING") {
+          // Progressively reveal wave of explored nodes
+          const speed = 2; // nodes per frame
+          exploreIndex = Math.min(exploredNodes.length, exploreIndex + speed);
+
+          // Draw explored frontier nodes
+          for (let i = 0; i < exploreIndex; i++) {
+            const n = exploredNodes[i];
+            const p = pos(n.c, n.r);
+            const age = exploreIndex - i;
+            const alpha = Math.max(0.04, 0.35 - age * 0.015);
+            ctx.fillStyle = `rgba(${pr}, ${pg}, ${pb}, ${alpha * 0.7})`;
+            ctx.beginPath();
+            ctx.arc(p.x, p.y, 2, 0, Math.PI * 2);
+            ctx.fill();
+          }
+
+          if (exploreIndex >= exploredNodes.length) {
+            state = "PATH_DRAW";
+            pathLengthDrawn = 0;
+            stateTime = now;
+          }
+        }
+
+        if (state === "PATH_DRAW") {
+          // Draw shortest path progressively
+          pathLengthDrawn = Math.min(
+            shortestPath.length,
+            pathLengthDrawn + 0.8
+          );
+          if (pathLengthDrawn >= shortestPath.length) {
+            state = "RUNNER";
+            runnerPos = 0;
+            stateTime = now;
+          }
+        }
+
+        if (state === "RUNNER") {
+          // Move traveling beam along the path
+          runnerPos += 0.045;
+          if (runnerPos >= 1) {
+            runnerPos = 1;
+            state = "HOLD";
+            stateTime = now;
+            rippleR = 3;
+            rippleAlpha = 0.9;
+          }
+        }
+
+        if (state === "HOLD") {
+          // Ripple expansion
+          if (rippleAlpha > 0.01) {
+            rippleR += 0.5;
+            rippleAlpha *= 0.92;
+          }
+
+          if (!isHovered && now - stateTime > holdDuration) {
+            state = "FADING";
+            stateTime = now;
+          }
+        }
+
+        if (state === "FADING") {
+          const progress = (now - stateTime) / 350;
+          fadeAlpha = Math.max(0, 1 - progress);
+          if (progress >= 1) {
+            startNewJourney(false);
+          }
+        }
+
+        // 4. Draw Shortest Path Line
+        if (
+          (state === "PATH_DRAW" ||
+            state === "RUNNER" ||
+            state === "HOLD" ||
+            state === "FADING") &&
+          shortestPath.length > 1
+        ) {
+          const count =
+            state === "PATH_DRAW"
+              ? Math.floor(pathLengthDrawn)
+              : shortestPath.length;
+
+          if (count > 1) {
+            ctx.save();
+            ctx.globalAlpha = fadeAlpha;
+            ctx.lineWidth = 2;
+            ctx.strokeStyle = `rgba(${pr}, ${pg}, ${pb}, 0.85)`;
+            ctx.shadowColor = `rgba(${pr}, ${pg}, ${pb}, 0.6)`;
+            ctx.shadowBlur = 6;
+            ctx.lineJoin = "round";
+            ctx.lineCap = "round";
+
+            ctx.beginPath();
+            const pStart = pos(shortestPath[0].c, shortestPath[0].r);
+            ctx.moveTo(pStart.x, pStart.y);
+
+            for (let i = 1; i < count; i++) {
+              const pt = pos(shortestPath[i].c, shortestPath[i].r);
+              ctx.lineTo(pt.x, pt.y);
+            }
+
+            // Fraction to next node in PATH_DRAW
+            if (state === "PATH_DRAW" && count < shortestPath.length) {
+              const frac = pathLengthDrawn - count;
+              const pCurr = pos(
+                shortestPath[count - 1].c,
+                shortestPath[count - 1].r
+              );
+              const pNext = pos(
+                shortestPath[count].c,
+                shortestPath[count].r
+              );
+              ctx.lineTo(
+                pCurr.x + (pNext.x - pCurr.x) * frac,
+                pCurr.y + (pNext.y - pCurr.y) * frac
+              );
+            }
+            ctx.stroke();
+
+            // Highlight path nodes
+            ctx.fillStyle = `rgba(${pr}, ${pg}, ${pb}, 0.9)`;
+            for (let i = 0; i < count; i++) {
+              const pt = pos(shortestPath[i].c, shortestPath[i].r);
+              ctx.beginPath();
+              ctx.arc(pt.x, pt.y, 2.5, 0, Math.PI * 2);
+              ctx.fill();
+            }
+            ctx.restore();
+          }
+
+          // 5. Draw Traveling Energy Beam (Runner)
+          if (state === "RUNNER" && shortestPath.length > 1) {
+            const totalSegments = shortestPath.length - 1;
+            const floatIdx = runnerPos * totalSegments;
+            const segIdx = Math.min(
+              totalSegments - 1,
+              Math.floor(floatIdx)
+            );
+            const segFrac = floatIdx - segIdx;
+            const pA = pos(shortestPath[segIdx].c, shortestPath[segIdx].r);
+            const pB = pos(
+              shortestPath[segIdx + 1].c,
+              shortestPath[segIdx + 1].r
+            );
+            const rx = pA.x + (pB.x - pA.x) * segFrac;
+            const ry = pA.y + (pB.y - pA.y) * segFrac;
+
+            ctx.save();
+            ctx.globalAlpha = fadeAlpha;
+            ctx.shadowColor = `rgba(${pr}, ${pg}, ${pb}, 1)`;
+            ctx.shadowBlur = 10;
+            ctx.fillStyle = isLight ? "#ffffff" : "#ffffff";
+            ctx.beginPath();
+            ctx.arc(rx, ry, 3.5, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.restore();
+          }
+        }
+
+        // 6. Draw Start & Target Nodes
+        if (shortestPath.length > 0) {
+          const pS = pos(start.c, start.r);
+          const pT = pos(target.c, target.r);
+
+          ctx.save();
+          ctx.globalAlpha = fadeAlpha;
+
+          // Start node (A)
+          ctx.fillStyle = `rgba(${pr}, ${pg}, ${pb}, 0.9)`;
+          ctx.shadowColor = `rgba(${pr}, ${pg}, ${pb}, 0.7)`;
+          ctx.shadowBlur = 6;
+          ctx.beginPath();
+          ctx.arc(pS.x, pS.y, 3.5, 0, Math.PI * 2);
+          ctx.fill();
+
+          // Target node (B) with pulsing outer ring
+          const breath = 0.5 + 0.5 * Math.sin(now * 0.005);
+          ctx.fillStyle = `rgba(${pr}, ${pg}, ${pb}, 1)`;
+          ctx.beginPath();
+          ctx.arc(pT.x, pT.y, 3.5, 0, Math.PI * 2);
+          ctx.fill();
+
+          ctx.strokeStyle = `rgba(${pr}, ${pg}, ${pb}, ${0.3 + breath * 0.4})`;
+          ctx.lineWidth = 1.2;
+          ctx.beginPath();
+          ctx.arc(pT.x, pT.y, 5.5 + breath * 2, 0, Math.PI * 2);
+          ctx.stroke();
+
+          // Ripple on arrival
+          if (rippleAlpha > 0.01) {
+            ctx.strokeStyle = `rgba(${pr}, ${pg}, ${pb}, ${rippleAlpha})`;
+            ctx.lineWidth = 1.5;
+            ctx.beginPath();
+            ctx.arc(pT.x, pT.y, rippleR, 0, Math.PI * 2);
+            ctx.stroke();
+          }
+
+          ctx.restore();
+        }
+
+        animId = requestAnimationFrame(draw);
+      }
+
+      // Intersection Observer to pause when off-screen
+      if (typeof IntersectionObserver !== "undefined") {
+        intersectionObserver = new IntersectionObserver((entries) => {
+          for (const entry of entries) {
+            isVisible = entry.isIntersecting;
+          }
+        });
+        intersectionObserver.observe(canvas);
+      }
+
+      // Resize Observer
+      if (typeof ResizeObserver !== "undefined") {
+        resizeObserver = new ResizeObserver(() => {
+          resize();
+        });
+        resizeObserver.observe(container);
+      } else {
+        window.addEventListener("resize", resize);
+      }
+
+      resize();
+      animId = requestAnimationFrame(draw);
     }
-    .marquee-right {
-      animation-duration: 26s;
+
+    if (document.readyState === "loading") {
+      document.addEventListener("DOMContentLoaded", init);
+    } else {
+      init();
     }
-  }
-</style>
+
+    document.addEventListener("astro:before-swap", () => {
+      if (animId) cancelAnimationFrame(animId);
+      if (resizeObserver) resizeObserver.disconnect();
+      if (intersectionObserver) intersectionObserver.disconnect();
+    });
+
+    document.addEventListener("astro:page-load", () => {
+      if (animId) cancelAnimationFrame(animId);
+      const container = document.querySelector(".visit-card-bg");
+      if (container) {
+        const canvas = container.querySelector(".journey-path-canvas");
+        if (canvas) canvas.dataset.initialized = "false";
+      }
+      init();
+    });
+  })();
+</script>
