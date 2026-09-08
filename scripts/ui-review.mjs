@@ -117,7 +117,15 @@ async function capturePage({ url, viewport, waitMs, selector, fullPage }) {
   const consoleErrors = [];
   const pageErrors = [];
   const failedRequests = [];
-  const browser = await chromium.launch({ headless: true });
+  let browser;
+  try {
+    browser = await chromium.launch({
+      headless: true,
+      channel: process.env.PLAYWRIGHT_CHANNEL || undefined,
+    });
+  } catch {
+    browser = await chromium.launch({ headless: true, channel: "chrome" });
+  }
 
   try {
     const page = await browser.newPage({ viewport, deviceScaleFactor: 1 });

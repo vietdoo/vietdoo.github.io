@@ -79,17 +79,19 @@ const defaultLabelMap: Record<string, string> = {
 
 const pathSegments = currentPath.split("/").filter(Boolean);
 const autoLabel = defaultLabelMap[currentPath] ||
+  (currentPath.startsWith("/blog/") ? "Blog" : null) ||
   (pathSegments.length > 0
     ? pathSegments[pathSegments.length - 1].replace(/-/g, " ").toUpperCase()
     : "Subpage");
 
 const resolvedNavLabel = navLabel || autoLabel;
 
-const searchRoutes = ["/playground", "/blog", "/books", "/engineering-showcase"];
+const searchRoutes = ["/playground", "/books", "/engineering-showcase"];
 const resolvedShowSearch =
   showSearch !== undefined
     ? showSearch
-    : searchRoutes.some((r) => currentPath === r || currentPath.startsWith(`${r}/`));
+    : currentPath === "/blog" ||
+      searchRoutes.some((r) => currentPath === r || currentPath.startsWith(`${r}/`));
 
 const resolvedSearchPlaceholder =
   searchPlaceholder || `Search ${resolvedNavLabel.toLowerCase()}...`;
