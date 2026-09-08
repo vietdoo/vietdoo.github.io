@@ -30,3 +30,16 @@ export function formatDate(date: Date, locale: string = "en-US"): string {
     day: "numeric",
   });
 }
+
+export function calculateYearsOfExperience(
+  startDate: string | Date = "2023-05-01",
+  currentDate: Date = new Date(),
+): number {
+  const start = typeof startDate === "string" ? new Date(startDate) : startDate;
+  let years = currentDate.getFullYear() - start.getFullYear();
+  const monthDiff = currentDate.getMonth() - start.getMonth();
+  if (monthDiff < 0 || (monthDiff === 0 && currentDate.getDate() < start.getDate())) {
+    years--;
+  }
+  return Math.max(0, years);
+}

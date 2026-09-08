@@ -6,7 +6,12 @@ import {
   getLocalizedPost,
   type TranslatableBlogPost,
 } from "../src/lib/blog-lang";
-import { formatDate, formatTimeTo12H, trimText } from "../src/lib/helpers";
+import {
+  calculateYearsOfExperience,
+  formatDate,
+  formatTimeTo12H,
+  trimText,
+} from "../src/lib/helpers";
 
 describe("Helper Functions", () => {
   describe("trimText", () => {
@@ -49,6 +54,28 @@ describe("Helper Functions", () => {
       const date = new Date(Date.UTC(2026, 0, 1, 14, 30));
       const formatted = formatTimeTo12H(date, "UTC");
       expect(formatted).toMatch(/2:30\s?PM/i);
+    });
+  });
+
+  describe("calculateYearsOfExperience", () => {
+    it("calculates 0 years before first anniversary", () => {
+      expect(calculateYearsOfExperience("2023-05-01", new Date("2023-06-01"))).toBe(0);
+      expect(calculateYearsOfExperience("2023-05-01", new Date("2024-04-30"))).toBe(0);
+    });
+
+    it("calculates 1 year on exactly 1 year milestone", () => {
+      expect(calculateYearsOfExperience("2023-05-01", new Date("2024-05-01"))).toBe(1);
+    });
+
+    it("calculates 3 years in 2026 after May", () => {
+      expect(calculateYearsOfExperience("2023-05-01", new Date("2026-05-01"))).toBe(3);
+      expect(calculateYearsOfExperience("2023-05-01", new Date("2026-09-08"))).toBe(3);
+    });
+
+    it("automatically turns into 4 years when May 2027 arrives", () => {
+      expect(calculateYearsOfExperience("2023-05-01", new Date("2027-04-30"))).toBe(3);
+      expect(calculateYearsOfExperience("2023-05-01", new Date("2027-05-01"))).toBe(4);
+      expect(calculateYearsOfExperience("2023-05-01", new Date("2027-12-31"))).toBe(4);
     });
   });
 

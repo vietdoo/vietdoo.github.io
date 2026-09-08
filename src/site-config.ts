@@ -1,3 +1,7 @@
+import { calculateYearsOfExperience } from "./lib/helpers";
+
+export const CAREER_START_DATE = "2023-05-01";
+
 export const SITE = {
   site: {
     url: "https://vietdoo.vndo.vn",
@@ -26,7 +30,13 @@ export const SITE = {
     ],
     jobTitle: "Software Engineer",
     jobTitleFull: "Software Engineer @ VNPT | Founder @ VNDO",
-    yearsOfExperience: "3+",
+    careerStartDate: CAREER_START_DATE,
+    get yearsOfExperience(): string {
+      return `${calculateYearsOfExperience(CAREER_START_DATE)}+`;
+    },
+    get yearsOfExperienceNum(): number {
+      return calculateYearsOfExperience(CAREER_START_DATE);
+    },
     company: "VNPT",
     companyVi: "VNPT",
     companyEn: "VNPT Group",
