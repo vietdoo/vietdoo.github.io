@@ -29,14 +29,11 @@ This article provides a practical, step-by-step tutorial on integrating Cloudina
 Rather than executing a fragile static script, Cloudinary engineered an onboarding flow tailored specifically for autonomous coding agents structured into **5 Guarded Stages**:
 
 ```mermaid
-flowchart LR
-    A["1. Silent Explore\nInspect project stack"] --> B["2. AI Tooling\nInstall MCP & Skills Pack"]
-    B --> C["3. SDK & Env\nScaffold official SDK & .env"]
-    C --> D["4. Credentials\nClaimable Cloud or API Keys"]
-    D --> E["5. Verify Setup\nTest Admin API & HTTP 200 Probe"]
-
-    classDef stage fill:#102b4a,stroke:#48d8e8,color:#effcff,stroke-width:2px;
-    class A,B,C,D,E stage;
+graph LR
+    A[1. Silent Explore<br/>Inspect project stack] --> B[2. AI Tooling<br/>Configure MCP and Skills]
+    B --> C[3. SDK and Env<br/>Scaffold SDK and .env.example]
+    C --> D[4. Credentials<br/>Claimable Cloud or API Keys]
+    D --> E[5. Verify Setup<br/>Admin API and HTTP 200 Probe]
 ```
 
 1. **Silent Explore**: The AI inspects project manifests (`package.json`, `requirements.txt`, `astro.config.mjs`...) to determine the exact framework (Next.js, Astro, React, Node/Express, Python/Django, Laravel...).

@@ -27,14 +27,11 @@ Trong workflow phát triển phần mềm hiện đại, các AI coding assistan
 Thay vì thực thi một script cài đặt cố định, AI Power Start vận hành như một state machine với **5 chặng kiểm soát có bảo vệ (Guarded Stages)**:
 
 ```mermaid
-flowchart LR
-    A["1. Silent Explore\nPhân tích stack & manifests"] --> B["2. AI Tooling\nCấu hình MCP & Skills Pack"]
-    B --> C["3. SDK & Env\nCài đặt SDK & sinh .env.example"]
-    C --> D["4. Credentials\nClaimable Cloud hoặc API Keys"]
-    D --> E["5. Verify Setup\nAdmin API & Fetch HTTP 200 Probe"]
-
-    classDef stage fill:#102b4a,stroke:#48d8e8,color:#effcff,stroke-width:2px;
-    class A,B,C,D,E stage;
+graph LR
+    A[1. Silent Explore<br/>Quét stack dự án] --> B[2. AI Tooling<br/>Cấu hình MCP và Skills]
+    B --> C[3. SDK và Env<br/>Cài SDK và .env.example]
+    C --> D[4. Credentials<br/>Claimable Cloud hoặc API Keys]
+    D --> E[5. Verify Setup<br/>Admin API và Probe HTTP 200]
 ```
 
 1. **Silent Explore**: Agent quét ngầm các manifest (`package.json`, `requirements.txt`, `astro.config.mjs`...) để xác định framework (Next.js, Astro, React, Express, Django...) và phân loại **Delivery Lane** (Frontend-only, Full-stack hay Backend API).
