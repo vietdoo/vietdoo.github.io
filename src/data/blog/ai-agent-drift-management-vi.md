@@ -93,7 +93,7 @@ type AgentPlan = {
 
 Manifest không phải là prompt transcript. Nó là tuyên bố cô đọng về những gì application phải kiểm tra trước khi cho phép side effect. Hạn chế đưa nội dung nhạy cảm vào manifest trừ khi chính nội dung đó là dependency. Với schema hoặc policy lớn, có thể lưu hash; nhưng vẫn phải giữ version identifier có thể truy xuất để operator xem được artifact chính xác.
 
-Semantic Versioning là một quy ước hữu ích cho public API: thay đổi không tương thích nên tăng major version, còn bổ sung và sửa lỗi tương thích có thể dùng minor hoặc patch version.[1] Tuy nhiên, agent platform không nên mặc định rằng version number tự chứng minh compatibility. Tool có thể giữ nguyên JSON schema nhưng đổi semantics của side effect. Vì thế, hãy lưu cả declared contract version và machine-checkable semantic fingerprint cho các phần thực sự ảnh hưởng đến action.
+Semantic Versioning là một quy ước hữu ích cho public API: thay đổi không tương thích nên tăng major version, còn bổ sung và sửa lỗi tương thích có thể dùng minor hoặc patch version. Tuy nhiên, agent platform không nên mặc định rằng version number tự chứng minh compatibility. Tool có thể giữ nguyên JSON schema nhưng đổi semantics của side effect. Vì thế, hãy lưu cả declared contract version và machine-checkable semantic fingerprint cho các phần thực sự ảnh hưởng đến action.
 
 ## Compatibility là một matrix, không phải boolean
 
@@ -257,7 +257,7 @@ Drift detector chỉ biết block action rồi sẽ bị disable vì “quá ồ
 
 Mục tiêu không phải đưa drift về zero. Change là bình thường trong production system. Mục tiêu là làm change visible, phân loại đúng và ngăn phần nguy hiểm trở thành side effect không được review.
 
-Điều này quan trọng vì controlled evaluation không dự đoán đầy đủ behavior trong environment đang thay đổi. International AI Safety Report 2026 mô tả một evaluation gap: pre-deployment test không đủ đáng tin để xác lập utility hoặc risk trong thế giới thực, trong khi autonomous operation làm việc intervention khó hơn khi failure xảy ra.[3] Drift management là một phản hồi thực tế cho khoảng trống đó. Nó bổ sung check ở nơi agent gặp live system thay vì giả định rằng một test thành công sẽ chứng minh compatibility vĩnh viễn.
+Điều này quan trọng vì controlled evaluation không dự đoán đầy đủ behavior trong environment đang thay đổi. International AI Safety Report 2026 mô tả một evaluation gap: pre-deployment test không đủ đáng tin để xác lập utility hoặc risk trong thế giới thực, trong khi autonomous operation làm việc intervention khó hơn khi failure xảy ra. Drift management là một phản hồi thực tế cho khoảng trống đó. Nó bổ sung check ở nơi agent gặp live system thay vì giả định rằng một test thành công sẽ chứng minh compatibility vĩnh viễn.
 
 ## Rollout mà không đóng băng platform
 

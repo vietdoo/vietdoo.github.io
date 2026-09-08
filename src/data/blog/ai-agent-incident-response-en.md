@@ -25,7 +25,7 @@ This playbook treats an incident as an operational state machine rather than a d
 
 Traditional services usually fail in recognizable ways: a process exits, a request returns an error, or a dependency times out. An agent can fail while continuing to produce valid HTTP responses. Its failure may be semantic, cumulative, or hidden behind a successful tool call. It may choose the wrong tool, use a valid credential for an invalid purpose, write an incorrect state, or describe an uncommitted action as complete.
 
-OWASP’s agentic-AI guidance frames these systems as autonomous combinations of models, tools, data, and actions, with risks that require threat modeling and mitigations rather than a single filter at the model boundary.[1] That framing changes the incident question. We are not only asking whether the model is available. We are asking whether the entire action path still deserves authority.
+OWASP’s agentic-AI guidance frames these systems as autonomous combinations of models, tools, data, and actions, with risks that require threat modeling and mitigations rather than a single filter at the model boundary. That framing changes the incident question. We are not only asking whether the model is available. We are asking whether the entire action path still deserves authority.
 
 The most useful distinction is between **availability** and **authority**. Availability asks whether the agent can answer. Authority asks what the agent is still allowed to change. During an incident, preserving read-only assistance may be reasonable even when writes must stop. A global outage is not the only safe outcome.
 

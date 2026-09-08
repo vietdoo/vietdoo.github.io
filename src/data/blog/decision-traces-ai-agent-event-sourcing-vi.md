@@ -27,7 +27,7 @@ Bài viết này trình bày một pattern thực dụng: coi đường đi củ
 
 Sai lầm đầu tiên là nhét mọi artifact vào một JSON blob khổng lồ tên `agent_trace`. Object đó rất nhanh trở thành hỗn hợp của prompt text, provider metadata, debug statement, business event và secret được redact nửa vời. Nó khó query, khó governance nhất quán và thường quá lớn để retention an toàn.
 
-Một thiết kế tốt hơn tách bốn lớp. **Telemetry** mô tả execution: span, latency, token count, provider, model và error. Registry semantic convention cho GenAI của OpenTelemetry có các attribute cho agent identity, conversation identity, provider, requested model, input/output message và evaluation metadata.[1] **Evidence reference** mô tả tài liệu mà agent được phép sử dụng: document ID, version, data classification và thời điểm retrieval. **Decision event** mô tả điều hệ thống đã accept, deny, escalate hay defer. **Domain event** mô tả state change bên ngoài, chẳng hạn `RefundApproved` hoặc `TicketAssigned`.
+Một thiết kế tốt hơn tách bốn lớp. **Telemetry** mô tả execution: span, latency, token count, provider, model và error. Registry semantic convention cho GenAI của OpenTelemetry có các attribute cho agent identity, conversation identity, provider, requested model, input/output message và evaluation metadata. **Evidence reference** mô tả tài liệu mà agent được phép sử dụng: document ID, version, data classification và thời điểm retrieval. **Decision event** mô tả điều hệ thống đã accept, deny, escalate hay defer. **Domain event** mô tả state change bên ngoài, chẳng hạn `RefundApproved` hoặc `TicketAssigned`.
 
 | Lớp | Câu hỏi chính | Ví dụ | Cách retention |
 |---|---|---|---|
@@ -63,7 +63,7 @@ Thứ tự có ý nghĩa. Agent có thể tạo candidate action trước khi co
 
 ![Whiteboard vẽ tay event ledger cho AI Agent, nối request, evidence, policy, approval, tool execution và outcome bằng các mũi tên nhân quả](/blog/decision-traces/decision-ledger.webp)
 
-Bài viết về decision trace của Streamkap mô tả một chuỗi tương tự, bắt đầu từ data event, đi qua context lookup, reasoning, action rồi tới outcome.[2] Bài học production không phải là copy nguyên tên event của một vendor. Điều quan trọng là chuỗi phải đủ rõ để người điều tra incident lần theo cùng một request qua data access, policy layer, agent runtime và business system.
+Bài viết về decision trace của Streamkap mô tả một chuỗi tương tự, bắt đầu từ data event, đi qua context lookup, reasoning, action rồi tới outcome. Bài học production không phải là copy nguyên tên event của một vendor. Điều quan trọng là chuỗi phải đủ rõ để người điều tra incident lần theo cùng một request qua data access, policy layer, agent runtime và business system.
 
 ### Hãy thiết kế decision envelope, không phải cột chain-of-thought
 
@@ -142,7 +142,7 @@ Phân biệt này cũng giúp tránh hứa hẹn sai về tính deterministic. D
 
 Audit system dễ xây nhất thường là hệ thống kém an toàn nhất: copy mọi prompt và model response vào log sink rồi hứa sẽ redact sau. Sensitive content có thể lan qua collector, index, backup, support export và laptop của developer trước khi job redact chạy.
 
-Hướng dẫn minimum audit trail của ARMO phân biệt infrastructure log với application-layer agent-action log. Nguồn này khuyến nghị redact tại source và lưu data shape, sensitivity classification, semantic tag, byte count hoặc hash thay vì plaintext khi content không thực sự cần thiết.[3]
+Hướng dẫn minimum audit trail của ARMO phân biệt infrastructure log với application-layer agent-action log. Nguồn này khuyến nghị redact tại source và lưu data shape, sensitivity classification, semantic tag, byte count hoặc hash thay vì plaintext khi content không thực sự cần thiết.
 
 ![Whiteboard vẽ tay privacy boundary giữa prompt/tool content riêng tư và decision ledger đã redact, với hash và sensitivity label đi qua ranh giới](/blog/decision-traces/privacy-boundary.webp)
 
@@ -161,7 +161,7 @@ Hash không phải deletion mechanism và cũng không tự động là anonymou
 
 Đừng bắt đầu bằng việc instrument từng token. Hãy bắt đầu từ những thời điểm làm thay đổi authority hoặc state. Bộ event tối thiểu hữu ích cho action-taking agent thường gồm request intake, identity assertion, data access, policy evaluation, decision outcome, human approval, tool invocation, tool result, error classification và domain state change.
 
-OpenTelemetry cung cấp vocabulary hữu ích để correlate agent, conversation, provider/model, input/output và evaluation data.[1] Dùng span cho các câu hỏi vận hành như latency và token cost. Dùng decision event cho các câu hỏi như “rule nào đã cho phép?” và “action này đã được accept một lần chưa?”. Dùng evidence reference cho câu hỏi “version nào của order hoặc policy đã hiển thị tại thời điểm đó?”.
+OpenTelemetry cung cấp vocabulary hữu ích để correlate agent, conversation, provider/model, input/output và evaluation data. Dùng span cho các câu hỏi vận hành như latency và token cost. Dùng decision event cho các câu hỏi như “rule nào đã cho phép?” và “action này đã được accept một lần chưa?”. Dùng evidence reference cho câu hỏi “version nào của order hoặc policy đã hiển thị tại thời điểm đó?”.
 
 Có thể bắt đầu bằng transactional outbox. Ghi domain change và audit event trong cùng một database transaction, publish event bất đồng bộ, sau đó làm consumer idempotent. Với workflow đi qua nhiều hệ thống, dùng append-only event store hoặc durable log có ordering và retention rõ. Pattern không nằm ở việc chọn Kafka hay Postgres. Nó nằm ở việc không để audit record phụ thuộc vào một lệnh `logger.info()` best-effort chạy sau side effect.
 

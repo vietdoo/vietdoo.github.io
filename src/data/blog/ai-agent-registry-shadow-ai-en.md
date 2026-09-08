@@ -33,7 +33,7 @@ A useful registry must connect an agent’s **declared identity** to its **obser
 
 The difference is reconciliation. A registry that only accepts declarations becomes a compliance form. A registry that compares declarations with runtime evidence becomes a security control.
 
-Microsoft’s 2026 Cyber Pulse discussion describes the organizational blind spot in similarly practical terms: leaders need to know what agents exist, who owns them, what systems and data they touch, and which ones are sanctioned or shadow agents [1]. LangChain’s 2026 survey also shows why this matters now: 57.3% of respondents reported agents in production, while quality remained the largest barrier and observability had become widespread [2]. Visibility is no longer a future concern; it is part of the production surface.
+Microsoft’s 2026 Cyber Pulse discussion describes the organizational blind spot in similarly practical terms: leaders need to know what agents exist, who owns them, what systems and data they touch, and which ones are sanctioned or shadow agents. LangChain’s 2026 survey also shows why this matters now: 57.3% of respondents reported agents in production, while quality remained the largest barrier and observability had become widespread. Visibility is no longer a future concern; it is part of the production surface.
 
 ## The four records every agent needs
 
@@ -141,7 +141,7 @@ A registry review should not ask whether the agent “seems safe.” It should a
 
 The review should produce an explicit capability contract. For example, “may draft a ticket and request approval” is materially different from “may close a ticket and notify the customer.” An autonomy label without an action-level contract is too vague to enforce.
 
-MLflow’s production guidance makes a related point: runtime governance belongs beneath the model layer, deterministic controls should prevent disallowed actions before they reach the wire, and skill or plugin boundaries deserve special attention [3]. The registry is where those runtime controls acquire a stable subject.
+MLflow’s production guidance makes a related point: runtime governance belongs beneath the model layer, deterministic controls should prevent disallowed actions before they reach the wire, and skill or plugin boundaries deserve special attention. The registry is where those runtime controls acquire a stable subject.
 
 ## Quarantine: the middle state that most inventories lack
 

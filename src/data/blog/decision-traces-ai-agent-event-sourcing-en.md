@@ -25,7 +25,7 @@ This article presents a practical pattern: treat the agent’s accepted action p
 
 The first mistake is to put every artifact into one giant JSON blob called `agent_trace`. That object soon becomes a mixture of prompt text, provider metadata, debug statements, business events, and half-redacted secrets. It is difficult to query, impossible to govern consistently, and usually too large to retain safely.
 
-A better design separates four layers. **Telemetry** describes execution: spans, latency, token counts, provider, model, and errors. OpenTelemetry’s GenAI semantic-convention registry includes attributes for agent identity, conversation identity, provider, requested model, input/output messages, and evaluation metadata.[1] **Evidence references** describe the material the agent was allowed to use: document IDs, versions, data classifications, and retrieval timestamps. **Decision events** describe what the system accepted, denied, escalated, or deferred. **Domain events** describe the external state change that followed, such as `RefundApproved` or `TicketAssigned`.
+A better design separates four layers. **Telemetry** describes execution: spans, latency, token counts, provider, model, and errors. OpenTelemetry’s GenAI semantic-convention registry includes attributes for agent identity, conversation identity, provider, requested model, input/output messages, and evaluation metadata. **Evidence references** describe the material the agent was allowed to use: document IDs, versions, data classifications, and retrieval timestamps. **Decision events** describe what the system accepted, denied, escalated, or deferred. **Domain events** describe the external state change that followed, such as `RefundApproved` or `TicketAssigned`.
 
 | Layer | Primary question | Example | Retention posture |
 |---|---|---|---|
@@ -61,7 +61,7 @@ The order matters. An agent may produce a candidate action before a human approv
 
 ![A hand-drawn whiteboard event ledger for an AI agent, showing request, evidence, policy, approval, tool execution, and outcome events connected by causation arrows](/blog/decision-traces/decision-ledger.webp)
 
-Streamkap’s decision-trace discussion describes a similar chain from triggering data event through context lookup, reasoning, action, and outcome.[2] The production lesson is not to copy a vendor’s event names. It is to make the chain explicit enough that an incident investigator can follow the same request across data access, policy, agent runtime, and the business system.
+Streamkap’s decision-trace discussion describes a similar chain from triggering data event through context lookup, reasoning, action, and outcome. The production lesson is not to copy a vendor’s event names. It is to make the chain explicit enough that an incident investigator can follow the same request across data access, policy, agent runtime, and the business system.
 
 ### Design the decision envelope, not a chain-of-thought column
 
@@ -140,7 +140,7 @@ This distinction is also how to avoid a false promise of determinism. A recorded
 
 The easiest audit system to build is the least safe one: copy every prompt and model response into a log sink and promise to redact it later. Sensitive content tends to spread across collectors, indexes, backups, support exports, and developer laptops before the redaction job runs.
 
-ARMO’s minimum-audit-trail guidance makes a useful distinction between infrastructure logs and the application-layer agent-action log. It recommends redacting at the source and retaining data shape, sensitivity classification, semantic tags, byte counts, and hashes rather than plaintext when the content itself is not required.[3]
+ARMO’s minimum-audit-trail guidance makes a useful distinction between infrastructure logs and the application-layer agent-action log. It recommends redacting at the source and retaining data shape, sensitivity classification, semantic tags, byte counts, and hashes rather than plaintext when the content itself is not required.
 
 ![A hand-drawn whiteboard showing the privacy boundary between private prompt/tool content and the redacted decision ledger, with hashes and sensitivity labels crossing the boundary](/blog/decision-traces/privacy-boundary.webp)
 
@@ -159,7 +159,7 @@ A hash is not a deletion mechanism and it is not automatically anonymous. It can
 
 Do not start by instrumenting every token. Start with the moments that change authority or state. The minimum useful event set for an action-taking agent usually includes request intake, identity assertion, data access, policy evaluation, decision outcome, human approval, tool invocation, tool result, error classification, and domain state change.
 
-OpenTelemetry gives a useful vocabulary for correlating agent, conversation, provider/model, input/output, and evaluation data.[1] Use spans for operational questions such as latency and token cost. Use decision events for questions such as “which rule allowed this?” and “was this action accepted once?” Use evidence references for “what version of the order or policy was visible then?”
+OpenTelemetry gives a useful vocabulary for correlating agent, conversation, provider/model, input/output, and evaluation data. Use spans for operational questions such as latency and token cost. Use decision events for questions such as “which rule allowed this?” and “was this action accepted once?” Use evidence references for “what version of the order or policy was visible then?”
 
 An implementation can begin as a transactional outbox. Write the domain change and the corresponding audit event in one database transaction, publish the event asynchronously, and make consumers idempotent. For workflows that span several systems, use an append-only event store or a durable log with explicit ordering and retention. The pattern is less about choosing Kafka versus Postgres than about refusing to let the audit record depend on a best-effort `logger.info()` call after the side effect.
 

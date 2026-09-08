@@ -25,7 +25,7 @@ The predictable response is to capture everything: the system prompt, user messa
 
 > **The core principle:** a trace is an *execution record*, not a conversation transcript. Preserve enough evidence to explain the agent’s path, cost, authority, and policy decisions. Route raw content through a separate, explicit, short-lived, access-controlled path.
 
-This is not an argument for shallow observability. Tool-calling agents need more visibility than conventional request/response services: they branch, retrieve, retry, call models, invoke tools, and sometimes change the outside world. OpenTelemetry’s GenAI conventions provide useful vocabulary for model identity, token counts, duration, tool calls, and—only when explicitly enabled—content. The fact that content capture is off by default matters: observability is not the same thing as permission to collect text.[1]
+This is not an argument for shallow observability. Tool-calling agents need more visibility than conventional request/response services: they branch, retrieve, retry, call models, invoke tools, and sometimes change the outside world. OpenTelemetry’s GenAI conventions provide useful vocabulary for model identity, token counts, duration, tool calls, and—only when explicitly enabled—content. The fact that content capture is off by default matters: observability is not the same thing as permission to collect text.
 
 This article builds a practical production design for tracing prompts, tool calls, tokens, and cost without converting logs into a data-exposure surface. The running example is **RelayDesk**, a multi-tenant customer-support agent that searches a knowledge base, reads account state, creates refund drafts, and sends email after approval. Every customer value, secret, price, and trace sample below is synthetic.
 
@@ -46,7 +46,7 @@ Before choosing a tracing SDK or a backend, write down the questions an on-call 
 
 The question design prevents a dangerous premise: that reading raw content is the only way to debug. It frequently is not. If `tool.get_customer_profile` is slow, retries three times because of `UPSTREAM_429`, and has a `restricted` output class, you already have a disciplined investigation path without seeing an address, a card number, or a bearer token.
 
-NIST frames post-deployment AI monitoring as more than infrastructure availability. It includes functionality, operations, human factors, security, and compliance. Its recent review also identifies fragmented logging, degradation detection, and balancing automated with human-validated monitoring as recurring challenges.[5] An agent dashboard that only shows latency is therefore an incomplete operating model.
+NIST frames post-deployment AI monitoring as more than infrastructure availability. It includes functionality, operations, human factors, security, and compliance. Its recent review also identifies fragmented logging, degradation detection, and balancing automated with human-validated monitoring as recurring challenges. An agent dashboard that only shows latency is therefore an incomplete operating model.
 
 ---
 
@@ -63,7 +63,7 @@ A defensible design separates evidence by the question it serves, the people who
 | **Events / audit logs** | Establish that a policy, retry, approval, or side effect occurred | Strongly typed event | No; decision evidence only | SRE and Security |
 | **Restricted evidence** | Investigate the rare case where an exact fragment matters | Sanitized snapshot or encrypted pointer | Explicit sample only | Two-person break-glass workflow |
 
-OpenTelemetry’s own sensitive-data guidance makes the responsibility clear: instrumentation cannot know what is sensitive in a specific business context. Implementers need to review emitted data, apply data minimization, collect only what serves an observability purpose, and consider aggregation or anonymization where possible.[2] “Turn on auto-instrumentation and inspect it later” is not a production data architecture.
+OpenTelemetry’s own sensitive-data guidance makes the responsibility clear: instrumentation cannot know what is sensitive in a specific business context. Implementers need to review emitted data, apply data minimization, collect only what serves an observability purpose, and consider aggregation or anonymization where possible. “Turn on auto-instrumentation and inspect it later” is not a production data architecture.
 
 ### Use spans to preserve execution shape, not to carry payloads
 
@@ -83,7 +83,7 @@ A model child span can include the deployment, template revision, token usage, f
 
 ![An agent root span fans out through model, retrieval, and tool-call cards while raw content stays behind a privacy layer](/blog/agent-observability-trace-map.webp)
 
-OpenTelemetry’s GenAI observability walkthrough uses the same essential hierarchy: an agent/root invocation with child chat and tool-execution spans, plus attributes for model identity, tokens, and finish reasons. When content recording is enabled, full messages and tool information can be attached. That is a policy choice, not a harmless default.[1]
+OpenTelemetry’s GenAI observability walkthrough uses the same essential hierarchy: an agent/root invocation with child chat and tool-execution spans, plus attributes for model identity, tokens, and finish reasons. When content recording is enabled, full messages and tool information can be attached. That is a policy choice, not a harmless default.
 
 ---
 
@@ -142,7 +142,7 @@ Redaction is not the last regex in a pipeline. It is a data-contract decision th
 | PII, credentials, or confidential content | **Redact** | Match category and field count | Proves policy execution without retaining the secret |
 | Material with no observability purpose | **Drop** | No field | Minimizes the attack surface |
 
-Hashing alone is not an anonymization guarantee. OpenTelemetry explicitly warns that a hash of a small or predictable input space—for example a numeric user ID—may be reversible in practice.[2] If you need a correlation key, prefer an HMAC managed as a secret, scoped by tenant or rotation window, and still access-controlled as sensitive telemetry. Do not put an unsalted SHA-256 email hash on a broad dashboard and call the system privacy-preserving.
+Hashing alone is not an anonymization guarantee. OpenTelemetry explicitly warns that a hash of a small or predictable input space—for example a numeric user ID—may be reversible in practice. If you need a correlation key, prefer an HMAC managed as a secret, scoped by tenant or rotation window, and still access-controlled as sensitive telemetry. Do not put an unsalted SHA-256 email hash on a broad dashboard and call the system privacy-preserving.
 
 ### A metadata-first TypeScript instrumentation wrapper
 
@@ -208,7 +208,7 @@ function traceToolCall(span: { setAttribute(k: string, v: string | number | bool
 }
 ```
 
-This is not a replacement for DLP or semantic PII detection. It establishes a safer default shape: a normal code path never attaches the raw payload in the first place, regardless of exporter retries, sampling decisions, or backend changes. Grafana describes the same ordering in its SDK-side secret sanitization: messages, system prompts, tool calls, and tool results are sanitized before generation data is exported; server-side guards provide a second, centralized policy layer.[3]
+This is not a replacement for DLP or semantic PII detection. It establishes a safer default shape: a normal code path never attaches the raw payload in the first place, regardless of exporter retries, sampling decisions, or backend changes. Grafana describes the same ordering in its SDK-side secret sanitization: messages, system prompts, tool calls, and tool results are sanitized before generation data is exported; server-side guards provide a second, centralized policy layer.
 
 ---
 
@@ -226,7 +226,7 @@ A production design usually needs at least five checkpoints.
 | **4. Backend routing and RBAC** | Split standard trace storage from restricted evidence; encrypt and audit access | Classifiers can still miss semantic PII |
 | **5. Detection and tests** | Canary secrets, DLP scans, adversarial fixtures, bypass alerts | Detection is not a preventive control |
 
-Do not make backend redaction your primary defense. Once a raw prompt has crossed the network, a queue, a retry buffer, or a third-party service, it may exist in several places. OpenTelemetry provides processors to modify, filter, redact, and transform telemetry, but its guidance is unambiguous: the best way to avoid collecting sensitive telemetry is not to collect it in the first place.[2]
+Do not make backend redaction your primary defense. Once a raw prompt has crossed the network, a queue, a retry buffer, or a third-party service, it may exist in several places. OpenTelemetry provides processors to modify, filter, redact, and transform telemetry, but its guidance is unambiguous: the best way to avoid collecting sensitive telemetry is not to collect it in the first place.
 
 The following is deliberately **policy pseudoconfiguration**, not copy-paste Collector syntax. Its value is in being reviewable as an allowlist-first contract; validate the exact processor syntax for your Collector version before deploying.
 
@@ -260,7 +260,7 @@ telemetry_policy:
 
 ### Truncation is not a privacy control
 
-Keeping only the first thousand characters reduces volume; it does not remove sensitivity. An API key can be in the first twenty characters, and an email, name, account number, or private instruction is often at the start of a message. Regex is also incomplete by design. Grafana distinguishes high-confidence secret-pattern sanitization from evaluator/guard approaches that can identify semantically expressed PII, and it documents different coverage for inputs, outputs, streaming, and reasoning blocks.[3]
+Keeping only the first thousand characters reduces volume; it does not remove sensitivity. An API key can be in the first twenty characters, and an email, name, account number, or private instruction is often at the start of a message. Regex is also incomplete by design. Grafana distinguishes high-confidence secret-pattern sanitization from evaluator/guard approaches that can identify semantically expressed PII, and it documents different coverage for inputs, outputs, streaming, and reasoning blocks.
 
 Test the pipeline with **synthetic but hostile** fixtures: a fake bearer token, fake email, fake identifier, nested JSON, base64-looking text, a tool result that contains a header, and a streaming response. The test target is not “a beautiful redactor.” It is proof that the raw value cannot appear in an exporter mock, a dead-letter queue, or a standard trace store outside the intended restricted lane.
 
@@ -310,7 +310,7 @@ When groundedness regresses, begin with prompt revision, index revision, tokeniz
 
 Tool calling is where agent observability must exceed ordinary API logging. `HTTP 200` does not mean “safe”: an agent may call a write tool against the wrong tenant, a tool may return far too much PII, an agent may loop a read tool and create a denial-of-wallet incident, or a technically successful action may still require approval.
 
-OWASP identifies tool abuse, excessive autonomy, data exfiltration, prompt injection, denial of wallet, and sensitive data exposure in context or logs as specific agent risks. Its baseline recommendations include least privilege, per-tool scopes, high-impact action controls, monitoring, and data classification.[4]
+OWASP identifies tool abuse, excessive autonomy, data exfiltration, prompt injection, denial of wallet, and sensitive data exposure in context or logs as specific agent risks. Its baseline recommendations include least privilege, per-tool scopes, high-impact action controls, monitoring, and data classification.
 
 A good tool span retains behavioral evidence:
 
@@ -356,7 +356,7 @@ Do not hard-code price in a dashboard query. Version a price card, attach `billi
 | **Per trace** | Loops, retry storms, expensive fallback chains | Stop after maximum model turns, tool calls, or estimated cost |
 | **Per tenant / period** | Abuse, rollout regressions, denial of wallet | Quota and anomaly detection by tenant tier and route |
 
-A cost signal does not need a user email, a raw prompt, or complete tool arguments to be useful. Route, model class, prompt revision, tool name, tenant tier, and risk tier are usually sufficient dimensions after cardinality review. LangChain similarly emphasizes that traces make token and latency attribution possible at the step level, while production scale requires sampling and retention because humans cannot read every trace.[6]
+A cost signal does not need a user email, a raw prompt, or complete tool arguments to be useful. Route, model class, prompt revision, tool name, tenant tier, and risk tier are usually sufficient dimensions after cardinality review. LangChain similarly emphasizes that traces make token and latency attribution possible at the step level, while production scale requires sampling and retention because humans cannot read every trace.
 
 ---
 
@@ -391,7 +391,7 @@ Use a deliberately narrow workflow instead:
 
 ![A locked debug cabinet represents time-bound break-glass access with two-person approval and an auditable evidence path](/blog/agent-observability-break-glass.webp)
 
-This design feels heavier than an unrestricted trace UI because it is. It creates an auditable boundary and prevents ordinary incident response from becoming routine bulk access to customer conversations. Grafana’s redaction documentation makes the limitation visible: SDK sanitizers and server guards have different coverage, and no single layer automatically covers response content, streaming, and model-thinking blocks in the same way.[3] Break-glass does not replace prevention; it acknowledges legitimate investigative needs without normalizing raw-content access.
+This design feels heavier than an unrestricted trace UI because it is. It creates an auditable boundary and prevents ordinary incident response from becoming routine bulk access to customer conversations. Grafana’s redaction documentation makes the limitation visible: SDK sanitizers and server guards have different coverage, and no single layer automatically covers response content, streaming, and model-thinking blocks in the same way. Break-glass does not replace prevention; it acknowledges legitimate investigative needs without normalizing raw-content access.
 
 ---
 
@@ -442,7 +442,7 @@ Implement the SDK sanitizer and Collector allowlist. Create canary fixtures and 
 
 ### Week 4: operate the feedback loop
 
-Set sampling and retention, launch the break-glass process, route policy-bypass alerts to on-call, and turn safe incident summaries into regression-evaluation fixtures. MLflow describes agent observability as a combination of tracing, evaluation, monitoring, cost/latency tracking, feedback, and governance; those are parts of one learning loop, not disconnected product features.[7]
+Set sampling and retention, launch the break-glass process, route policy-bypass alerts to on-call, and turn safe incident summaries into regression-evaluation fixtures. MLflow describes agent observability as a combination of tracing, evaluation, monitoring, cost/latency tracking, feedback, and governance; those are parts of one learning loop, not disconnected product features.
 
 ---
 

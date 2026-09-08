@@ -23,7 +23,7 @@ I have watched an AI agent produce the exact right final answer — and still be
 
 The scenario is familiar. A user asks for the status of a case. The agent returns the correct case number, correct status, and correct next deadline. The demo is smooth enough that everyone in the room nods. Then you open the trace. On the first run, the agent called a write-capable tool before the read tool. On another run, it retried the same tool four times. On slightly noisier wording, it attempted to change the case state because the user said, “If possible, please handle it for me.” The initial demo never took the dangerous branch, so the team concluded the system was ready.
 
-That is the difference between **an agent that has once produced a good answer** and **an agent whose behavior is sufficiently reliable to release**. For a tool-calling agent, the final answer is only the visible layer. Tool selection, arguments, state transitions, retries, guardrails, latency, token cost, and recovery from intermediate failure all belong to the release surface. Anthropic describes the full record as a transcript or trajectory, while the *outcome* is the actual final state in the environment—not the agent’s claim that an action was completed.[1]
+That is the difference between **an agent that has once produced a good answer** and **an agent whose behavior is sufficiently reliable to release**. For a tool-calling agent, the final answer is only the visible layer. Tool selection, arguments, state transitions, retries, guardrails, latency, token cost, and recovery from intermediate failure all belong to the release surface. Anthropic describes the full record as a transcript or trajectory, while the *outcome* is the actual final state in the environment—not the agent’s claim that an action was completed.
 
 This article shows how to turn that insight into a **regression suite**: a set of executable contracts that can be replayed after every prompt, model, tool-schema, routing, retrieval, policy, or orchestration change. The suite should not force an agent down one artificial “golden path.” It should enforce the invariants that production cannot afford to trade away.
 
@@ -33,7 +33,7 @@ This article shows how to turn that insight into a **regression suite**: a set o
 
 ## A correct answer can still conceal a broken system
 
-Agents differ from prompt chains because they make decisions over multiple steps. Every step introduces another place for nondeterminism and failure: the model can pick the wrong tool, choose the right tool with malformed arguments, misinterpret an observation, loop uselessly, or mutate state before validating a condition. An agent can therefore pass a final-answer check while remaining fragile when the input, time, tool response, or session state changes slightly.[1] [2]
+Agents differ from prompt chains because they make decisions over multiple steps. Every step introduces another place for nondeterminism and failure: the model can pick the wrong tool, choose the right tool with malformed arguments, misinterpret an observation, loop uselessly, or mutate state before validating a condition. An agent can therefore pass a final-answer check while remaining fragile when the input, time, tool response, or session state changes slightly.
 
 ![The final answer is only the visible tip; tool use, state, safety, and cost sit beneath the surface](/blog/agent-evals-iceberg.webp)
 
@@ -48,13 +48,13 @@ Use a realistic fictional system throughout the article: **CaseOps Agent**, an i
 
 Consider this regression case: *“Where is case CS-4821? If documents are missing, tell me what the applicant must provide.”* The expected answer is a correct summary and a list of missing documents. But the meaningful contract is richer: the agent must call `lookup_case` first; it may call `get_policy`; it must **not** call `request_status_change`; it must not expose data from another case; and it must not retry endlessly when the policy service times out.
 
-A final-answer matcher would allow the agent to pass even if it attempted a forbidden action before responding. In a low-risk product, that might be a wasted tool call. In payments, healthcare, identity, administrative operations, or developer tooling, it may become an incident. OWASP identifies risks including tool abuse, excessive autonomy, prompt injection, data exfiltration, and denial of wallet in agentic systems. Those risks make the trajectory part of the release surface rather than optional debug data.[7]
+A final-answer matcher would allow the agent to pass even if it attempted a forbidden action before responding. In a low-risk product, that might be a wasted tool call. In payments, healthcare, identity, administrative operations, or developer tooling, it may become an incident. OWASP identifies risks including tool abuse, excessive autonomy, prompt injection, data exfiltration, and denial of wallet in agentic systems. Those risks make the trajectory part of the release surface rather than optional debug data.
 
 ---
 
 ## Evals are an architectural layer, not a handful of prompt tests
 
-An *eval* is a test that combines an input with grading logic for a desired behavior. For agents, the important unit is not just a prompt and a response. It includes a **task**, **trial**, **grader**, **trace**, **outcome**, **agent harness**, and **evaluation harness**.[1] This vocabulary is useful because it helps a team locate failure precisely instead of saying that “the model was weird.”
+An *eval* is a test that combines an input with grading logic for a desired behavior. For agents, the important unit is not just a prompt and a response. It includes a **task**, **trial**, **grader**, **trace**, **outcome**, **agent harness**, and **evaluation harness**. This vocabulary is useful because it helps a team locate failure precisely instead of saying that “the model was weird.”
 
 | Term | Practical meaning | The question it answers |
 |---|---|---|
@@ -69,7 +69,7 @@ The most common design mistake is to mix two different goals in one dashboard.
 
 A **capability eval** asks, *Which hard tasks can the agent perform today?* It is a climbing wall. It can start with a low pass rate because its purpose is to direct improvement.
 
-A **regression eval** asks, *Do behaviors that were previously accepted still work?* It is a guardrail. For critical conditions, it should have an almost-perfect pass expectation. Anthropic recommends keeping these suites separate and allowing robust capability cases to graduate into regression cases once they represent behavior the team is committed to preserving.[1]
+A **regression eval** asks, *Do behaviors that were previously accepted still work?* It is a guardrail. For critical conditions, it should have an almost-perfect pass expectation. Anthropic recommends keeping these suites separate and allowing robust capability cases to graduate into regression cases once they represent behavior the team is committed to preserving.
 
 ![A capability suite explores the mountain; a regression suite protects the safe route](/blog/agent-evals-two-suites.webp)
 
@@ -83,7 +83,7 @@ For example, generating a deeply nuanced response for a rare edge case may still
 
 ## Grade the right surface: run, trace, or thread
 
-There is no single place to evaluate an agent. LangChain describes three complementary surfaces: a **run** is one model or tool invocation, a **trace** is one complete end-to-end turn, and a **thread** is a multi-turn conversation.[2] Each surface answers a different class of question.
+There is no single place to evaluate an agent. LangChain describes three complementary surfaces: a **run** is one model or tool invocation, a **trace** is one complete end-to-end turn, and a **thread** is a multi-turn conversation. Each surface answers a different class of question.
 
 | Surface | What to evaluate | CaseOps example | Best grader type |
 |---|---|---|---|
@@ -91,7 +91,7 @@ There is no single place to evaluate an agent. LangChain describes three complem
 | **Trace** | Outcome, trajectory, and state effect for one task | Did it inspect the right case, avoid changing state, and answer accurately? | Deterministic graders plus a narrow rubric judge |
 | **Thread** | Intent and memory across turns | When the user changes their goal, does the agent preserve scope and consent? | State evaluator, judge, sampled human review |
 
-Run-level tests provide fast feedback and are excellent after changing a tool description or router. Trace-level tests are the core release gate because they test real end-to-end impact. Thread-level tests need not run on every small pull request, but they matter for long-running sessions, handoffs, and memory. A system can handle each individual turn well while failing the conversation as a whole.[2]
+Run-level tests provide fast feedback and are excellent after changing a tool description or router. Trace-level tests are the core release gate because they test real end-to-end impact. Thread-level tests need not run on every small pull request, but they matter for long-running sessions, handoffs, and memory. A system can handle each individual turn well while failing the conversation as a whole.
 
 ### Do not turn trajectory tests into handcuffs
 
@@ -105,7 +105,7 @@ Instead, split trajectory rules into three classes:
 | **Ordering constraint** | Look up the case before reasoning about its state; obtain approval before a write action | Partial-order matcher |
 | **Soft quality constraint** | Avoid unproductive loops; explain uncertainty clearly; choose a reasonable route | Budgets plus a rubric judge |
 
-Strict, ordered tool-call matching should be reserved for sequences where order genuinely matters for correctness or safety. In most other cases, outcome and the quality of decisions matter more than a single pre-planned route.[2]
+Strict, ordered tool-call matching should be reserved for sequences where order genuinely matters for correctness or safety. In most other cases, outcome and the quality of decisions matter more than a single pre-planned route.
 
 ![A trace can have several valid routes, but dangerous routes must be blocked before they touch state](/blog/agent-evals-trace.webp)
 
@@ -173,7 +173,7 @@ Three design choices are doing real work here. First, every fixture owns its **i
 
 ## Use a hybrid grader system: code for hard facts, judges for semantics
 
-No single grader is good at every behavior. Code-based graders are fast, cheap, reproducible, and ideal for state, schema, tool name, arguments, counts, and policy. Model-based graders are flexible when you need to assess helpfulness, groundedness, or a route that is reasonable but difficult to enumerate. Human reviewers calibrate judges and handle high-stakes domains.[1] [2]
+No single grader is good at every behavior. Code-based graders are fast, cheap, reproducible, and ideal for state, schema, tool name, arguments, counts, and policy. Model-based graders are flexible when you need to assess helpfulness, groundedness, or a route that is reasonable but difficult to enumerate. Human reviewers calibrate judges and handle high-stakes domains.
 
 The important distinction is not whether you use an LLM-as-a-judge. It is whether you refuse to hand a checkable fact to a variable judge.
 
@@ -251,7 +251,7 @@ Return JSON only:
 { "pass": boolean, "evidence": [string], "reason": string }
 ```
 
-OpenAI notes that LLMs are generally more reliable at discrimination tasks such as classification, pairwise comparison, and criteria-based scoring than open-ended generation. That is why a rubric should define exactly what is being classified.[5] For high-risk cases, sample judge results for human review, measure agreement, and adjust the rubric or dataset. An uncalibrated judge is only another prompt that happens to sound authoritative.
+OpenAI notes that LLMs are generally more reliable at discrimination tasks such as classification, pairwise comparison, and criteria-based scoring than open-ended generation. That is why a rubric should define exactly what is being classified. For high-risk cases, sample judge results for human review, measure agreement, and adjust the rubric or dataset. An uncalibrated judge is only another prompt that happens to sound authoritative.
 
 ---
 
@@ -270,7 +270,7 @@ A practical approach is to separate execution tiers by cost.
 
 Those numbers are an **illustrative policy**, not an industry standard. Start with a budget that fits your baseline, API economics, and product risk. More important than the exact trial count is preserving the model configuration, tool and policy versions, trace, state diff, grader version, and relevant seed/configuration. When a case becomes flaky, you need to know which variable moved.
 
-A simple rule works well for critical invariants: **a safety violation in any trial fails the case**, even if other trials look excellent. For soft quality scores, consider a median or a lower percentile instead of an average so that a few exceptional runs do not hide tail risk. Do not overbuild statistics before you have high-signal traces, however. Observability is the prerequisite for meaningful metrics.[4] [8]
+A simple rule works well for critical invariants: **a safety violation in any trial fails the case**, even if other trials look excellent. For soft quality scores, consider a median or a lower percentile instead of an average so that a few exceptional runs do not hide tail risk. Do not overbuild statistics before you have high-signal traces, however. Observability is the prerequisite for meaningful metrics.
 
 ---
 
@@ -358,7 +358,7 @@ jobs:
       - run: pnpm evals:compare --baseline main --report reports/regression.json
 ```
 
-Treat this as a policy sketch, not copy-and-paste production YAML. Your provider needs its own correct changed-path logic, secrets strategy, caching, and report storage. The core principle is stable: small PRs receive fast feedback, high-impact agent changes receive deeper coverage, and stability suites run outside the critical path. OpenAI recommends eval-driven development, thorough logging, datasets that reflect production distributions, automated scoring where possible, and continuous evaluation as the application evolves.[5]
+Treat this as a policy sketch, not copy-and-paste production YAML. Your provider needs its own correct changed-path logic, secrets strategy, caching, and report storage. The core principle is stable: small PRs receive fast feedback, high-impact agent changes receive deeper coverage, and stability suites run outside the critical path. OpenAI recommends eval-driven development, thorough logging, datasets that reflect production distributions, automated scoring where possible, and continuous evaluation as the application evolves.
 
 ### A good gate needs an auditable escape route
 
@@ -368,7 +368,7 @@ When CI is red, the team needs a resolution path instead of “rerun until green
 
 ## Production is not the enemy of offline evals; it supplies the next case
 
-An offline suite knows only the failures you have already imagined. Production reveals what users actually ask, where tools really time out, how retrieval really drifts, and how an agent actually abuses retries at peak load. Offline and online evaluation are complementary: offline protects known behavior before deployment, while online evaluation discovers unknown failures after it.[2]
+An offline suite knows only the failures you have already imagined. Production reveals what users actually ask, where tools really time out, how retrieval really drifts, and how an agent actually abuses retries at peak load. Offline and online evaluation are complementary: offline protects known behavior before deployment, while online evaluation discovers unknown failures after it.
 
 ![A production incident should become a minimal fixture and a release gate in a continuous-improvement flywheel](/blog/agent-evals-flywheel.webp)
 
@@ -384,7 +384,7 @@ This is the most valuable flywheel in agent engineering: **incident → trace �
 
 ### Security and privacy in eval data
 
-Traces are rich evidence, but they can also contain prompts, tool arguments, content, identity, and PII. OpenTelemetry warns that capturing prompt, response, or tool content needs privacy and security consideration; good instrumentation does not mean logging everything.[8] Default to synthetic evaluation data, tokenized identifiers, redacted content, access-controlled reports, and explicit retention policies. If you must use a real production trace, require a data classification, approval path, and de-identification process.
+Traces are rich evidence, but they can also contain prompts, tool arguments, content, identity, and PII. OpenTelemetry warns that capturing prompt, response, or tool content needs privacy and security consideration; good instrumentation does not mean logging everything. Default to synthetic evaluation data, tokenized identifiers, redacted content, access-controlled reports, and explicit retention policies. If you must use a real production trace, require a data classification, approval path, and de-identification process.
 
 ---
 
@@ -399,7 +399,7 @@ Traces are rich evidence, but they can also contain prompts, tool arguments, con
 | **A static dataset** | Cases do not change after launch | The team optimizes for last year’s exam | Mine production failures into regression fixtures |
 | **No cost or loop budget** | An agent is “correct” after twenty tool calls | Bills and latency rise; tool storms emerge | Set budgets and monitor trends |
 
-Do not confuse evals with runtime guardrails. Evals establish evidence across a case set; runtime authorization, least privilege, confirmation flows, rate limits, and guardrails must still exist when the agent is live. OWASP recommends controls such as least-privilege tool access, approval for sensitive actions, adversarial testing, and monitoring. A regression suite helps prove that those controls have not quietly disappeared in the next release.[7]
+Do not confuse evals with runtime guardrails. Evals establish evidence across a case set; runtime authorization, least privilege, confirmation flows, rate limits, and guardrails must still exist when the agent is live. OWASP recommends controls such as least-privilege tool access, approval for sensitive actions, adversarial testing, and monitoring. A regression suite helps prove that those controls have not quietly disappeared in the next release.
 
 ---
 

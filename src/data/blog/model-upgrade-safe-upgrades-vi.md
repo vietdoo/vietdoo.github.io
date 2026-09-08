@@ -35,7 +35,7 @@ Một quy trình release hữu ích cần nối các lớp này với nhau:
 
 Mỗi lớp trả lời một câu hỏi khác nhau. Dùng một pass rate duy nhất cho tất cả các lớp sẽ tạo ra cảm giác an toàn giả.
 
-Báo cáo State of Agent Engineering năm 2026 cho thấy áp lực vận hành phía sau bài toán này. Trong khảo sát hơn 1.300 người làm nghề, 57% cho biết tổ chức của họ đã có agent chạy production, trong khi quality vẫn là rào cản phổ biến nhất. Cùng báo cáo đó cho thấy observability được áp dụng rộng hơn offline eval và online eval, còn việc dùng nhiều model đã trở thành điều bình thường chứ không còn là ngoại lệ.[1] Một đội ngũ có thể sở hữu trace rất tốt và nhiều model để lựa chọn nhưng vẫn chưa trả lời được câu hỏi: **chính xác thì điều gì không được thay đổi khi thay model này bằng model khác?**
+Báo cáo State of Agent Engineering năm 2026 cho thấy áp lực vận hành phía sau bài toán này. Trong khảo sát hơn 1.300 người làm nghề, 57% cho biết tổ chức của họ đã có agent chạy production, trong khi quality vẫn là rào cản phổ biến nhất. Cùng báo cáo đó cho thấy observability được áp dụng rộng hơn offline eval và online eval, còn việc dùng nhiều model đã trở thành điều bình thường chứ không còn là ngoại lệ. Một đội ngũ có thể sở hữu trace rất tốt và nhiều model để lựa chọn nhưng vẫn chưa trả lời được câu hỏi: **chính xác thì điều gì không được thay đổi khi thay model này bằng model khác?**
 
 ## Viết behavioral contract trước khi viết test case
 
@@ -206,7 +206,7 @@ Vì vậy post-release monitoring phải so candidate với baseline behavior k�
 | Action | Tool choice, argument repair, retry, approval rate | Pause hoặc rollback khi risk tăng |
 | Operations | Latency, token, provider error, cost | Điều chỉnh budget, capacity hoặc routing |
 
-Công trình evaluation probes của NIST cũng đi theo hướng này: automated verifier có thể được tích hợp trực tiếp vào agent workflow, và kết quả được tích lũy thành machine-readable audit trail nối decision với evidence hỗ trợ.[2] Ý tưởng quan trọng không nằm ở một judge model cụ thể. Nó nằm ở feedback loop: release system tiếp tục kiểm tra contract sau khi buổi deploy kết thúc.
+Công trình evaluation probes của NIST cũng đi theo hướng này: automated verifier có thể được tích hợp trực tiếp vào agent workflow, và kết quả được tích lũy thành machine-readable audit trail nối decision với evidence hỗ trợ. Ý tưởng quan trọng không nằm ở một judge model cụ thể. Nó nằm ở feedback loop: release system tiếp tục kiểm tra contract sau khi buổi deploy kết thúc.
 
 ![Vòng lặp phát hiện drift và rollback sau release, nối quality signal, human review với baseline model ổn định](/blog/model-upgrade/drift-rollback.webp)
 

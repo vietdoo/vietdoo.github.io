@@ -23,7 +23,7 @@ Agent không “fail” theo nghĩa đơn giản. Nó tạo ra một business pr
 
 > **Luận điểm chính:** Plan của agent không phải transaction. Mỗi tool tạo side effect nên khai báo nó thay đổi gì, có thể kiểm tra outcome thế nào và compensation nào an toàn để thử. Runtime cần lưu bền vững các contract đó, phân biệt `failed` với `unknown`, chạy compensation có kiểm soát và chuyển cho con người khi không tồn tại inverse an toàn.
 
-Bài này tập trung vào application-level pattern. Đây không phải phần giới thiệu chung về Saga, cũng không yêu cầu language model tự nghĩ ra một thao tác undo khéo léo giữa lúc incident. Temporal mô tả Saga là chuỗi local transaction với compensating action, gồm cả việc chạy theo thứ tự ngược và đăng ký compensation trước khi activity chạy.[1] Công trình Robust Agent Compensation gần đây áp dụng recovery manager dạng log cho agent framework và formalize cặp action/compensation.[2] Bài học hữu ích cho AI platform là đưa các ý tưởng đó vào tool boundary, nơi chúng có thể được review, test, authorize và observe.
+Bài này tập trung vào application-level pattern. Đây không phải phần giới thiệu chung về Saga, cũng không yêu cầu language model tự nghĩ ra một thao tác undo khéo léo giữa lúc incident. Temporal mô tả Saga là chuỗi local transaction với compensating action, gồm cả việc chạy theo thứ tự ngược và đăng ký compensation trước khi activity chạy. Công trình Robust Agent Compensation gần đây áp dụng recovery manager dạng log cho agent framework và formalize cặp action/compensation. Bài học hữu ích cho AI platform là đưa các ý tưởng đó vào tool boundary, nơi chúng có thể được review, test, authorize và observe.
 
 ## Timeout không phải rollback
 

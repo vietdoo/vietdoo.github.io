@@ -21,7 +21,7 @@ Không có điều gì kỳ bí xảy ra. Source row đã bị xóa, nhưng nh�
 
 > **Luận điểm chính:** AI system nên coi deletion là một propagation protocol, không phải một database button. Hãy chặn retrieval ngay lập tức, xóa hoặc vô hiệu hóa mọi projection dẫn xuất, và tạo bằng chứng cho thấy phạm vi đã được xử lý mà không chép dữ liệu đã xóa vào audit log.
 
-Đây là playbook về kiến trúc, không phải tư vấn pháp lý cho từng trường hợp. Nghĩa vụ privacy còn phụ thuộc vào jurisdiction, mục đích xử lý, lawful basis, hợp đồng, chính sách lưu trữ và tình tiết của từng request. GDPR Article 17 mô tả quyền xóa trong các trường hợp cụ thể, đồng thời liệt kê những ngoại lệ như nghĩa vụ pháp lý, tự do biểu đạt, lưu trữ hoặc nghiên cứu vì lợi ích công và việc bảo vệ quyền lợi pháp lý.[1] Bài học kiến trúc vẫn có tính tổng quát: nếu hệ thống hứa sẽ quên, hệ thống cần có scope, state machine và cách chứng minh completion.
+Đây là playbook về kiến trúc, không phải tư vấn pháp lý cho từng trường hợp. Nghĩa vụ privacy còn phụ thuộc vào jurisdiction, mục đích xử lý, lawful basis, hợp đồng, chính sách lưu trữ và tình tiết của từng request. GDPR Article 17 mô tả quyền xóa trong các trường hợp cụ thể, đồng thời liệt kê những ngoại lệ như nghĩa vụ pháp lý, tự do biểu đạt, lưu trữ hoặc nghiên cứu vì lợi ích công và việc bảo vệ quyền lợi pháp lý. Bài học kiến trúc vẫn có tính tổng quát: nếu hệ thống hứa sẽ quên, hệ thống cần có scope, state machine và cách chứng minh completion.
 
 ## Deletion là một graph, không phải một row
 
@@ -100,7 +100,7 @@ Check này phải nằm ở retrieval boundary, không chỉ trong UI. Cached re
 
 ## Delete API của provider chỉ xử lý một projection
 
-Vector database thường cung cấp cách xóa point theo ID hoặc metadata filter. Pinecone mô tả việc xóa theo ID, metadata filter, toàn bộ record trong namespace hoặc cả namespace; tài liệu cũng ghi rõ delete tiêu thụ write units.[3] Qdrant mô tả xóa theo point ID hoặc filter, đồng thời phân biệt xóa cả point với xóa riêng vector hoặc payload.[4]
+Vector database thường cung cấp cách xóa point theo ID hoặc metadata filter. Pinecone mô tả việc xóa theo ID, metadata filter, toàn bộ record trong namespace hoặc cả namespace; tài liệu cũng ghi rõ delete tiêu thụ write units. Qdrant mô tả xóa theo point ID hoặc filter, đồng thời phân biệt xóa cả point với xóa riêng vector hoặc payload.
 
 Các API đó rất hữu ích, nhưng chúng không phải end-to-end erasure protocol. Chúng chỉ hoạt động trên một index. Chúng không biết source đó đã được summary vào bảng khác, copy vào cache, đưa vào trace hay export sang data warehouse hay chưa.
 
@@ -183,7 +183,7 @@ Hãy phân loại từng projection trước khi xây deletion worker. Một pol
 
 Đừng dùng từ “anonymized” như một chiếc đũa thần. Một transformation bất khả nghịch phải được đánh giá dựa trên dữ liệu, attacker model và các field xung quanh. Hash một email ổn định trong audit table vẫn có thể cho phép correlation. Thay content bằng một secret token ngắn vẫn có thể cho phép operator có quyền tái nhận diện. Nếu evidence cần được giữ, hãy minimize nó và tách quyền truy cập evidence khỏi product data.
 
-NIST mô tả AI RMF là hướng dẫn tự nguyện giúp đưa các yếu tố trustworthiness vào thiết kế, phát triển, sử dụng và đánh giá AI product, service và system.[2] NIST không quy định một cách triển khai deletion duy nhất. Với engineering team, hệ quả hữu ích là xem deletion như một risk control có governance, owner, outcome có thể test và residual risk được ghi chép.
+NIST mô tả AI RMF là hướng dẫn tự nguyện giúp đưa các yếu tố trustworthiness vào thiết kế, phát triển, sử dụng và đánh giá AI product, service và system. NIST không quy định một cách triển khai deletion duy nhất. Với engineering team, hệ quả hữu ích là xem deletion như một risk control có governance, owner, outcome có thể test và residual risk được ghi chép.
 
 ## Evidence ledger phải chứng minh scope mà không biến thành shadow archive
 

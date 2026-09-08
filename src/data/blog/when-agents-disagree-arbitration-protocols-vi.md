@@ -118,7 +118,7 @@ Hãy coi basis là một phần của value.
 | Evidence coverage | Tỷ lệ required claim đã có support được chấp nhận. | Đây là dimension riêng, không phải confidence. |
 | Heuristic | Rule như “hai tool cùng thành công”. | Hữu ích cho policy, không phải probability. |
 
-Bài *Trust or Escalate* tại ICLR trình bày selective evaluation: ước lượng confidence của judge rồi quyết định khi nào trust judgment và khi nào escalate. Bài cũng mô tả cascaded selective evaluation, trong đó judge rẻ xử lý case phù hợp còn evaluator mạnh hơn hoặc human xử lý case không chắc chắn.[1](https://proceedings.iclr.cc/paper_files/paper/2025/hash/08dabd5345b37fffcbe335bd578b15a0-Abstract-Conference.html)
+Bài *Trust or Escalate* tại ICLR trình bày selective evaluation: ước lượng confidence của judge rồi quyết định khi nào trust judgment và khi nào escalate. Bài cũng mô tả cascaded selective evaluation, trong đó judge rẻ xử lý case phù hợp còn evaluator mạnh hơn hoặc human xử lý case không chắc chắn.
 
 Ý tưởng này chuyển rất tự nhiên vào production arbitration. Không nên gọi judge đắt nhất để xử lý mọi case. Trước hết hãy xác định case có nằm trong vùng mà một decision rẻ và an toàn có thể xử lý hay không, sau đó chỉ dùng evaluator mạnh khi risk hoặc uncertainty thực sự yêu cầu.
 
@@ -198,7 +198,7 @@ Một human queue nhận transcript không cấu trúc không phải arbitration
 
 ## Abstention là một outcome hợp lệ
 
-Survey *Know Your Limits* trên TACL xem abstention là việc language model từ chối trả lời để giảm hallucination và tăng safety. Bài tổ chức nghiên cứu abstention theo query, model và human values, đồng thời nhấn mạnh phương pháp và evaluation phụ thuộc vào context.[2](https://direct.mit.edu/tacl/article/doi/10.1162/tacl_a_00754/131566/Know-Your-Limits-A-Survey-of-Abstention-in-Large)
+Survey *Know Your Limits* trên TACL xem abstention là việc language model từ chối trả lời để giảm hallucination và tăng safety. Bài tổ chức nghiên cứu abstention theo query, model và human values, đồng thời nhấn mạnh phương pháp và evaluation phụ thuộc vào context.
 
 Trong agent system, abstention không nên là câu “tôi không chắc”. Nó phải là một typed state có reason và next step.
 

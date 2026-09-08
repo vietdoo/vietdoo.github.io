@@ -17,7 +17,7 @@ Câu hỏi này thay đổi toàn bộ tư duy engineering. Demo hỏi model có
 
 Không thể giải quyết khác biệt ấy chỉ bằng cách viết system prompt dài hơn. Cách đúng là đưa evaluation vào trong kiến trúc.
 
-Hướng dẫn eval-driven system design của OpenAI mô tả một con đường thực tế: bắt đầu từ một tập dữ liệu có nhãn nhỏ, dựng initial evals, nối kết quả với KPI và chi phí, sau đó cải tiến lặp lại cả trước lẫn sau khi deploy.[1] Điều quan trọng không nằm ở framework cụ thể. Điều quan trọng là biến sự không chắc chắn thành một vòng lặp quyết định có thể chạy lại.
+Hướng dẫn eval-driven system design của OpenAI mô tả một con đường thực tế: bắt đầu từ một tập dữ liệu có nhãn nhỏ, dựng initial evals, nối kết quả với KPI và chi phí, sau đó cải tiến lặp lại cả trước lẫn sau khi deploy. Điều quan trọng không nằm ở framework cụ thể. Điều quan trọng là biến sự không chắc chắn thành một vòng lặp quyết định có thể chạy lại.
 
 > **Luận điểm:** Một AI release nên được promote vì system tạo ra đủ bằng chứng chống lại một contract, không phải vì reviewer có cảm giác demo mới trông tốt hơn.
 
@@ -188,7 +188,7 @@ observe -> sanitize -> cluster -> label -> add or refine case
       -> change system -> replay -> compare -> promote or revert
 ```
 
-Bước `sanitize` rất quan trọng. Trace thường chứa customer data, secret hoặc proprietary prompt. Record evaluation cần giữ lại failure signal nhưng giảm tối đa việc sao chép dữ liệu nhạy cảm. OWASP khuyến nghị sanitization, least-privilege access, tokenization và redaction để giảm nguy cơ sensitive information disclosure.[4]
+Bước `sanitize` rất quan trọng. Trace thường chứa customer data, secret hoặc proprietary prompt. Record evaluation cần giữ lại failure signal nhưng giảm tối đa việc sao chép dữ liệu nhạy cảm. OWASP khuyến nghị sanitization, least-privilege access, tokenization và redaction để giảm nguy cơ sensitive information disclosure.
 
 Bước `cluster` ngăn một trăm ticket tương tự biến thành một trăm test case nhiễu. Hãy gom failure theo invariant: sai tenant, policy cũ, action không được hỗ trợ, citation thiếu, retry storm hoặc clarification kém. Test suite nên encode behavior chứ không encode đúng một câu chữ của khách hàng.
 

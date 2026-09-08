@@ -19,7 +19,7 @@ That is the job of an **agent receipt**: a compact, user-readable proof of an im
 
 > **The thesis:** An agent receipt should make the changed state, authority, evidence, and uncertainty legible in one place. It should help a human decide whether to accept, investigate, reverse, or escalate an outcome without reading the entire execution trace.
 
-Microsoft’s practical lesson on cryptographic receipts describes a receipt as a signed JSON object that records what an agent did. It highlights attribution, integrity, and ordering as useful guarantees, while also drawing an important boundary: a receipt does not prove that an action was correct or that the policy itself was sound.[1] That boundary is the difference between an honest accountability design and a decorative “verified” badge.
+Microsoft’s practical lesson on cryptographic receipts describes a receipt as a signed JSON object that records what an agent did. It highlights attribution, integrity, and ordering as useful guarantees, while also drawing an important boundary: a receipt does not prove that an action was correct or that the policy itself was sound. That boundary is the difference between an honest accountability design and a decorative “verified” badge.
 
 ## A receipt is not a prettier log
 
@@ -136,7 +136,7 @@ The receipt should therefore expose different kinds of status instead of one gre
 | Verification failed | Signature, ordering, or hash checks failed. | Stop relying on the receipt and investigate. |
 | Outcome uncertain | The execution result is unknown or still reconciling. | Do not describe the action as completed. |
 
-This vocabulary prevents a common failure mode: using cryptography to create false certainty. The arXiv work on verifiability-first agents makes a similar point from a broader control perspective: assurance should help detect and remediate misalignment, not merely produce a plausible explanation after the fact.[2]
+This vocabulary prevents a common failure mode: using cryptography to create false certainty. The arXiv work on verifiability-first agents makes a similar point from a broader control perspective: assurance should help detect and remediate misalignment, not merely produce a plausible explanation after the fact.
 
 ## Make the receipt privacy-aware
 
@@ -175,7 +175,7 @@ receipt received
   -> return verified, warning, failed, or unknown
 ```
 
-Canonicalization matters because two JSON serializers can represent the same logical object with different bytes. Microsoft’s lesson uses JSON Canonicalization Scheme and Ed25519 signing, then adds a previous-receipt hash to make ordering tamper-evident.[1] Teams do not need to copy that exact stack, but they should choose a reproducible encoding, a managed key lifecycle, and a verification procedure that can be implemented by more than one component.
+Canonicalization matters because two JSON serializers can represent the same logical object with different bytes. Microsoft’s lesson uses JSON Canonicalization Scheme and Ed25519 signing, then adds a previous-receipt hash to make ordering tamper-evident. Teams do not need to copy that exact stack, but they should choose a reproducible encoding, a managed key lifecycle, and a verification procedure that can be implemented by more than one component.
 
 The final step is especially important: **verify the claimed state against the source of truth**. A valid receipt may say that a database update was applied while the record was later changed by a human or another agent. Integrity of the receipt is not freshness of the world.
 

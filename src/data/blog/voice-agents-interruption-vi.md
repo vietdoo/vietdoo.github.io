@@ -21,7 +21,7 @@ Cuộc gọi kết thúc với hai transcript: một cho những gì agent đã 
 
 > **Luận điểm:** Một voice agent tự nhiên không phải agent nói thật nhanh. Đó là agent biết nhường lời nhanh, giữ lại partial intent, cancel công việc không còn liên quan và biết khi nào human nên tiếp quản.
 
-Tài liệu turn-handling của LiveKit mô tả turn detection là quá trình xác định lúc user bắt đầu hoặc kết thúc một lượt nói, đồng thời phân biệt VAD, endpointing, semantic turn detector, realtime-model detection và manual control.[1] Đây là các lựa chọn triển khai. Câu hỏi production rộng hơn là: state nào được phép đổi khi user nói chồng lên agent, và làm sao ngăn response cũ rò vào lượt nói mới?
+Tài liệu turn-handling của LiveKit mô tả turn detection là quá trình xác định lúc user bắt đầu hoặc kết thúc một lượt nói, đồng thời phân biệt VAD, endpointing, semantic turn detector, realtime-model detection và manual control. Đây là các lựa chọn triển khai. Câu hỏi production rộng hơn là: state nào được phép đổi khi user nói chồng lên agent, và làm sao ngăn response cũ rò vào lượt nói mới?
 
 ## Conversation turn là state transition
 
@@ -64,7 +64,7 @@ Transition từ `speaking` sang `interrupted` phải nhanh và có authority. N�
 
 Voice activity detection hữu ích vì phát hiện speech và silence nhanh. Nó không luôn biết một người đã nói xong ý hay chưa. Endpointing thêm delay, nhưng fixed delay là một thỏa hiệp: quá ngắn tạo response sớm, quá dài làm agent chậm. Semantic turn detection có thể dùng meaning của speech bên cạnh acoustic. Realtime model có thể cung cấp detection phía server.
 
-LiveKit ghi lại các mode này và các option hỗ trợ như endpointing delay, adaptive interruption handling, VAD và noise cancellation.[1] Lựa chọn đúng phụ thuộc ngôn ngữ, chất lượng kênh, latency budget và session là phone call, browser microphone, push-to-talk hay cuộc họp nhiều người.
+LiveKit ghi lại các mode này và các option hỗ trợ như endpointing delay, adaptive interruption handling, VAD và noise cancellation. Lựa chọn đúng phụ thuộc ngôn ngữ, chất lượng kênh, latency budget và session là phone call, browser microphone, push-to-talk hay cuộc họp nhiều người.
 
 Đừng xem detector là sự thật tuyệt đối. Hãy xem nó là signal đi cùng confidence và policy. Với câu hỏi thông tin ít rủi ro, endpoint sớm có thể được sửa trong hội thoại. Trước irreversible action, endpoint không chắc chắn không đủ để trigger commit.
 

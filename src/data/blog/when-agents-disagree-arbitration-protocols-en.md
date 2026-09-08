@@ -118,7 +118,7 @@ Treat the basis as part of the value.
 | Evidence coverage | Fraction of required claims with accepted support. | It is a separate dimension, not confidence by itself. |
 | Heuristic | A rule such as “two tools succeeded.” | Useful for policy, not a probability. |
 
-The ICLR paper *Trust or Escalate* presents selective evaluation as a way to estimate judge confidence and decide when to trust a judgment or escalate it. It also describes cascaded selective evaluation, where cheaper judges handle suitable cases and stronger judges or humans handle uncertain cases.[1](https://proceedings.iclr.cc/paper_files/paper/2025/hash/08dabd5345b37fffcbe335bd578b15a0-Abstract-Conference.html)
+The ICLR paper *Trust or Escalate* presents selective evaluation as a way to estimate judge confidence and decide when to trust a judgment or escalate it. It also describes cascaded selective evaluation, where cheaper judges handle suitable cases and stronger judges or humans handle uncertain cases.
 
 That idea translates well to production arbitration. Do not ask the most expensive judge to arbitrate every case. First determine whether the case is eligible for a low-cost decision, then use stronger evaluation only when the risk or uncertainty requires it.
 
@@ -198,7 +198,7 @@ A human queue that receives an unstructured transcript is not an arbitration pro
 
 ## Abstention is a valid outcome
 
-The TACL survey *Know Your Limits* frames abstention as a way for language models to refuse an answer in order to reduce hallucination and improve safety. It organizes abstention research around the query, the model, and human values, while emphasizing that methods and evaluation depend on context.[2](https://direct.mit.edu/tacl/article/doi/10.1162/tacl_a_00754/131566/Know-Your-Limits-A-Survey-of-Abstention-in-Large)
+The TACL survey *Know Your Limits* frames abstention as a way for language models to refuse an answer in order to reduce hallucination and improve safety. It organizes abstention research around the query, the model, and human values, while emphasizing that methods and evaluation depend on context.
 
 In an agent system, abstention should not be a vague “I am not sure.” It should be a typed state with a reason and a next step.
 

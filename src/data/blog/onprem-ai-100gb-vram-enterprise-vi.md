@@ -19,7 +19,7 @@ Câu hỏi đầu tiên phải là hệ thống cần làm gì, phải phục v�
 
 > **Luận điểm chính:** khoảng 100 GB VRAM tổng không phải lời hứa rằng doanh nghiệp có thể chạy model 100 tỷ tham số. Đó là một capacity envelope phải được chia cho weight, runtime buffer, KV cache, concurrency và operational headroom. Production thành công nhờ sizing theo workload, không phải nhồi đầy mọi byte bằng trọng số model.
 
-Phân biệt này rất quan trọng vì một model load được vẫn có thể không dùng được. Nó có thể không còn chỗ cho context window thực tế, xếp hàng request chỉ vì một prompt dài, OOM khi graph capture hoặc trả lời đủ tốt nhưng quá chậm khi nhiều phòng ban cùng sử dụng. Hướng dẫn triển khai của vLLM cũng tách rõ trường hợp model vừa một GPU, tensor parallelism trên nhiều GPU trong một node và việc kết hợp tensor/pipeline parallelism khi cần nhiều node.[1](https://docs.vllm.ai/en/stable/serving/parallelism_scaling/) Đây là quyết định về serving, không chỉ là thủ thuật để load model.
+Phân biệt này rất quan trọng vì một model load được vẫn có thể không dùng được. Nó có thể không còn chỗ cho context window thực tế, xếp hàng request chỉ vì một prompt dài, OOM khi graph capture hoặc trả lời đủ tốt nhưng quá chậm khi nhiều phòng ban cùng sử dụng. Hướng dẫn triển khai của vLLM cũng tách rõ trường hợp model vừa một GPU, tensor parallelism trên nhiều GPU trong một node và việc kết hợp tensor/pipeline parallelism khi cần nhiều node. Đây là quyết định về serving, không chỉ là thủ thuật để load model.
 
 ## Bắt đầu từ workload, không phải số parameter
 
@@ -54,7 +54,7 @@ memory dành cho weight và KV cache
 = serving memory có thể sử dụng
 ```
 
-Để chọn model sơ bộ, weight memory xấp xỉ bằng số parameter nhân với số byte mỗi weight. FP16 hoặc BF16 gần hai byte mỗi parameter, INT8 gần một byte và INT4 gần nửa byte trước khi tính scale, metadata, padding và runtime overhead. Tài liệu Hugging Face mô tả quantization là lưu weight ở precision thấp hơn để giảm memory requirement trong khi cố gắng giữ nhiều accuracy nhất có thể, đồng thời nhấn mạnh mỗi phương pháp có trade-off và yêu cầu phần cứng khác nhau.[2](https://huggingface.co/docs/transformers/quantization/overview)
+Để chọn model sơ bộ, weight memory xấp xỉ bằng số parameter nhân với số byte mỗi weight. FP16 hoặc BF16 gần hai byte mỗi parameter, INT8 gần một byte và INT4 gần nửa byte trước khi tính scale, metadata, padding và runtime overhead. Tài liệu Hugging Face mô tả quantization là lưu weight ở precision thấp hơn để giảm memory requirement trong khi cố gắng giữ nhiều accuracy nhất có thể, đồng thời nhấn mạnh mỗi phương pháp có trade-off và yêu cầu phần cứng khác nhau.
 
 Phép tính này hữu ích để loại bỏ các kế hoạch bất khả thi. Nó chưa đủ chính xác để phê duyệt một capacity target production.
 
@@ -68,15 +68,15 @@ Phép tính này hữu ích để loại bỏ các kế hoạch bất khả thi.
 | 30–32B ở INT4 | 18–24 GB trước runtime overhead | Reasoning, coding hoặc document workflow mức trung | KV cache và output dài có thể trở thành bottleneck |
 | 70B ở INT4 | 40–50 GB trước runtime overhead | Tier chuyên biệt chất lượng cao với multi-GPU serving | Tensor parallelism, concurrency thấp hơn và interconnect trở thành yếu tố chính |
 
-Bảng trên cố ý chỉ mang tính xấp xỉ. Nó chưa bao gồm KV cache, vốn tăng theo số sequence đang hoạt động, context length, số layer và attention dimension. vLLM báo capacity của KV cache và ước tính maximum concurrency theo sequence length đã cấu hình; vì vậy `max-model-len` là một capacity control, không chỉ là công tắc bật tính năng context dài.[1](https://docs.vllm.ai/en/stable/serving/parallelism_scaling/)
+Bảng trên cố ý chỉ mang tính xấp xỉ. Nó chưa bao gồm KV cache, vốn tăng theo số sequence đang hoạt động, context length, số layer và attention dimension. vLLM báo capacity của KV cache và ước tính maximum concurrency theo sequence length đã cấu hình; vì vậy `max-model-len` là một capacity control, không chỉ là công tắc bật tính năng context dài.
 
 Do đó, team cần reserve memory trước khi chọn mức quantization. Nhồi weight vào một card 48 GB đến 47,9 GB có thể trông rất hiệu quả trong model summary tĩnh nhưng sẽ thất bại ngay khi server nhận request dài thứ hai.
 
 ## Hiểu đúng các phương án phần cứng
 
-Có nhiều cách tiếp cận envelope khoảng 100 GB. Một cặp GPU 48 GB-class cho data center hoặc workstation cho tổng VRAM danh nghĩa 96 GB. Hai NVIDIA L40S là ví dụ tự nhiên: NVIDIA liệt kê L40S có công suất tối đa 350 W và công bố các con số hiệu năng FP32, FP16 Tensor Core và FP8 Tensor Core trên trang sản phẩm.[3](https://www.nvidia.com/en-us/data-center/l40s/) Điểm quan trọng không phải FLOPS được quảng cáo, mà là hai card có thể trở thành hai serving slot độc lập hoặc một pool tensor-parallel, tùy workload.
+Có nhiều cách tiếp cận envelope khoảng 100 GB. Một cặp GPU 48 GB-class cho data center hoặc workstation cho tổng VRAM danh nghĩa 96 GB. Hai NVIDIA L40S là ví dụ tự nhiên: NVIDIA liệt kê L40S có công suất tối đa 350 W và công bố các con số hiệu năng FP32, FP16 Tensor Core và FP8 Tensor Core trên trang sản phẩm. Điểm quan trọng không phải FLOPS được quảng cáo, mà là hai card có thể trở thành hai serving slot độc lập hoặc một pool tensor-parallel, tùy workload.
 
-H100 SXM có 80 GB memory và băng thông 3,35 TB/s, trong khi H100 NVL được liệt kê ở mức 94 GB và 3,9 TB/s.[4](https://www.nvidia.com/en-us/data-center/h100/) Một GPU lớn có thể đơn giản hơn về vận hành khi model vừa một card, nhưng nó không tự động đem lại nhiều capacity tổng hơn, redundancy hay concurrency hơn. Thiết kế một card cũng tạo ra failure domain lớn hơn.
+H100 SXM có 80 GB memory và băng thông 3,35 TB/s, trong khi H100 NVL được liệt kê ở mức 94 GB và 3,9 TB/s. Một GPU lớn có thể đơn giản hơn về vận hành khi model vừa một card, nhưng nó không tự động đem lại nhiều capacity tổng hơn, redundancy hay concurrency hơn. Thiết kế một card cũng tạo ra failure domain lớn hơn.
 
 | Topology | Memory danh nghĩa | Phù hợp nhất | Không giải quyết được |
 |---|---:|---|---|
@@ -95,7 +95,7 @@ Triển khai AI on-premise cho doanh nghiệp nên có một model ladder và pr
 
 Tier đầu tiên hợp lý là model instruct 7B–8B ở BF16, FP16 hoặc định dạng 8-bit đã được validate kỹ. Nó xử lý classification, extraction, routing, tóm tắt ngắn và structured transformation. Giá trị của nó là latency dễ đoán và concurrency cao. Nếu workload chủ yếu bị giới hạn bởi schema, một model nhỏ kèm validation tốt có thể vượt model lớn thường xuyên phải retry vì output khó parse.
 
-Tier thứ hai là model 14B–32B. Model card của Qwen3-14B ghi nhận đây là model 14,8B parameter, native context 32.768 token và đã validate khả năng mở rộng đến 131.072 token bằng YaRN; model card cũng xác định license Apache-2.0 và các hướng triển khai qua vLLM, SGLang và llama.cpp.[5](https://huggingface.co/Qwen/Qwen3-14B) Mistral Small 3.1 24B là một đại diện khác cho nhóm model trung; model card xác định license Apache-2.0 và khuyến nghị vLLM cho serving.[6](https://huggingface.co/mistralai/Mistral-Small-3.1-24B-Instruct-2503)
+Tier thứ hai là model 14B–32B. Model card của Qwen3-14B ghi nhận đây là model 14,8B parameter, native context 32.768 token và đã validate khả năng mở rộng đến 131.072 token bằng YaRN; model card cũng xác định license Apache-2.0 và các hướng triển khai qua vLLM, SGLang và llama.cpp. Mistral Small 3.1 24B là một đại diện khác cho nhóm model trung; model card xác định license Apache-2.0 và khuyến nghị vLLM cho serving.
 
 Đây là tier mà đa số doanh nghiệp nên bắt đầu. Nó đem lại bước nhảy quality đáng kể mà chưa bắt mọi request đi qua multi-GPU model parallelism. Chỉ quantize xuống INT4 hoặc INT8 sau khi đo các task quan trọng. Model ít bit nhưng mất thuật ngữ công ty, kỷ luật tool call hoặc hành vi từ chối sẽ không rẻ hơn nếu nó làm tăng human review và retry.
 
@@ -130,7 +130,7 @@ Giữ một reference path full-precision hoặc precision cao hơn để so sá
 
 Weight là tĩnh. KV cache là động. Mỗi sequence đang hoạt động lưu attention state, và lượng memory tăng khi prompt hoặc output dài hơn. Một server nhìn rất thoải mái với một request ngắn có thể mất ổn định khi pipeline retrieval thêm 10.000 token hoặc coding agent giữ lại lịch sử tool dài trong context.
 
-Hãy đặt context limit theo workload thay vì mở maximum context của model cho mọi caller. Request context dài nên có budget, queue hoặc model tier riêng. Model card Qwen3 phân biệt native context với context mở rộng bằng YaRN, nhắc chúng ta rằng context dài cần cấu hình và validation riêng.[5](https://huggingface.co/Qwen/Qwen3-14B)
+Hãy đặt context limit theo workload thay vì mở maximum context của model cho mọi caller. Request context dài nên có budget, queue hoặc model tier riêng. Model card Qwen3 phân biệt native context với context mở rộng bằng YaRN, nhắc chúng ta rằng context dài cần cấu hình và validation riêng.
 
 Theo dõi đồng thời bốn tín hiệu: GPU memory utilization, KV-cache utilization, active sequence và queue wait. GPU memory tăng mà active sequence không tăng có thể là fragmentation hoặc temporary buffer. Queue wait tăng trong khi memory ổn định có thể là scheduler limit. OOM sau prompt dài không được giải quyết bằng cách tăng request timeout.
 
@@ -156,9 +156,9 @@ validation + safety checks ---- shared observability
 accepted outcome / abstention / human escalation
 ```
 
-Chạy một serving process trên mỗi GPU khi model vừa độc lập. Dùng tensor parallelism khi một model cần nhiều memory hơn một card và benchmark communication path. vLLM mô tả tensor parallelism cho multi-GPU trong một node và pipeline parallelism khi model vượt khả năng một node.[1](https://docs.vllm.ai/en/stable/serving/parallelism_scaling/)
+Chạy một serving process trên mỗi GPU khi model vừa độc lập. Dùng tensor parallelism khi một model cần nhiều memory hơn một card và benchmark communication path. vLLM mô tả tensor parallelism cho multi-GPU trong một node và pipeline parallelism khi model vượt khả năng một node.
 
-Dùng internal API tương thích OpenAI để application không bị khóa chặt vào serving engine. Model card Qwen3 chỉ ra vLLM, SGLang và llama.cpp là các lựa chọn local hoặc deployment.[5](https://huggingface.co/Qwen/Qwen3-14B) Lựa chọn cuối cùng nên dựa trên model architecture được hỗ trợ, batching behavior, observability, quantization path và mức quen thuộc của team vận hành.
+Dùng internal API tương thích OpenAI để application không bị khóa chặt vào serving engine. Model card Qwen3 chỉ ra vLLM, SGLang và llama.cpp là các lựa chọn local hoặc deployment. Lựa chọn cuối cùng nên dựa trên model architecture được hỗ trợ, batching behavior, observability, quantization path và mức quen thuộc của team vận hành.
 
 Đừng để router che mất evidence cần thiết để vận hành hệ thống. Propagate model ID, quantization format, prompt/output token count, queue time, time to first token, inter-token latency, finish reason, safety decision và outcome ID. Các bài model-router và SLO hiện có của folio là tài liệu liên quan: routing chọn đường đi, còn serving contract chứng minh đường đi có khỏe hay không.
 

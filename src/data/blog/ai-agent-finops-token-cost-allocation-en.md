@@ -19,7 +19,7 @@ A monthly total cannot answer those questions. An AI agent is not one API call w
 
 > **The thesis:** AI FinOps becomes useful when cost is allocated to the same dimensions by which the business manages work: tenant, workflow, outcome, and owner. Token usage is the meter, but accountable unit economics is the product.
 
-The [FinOps Foundation’s overview of FinOps for AI](https://www.finops.org/wg/finops-for-ai-overview/) describes both continuity and change. The basic `Price × Quantity = Cost` equation still applies, but AI introduces volatile pricing, new SKUs, token meters, GPU scarcity, limited native tagging, and an ongoing quality dimension.[1](https://www.finops.org/wg/finops-for-ai-overview/) This article turns those principles into an application-level design for agent teams.
+The [FinOps Foundation’s overview of FinOps for AI](https://www.finops.org/wg/finops-for-ai-overview/) describes both continuity and change. The basic `Price × Quantity = Cost` equation still applies, but AI introduces volatile pricing, new SKUs, token meters, GPU scarcity, limited native tagging, and an ongoing quality dimension. This article turns those principles into an application-level design for agent teams.
 
 ## AI spend is a workflow, not a line item
 
@@ -174,7 +174,7 @@ When no fair allocation is possible, mark the cost as shared rather than inventi
 
 ## Usage meters are not interchangeable
 
-Token accounting is more complicated than counting characters in the user prompt. The billed input may differ from the visible input after templating, retrieval, compression, tool schema expansion, or provider-side processing. The FinOps Foundation notes that AI services can expose different token meters and that user input is not always the same quantity that reaches the billed endpoint.[1](https://www.finops.org/wg/finops-for-ai-overview/)
+Token accounting is more complicated than counting characters in the user prompt. The billed input may differ from the visible input after templating, retrieval, compression, tool schema expansion, or provider-side processing. The FinOps Foundation notes that AI services can expose different token meters and that user input is not always the same quantity that reaches the billed endpoint.
 
 Record the meters separately when the provider exposes them.
 

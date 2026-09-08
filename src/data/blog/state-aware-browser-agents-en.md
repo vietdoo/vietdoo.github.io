@@ -21,7 +21,7 @@ This is the failure mode that makes browser agents different from ordinary API t
 
 > **The thesis:** A browser action is safe only when the state that justified it still matches the state in which it will execute. Observe, fingerprint, revalidate, then act. If the fingerprint is stale, stop instead of guessing.
 
-Realistic web-agent benchmarks such as WebArena are useful precisely because they evaluate agents in functional environments with multi-step tasks, not only isolated text responses.[1] Production systems need one more layer: they must also prove that the page and authority context remained stable before an irreversible click.
+Realistic web-agent benchmarks such as WebArena are useful precisely because they evaluate agents in functional environments with multi-step tasks, not only isolated text responses. Production systems need one more layer: they must also prove that the page and authority context remained stable before an irreversible click.
 
 ## A screenshot is an observation, not a contract
 
@@ -188,7 +188,7 @@ For each task, record whether the intended resource changed, whether the change 
 | Recovery loop count | Whether a site is unstable or the locator is weak | Blaming the model without site context |
 | Side-effect leakage | Whether exploratory steps mutated state | Treating read actions as automatically safe |
 
-WebArena’s benchmark framing is a useful starting point for verifiable tasks, but production evaluation needs the application’s own state oracle and authorization model.[1] Browser reliability is not just “did the agent finish?” It is “did the correct principal cause the correct state transition, and can we prove it?”
+WebArena’s benchmark framing is a useful starting point for verifiable tasks, but production evaluation needs the application’s own state oracle and authorization model. Browser reliability is not just “did the agent finish?” It is “did the correct principal cause the correct state transition, and can we prove it?”
 
 ## A practical rollout checklist
 

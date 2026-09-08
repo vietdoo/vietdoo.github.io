@@ -23,7 +23,7 @@ Không cần prompt injection. Không có provider outage. Model làm điều mo
 
 > **Luận điểm chính:** Yêu cầu authorization cho AI agent nên là policy có thể chạy và kiểm thử, không phải prose trong prompt, comment đặt cạnh tool hay convention không được ghi lại trong adapter. Model có thể đề xuất action; application code deterministic phải quyết định action đó có được phép hay không, ghi lại lý do, và mặc định từ chối khi bằng chứng chưa đầy đủ.
 
-Bài này trình bày một pattern ở application level cho policy-as-code trong hệ thống agent có tool. OPA, Cedar và OpenFGA được dùng như các điểm tham chiếu hữu ích, không phải lời khuyên rằng team nào cũng phải chọn cùng một engine. Tài liệu OPA mô tả policy-as-code là các rule declarative được đánh giá từ structured input và tách decision khỏi enforcement.[1] Framework testing của OPA cho thấy cả allow case lẫn deny case có thể trở thành regression check lặp lại được.[2] Mô hình validation của Cedar nhắc một điều quan trọng: policy có thể đúng cú pháp nhưng vẫn tham chiếu sai type, action hoặc attribute, vì vậy thay đổi policy cần được validate theo schema trước khi đi vào authorization engine.[3] Tài liệu authorization cho agent của OpenFGA cho thấy permission có scope và gắn với task quan trọng thế nào khi agent hành động thay user hoặc truy cập hệ thống bên thứ ba.[4]
+Bài này trình bày một pattern ở application level cho policy-as-code trong hệ thống agent có tool. OPA, Cedar và OpenFGA được dùng như các điểm tham chiếu hữu ích, không phải lời khuyên rằng team nào cũng phải chọn cùng một engine. Tài liệu OPA mô tả policy-as-code là các rule declarative được đánh giá từ structured input và tách decision khỏi enforcement. Framework testing của OPA cho thấy cả allow case lẫn deny case có thể trở thành regression check lặp lại được. Mô hình validation của Cedar nhắc một điều quan trọng: policy có thể đúng cú pháp nhưng vẫn tham chiếu sai type, action hoặc attribute, vì vậy thay đổi policy cần được validate theo schema trước khi đi vào authorization engine. Tài liệu authorization cho agent của OpenFGA cho thấy permission có scope và gắn với task quan trọng thế nào khi agent hành động thay user hoặc truy cập hệ thống bên thứ ba.
 
 ## Permission trong prompt không phải authorization decision
 
@@ -192,7 +192,7 @@ test_export_is_not_implied_by_read if {
 }
 ```
 
-Tài liệu OPA mô tả test rule với prefix `test_` và command `opa test` để chạy chúng.[2] Engine cụ thể ít quan trọng hơn thói quen: mọi authorization change nên tạo ra một diff trong executable test, và CI phải fail khi deny boundary biến mất.
+Tài liệu OPA mô tả test rule với prefix `test_` và command `opa test` để chạy chúng. Engine cụ thể ít quan trọng hơn thói quen: mọi authorization change nên tạo ra một diff trong executable test, và CI phải fail khi deny boundary biến mất.
 
 Đừng xem một test run rỗng là thành công. Package bị rename, path sai hoặc test selector đánh máy nhầm có thể tạo một build màu xanh nhưng thực tế không chạy test nào. Command test và CI wrapper nên fail khi test set kỳ vọng là rỗng; kết quả cũng nên được export ở dạng machine-readable cho release system.
 
@@ -202,7 +202,7 @@ Policy có thể sai về logic dù toàn bộ test đều pass. Nó cũng có t
 
 Giả sử rule tham chiếu `customer.tenantId`, còn application gửi `customer.tenant_id`. Rule có thể chỉ đơn giản là không bao giờ match. Giả sử action trong schema là `customer.read`, nhưng một policy file lại ghi `customer.read_record`. Policy trông hợp lý trong code review nhưng sẽ trở thành dead logic khi chạy production.
 
-Tài liệu validation của Cedar làm rõ khác biệt này. Policy có thể đúng theo syntax nhưng chứa typo, undefined attribute hoặc phép so sánh không hợp lệ. Cedar dùng schema mô tả entity type, attribute, relationship, action và type của các thành phần trong request để validate policy trước khi authorization engine sử dụng nó.[3]
+Tài liệu validation của Cedar làm rõ khác biệt này. Policy có thể đúng theo syntax nhưng chứa typo, undefined attribute hoặc phép so sánh không hợp lệ. Cedar dùng schema mô tả entity type, attribute, relationship, action và type của các thành phần trong request để validate policy trước khi authorization engine sử dụng nó.
 
 Điều đó gợi ý một bộ kiểm tra ba lớp:
 

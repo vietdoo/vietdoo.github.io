@@ -25,7 +25,7 @@ It may need to inspect several systems, wait for an approval, retry a provider, 
 
 The uncomfortable question is simple: **if the process disappears after step four, what exactly tells the system where to resume, which work has already happened, and which effects are safe to repeat?**
 
-This is the problem that durable execution addresses. Temporal defines it as “crash-proof execution”: an abstraction that allows application work to resume after process or machine failure while preserving the state required to continue.[1] The phrase is useful, but an agent adds complications. Model responses are nondeterministic, tool calls may have side effects, context can be compacted, and the user may wait hours or days between steps.
+This is the problem that durable execution addresses. Temporal defines it as “crash-proof execution”: an abstraction that allows application work to resume after process or machine failure while preserving the state required to continue. The phrase is useful, but an agent adds complications. Model responses are nondeterministic, tool calls may have side effects, context can be compacted, and the user may wait hours or days between steps.
 
 This article treats durable execution as a workflow architecture for AI agents. It is not a product tutorial and it is not a claim that a workflow engine removes all failure. The design still needs idempotent effects, explicit timeouts, retry budgets, leases, versioning, and reconciliation.
 

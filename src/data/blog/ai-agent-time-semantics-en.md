@@ -36,7 +36,7 @@ The word *timeout* is attractive because it appears to solve every waiting probl
 | Observation freshness | How long may this fact be trusted? | “Stock count was observed at 10:02 and is valid for 30 seconds” | Re-read the source before making a decision |
 | Plan validity | Under which conditions is this multi-step plan still applicable? | “Apply the refund only while the invoice and approval are unchanged” | Revalidate, replan or refuse |
 
-These clocks can be related, but they should remain explicit. Martin Fowler's description of a distributed lease captures the key idea: access is granted for a limited period and must be renewed before expiry; a crashed or disconnected node must not retain access forever.[1] Temporal's guidance makes a complementary distinction: timeouts detect failure, while timers implement business logic.[2]
+These clocks can be related, but they should remain explicit. Martin Fowler's description of a distributed lease captures the key idea: access is granted for a limited period and must be renewed before expiry; a crashed or disconnected node must not retain access forever. Temporal's guidance makes a complementary distinction: timeouts detect failure, while timers implement business logic.
 
 An AI agent adds a fifth concern: its plan is an interpretation of observations. A timer can tell us that five minutes passed. It cannot tell us whether the evidence behind a plan is still applicable. That is why a resumed run needs both mechanical timers and semantic revalidation.
 
@@ -105,13 +105,13 @@ async function callWithBudget<T>(
 }
 ```
 
-This distinction also clarifies retries. A retry policy describes how to try again after a failure; it should not quietly create an unlimited business obligation. Temporal documents exponential backoff and separate limits for an individual attempt and the total scheduled effort.[3] The same principle applies even when the agent runtime is home-grown: cap the whole outcome, not only each request.
+This distinction also clarifies retries. A retry policy describes how to try again after a failure; it should not quietly create an unlimited business obligation. Temporal documents exponential backoff and separate limits for an individual attempt and the total scheduled effort. The same principle applies even when the agent runtime is home-grown: cap the whole outcome, not only each request.
 
 The expiry path should be a product decision. Some workflows can pause and wait for the user. Some should return a partial result. Some must refuse because acting late is worse than doing nothing. A deadline without an explicit expiry outcome is only a timestamp.
 
 ## A lease protects ownership, not truth
 
-Leases are useful when an action must have one current owner. They are common in distributed systems because a worker can crash or become partitioned; a time-bounded lease prevents that worker from holding a resource indefinitely.[1]
+Leases are useful when an action must have one current owner. They are common in distributed systems because a worker can crash or become partitioned; a time-bounded lease prevents that worker from holding a resource indefinitely.
 
 For an agent, the resource might be a task, a customer conversation, a browser session, a shopping cart or a reconciliation job. The lease should be attached to an owner and checked at the point where the side effect is committed.
 
@@ -157,7 +157,7 @@ function isFresh<T>(observation: Observation<T>, now = Date.now()) {
 }
 ```
 
-Freshness is not identical to recency. A policy that changed yesterday may still be valid if versioned and approved. A stock count from ten seconds ago may already be unsafe if the item is being sold concurrently. Data readiness work for agentic systems increasingly treats freshness SLAs, data contracts and traceability as part of the data layer rather than as optional metadata.[4]
+Freshness is not identical to recency. A policy that changed yesterday may still be valid if versioned and approved. A stock count from ten seconds ago may already be unsafe if the item is being sold concurrently. Data readiness work for agentic systems increasingly treats freshness SLAs, data contracts and traceability as part of the data layer rather than as optional metadata.
 
 The useful question is not “Is this data fresh?” It is “Fresh enough for what action?” A stale observation might support a draft answer but not a purchase. It might support ranking options but not committing a reservation.
 

@@ -35,7 +35,7 @@ A useful release process joins the layers together:
 
 The key is that each layer answers a different question. Reusing a single pass rate for all of them creates false confidence.
 
-The 2026 State of Agent Engineering report reflects the operational pressure behind this problem. In a survey of more than 1,300 professionals, 57% reported agents in production, while quality remained the most common barrier. The same report found that observability was much more common than offline or online evaluation, and that using multiple models was normal rather than exceptional.[1] A team can therefore have excellent traces and several available models while still lacking a disciplined answer to the question: **what exactly must not change when we replace one model with another?**
+The 2026 State of Agent Engineering report reflects the operational pressure behind this problem. In a survey of more than 1,300 professionals, 57% reported agents in production, while quality remained the most common barrier. The same report found that observability was much more common than offline or online evaluation, and that using multiple models was normal rather than exceptional. A team can therefore have excellent traces and several available models while still lacking a disciplined answer to the question: **what exactly must not change when we replace one model with another?**
 
 ## Write the behavioral contract before the test cases
 
@@ -206,7 +206,7 @@ Post-release monitoring should therefore compare the candidate against a baselin
 | Action | Tool choice, argument repair, retries, approval rate | Pause or rollback if risk rises |
 | Operations | Latency, tokens, provider errors, cost | Tune budgets, capacity, or routing |
 
-NIST’s work on evaluation probes points in the same direction: automated verifiers can be integrated directly into an agent workflow, and their results can be accumulated into a machine-readable audit trail that connects decisions to supporting evidence.[2] The important idea is not a particular judge model. It is the feedback loop: the release system continues checking the contract after the deployment ceremony is over.
+NIST’s work on evaluation probes points in the same direction: automated verifiers can be integrated directly into an agent workflow, and their results can be accumulated into a machine-readable audit trail that connects decisions to supporting evidence. The important idea is not a particular judge model. It is the feedback loop: the release system continues checking the contract after the deployment ceremony is over.
 
 ![A post-release drift and rollback loop connecting quality signals, human review, and a stable baseline model](/blog/model-upgrade/drift-rollback.webp)
 

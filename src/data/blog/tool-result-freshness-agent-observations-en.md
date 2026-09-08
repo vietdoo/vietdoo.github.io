@@ -23,7 +23,7 @@ That distinction matters everywhere an AI agent can observe one system and act o
 
 > **The thesis:** A tool result is an observation with an age, scope, version, and purpose. It may be safe for explanation while already unsafe for an irreversible action. Production agents need a freshness contract and an action-time revalidation gate—not another instruction telling the model to “use the latest data.”
 
-This article presents an application-level pattern for tool-using agents. It borrows useful vocabulary from HTTP caching, where a stored response is fresh only for a defined lifetime and may need validation before reuse.[1] It also borrows the idea of request preconditions from HTTP semantics: a write can be conditional on the representation still matching the one the client observed.[2] The pattern is not an HTTP implementation requirement, and it is not a replacement for database transactions. It is a way to make time and state explicit at the boundary where an agent wants to cause an effect.
+This article presents an application-level pattern for tool-using agents. It borrows useful vocabulary from HTTP caching, where a stored response is fresh only for a defined lifetime and may need validation before reuse. It also borrows the idea of request preconditions from HTTP semantics: a write can be conditional on the representation still matching the one the client observed. The pattern is not an HTTP implementation requirement, and it is not a replacement for database transactions. It is a way to make time and state explicit at the boundary where an agent wants to cause an effect.
 
 ## An observation is not the world
 
@@ -173,7 +173,7 @@ For a read-only answer, a new RAG retrieval may be enough. For a write, the reva
 | Authorization service | Current policy decision and grant expiry | Deny and request fresh authorization. |
 | External provider | Provider-side confirmation or idempotent reservation | Mark the outcome unknown and reconcile. |
 
-HTTP caching gives a helpful conceptual distinction. A cached response can be fresh for reuse during its freshness lifetime; once it needs validation, the client checks with the origin rather than assuming that the stored representation is still valid.[1] A similar distinction works for agent observations, but the policy must be stricter for actions with side effects.
+HTTP caching gives a helpful conceptual distinction. A cached response can be fresh for reuse during its freshness lifetime; once it needs validation, the client checks with the origin rather than assuming that the stored representation is still valid. A similar distinction works for agent observations, but the policy must be stricter for actions with side effects.
 
 A revalidation call should be narrow. It should not ask the model to repeat the whole conversation or re-run every tool. It should confirm the smallest state necessary for the proposed action:
 
@@ -187,7 +187,7 @@ A revalidation call should be narrow. It should not ask the model to repeat the 
 }
 ```
 
-If the source supports a conditional write, combine the check and the write where possible. The equivalent of an `If-Match` precondition means: perform the write only if the server’s current representation still matches the version observed earlier.[2] This closes a race that would remain if the agent performed a separate “read latest” call and then waited before writing.
+If the source supports a conditional write, combine the check and the write where possible. The equivalent of an `If-Match` precondition means: perform the write only if the server’s current representation still matches the version observed earlier. This closes a race that would remain if the agent performed a separate “read latest” call and then waited before writing.
 
 ## The race window is the real bug
 

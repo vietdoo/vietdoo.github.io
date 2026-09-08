@@ -17,7 +17,7 @@ A senior engineer may be allowed to delete a production replica. A support agent
 
 > **Thesis:** An AI agent is a distinct principal. Delegation should transfer only the authority required for the current task, preserve the identity of the person who initiated the work, constrain the agent’s own role, and remain revocable while the run is in progress.
 
-This distinction is becoming an identity and authorization problem rather than a prompt-writing problem. NIST’s NCCoE has explicitly called for work on the identification, authorization, auditing and non-repudiation of software agents.[1] An IETF Internet-Draft proposes an OAuth extension that records the user, client application and agent in a delegated authorization flow.[2] These efforts do not eliminate local design decisions, but they make the direction clear: agent identity must be represented deliberately.
+This distinction is becoming an identity and authorization problem rather than a prompt-writing problem. NIST’s NCCoE has explicitly called for work on the identification, authorization, auditing and non-repudiation of software agents. An IETF Internet-Draft proposes an OAuth extension that records the user, client application and agent in a delegated authorization flow. These efforts do not eliminate local design decisions, but they make the direction clear: agent identity must be represented deliberately.
 
 ## The identity triangle: user, client, and agent
 
@@ -38,7 +38,7 @@ This is complementary to the folio’s existing [agent handover architecture](/b
 
 ## Delegation is not impersonation
 
-OAuth token exchange makes a useful distinction between **delegation** and **impersonation**. In impersonation, principal A is given a token that makes A indistinguishable from principal B in the receiving system. In delegation, A keeps its own identity while acting for B. RFC 8693 describes these as different semantics and supports tokens that carry information about both the subject and the actor.[3]
+OAuth token exchange makes a useful distinction between **delegation** and **impersonation**. In impersonation, principal A is given a token that makes A indistinguishable from principal B in the receiving system. In delegation, A keeps its own identity while acting for B. RFC 8693 describes these as different semantics and supports tokens that carry information about both the subject and the actor.
 
 For AI agents, the difference is practical. If an agent impersonates the user, a downstream API may see only `user:alice`. It cannot tell whether Alice directly made the request, whether a client invoked an agent, or whether a second agent rewrote the task. If the agent delegates on Alice’s behalf, the downstream API can enforce a policy over both identities: “Alice initiated this, but `agent:ticket-assistant` is the actor, and this token is valid only for ticket reads until 14:00.”
 
@@ -72,9 +72,9 @@ Suppose an engineer can read deployments, roll back a release and delete cloud r
 
 ![The intersection of user permission, agent role, task scope, audience, and environment](/blog/agent-identity-delegation-revocation/intersection-authority-playwright.webp)
 
-WorkOS describes this as an intersection rule: the user’s permissions are a ceiling, not a complete grant. The agent’s own configured scope is a second ceiling.[4] This prevents a common failure mode in which a privileged employee unintentionally gives a general-purpose agent the ability to perform every privileged action the employee can perform.
+WorkOS describes this as an intersection rule: the user’s permissions are a ceiling, not a complete grant. The agent’s own configured scope is a second ceiling. This prevents a common failure mode in which a privileged employee unintentionally gives a general-purpose agent the ability to perform every privileged action the employee can perform.
 
-The intersection should be evaluated at the policy boundary, ideally at every sensitive tool call. Do not ask the model to decide whether an action is allowed. The model can propose an action; a policy engine or resource server must decide whether the action is authorized. This is also the direction recommended by OWASP’s guidance on excessive agency: minimize functionality and permissions, execute extensions in the user’s context, require approval for high-impact operations, and enforce complete mediation downstream.[5]
+The intersection should be evaluated at the policy boundary, ideally at every sensitive tool call. Do not ask the model to decide whether an action is allowed. The model can propose an action; a policy engine or resource server must decide whether the action is authorized. This is also the direction recommended by OWASP’s guidance on excessive agency: minimize functionality and permissions, execute extensions in the user’s context, require approval for high-impact operations, and enforce complete mediation downstream.
 
 A useful policy input has more structure than a scope string:
 
@@ -111,7 +111,7 @@ A denied decision is useful data. It tells the system whether the agent requeste
 
 ## Token exchange: create a task-shaped credential
 
-The agent should not forward the user’s browser session token to every downstream service. It should exchange an authenticated subject token for a new credential that is specific to the resource, audience and task. RFC 8693 defines an OAuth-based token exchange protocol for obtaining a token that can be more narrowly scoped for a downstream service.[3]
+The agent should not forward the user’s browser session token to every downstream service. It should exchange an authenticated subject token for a new credential that is specific to the resource, audience and task. RFC 8693 defines an OAuth-based token exchange protocol for obtaining a token that can be more narrowly scoped for a downstream service.
 
 A simplified request might look like this:
 
@@ -155,7 +155,7 @@ An issued token or equivalent authorization context should make the relationship
 }
 ```
 
-The important properties are not the exact JSON shape. They are that the resource server can identify the executing agent, attribute the delegation to a user, restrict the audience, see the task boundary, and reject an expired or policy-incompatible credential. ScaleKit describes the same need as dual identity enforcement, scoped permissions, cross-service attribution, expiry and revocation checks, and auditability at scale.[6]
+The important properties are not the exact JSON shape. They are that the resource server can identify the executing agent, attribute the delegation to a user, restrict the audience, see the task boundary, and reject an expired or policy-incompatible credential. ScaleKit describes the same need as dual identity enforcement, scoped permissions, cross-service attribution, expiry and revocation checks, and auditability at scale.
 
 ## Delegation chains need a maximum depth
 

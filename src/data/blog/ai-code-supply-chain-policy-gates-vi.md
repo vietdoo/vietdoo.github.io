@@ -31,7 +31,7 @@ Coding agent thường được gọi là một assistant, nhưng về mặt v�
 | **Đã build như thế nào?** | Builder identity, input, timestamp, dependency lock, artifact digest | Builder không bị compromise         |
 | **Vì sao được release?**  | Policy evaluation, approval, exception, risk threshold               | Quyết định kinh doanh là sáng suốt  |
 
-SLSA định nghĩa provenance là thông tin có thể kiểm chứng về nơi, thời điểm và cách một software artifact được tạo ra; mục đích là để consumer xác minh artifact được build theo kỳ vọng và, khi phù hợp, có thể build lại [3]. Khái niệm này phù hợp tự nhiên với thay đổi do agent tạo, nhưng cần giữ một ranh giới: build provenance cho biết artifact được tạo như thế nào; nó không chứng nhận reasoning của model là đúng.
+SLSA định nghĩa provenance là thông tin có thể kiểm chứng về nơi, thời điểm và cách một software artifact được tạo ra; mục đích là để consumer xác minh artifact được build theo kỳ vọng và, khi phù hợp, có thể build lại. Khái niệm này phù hợp tự nhiên với thay đổi do agent tạo, nhưng cần giữ một ranh giới: build provenance cho biết artifact được tạo như thế nào; nó không chứng nhận reasoning của model là đúng.
 
 Đây là một ranh giới lành mạnh. Nó ngăn việc biến artifact có chữ ký thành con dấu “AI đã approve”. Chữ ký chứng minh quyền kiểm soát signing key và tính toàn vẹn của statement đã ký. Nó không chứng minh dependency là vô hại, function được sinh ra không có lỗi logic, hay reviewer đã hiểu đầy đủ rủi ro.
 
@@ -109,7 +109,7 @@ Một evidence envelope hữu ích kết hợp source view và artifact view:
 }
 ```
 
-Mô hình provenance của SLSA hữu ích ở đây vì nó cung cấp vocabulary cho source material, build definition, builder, metadata và subject được tạo ra [3]. Các field riêng cho AI nên mở rộng evidence envelope một cách cẩn trọng, không thay thế metadata chuẩn của build.
+Mô hình provenance của SLSA hữu ích ở đây vì nó cung cấp vocabulary cho source material, build definition, builder, metadata và subject được tạo ra. Các field riêng cho AI nên mở rộng evidence envelope một cách cẩn trọng, không thay thế metadata chuẩn của build.
 
 ## Policy gate biến evidence thành quyết định release
 
@@ -150,7 +150,7 @@ exceptions:
 
 ## Tách pre-commit check khỏi system of record
 
-Agent-side check rất hữu ích vì rút ngắn feedback loop. Tài liệu GitHub mô tả secret scanning qua remote MCP server như một cách scan thay đổi hiện tại trước khi secret chạm vào repository [5]. Tài liệu cũng nêu rõ một giới hạn quan trọng: finding từ MCP là ephemeral và không trở thành GitHub alert bền vững; nó là pre-commit safety check, không phải system of record [6].
+Agent-side check rất hữu ích vì rút ngắn feedback loop. Tài liệu GitHub mô tả secret scanning qua remote MCP server như một cách scan thay đổi hiện tại trước khi secret chạm vào repository. Tài liệu cũng nêu rõ một giới hạn quan trọng: finding từ MCP là ephemeral và không trở thành GitHub alert bền vững; nó là pre-commit safety check, không phải system of record.
 
 Ranh giới này nên xuất hiện trong kiến trúc. Developer hoặc agent có thể chạy scan nhanh ở local hay trong interactive session, nhưng repository và CI vẫn phải enforce durable gate. Nếu không, một IDE khác, một tool bị tắt hoặc agent config bị thay đổi sẽ tạo ra một đường vòng vô hình quanh control.
 
@@ -162,7 +162,7 @@ Ranh giới này nên xuất hiện trong kiến trúc. Developer hoặc agent c
 | Registry hoặc deploy admission | Enforce signature, provenance, SBOM và policy | Policy yếu biến gate thành hình thức                          |
 | Incident archive               | Tái dựng decision và phạm vi ảnh hưởng        | Lưu mọi thứ tạo rủi ro privacy và chi phí                     |
 
-GitHub cũng mô tả workflow bảo mật cho AI coding agent có thể phát hiện secret, vulnerability và insecure dependency từ agent mode và tool tương thích MCP [5]. Bài học thực tế không phải là giao toàn bộ chain cho một platform. Đó là xếp lớp interactive assistance với control được enforce ở repository và deployment.
+GitHub cũng mô tả workflow bảo mật cho AI coding agent có thể phát hiện secret, vulnerability và insecure dependency từ agent mode và tool tương thích MCP. Bài học thực tế không phải là giao toàn bộ chain cho một platform. Đó là xếp lớp interactive assistance với control được enforce ở repository và deployment.
 
 ## Nên ghi nhận gì về AI contribution?
 
@@ -170,7 +170,7 @@ Câu trả lời phụ thuộc vào rủi ro và retention. Một thay đổi do
 
 Minimum record hợp lý gồm contribution ID, base revision, resulting commit, changed paths, agent/client class, tool policy version và timestamp. Record assurance cao hơn có thể thêm model family, configuration hash, tool được enable, external retrieval reference, test environment và protected session-evidence hash. Hệ thống không nên lưu secret, customer data hoặc toàn bộ prompt trong commit metadata thông thường.
 
-Dự án SSDF của NIST hiện trỏ tới SP 800-218A, một community profile bổ sung các practice, task, recommendation và consideration dành cho AI vào secure software development lifecycle [4]. Đây là cách framing hữu ích: code do AI tạo nên được đưa vào các outcome của secure development, không nên bị quản lý bởi một “AI checklist” tách rời khỏi các control engineering bình thường.
+Dự án SSDF của NIST hiện trỏ tới SP 800-218A, một community profile bổ sung các practice, task, recommendation và consideration dành cho AI vào secure software development lifecycle. Đây là cách framing hữu ích: code do AI tạo nên được đưa vào các outcome của secure development, không nên bị quản lý bởi một “AI checklist” tách rời khỏi các control engineering bình thường.
 
 ## Rollout mà không làm team đứng yên
 
@@ -194,7 +194,7 @@ Metric đầu tiên không nên là “bao nhiêu phần trăm code được vi�
 
 **“SBOM đã đính kèm trong repository.”** SBOM gắn với branch hoặc working tree có thể drift so với image đã deploy. Hãy bind nó với artifact digest và giữ lại chính input được dùng để sinh SBOM.
 
-**“Agent đã chạy security scan.”** Interactive scan rút ngắn feedback loop. Nó không nên là gate duy nhất. Tài liệu GitHub phân biệt rõ ephemeral MCP scan result với security record bền vững trong repository [6].
+**“Agent đã chạy security scan.”** Interactive scan rút ngắn feedback loop. Nó không nên là gate duy nhất. Tài liệu GitHub phân biệt rõ ephemeral MCP scan result với security record bền vững trong repository.
 
 **“Chúng ta sẽ giữ mọi prompt để audit sau này.”** Transcript đầy đủ có thể chứa credential, customer data, proprietary code hoặc thông tin cá nhân không liên quan. Hãy dùng retention theo tầng: metadata ổn định mặc định, protected evidence chỉ cho task rủi ro cao, cùng quy tắc access và deletion rõ ràng.
 

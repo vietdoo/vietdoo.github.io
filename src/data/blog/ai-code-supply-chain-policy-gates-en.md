@@ -31,7 +31,7 @@ That does not mean the agent deserves a human identity. It means the system need
 | **How was it built?**    | Builder identity, inputs, timestamps, dependency lock, artifact digest | That the builder itself was uncompromised  |
 | **Why was it released?** | Policy evaluation, approvals, exceptions, risk thresholds              | That the business decision was wise        |
 
-SLSA defines provenance as verifiable information about where, when, and how a software artifact was produced, with the purpose of allowing consumers to verify expectations and, where useful, rebuild the artifact [3]. That concept maps naturally to agent-generated changes, but with an important boundary: build provenance can show how an artifact was produced; it does not certify that the model’s reasoning was correct.
+SLSA defines provenance as verifiable information about where, when, and how a software artifact was produced, with the purpose of allowing consumers to verify expectations and, where useful, rebuild the artifact. That concept maps naturally to agent-generated changes, but with an important boundary: build provenance can show how an artifact was produced; it does not certify that the model’s reasoning was correct.
 
 The distinction is healthy. It prevents a signed artifact from becoming a magical “AI approved” stamp. A signature proves control of a signing key and integrity of the signed statement. It does not prove that a dependency is benign, a generated function has no logic flaw, or a human reviewer understood the risk.
 
@@ -109,7 +109,7 @@ A useful evidence envelope combines source and artifact views:
 }
 ```
 
-SLSA’s provenance model is useful here because it gives teams a vocabulary for source materials, build definition, builder, metadata, and the produced subject [3]. The AI-specific fields should extend the evidence envelope carefully rather than replace standard build metadata.
+SLSA’s provenance model is useful here because it gives teams a vocabulary for source materials, build definition, builder, metadata, and the produced subject. The AI-specific fields should extend the evidence envelope carefully rather than replace standard build metadata.
 
 ## Policy gates turn evidence into a release decision
 
@@ -150,7 +150,7 @@ This is not a complete security program. It is a release contract. The contract 
 
 ## Separate pre-commit checks from system-of-record controls
 
-Agent-side checks are useful because they shorten feedback loops. GitHub’s documentation describes secret scanning through its remote MCP server as a way to scan current changes before secrets reach a repository [5]. It also makes a crucial limitation explicit: MCP findings are ephemeral and do not become persistent GitHub alerts; they are a pre-commit safety check, not a system of record [6].
+Agent-side checks are useful because they shorten feedback loops. GitHub’s documentation describes secret scanning through its remote MCP server as a way to scan current changes before secrets reach a repository. It also makes a crucial limitation explicit: MCP findings are ephemeral and do not become persistent GitHub alerts; they are a pre-commit safety check, not a system of record.
 
 That distinction should appear in the architecture. A developer or agent may run a fast local or interactive scan, but the repository and CI must enforce the durable gate. Otherwise a skipped tool, a different IDE, or a changed agent configuration creates an invisible path around the control.
 
@@ -162,7 +162,7 @@ That distinction should appear in the architecture. A developer or agent may run
 | Registry or deploy admission | Enforce signatures, provenance, SBOM, and policy | A weak policy can turn the gate into theatre              |
 | Incident archive             | Reconstruct decisions and scope                  | Retaining everything can create privacy and cost problems |
 
-GitHub also documents that its AI coding-agent security workflow can catch secrets, vulnerabilities, and insecure dependencies from agent mode and MCP-compatible tools [5]. The practical lesson is not to outsource the whole chain to one platform. It is to layer interactive assistance with repository-enforced and deployment-enforced controls.
+GitHub also documents that its AI coding-agent security workflow can catch secrets, vulnerabilities, and insecure dependencies from agent mode and MCP-compatible tools. The practical lesson is not to outsource the whole chain to one platform. It is to layer interactive assistance with repository-enforced and deployment-enforced controls.
 
 ## What should be recorded about the AI contribution?
 
@@ -170,7 +170,7 @@ The answer depends on risk and retention. A low-risk documentation change may ne
 
 A sensible minimum record includes the contribution ID, base revision, resulting commit, changed paths, agent/client class, tool policy version, and timestamps. A higher-assurance record may add the model family, configuration hash, enabled tools, external retrieval references, test environment, and a protected session-evidence hash. The system should avoid storing secrets, raw customer data, or full prompts in ordinary commit metadata.
 
-NIST’s SSDF project now points to SP 800-218A, a community profile that adds AI-specific practices, tasks, recommendations, and considerations to the secure software development lifecycle [4]. That is a useful framing: AI-generated code should be integrated into secure development outcomes, not managed by an isolated “AI checklist” disconnected from ordinary engineering controls.
+NIST’s SSDF project now points to SP 800-218A, a community profile that adds AI-specific practices, tasks, recommendations, and considerations to the secure software development lifecycle. That is a useful framing: AI-generated code should be integrated into secure development outcomes, not managed by an isolated “AI checklist” disconnected from ordinary engineering controls.
 
 ## A rollout that does not stop the team
 
@@ -194,7 +194,7 @@ The first metric should not be “percentage of code written by AI.” That numb
 
 **“The SBOM is attached to the repository.”** An SBOM tied to a branch or working tree can drift from the deployed image. Bind it to the artifact digest and preserve the exact generation input.
 
-**“The agent ran the security scan.”** Interactive scans shorten the path to feedback. They should not be the only gate. GitHub’s own documentation distinguishes ephemeral MCP scan results from persistent repository security records [6].
+**“The agent ran the security scan.”** Interactive scans shorten the path to feedback. They should not be the only gate. GitHub’s own documentation distinguishes ephemeral MCP scan results from persistent repository security records.
 
 **“We will keep every prompt for future audits.”** Full transcripts can contain credentials, customer data, proprietary code, or unrelated personal information. Use a tiered retention design: stable metadata by default, protected evidence only for higher-risk tasks, and explicit deletion and access rules.
 

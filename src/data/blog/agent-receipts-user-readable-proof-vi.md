@@ -19,7 +19,7 @@ Trace có thể trả lời những câu hỏi đó, nhưng chỉ sau khi ai đ�
 
 > **Luận điểm chính:** Agent receipt phải làm cho state đã thay đổi, authority, evidence và uncertainty trở nên dễ hiểu trong cùng một nơi. Người đọc có thể quyết định chấp nhận, điều tra, hoàn tác hoặc chuyển escalation mà không cần đọc toàn bộ execution trace.
 
-Bài học thực hành về cryptographic receipt của Microsoft định nghĩa receipt là một JSON object ghi lại agent đã làm gì và được ký bằng chữ ký số. Tài liệu này nhấn mạnh ba bảo đảm hữu ích: attribution, integrity và ordering, đồng thời đặt ra một giới hạn quan trọng: receipt không chứng minh action là đúng hay policy đứng phía sau là hợp lý.[1] Chính giới hạn này phân biệt một thiết kế accountability trung thực với một chiếc badge “verified” chỉ để trang trí.
+Bài học thực hành về cryptographic receipt của Microsoft định nghĩa receipt là một JSON object ghi lại agent đã làm gì và được ký bằng chữ ký số. Tài liệu này nhấn mạnh ba bảo đảm hữu ích: attribution, integrity và ordering, đồng thời đặt ra một giới hạn quan trọng: receipt không chứng minh action là đúng hay policy đứng phía sau là hợp lý. Chính giới hạn này phân biệt một thiết kế accountability trung thực với một chiếc badge “verified” chỉ để trang trí.
 
 ## Receipt không phải một log đẹp hơn
 
@@ -136,7 +136,7 @@ Vì vậy receipt nên hiển thị nhiều status khác nhau thay vì một nh�
 | Verification failed | Signature, ordering hoặc hash check thất bại. | Dừng dựa vào receipt và điều tra. |
 | Outcome uncertain | Execution result chưa biết hoặc đang reconcile. | Không mô tả action là đã hoàn thành. |
 
-Cách gọi status này tránh một lỗi phổ biến: dùng cryptography để tạo ra certainty giả. Nghiên cứu về verifiability-first agent cũng đặt vấn đề ở cấp độ rộng hơn: assurance nên giúp phát hiện và xử lý misalignment, không chỉ tạo ra một lời giải thích nghe hợp lý sau sự kiện.[2]
+Cách gọi status này tránh một lỗi phổ biến: dùng cryptography để tạo ra certainty giả. Nghiên cứu về verifiability-first agent cũng đặt vấn đề ở cấp độ rộng hơn: assurance nên giúp phát hiện và xử lý misalignment, không chỉ tạo ra một lời giải thích nghe hợp lý sau sự kiện.
 
 ## Thiết kế receipt có ý thức về privacy
 
@@ -175,7 +175,7 @@ receipt received
   -> return verified, warning, failed, or unknown
 ```
 
-Canonicalization quan trọng vì hai JSON serializer có thể biểu diễn cùng một object logic thành các byte khác nhau. Bài học của Microsoft dùng JSON Canonicalization Scheme và Ed25519 signing, sau đó thêm hash của receipt trước để làm cho thứ tự trở nên tamper-evident.[1] Team không nhất thiết phải copy nguyên stack đó, nhưng cần chọn encoding có thể tái lập, key lifecycle được quản lý và procedure verify có thể được thực hiện bởi nhiều hơn một component.
+Canonicalization quan trọng vì hai JSON serializer có thể biểu diễn cùng một object logic thành các byte khác nhau. Bài học của Microsoft dùng JSON Canonicalization Scheme và Ed25519 signing, sau đó thêm hash của receipt trước để làm cho thứ tự trở nên tamper-evident. Team không nhất thiết phải copy nguyên stack đó, nhưng cần chọn encoding có thể tái lập, key lifecycle được quản lý và procedure verify có thể được thực hiện bởi nhiều hơn một component.
 
 Bước cuối đặc biệt quan trọng: **đối chiếu state được claim với source of truth**. Receipt hợp lệ có thể nói database update đã apply, trong khi record sau đó đã bị người khác hoặc agent khác thay đổi. Integrity của receipt không đồng nghĩa với freshness của thế giới.
 

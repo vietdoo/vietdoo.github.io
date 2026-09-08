@@ -15,7 +15,7 @@ Một RAG demo thường kết thúc bằng một câu khá yên tâm: “Câu t
 
 Một retrieved chunk có thể đến từ document cũ. Parser có thể làm mất header của bảng. Reranker có thể chọn một paragraph nằm gần figure nhưng bỏ qua figure vốn làm thay đổi ý nghĩa. Sau đó model ghép ba mảnh evidence thành một claim mà không source nào thực sự nói. Final answer có citation, nhưng citation không giải thích claim được hình thành như thế nào.
 
-Đó là lúc **provenance** trở nên hữu ích. Observability cho biết hệ thống đã làm gì: model nào chạy, request mất bao lâu, retriever trả về những ID nào. Provenance hỏi một câu khác: **những entity, activity và agent nào đã góp phần tạo ra claim này, và reviewer có thể lần theo lineage về source hay không?** Mô hình W3C PROV dùng chính những khái niệm đó để suy luận về chất lượng, độ tin cậy và trustworthiness của dữ liệu được tạo ra.[1]
+Đó là lúc **provenance** trở nên hữu ích. Observability cho biết hệ thống đã làm gì: model nào chạy, request mất bao lâu, retriever trả về những ID nào. Provenance hỏi một câu khác: **những entity, activity và agent nào đã góp phần tạo ra claim này, và reviewer có thể lần theo lineage về source hay không?** Mô hình W3C PROV dùng chính những khái niệm đó để suy luận về chất lượng, độ tin cậy và trustworthiness của dữ liệu được tạo ra.
 
 > **Luận điểm chính:** Citation là một pointer. Provenance là chain of custody đứng phía sau pointer đó.
 

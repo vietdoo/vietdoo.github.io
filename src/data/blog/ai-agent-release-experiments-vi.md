@@ -71,7 +71,7 @@ Offline eval, shadow traffic, replay, canary và full rollout thường được
 
 Một kỷ luật hữu ích là viết exit condition cho từng mode trước khi chạy. “Model mới có vẻ tốt hơn” không phải exit condition. “Không có critical safety invariant nào regression, p95 latency nằm trong budget và candidate cải thiện task completion trên target slice” thì có thể đo được, dù phép đo vẫn không hoàn hảo.
 
-Hướng dẫn eval của OpenAI nhấn mạnh task-specific test, data có hình dạng production, continuous evaluation và human calibration thay vì một score chung chung.[1] Hướng dẫn đánh giá agent của Anthropic cũng tách transcript khỏi final environment outcome, đồng thời khuyến nghị kết hợp code-based, model-based và human grader.[2] Những ý tưởng đó quan trọng ở đây vì release có thể nghe hay hơn nhưng vẫn để lại database state sai.
+Hướng dẫn eval của OpenAI nhấn mạnh task-specific test, data có hình dạng production, continuous evaluation và human calibration thay vì một score chung chung. Hướng dẫn đánh giá agent của Anthropic cũng tách transcript khỏi final environment outcome, đồng thời khuyến nghị kết hợp code-based, model-based và human grader. Những ý tưởng đó quan trọng ở đây vì release có thể nghe hay hơn nhưng vẫn để lại database state sai.
 
 ## Bắt đầu với release ledger
 
@@ -141,7 +141,7 @@ Offline eval cho biết candidate xử lý thế nào với những case ta đã
 
 ## Shadow traffic là traffic thật nhưng effect đã bị gỡ bỏ
 
-Một shadow test đúng nghĩa copy input sang candidate, trong khi chỉ stable route trả response cho calling application. AWS mô tả shadow testing là cách so sánh một variant đã deploy với infrastructure hiện tại, gồm cả operational metric như latency và error rate, mà không gây end-user impact.[3]
+Một shadow test đúng nghĩa copy input sang candidate, trong khi chỉ stable route trả response cho calling application. AWS mô tả shadow testing là cách so sánh một variant đã deploy với infrastructure hiện tại, gồm cả operational metric như latency và error rate, mà không gây end-user impact.
 
 Với agent, “không gây user impact” cần được định nghĩa chặt hơn việc “không hiển thị candidate answer.” Candidate không được gửi email, sửa CRM, reserve inventory, charge tiền hay để tool result riêng tư rơi vào shared log. Side-effect boundary phải nằm ở tool gateway, không chỉ ở UI.
 
@@ -211,7 +211,7 @@ Replay cũng là nơi team phát hiện mình chưa lưu đủ evidence. Đó kh
 
 Sau offline và shadow check, canary expose candidate cho một cohort có kiểm soát. Cohort có thể chọn theo tenant, feature flag, internal user, geography, request class hoặc stable hash. Quy tắc chọn cohort là một phần của experiment vì canary chỉ gồm internal prompt thân thiện sẽ không đại diện cho traffic khó nhất.
 
-Các hệ thống progressive delivery thường biểu diễn canary bằng chuỗi traffic weight và pause, trong đó analysis quyết định rollout có đi tiếp hay bị abort.[4] Ý tưởng này dùng được cho agent, nhưng metric phải bao gồm behavior và effect, không chỉ HTTP health.
+Các hệ thống progressive delivery thường biểu diễn canary bằng chuỗi traffic weight và pause, trong đó analysis quyết định rollout có đi tiếp hay bị abort. Ý tưởng này dùng được cho agent, nhưng metric phải bao gồm behavior và effect, không chỉ HTTP health.
 
 ```text
 candidate  ->  1%  -> pause + analyze

@@ -13,7 +13,7 @@ The first sign that an AI team has outgrown ad hoc experimentation is usually no
 
 The question sounds simple until the team discovers that a developer edited a prompt in a shared dashboard, the staging service fetched `latest`, production fetched `production`, the evaluation dataset had changed since last week, and the trace did not record the commit or prompt version that produced the answer. Everyone has a plausible explanation. Nobody has a reproducible one.
 
-Langfuse is often introduced as a place to inspect traces and compare model outputs. That is useful, but it is not the whole operational problem. A mature AI system needs a release path that connects a prompt or model change to evidence, approval, deployment, observation, and rollback. Langfuse can provide important pieces of that path through prompt versioning, labels, datasets, experiments, scores, tracing, APIs, and CI/CD integrations.[1](https://langfuse.com/docs/prompt-management/features/prompt-version-control) [2](https://langfuse.com/docs/evaluation/experiments/datasets) [3](https://langfuse.com/docs/prompt-management/features/github-integration)
+Langfuse is often introduced as a place to inspect traces and compare model outputs. That is useful, but it is not the whole operational problem. A mature AI system needs a release path that connects a prompt or model change to evidence, approval, deployment, observation, and rollback. Langfuse can provide important pieces of that path through prompt versioning, labels, datasets, experiments, scores, tracing, APIs, and CI/CD integrations.
 
 ![A Langfuse release system connects prompt versions, traces, datasets, evaluations, CI/CD gates, and production rollback](/blog/langfuse-dev-prod-cicd/hero.webp)
 
@@ -41,7 +41,7 @@ The goal is not to make every environment identical. The goal is to make every *
 | Trace payload | Debug-friendly but masked | Full diagnostic fields under controlled access | Minimum necessary payload, aggressive masking and retention |
 | Promotion authority | Author or team reviewer | Release owner and evaluation gate | Protected approver or change policy |
 
-Langfuse prompt versions are scoped to a project, and Langfuse documents labels as a mechanism that can represent environments, tenants, or experiments. The `latest` label points to the newest version, while an explicit production label identifies the version intentionally selected for production. A rollback can be performed by moving the production label to an earlier version; protected labels can restrict who is allowed to change that pointer.[1](https://langfuse.com/docs/prompt-management/features/prompt-version-control)
+Langfuse prompt versions are scoped to a project, and Langfuse documents labels as a mechanism that can represent environments, tenants, or experiments. The `latest` label points to the newest version, while an explicit production label identifies the version intentionally selected for production. A rollback can be performed by moving the production label to an earlier version; protected labels can restrict who is allowed to change that pointer.
 
 That behavior creates an important design choice. A label is a deployment pointer, not a substitute for release evidence. The application should record the resolved prompt name, version, label, and release identifier in its trace metadata. Otherwise, moving a label later can make historical behavior difficult to reconstruct.
 
@@ -51,7 +51,7 @@ The most dangerous synchronization design is one that has two sources of truth w
 
 There are three reasonable ownership patterns.
 
-The first is **registry-first**. Langfuse owns prompt authoring and versioning. A reviewer creates a new prompt version, attaches a change description, runs an experiment, and moves an environment label after approval. GitHub Actions can be triggered when the prompt changes through the documented Repository Dispatch integration.[3](https://langfuse.com/docs/prompt-management/features/github-integration) This is convenient for teams whose prompt editors work primarily in Langfuse, but it requires strong webhook security and an audit rule that prevents undocumented production edits.
+The first is **registry-first**. Langfuse owns prompt authoring and versioning. A reviewer creates a new prompt version, attaches a change description, runs an experiment, and moves an environment label after approval. GitHub Actions can be triggered when the prompt changes through the documented Repository Dispatch integration. This is convenient for teams whose prompt editors work primarily in Langfuse, but it requires strong webhook security and an audit rule that prevents undocumented production edits.
 
 The second is **Git-first**. Prompt templates, configuration, and evaluation definitions live in a repository. CI validates and publishes a new Langfuse prompt version. Langfuse becomes the runtime registry and observation surface, while Git remains the reviewable source of change. This model is attractive when prompts are tightly coupled to application code or must pass the same pull-request process as code.
 
@@ -116,7 +116,7 @@ rollback:
 
 The manifest is not intended to duplicate every trace. It is a compact statement of what the release is supposed to use and what evidence allowed it to proceed. At runtime, the trace should carry the manifest ID or release ID, while the manifest links back to the exact prompt and dataset versions.
 
-When an application fetches a prompt by label, use the Langfuse SDK retrieval path that supports client-side caching, retries, and fallbacks rather than rebuilding the retrieval logic around a raw request.[6](https://langfuse.com/docs/api-and-data-platform/features/public-api) In production, prefer an explicit environment label or resolved version. Use `latest` for exploration, not as an unreviewed production dependency.
+When an application fetches a prompt by label, use the Langfuse SDK retrieval path that supports client-side caching, retries, and fallbacks rather than rebuilding the retrieval logic around a raw request. In production, prefer an explicit environment label or resolved version. Use `latest` for exploration, not as an unreviewed production dependency.
 
 A safe fetch contract looks like this:
 
@@ -137,11 +137,11 @@ If the registry is temporarily unavailable, the fallback must also be observable
 
 ## Sync projects without copying the wrong data
 
-Langfuse recommends a single deployment in many self-hosted scenarios, using organizations, projects, and RBAC for logical separation. Multiple deployments can be justified by strict regulatory or infrastructure requirements, but they increase operational cost and make prompt and dataset synchronization more difficult.[7](https://langfuse.com/self-hosting/security/deployment-strategies)
+Langfuse recommends a single deployment in many self-hosted scenarios, using organizations, projects, and RBAC for logical separation. Multiple deployments can be justified by strict regulatory or infrastructure requirements, but they increase operational cost and make prompt and dataset synchronization more difficult.
 
 A team should therefore choose a boundary deliberately. A single deployment with separate projects may be sufficient for dev, staging, and production when access controls, network policy, and retention are appropriate. Separate instances may be necessary when production data must remain in a different network or jurisdiction, or when a compliance policy requires physical separation.
 
-Project separation also affects prompt movement. Because prompts are scoped to a project, a prompt version cannot be assumed to exist in another project merely because the names match.[1](https://langfuse.com/docs/prompt-management/features/prompt-version-control) Promotion between projects should use an explicit export/import or publish step that records the source version, destination version, checksum, and actor.
+Project separation also affects prompt movement. Because prompts are scoped to a project, a prompt version cannot be assumed to exist in another project merely because the names match. Promotion between projects should use an explicit export/import or publish step that records the source version, destination version, checksum, and actor.
 
 Use this synchronization policy:
 
@@ -156,7 +156,7 @@ Use this synchronization policy:
 | Production secrets | Never copy | Credentials are environment-specific |
 | Scores and experiment results | Export summary or reproduce against a declared dataset version | Avoid confusing evidence from different data states |
 
-Langfuse dataset changes create versions tracked by timestamps, and a dataset can be retrieved at a specific version for reproducible experiments.[2](https://langfuse.com/docs/evaluation/experiments/datasets) This is particularly useful when a team wants to explain why a prompt passed in February but fails when rerun against a later dataset with new edge cases.
+Langfuse dataset changes create versions tracked by timestamps, and a dataset can be retrieved at a specific version for reproducible experiments. This is particularly useful when a team wants to explain why a prompt passed in February but fails when rerun against a later dataset with new edge cases.
 
 Do not use production as the default training ground for development. Instead, establish a controlled path from production observation to a redacted regression item. The path should include data owner approval, PII checks, tenant authorization, and a record of why the example is needed. A production trace is evidence, not automatically a permitted test fixture.
 
@@ -193,9 +193,9 @@ The values should be application-controlled and consistent across services. A ga
 
 A trace contract also needs a negative definition. Specify fields that must not be recorded: access tokens, full payment details, private keys, unredacted health information, and raw secrets embedded in tool responses. The application should avoid creating those attributes in the first place whenever possible.
 
-Langfuse supports masking of trace inputs, outputs, metadata, and OpenTelemetry attributes before export. For current Python SDK setups, the documentation recommends `mask_otel_spans` for export-stage masking, while other SDK and OpenTelemetry configurations have their own hooks.[4](https://langfuse.com/docs/observability/features/masking) Masking functions should be deterministic and fast. A masking implementation that blocks export or fails open unexpectedly can create a false sense of safety.
+Langfuse supports masking of trace inputs, outputs, metadata, and OpenTelemetry attributes before export. For current Python SDK setups, the documentation recommends `mask_otel_spans` for export-stage masking, while other SDK and OpenTelemetry configurations have their own hooks. Masking functions should be deterministic and fast. A masking implementation that blocks export or fails open unexpectedly can create a false sense of safety.
 
-In self-hosted deployments, Langfuse documents both client-side masking and server-side ingestion masking. Client-side masking is the boundary to use when data must never leave the application. Server-side masking can act as a centralized safety net, but it may be an Enterprise feature and does not replace client-side protection.[5](https://langfuse.com/self-hosting/security/data-masking)
+In self-hosted deployments, Langfuse documents both client-side masking and server-side ingestion masking. Client-side masking is the boundary to use when data must never leave the application. Server-side masking can act as a centralized safety net, but it may be an Enterprise feature and does not replace client-side protection.
 
 The trace should also record the masking policy version. A later investigator should be able to distinguish “the answer was wrong” from “the evaluator could not see the redacted evidence.” Observability and privacy are not separate projects; the trace contract is where they meet.
 
@@ -213,7 +213,7 @@ Organize datasets by purpose rather than by whoever created them:
 | Performance | Long context, concurrency and expensive paths | Latency, tokens and cost |
 | Adversarial | Ambiguous, conflicting or manipulative inputs | Robustness and abstention |
 
-The dataset name should make its contract visible. `support/golden` is less informative than `support/golden/v3` if the team does not define whether the suffix is a semantic release, a dataset folder, or an application version. Langfuse supports folders through slash-delimited dataset names, while dataset item changes create timestamped versions.[2](https://langfuse.com/docs/evaluation/experiments/datasets)
+The dataset name should make its contract visible. `support/golden` is less informative than `support/golden/v3` if the team does not define whether the suffix is a semantic release, a dataset folder, or an application version. Langfuse supports folders through slash-delimited dataset names, while dataset item changes create timestamped versions.
 
 For each CI run, record the dataset name and exact version timestamp. If the CI job fetches “the latest dataset,” the result is not reproducible: a teammate can rerun the same commit a day later against a different test set and receive a different gate outcome.
 
@@ -232,7 +232,7 @@ missing_prompt_version = 0
 
 These thresholds are examples, not universal defaults. The team must calibrate them against human labels and business risk. A score from an automated evaluator is evidence with uncertainty, not a license to ignore a critical failure.
 
-Langfuse experiments can be run through SDK workflows on local or hosted datasets, and the versioned dataset capability makes it possible to compare a candidate against a known data state.[2](https://langfuse.com/docs/evaluation/experiments/datasets) The CI system should store the experiment identifier, evaluator code version, model used by the evaluator, and summary results in the release record.
+Langfuse experiments can be run through SDK workflows on local or hosted datasets, and the versioned dataset capability makes it possible to compare a candidate against a known data state. The CI system should store the experiment identifier, evaluator code version, model used by the evaluator, and summary results in the release record.
 
 ## The CI/CD pipeline should promote evidence
 
@@ -257,7 +257,7 @@ A practical pipeline has five gates:
    move protected production label, canary, monitor, rollback if needed
 ```
 
-Langfuse documents two GitHub integration patterns: Repository Dispatch can trigger a workflow when a prompt changes, while Prompt Version Webhooks can synchronize prompt versions into a repository through a webhook server.[3](https://langfuse.com/docs/prompt-management/features/github-integration) These are integration primitives, not a complete release policy. The workflow still needs signature verification, idempotency, least-privilege credentials, dataset pinning, and a rule for what happens when CI fails.
+Langfuse documents two GitHub integration patterns: Repository Dispatch can trigger a workflow when a prompt changes, while Prompt Version Webhooks can synchronize prompt versions into a repository through a webhook server. These are integration primitives, not a complete release policy. The workflow still needs signature verification, idempotency, least-privilege credentials, dataset pinning, and a rule for what happens when CI fails.
 
 A minimal GitHub Actions shape might look like this:
 
@@ -306,9 +306,9 @@ jobs:
       - run: ./ci/start-canary.sh
 ```
 
-The commands are intentionally placeholders. A production implementation should call the documented Langfuse API or CLI and validate the response against the API reference rather than assuming an endpoint or field name.[5](https://langfuse.com/docs/api-and-data-platform/features/cli) [6](https://langfuse.com/docs/api-and-data-platform/features/public-api)
+The commands are intentionally placeholders. A production implementation should call the documented Langfuse API or CLI and validate the response against the API reference rather than assuming an endpoint or field name.
 
-A workflow should never print `LANGFUSE_SECRET_KEY`, prompt contents containing customer data, or raw webhook payloads into public CI logs. Use separate project-scoped keys for the environments, store them in the CI secret manager, and grant only the operations the job needs. The Langfuse CLI uses the same project API key pair as the SDK/public API and supports a region-specific or self-hosted base URL through environment variables.[5](https://langfuse.com/docs/api-and-data-platform/features/cli)
+A workflow should never print `LANGFUSE_SECRET_KEY`, prompt contents containing customer data, or raw webhook payloads into public CI logs. Use separate project-scoped keys for the environments, store them in the CI secret manager, and grant only the operations the job needs. The Langfuse CLI uses the same project API key pair as the SDK/public API and supports a region-specific or self-hosted base URL through environment variables.
 
 ## Promotion is a state transition
 
@@ -328,7 +328,7 @@ The state transition should be idempotent. If a CI job retries after a network t
 
 A release approval should include the diff, not just the score. Reviewers need to see which prompt variables changed, whether the tool contract changed, which model parameters changed, which dataset version was used, how the candidate compares with the current production version, and what the rollback target is.
 
-Protected production labels are useful because they turn a convention into a permission boundary. The label should be movable by the release identity and approved operators, not by every developer who can edit a prompt.[1](https://langfuse.com/docs/prompt-management/features/prompt-version-control)
+Protected production labels are useful because they turn a convention into a permission boundary. The label should be movable by the release identity and approved operators, not by every developer who can edit a prompt.
 
 ![CI/CD gates compare prompt versions on a pinned dataset before staging, approval, production promotion, and rollback](/blog/langfuse-dev-prod-cicd/ci-cd-gates.webp)
 
@@ -389,7 +389,7 @@ The sixth is **assuming a label move is a complete rollback**. Verify caches, ap
 
 The seventh is **building a bidirectional sync loop**. If Langfuse writes to Git and Git writes to Langfuse without a clear ownership rule, one change can multiply into several versions. Add loop prevention and make one system authoritative for each artifact.
 
-The eighth is **masking only in the dashboard**. Data that should never leave the application must be masked before export. A viewer permission cannot undo an unsafe ingestion boundary.[4](https://langfuse.com/docs/observability/features/masking) [5](https://langfuse.com/self-hosting/security/data-masking)
+The eighth is **masking only in the dashboard**. Data that should never leave the application must be masked before export. A viewer permission cannot undo an unsafe ingestion boundary.
 
 ## A rollout plan for a small team
 

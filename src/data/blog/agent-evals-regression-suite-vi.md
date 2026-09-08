@@ -23,7 +23,7 @@ Tôi đã từng thấy một AI agent trả lời câu cuối cùng hoàn toàn
 
 Tình huống rất quen: người dùng hỏi trạng thái một hồ sơ. Agent trả về đúng mã hồ sơ, đúng trạng thái, đúng deadline. Demo nhìn mượt đến mức cả phòng gật đầu. Nhưng mở trace ra, bạn thấy nó đã gọi một tool ghi dữ liệu trước khi tool tra cứu; ở lần chạy khác, nó retry cùng một tool bốn lần; và ở một input hơi nhiễu, nó cố thay đổi trạng thái hồ sơ chỉ vì câu “nếu có thể, giúp tôi xử lý luôn”. Lần demo đầu tiên không chạm vào nhánh nguy hiểm nên tất cả đều tưởng hệ thống đã sẵn sàng.
 
-Đó là sự khác biệt giữa **“agent từng tạo ra câu trả lời đẹp”** và **“agent có hành vi đủ ổn định để được release”**. Với agent có tool call, câu trả lời cuối chỉ là bề mặt. Phần còn lại nằm trong lựa chọn tool, arguments, state change, retry, guardrail, latency, token cost và cách agent xử lý thất bại trung gian. Anthropic gọi toàn bộ dấu vết đó là transcript hoặc trajectory; còn *outcome* phải được hiểu là trạng thái cuối thật trong môi trường, không phải lời agent tự khẳng định.[1]
+Đó là sự khác biệt giữa **“agent từng tạo ra câu trả lời đẹp”** và **“agent có hành vi đủ ổn định để được release”**. Với agent có tool call, câu trả lời cuối chỉ là bề mặt. Phần còn lại nằm trong lựa chọn tool, arguments, state change, retry, guardrail, latency, token cost và cách agent xử lý thất bại trung gian. Anthropic gọi toàn bộ dấu vết đó là transcript hoặc trajectory; còn *outcome* phải được hiểu là trạng thái cuối thật trong môi trường, không phải lời agent tự khẳng định.
 
 Bài này trình bày một cách thực dụng để biến điều đó thành **regression suite**: một bộ hợp đồng có thể chạy lại sau mỗi thay đổi prompt, model, tool schema, routing, retrieval, policy hoặc orchestration. Nó không khóa agent vào một đường đi duy nhất. Nó khóa các bất biến mà production không được phép đánh đổi.
 
@@ -33,7 +33,7 @@ Bài này trình bày một cách thực dụng để biến điều đó thành
 
 ## Bài toán thật: một đáp án đúng vẫn có thể che giấu một hệ thống sai
 
-Agent khác prompt chain ở chỗ nó tự chọn hành động trong nhiều bước. Mỗi bước đưa thêm một biến ngẫu nhiên vào hệ thống: có thể chọn sai tool, chọn đúng tool nhưng truyền sai arguments, diễn giải sai observation, lặp vô ích, hoặc thao tác state trước khi xác thực điều kiện. Vì vậy, một agent có thể “pass” khi nhìn vào final answer nhưng vẫn dễ vỡ khi input, thời điểm, tool response hoặc session state hơi khác đi.[1] [2]
+Agent khác prompt chain ở chỗ nó tự chọn hành động trong nhiều bước. Mỗi bước đưa thêm một biến ngẫu nhiên vào hệ thống: có thể chọn sai tool, chọn đúng tool nhưng truyền sai arguments, diễn giải sai observation, lặp vô ích, hoặc thao tác state trước khi xác thực điều kiện. Vì vậy, một agent có thể “pass” khi nhìn vào final answer nhưng vẫn dễ vỡ khi input, thời điểm, tool response hoặc session state hơi khác đi.
 
 ![Final answer chỉ là phần nổi; tool, state, safety và cost nằm phía dưới mặt nước](/blog/agent-evals-iceberg.webp)
 
@@ -48,13 +48,13 @@ Hãy dùng một case study giả định xuyên suốt bài: **CaseOps Agent**.
 
 Một regression case mang input: *“Hồ sơ CS-4821 đang ở đâu? Nếu nó bị thiếu giấy tờ thì cho tôi biết phải bổ sung gì.”* Final answer mong đợi là một tóm tắt đúng và hướng dẫn bổ sung. Nhưng contract quan trọng hơn gồm: agent phải gọi `lookup_case` trước; được gọi `get_policy`; **không được** gọi `request_status_change`; không được lộ PII từ case khác; và không được retry vô hạn khi policy service timeout.
 
-Nếu bạn chỉ match final answer, agent vẫn có thể pass dù đã thử một action không được phép rồi mới trả lời. Trong domain rủi ro thấp, đó có thể là một tool call lãng phí. Trong payments, healthcare, identity, admin operations hay developer tooling, nó có thể là một incident. OWASP liệt kê tool abuse, excessive autonomy, prompt injection, data exfiltration và denial-of-wallet trong các rủi ro đặc trưng của agent; các rủi ro này biến “trajectory” thành một phần của release surface, không phải dữ liệu debug tùy chọn.[7]
+Nếu bạn chỉ match final answer, agent vẫn có thể pass dù đã thử một action không được phép rồi mới trả lời. Trong domain rủi ro thấp, đó có thể là một tool call lãng phí. Trong payments, healthcare, identity, admin operations hay developer tooling, nó có thể là một incident. OWASP liệt kê tool abuse, excessive autonomy, prompt injection, data exfiltration và denial-of-wallet trong các rủi ro đặc trưng của agent; các rủi ro này biến “trajectory” thành một phần của release surface, không phải dữ liệu debug tùy chọn.
 
 ---
 
 ## Evals là một lớp kiến trúc, không phải vài prompt test
 
-Một *eval* là test có input và logic chấm để đo một behavior mong muốn. Với agent, đơn vị quan trọng không chỉ là prompt và response. Nó còn có **task**, **trial**, **grader**, **trace**, **outcome**, **agent harness** và **evaluation harness**.[1] Dùng đúng từ không phải để làm phức tạp tài liệu; nó giúp team biết chính xác lỗi nằm ở đâu.
+Một *eval* là test có input và logic chấm để đo một behavior mong muốn. Với agent, đơn vị quan trọng không chỉ là prompt và response. Nó còn có **task**, **trial**, **grader**, **trace**, **outcome**, **agent harness** và **evaluation harness**. Dùng đúng từ không phải để làm phức tạp tài liệu; nó giúp team biết chính xác lỗi nằm ở đâu.
 
 | Khái niệm | Nghĩa thực chiến | Câu hỏi cần trả lời |
 |---|---|---|
@@ -70,7 +70,7 @@ Sai lầm phổ biến nhất là gom hai mục tiêu khác nhau vào một dash
 - **Capability eval** hỏi: *Agent hiện làm được những task khó nào?* Nó là sân tập, có thể bắt đầu với pass rate thấp và dùng để cải thiện.
 - **Regression eval** hỏi: *Những behavior từng được chấp nhận có còn đúng không?* Nó là lan can an toàn, phải có tỷ lệ pass gần như tuyệt đối đối với các điều kiện critical.
 
-Anthropic khuyến nghị tách hai loại này: case capability khi đã đạt chất lượng bền vững có thể “tốt nghiệp” thành regression case.[1] Đây là cách tránh hai thái cực: viết một suite quá dễ để luôn xanh, hoặc dùng toàn task frontier khó đến mức CI đỏ liên tục và mọi người tắt nó đi.
+Anthropic khuyến nghị tách hai loại này: case capability khi đã đạt chất lượng bền vững có thể “tốt nghiệp” thành regression case. Đây là cách tránh hai thái cực: viết một suite quá dễ để luôn xanh, hoặc dùng toàn task frontier khó đến mức CI đỏ liên tục và mọi người tắt nó đi.
 
 ![Capability suite là đường khám phá; regression suite là lan can bảo toàn điều đã đúng](/blog/agent-evals-two-suites.webp)
 
@@ -84,7 +84,7 @@ Ví dụ, “tự động tạo một câu trả lời rất giàu sắc thái c
 
 ## Chấm ở đâu: run, trace hay thread?
 
-Agent không có một điểm chấm duy nhất. LangChain mô tả ba bề mặt bổ trợ nhau: **run** là một model/tool invocation, **trace** là một lượt xử lý end-to-end, còn **thread** là một chuỗi hội thoại nhiều lượt.[2] Mỗi bề mặt trả lời một loại câu hỏi khác nhau.
+Agent không có một điểm chấm duy nhất. LangChain mô tả ba bề mặt bổ trợ nhau: **run** là một model/tool invocation, **trace** là một lượt xử lý end-to-end, còn **thread** là một chuỗi hội thoại nhiều lượt. Mỗi bề mặt trả lời một loại câu hỏi khác nhau.
 
 | Bề mặt | Nên chấm gì | Ví dụ CaseOps | Loại grader phù hợp |
 |---|---|---|---|
@@ -92,7 +92,7 @@ Agent không có một điểm chấm duy nhất. LangChain mô tả ba bề m�
 | **Trace** | Outcome + trajectory + state effect của một task | Agent có tra đúng case, không đổi status và trả lời đúng? | Deterministic + rubric judge |
 | **Thread** | Intent và memory qua nhiều lượt | User đổi mục tiêu giữa chừng; agent có giữ đúng scope và consent? | State evaluator + judge + sampled human review |
 
-Run-level test cho feedback nhanh. Nó rất hợp với thay đổi tool description hoặc router. Trace-level test là lõi của release gate vì nó kiểm tra tác động end-to-end. Thread-level test không cần xuất hiện trong PR nhỏ nào cũng chạy, nhưng cần có khi product cho phép long-running session, handoff hoặc memory — vì mỗi lượt “đúng” không bảo đảm cả conversation “đúng”.[2]
+Run-level test cho feedback nhanh. Nó rất hợp với thay đổi tool description hoặc router. Trace-level test là lõi của release gate vì nó kiểm tra tác động end-to-end. Thread-level test không cần xuất hiện trong PR nhỏ nào cũng chạy, nhưng cần có khi product cho phép long-running session, handoff hoặc memory — vì mỗi lượt “đúng” không bảo đảm cả conversation “đúng”.
 
 ### Đừng biến trajectory test thành xiềng xích
 
@@ -106,7 +106,7 @@ Thay vào đó, hãy tách trajectory thành ba loại luật:
 | **Ràng buộc có thứ tự** | Phải tra case trước khi dựa vào state case; phải có approval trước write action | Partial-order matcher |
 | **Chất lượng mềm** | Không vòng lặp vô ích; giải thích rõ uncertainty; route có hợp lý không | Budget + rubric judge |
 
-Đúng như khuyến nghị cho agent eval, strict ordered tool-call matching chỉ nên dùng khi thứ tự thật sự có ý nghĩa về correctness hoặc safety; ở các trường hợp còn lại, outcome và chất lượng quyết định quan trọng hơn exact path.[2]
+Đúng như khuyến nghị cho agent eval, strict ordered tool-call matching chỉ nên dùng khi thứ tự thật sự có ý nghĩa về correctness hoặc safety; ở các trường hợp còn lại, outcome và chất lượng quyết định quan trọng hơn exact path.
 
 ![Một trace có nhiều đường đi hợp lệ, nhưng các đường nguy hiểm phải bị chặn trước khi chạm vào state](/blog/agent-evals-trace.webp)
 
@@ -174,7 +174,7 @@ Có ba quyết định thiết kế đáng chú ý ở đây. Thứ nhất, fixt
 
 ## Hệ thống grader lai: dùng code cho sự thật cứng, dùng judge cho ngữ nghĩa
 
-Không có một grader nào đủ tốt cho mọi behavior. Code-based grader nhanh, rẻ, reproducible và lý tưởng cho state, schema, tool name, argument, count và policy. Model-based grader linh hoạt khi cần đánh giá helpfulness, groundedness hoặc một route “reasonable” mà không thể enumerate hết. Human review dùng để hiệu chuẩn judge và xử lý domain high-stakes.[1] [2]
+Không có một grader nào đủ tốt cho mọi behavior. Code-based grader nhanh, rẻ, reproducible và lý tưởng cho state, schema, tool name, argument, count và policy. Model-based grader linh hoạt khi cần đánh giá helpfulness, groundedness hoặc một route “reasonable” mà không thể enumerate hết. Human review dùng để hiệu chuẩn judge và xử lý domain high-stakes.
 
 Điểm quan trọng không phải là “có dùng LLM-as-a-judge không”, mà là **không giao sự thật có thể kiểm tra cho một judge biến thiên**.
 
@@ -252,7 +252,7 @@ Return JSON only:
 { "pass": boolean, "evidence": [string], "reason": string }
 ```
 
-OpenAI lưu ý rằng LLM thường mạnh hơn ở discrimination như classification, pairwise comparison và scoring theo criteria hơn là open-ended generation; vì vậy rubric phải ràng buộc rõ điều gì cần phân loại.[5] Với high-risk case, hãy lấy sample judge result để con người review, đo agreement, rồi chỉnh rubric/dataset. Một judge không được hiệu chuẩn chỉ là một prompt khác có vẻ chính xác hơn.
+OpenAI lưu ý rằng LLM thường mạnh hơn ở discrimination như classification, pairwise comparison và scoring theo criteria hơn là open-ended generation; vì vậy rubric phải ràng buộc rõ điều gì cần phân loại. Với high-risk case, hãy lấy sample judge result để con người review, đo agreement, rồi chỉnh rubric/dataset. Một judge không được hiệu chuẩn chỉ là một prompt khác có vẻ chính xác hơn.
 
 ---
 
@@ -271,7 +271,7 @@ Cách làm thực dụng là tách execution tier theo độ đắt:
 
 Các con số trên là **policy mẫu**, không phải chuẩn công nghiệp. Hãy bắt đầu bằng budget phù hợp với baseline, giá API và mức rủi ro của product. Quan trọng hơn số trial là khả năng lưu lại seed/configuration/model/tool version, trace, state diff và grader version. Khi một case flaky, bạn cần biết biến nào đã thay đổi.
 
-Một rule đơn giản cho critical invariant là: **một trial vi phạm safety thì fail case ngay**, bất kể các trial khác đẹp thế nào. Với quality score mềm, bạn có thể dùng median hoặc lower percentile thay vì average để tránh một vài run xuất sắc che đi tail risk. Nhưng đừng làm statistic phức tạp trước khi bạn đã có trace chất lượng; observability là điều kiện để mọi metric phía sau còn nghĩa.[4] [8]
+Một rule đơn giản cho critical invariant là: **một trial vi phạm safety thì fail case ngay**, bất kể các trial khác đẹp thế nào. Với quality score mềm, bạn có thể dùng median hoặc lower percentile thay vì average để tránh một vài run xuất sắc che đi tail risk. Nhưng đừng làm statistic phức tạp trước khi bạn đã có trace chất lượng; observability là điều kiện để mọi metric phía sau còn nghĩa.
 
 ---
 
@@ -360,7 +360,7 @@ jobs:
       - run: pnpm evals:compare --baseline main --report reports/regression.json
 ```
 
-Đừng copy `changed_files` literal này vào workflow production; GitHub Actions cần cách lấy changed paths đúng theo môi trường của bạn. Ý chính là policy: PR nhỏ chạy nhanh, thay đổi agent quan trọng chạy sâu hơn, còn suite stability chạy ngoài critical path. OpenAI khuyến nghị eval-driven development, log đầy đủ, xây dataset đại diện cho production và continuous evaluation trên mỗi thay đổi; đó là tư duy đúng, còn implementation chi tiết phải hợp với platform của bạn.[5]
+Đừng copy `changed_files` literal này vào workflow production; GitHub Actions cần cách lấy changed paths đúng theo môi trường của bạn. Ý chính là policy: PR nhỏ chạy nhanh, thay đổi agent quan trọng chạy sâu hơn, còn suite stability chạy ngoài critical path. OpenAI khuyến nghị eval-driven development, log đầy đủ, xây dataset đại diện cho production và continuous evaluation trên mỗi thay đổi; đó là tư duy đúng, còn implementation chi tiết phải hợp với platform của bạn.
 
 ### Gate tốt phải có đường thoát an toàn
 
@@ -370,7 +370,7 @@ Khi CI đỏ, team cần biết cách xử lý thay vì “re-run until green”
 
 ## Production không phải đối thủ của offline eval; nó là nguồn case tiếp theo
 
-Offline suite chỉ biết những case bạn đã nghĩ ra. Production mới cho bạn biết user thực sự nói gì, tool thực sự timeout ở đâu, retrieval thực sự drift thế nào và agent thực sự lạm dụng retry trong giờ cao điểm. Offline và online không thay thế nhau: offline bảo vệ known behavior trước deploy; online tìm unknown failure sau deploy.[2]
+Offline suite chỉ biết những case bạn đã nghĩ ra. Production mới cho bạn biết user thực sự nói gì, tool thực sự timeout ở đâu, retrieval thực sự drift thế nào và agent thực sự lạm dụng retry trong giờ cao điểm. Offline và online không thay thế nhau: offline bảo vệ known behavior trước deploy; online tìm unknown failure sau deploy.
 
 ![Incident production phải quay về thành fixture tối giản và release gate, tạo vòng lặp cải thiện liên tục](/blog/agent-evals-flywheel.webp)
 
@@ -386,7 +386,7 @@ Tôi dùng quy trình năm bước cho mỗi incident agent:
 
 ### Bảo mật và privacy trong eval data
 
-Trace rất giàu thông tin nhưng cũng có thể chứa prompt, tool arguments, content, identity và PII. OpenTelemetry cảnh báo việc capture prompt/response/tool content cần được cân nhắc vì privacy và security; instrumentation tốt không đồng nghĩa với log tất cả mọi thứ.[8] Với eval fixture, mặc định nên dùng synthetic data, token hóa định danh, redact raw content, giới hạn quyền truy cập report và đặt retention policy. Nếu phải dùng production trace thật, hãy có data classification, approval path và quy trình de-identification rõ ràng.
+Trace rất giàu thông tin nhưng cũng có thể chứa prompt, tool arguments, content, identity và PII. OpenTelemetry cảnh báo việc capture prompt/response/tool content cần được cân nhắc vì privacy và security; instrumentation tốt không đồng nghĩa với log tất cả mọi thứ. Với eval fixture, mặc định nên dùng synthetic data, token hóa định danh, redact raw content, giới hạn quyền truy cập report và đặt retention policy. Nếu phải dùng production trace thật, hãy có data classification, approval path và quy trình de-identification rõ ràng.
 
 ---
 
@@ -401,7 +401,7 @@ Trace rất giàu thông tin nhưng cũng có thể chứa prompt, tool argument
 | **Dataset đứng yên** | Case không đổi dù product đã chạy lâu | Chỉ tối ưu cho bài thi cũ | Mine production failure thành regression fixture |
 | **No cost/loop budget** | Agent được “đúng” dù 20 tool calls | Bill tăng, latency tăng, tool storm | Set budget rõ và theo dõi trend |
 
-Cũng đừng nhầm eval với guardrail runtime. Evals chứng minh behavior trên tập case; guardrail, authorization, least privilege, confirmation và rate limit vẫn cần tồn tại lúc runtime. OWASP khuyến nghị kiểm soát quyền tool, approval cho action nhạy cảm, adversarial testing và monitoring; regression suite giúp bạn xác nhận các control đó không bị vô tình gỡ bỏ trong release sau.[7]
+Cũng đừng nhầm eval với guardrail runtime. Evals chứng minh behavior trên tập case; guardrail, authorization, least privilege, confirmation và rate limit vẫn cần tồn tại lúc runtime. OWASP khuyến nghị kiểm soát quyền tool, approval cho action nhạy cảm, adversarial testing và monitoring; regression suite giúp bạn xác nhận các control đó không bị vô tình gỡ bỏ trong release sau.
 
 ---
 

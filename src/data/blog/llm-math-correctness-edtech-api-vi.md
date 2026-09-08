@@ -13,7 +13,7 @@ image: "/blog/llm-math-correctness-edtech/hero.webp"
 
 Failure mode này làm thay đổi câu hỏi engineering. Câu hỏi không chỉ là LLM có thể sinh một bài toán, giải một phương trình hoặc giải thích phân số hay không. Câu hỏi đúng phải là: **sản phẩm EdTech có biết khi nào artifact được sinh ra là đúng, giải được, phù hợp sư phạm và đủ an toàn để publish hay không**.
 
-LLM API là một generator, paraphraser và giao diện tutor hữu ích. Nó không phải nguồn sự thật toán học. Nghiên cứu về LLM trong vai trò math tutor cho thấy response có thể trông phù hợp với nguyên tắc sư phạm nhưng vẫn chứa nhiều inaccuracies; những lỗi nghe hợp lý có thể tạo misconception cho người học.[1](https://arxiv.org/html/2503.16460v1) Nghiên cứu về stepwise verification cũng chỉ ra rằng việc tìm đúng bước sai đầu tiên trong lời giải của học sinh là bài toán khó với các model hiện tại, trong khi verifier độc lập có thể giúp feedback chính xác và có mục tiêu hơn.[2](https://aclanthology.org/2024.emnlp-main.478/)
+LLM API là một generator, paraphraser và giao diện tutor hữu ích. Nó không phải nguồn sự thật toán học. Nghiên cứu về LLM trong vai trò math tutor cho thấy response có thể trông phù hợp với nguyên tắc sư phạm nhưng vẫn chứa nhiều inaccuracies; những lỗi nghe hợp lý có thể tạo misconception cho người học. Nghiên cứu về stepwise verification cũng chỉ ra rằng việc tìm đúng bước sai đầu tiên trong lời giải của học sinh là bài toán khó với các model hiện tại, trong khi verifier độc lập có thể giúp feedback chính xác và có mục tiêu hơn.
 
 ![Một candidate toán do LLM sinh ra đi qua các cổng verification độc lập trước khi được hệ thống EdTech phát hành](/blog/llm-math-correctness-edtech/hero.webp)
 
@@ -38,7 +38,7 @@ Nếu gom tất cả thành `correct: true/false`, ta sẽ che mất failure mod
 | Pedagogical fit | Item có đúng grade, skill, difficulty và hint policy không? | Curriculum rubric và reviewer |
 | Release safety | Quality, safety, cost và latency có nằm trong ngưỡng không? | Regression suite và release gate |
 
-Phân biệt này rất quan trọng vì structured response không tự động trở thành response đúng. Structured Outputs có thể ràng buộc response API theo JSON Schema và giúp phát hiện refusal bằng chương trình, nhưng tài liệu cũng cảnh báo rằng structured output vẫn có thể chứa lỗi.[3](https://developers.openai.com/api/docs/guides/structured-outputs) Schema compliance chỉ là cổng đầu tiên, không phải bằng chứng toán học.
+Phân biệt này rất quan trọng vì structured response không tự động trở thành response đúng. Structured Outputs có thể ràng buộc response API theo JSON Schema và giúp phát hiện refusal bằng chương trình, nhưng tài liệu cũng cảnh báo rằng structured output vẫn có thể chứa lỗi. Schema compliance chỉ là cổng đầu tiên, không phải bằng chứng toán học.
 
 ## Tách generation contract khỏi mathematics contract
 
@@ -118,9 +118,9 @@ Canonicalizer phải giữ nguyên student-facing text để hiển thị, đồ
 
 ## Lớp hai: tính lại bằng engine độc lập
 
-Rule hữu ích đơn giản nhất là tính đáp án hai lần bằng hai cơ chế khác nhau. Nếu LLM nói `3/4 + 2/3 = 17/12`, một rational library exact có thể kiểm tra mà không cần hỏi model thứ hai. Với đại số, symbolic system có thể solve phương trình rồi substitute candidate answer vào constraint ban đầu. Tài liệu SymPy mô tả symbolic equation solving qua `solveset` và các solver API liên quan.[4](https://docs.sympy.org/latest/modules/solvers/solvers.html)
+Rule hữu ích đơn giản nhất là tính đáp án hai lần bằng hai cơ chế khác nhau. Nếu LLM nói `3/4 + 2/3 = 17/12`, một rational library exact có thể kiểm tra mà không cần hỏi model thứ hai. Với đại số, symbolic system có thể solve phương trình rồi substitute candidate answer vào constraint ban đầu. Tài liệu SymPy mô tả symbolic equation solving qua `solveset` và các solver API liên quan.
 
-Với bài có nhiều constraint, SMT solver có thể biểu diễn biến, domain, bất đẳng thức và quan hệ logic. Programming Z3 guide trình bày API thực tế để giải các constraint số học và logic.[5](https://theory.stanford.edu/~nikolaj/programmingz3.html) Không phải bài toán cấp phổ thông nào cũng cần theorem prover. Điểm cốt lõi là đáp án cuối được kiểm tra bởi một hệ thống không hoạt động giống token prediction của language model.
+Với bài có nhiều constraint, SMT solver có thể biểu diễn biến, domain, bất đẳng thức và quan hệ logic. Programming Z3 guide trình bày API thực tế để giải các constraint số học và logic. Không phải bài toán cấp phổ thông nào cũng cần theorem prover. Điểm cốt lõi là đáp án cuối được kiểm tra bởi một hệ thống không hoạt động giống token prediction của language model.
 
 Một verification routine tối thiểu cho phương trình tuyến tính có thể có dạng:
 
@@ -146,7 +146,7 @@ Final answer đúng vẫn có thể được suy ra bằng một bước sai. V�
 
 Hãy biểu diễn mỗi step dưới dạng claim cộng operation. Step verifier kiểm tra claim tiếp theo có theo sau claim trước dưới operation đó và các side condition hay không. Với equation transformation, verifier có thể so sánh solution set trước và sau step. Với numerical computation, nó tính lại hai vế exact. Với geometry hoặc word problem, có thể cần domain-specific checker hoặc constrained template.
 
-Nghiên cứu về formal verification cho LLM-based mathematical problem solving sử dụng thiết kế formalizer và critic: chuyển reasoning bằng ngôn ngữ tự nhiên sang structured language rồi kiểm tra statement bằng computer algebra system và SMT solver.[6](https://arxiv.org/html/2505.20869v1) Pattern này hữu ích cho EdTech vì verifier kiểm tra dependency graph của các claim thay vì chỉ hỏi một LLM thứ hai xem đoạn văn có nghe đúng hay không.
+Nghiên cứu về formal verification cho LLM-based mathematical problem solving sử dụng thiết kế formalizer và critic: chuyển reasoning bằng ngôn ngữ tự nhiên sang structured language rồi kiểm tra statement bằng computer algebra system và SMT solver. Pattern này hữu ích cho EdTech vì verifier kiểm tra dependency graph của các claim thay vì chỉ hỏi một LLM thứ hai xem đoạn văn có nghe đúng hay không.
 
 ## Lớp bốn: kiểm tra chính bài toán
 

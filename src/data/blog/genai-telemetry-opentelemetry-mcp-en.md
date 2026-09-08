@@ -17,7 +17,7 @@ It had a request ID, a 200 response, and a latency number. It did not tell us wh
 
 That is the observability gap in many AI systems. Teams add logging around an LLM call, but a production agent is not an LLM call. It is a distributed decision path that crosses model providers, retrieval systems, tool servers, policy gates, queues, human approvals, and external side effects.
 
-OpenTelemetry’s GenAI semantic-conventions work is important because it treats these signals as a shared vocabulary rather than a provider-specific dashboard feature.[1] The value is portability: a trace emitted by one model gateway should remain understandable after the team changes provider, router, orchestration framework, or MCP server.
+OpenTelemetry’s GenAI semantic-conventions work is important because it treats these signals as a shared vocabulary rather than a provider-specific dashboard feature. The value is portability: a trace emitted by one model gateway should remain understandable after the team changes provider, router, orchestration framework, or MCP server.
 
 > **Thesis:** Telemetry is a contract between system boundaries. If the vocabulary changes every time the model provider changes, the organization does not own its observability.
 
@@ -89,7 +89,7 @@ The observability schema should include a sensitivity classification. A field th
 
 ## Instrument MCP as a protocol boundary
 
-MCP is not merely another HTTP endpoint. Its specification defines lifecycle and capability exchange, along with tools, resources, prompts, roots, sampling and elicitation as distinct protocol concepts.[2] Telemetry should preserve that shape.
+MCP is not merely another HTTP endpoint. Its specification defines lifecycle and capability exchange, along with tools, resources, prompts, roots, sampling and elicitation as distinct protocol concepts. Telemetry should preserve that shape.
 
 At session initialization, record the server identity, protocol version, negotiated capabilities, transport class, and outcome. When a tool is listed, record the tool schema version or fingerprint rather than copying a potentially sensitive description into every trace. When a tool is invoked, record the logical name, validation result, approval state, and mutation class. When a resource is read, record its stable identifier and access decision.
 
@@ -165,7 +165,7 @@ The useful question is not “which model used the most tokens?” It is “what
 
 ## Privacy is part of telemetry design
 
-OWASP identifies sensitive information disclosure as a major risk for LLM applications and recommends sanitization, strict access controls, tokenization, redaction, and careful system configuration.[3] These controls cannot be bolted on after the trace schema has been copied into five backends.
+OWASP identifies sensitive information disclosure as a major risk for LLM applications and recommends sanitization, strict access controls, tokenization, redaction, and careful system configuration. These controls cannot be bolted on after the trace schema has been copied into five backends.
 
 Define a capture policy by field and environment. Development may capture a short, synthetic prompt. Staging may capture a redacted template and hashes. Production may capture only metadata for high-risk tenants. Incident mode can grant time-limited access to encrypted payloads with an explicit approval record.
 

@@ -39,7 +39,7 @@ Keeping those jobs separate is the first anti-leakage control.
 
 This separation matters because a simulator can be fluent while still being a bad test instrument. It may always comply, reveal its hidden goal too early, use the same wording in every run, or stop after the first plausible answer. Those behaviors make the benchmark easy to optimize and poor at predicting deployment performance.
 
-OpenAI’s evaluation guidance recommends task-specific evaluations that reflect real-world distributions, continuous evaluation, automation where possible, and calibration against human feedback.[1] That advice has a direct implication for synthetic users: the generator should model the distribution of situations, not merely produce grammatical prompts.
+OpenAI’s evaluation guidance recommends task-specific evaluations that reflect real-world distributions, continuous evaluation, automation where possible, and calibration against human feedback. That advice has a direct implication for synthetic users: the generator should model the distribution of situations, not merely produce grammatical prompts.
 
 ## Why scenario generation is attractive—and dangerous
 
@@ -49,7 +49,7 @@ Synthetic generation can create these combinations quickly. It can vary the acco
 
 The danger is that generation systems tend to optimize for what they can easily describe. They produce polite, explicit, single-intent users with clean data and obvious success conditions. The resulting benchmark measures whether an agent can satisfy a cooperative narrator, not whether it can handle a real interaction.
 
-The Korea and Singapore AI Safety Institutes reported a related lesson in their joint testing. Earlier benchmarks used overtly synthetic data and local websites, which encouraged agents to behave as if the task was artificial. Their later methodology increased realism through mirrored MCP servers, realistic test data, multi-turn interaction, and interconnected applications.[2]
+The Korea and Singapore AI Safety Institutes reported a related lesson in their joint testing. Earlier benchmarks used overtly synthetic data and local websites, which encouraged agents to behave as if the task was artificial. Their later methodology increased realism through mirrored MCP servers, realistic test data, multi-turn interaction, and interconnected applications.
 
 Synthetic users therefore need two kinds of realism:
 
@@ -142,7 +142,7 @@ type UserPolicy = {
 
 The simulator should decide whether to answer, clarify, correct, object, or exit based on the state and the agent’s last observable action. It should not be told “make the agent fail.” That instruction produces adversarial theater rather than realistic pressure. It should instead follow a goal and a set of rules that naturally make some agent behaviors succeed and others fail.
 
-Recent work on grounded user simulation makes the same distinction. RealUserSim reports that unconstrained LLM simulators can be poor proxies for human behavior, while hand-crafted directives can cause “directive amplification,” where the simulator exaggerates its instructions into unnatural behavior. The paper grounds simulation in observed human–LLM conversations and evaluates fidelity separately from agent task success.[3]
+Recent work on grounded user simulation makes the same distinction. RealUserSim reports that unconstrained LLM simulators can be poor proxies for human behavior, while hand-crafted directives can cause “directive amplification,” where the simulator exaggerates its instructions into unnatural behavior. The paper grounds simulation in observed human–LLM conversations and evaluates fidelity separately from agent task success.
 
 The practical lesson is not to scrape conversations and paste them into a prompt. It is to extract reusable behavioral patterns—how users correct a misunderstanding, when they add context, how they react to friction—and keep those patterns separate from the private goals and answer keys of the benchmark.
 
@@ -189,7 +189,7 @@ A practical partitioning policy looks like this:
 
 The locked set is not made valid merely by putting it in a different folder. Protect it operationally. Do not send it to the same prompt optimizer that edits the agent. Do not use evaluator comments as simulator instructions. Do not let a failed test automatically become a new training example without recording why it failed and which partition it belongs to.
 
-LatestEval describes a dynamic construction approach that uses recent materials and removes answer-bearing text from context to reduce contamination risk.[6] The general principle is useful, but no method can prove that a closed model has never encountered a scenario. Report the limitation honestly. Use fresh source families, rotate scenario templates, maintain provenance, and check for near-duplicates rather than claiming mathematical purity.
+LatestEval describes a dynamic construction approach that uses recent materials and removes answer-bearing text from context to reduce contamination risk. The general principle is useful, but no method can prove that a closed model has never encountered a scenario. Report the limitation honestly. Use fresh source families, rotate scenario templates, maintain provenance, and check for near-duplicates rather than claiming mathematical purity.
 
 ## Add a leakage budget to the pipeline
 
@@ -237,9 +237,9 @@ At minimum, validate:
 
 Then apply semantic checks. A second model can critique whether the conversation sounds plausible, but it should not be the only judge. Sample cases for human review and measure agreement on concrete yes/no conditions.
 
-The AISI methodology used task-specific correctness and safety conditions, often expressed as granular questions, and marked some safety conditions as not applicable when their prerequisite action never occurred.[2] That is a useful pattern for agent benchmarks. If the agent never sent an email, do not pretend you measured whether the email leaked a secret. Record the prerequisite as unmet and score the task according to the rubric’s defined semantics.
+The AISI methodology used task-specific correctness and safety conditions, often expressed as granular questions, and marked some safety conditions as not applicable when their prerequisite action never occurred. That is a useful pattern for agent benchmarks. If the agent never sent an email, do not pretend you measured whether the email leaked a secret. Record the prerequisite as unmet and score the task according to the rubric’s defined semantics.
 
-NVIDIA’s synthetic benchmark workflow similarly emphasizes domain-specific generation, quality scoring and filtering, ground truth pairing, and reproducible evaluation in CI/CD.[4] The important part is the chain, not the product name: generated examples must be inspected, labeled, and replayable before they become evidence.
+NVIDIA’s synthetic benchmark workflow similarly emphasizes domain-specific generation, quality scoring and filtering, ground truth pairing, and reproducible evaluation in CI/CD. The important part is the chain, not the product name: generated examples must be inspected, labeled, and replayable before they become evidence.
 
 ## Evaluate the whole trace, not just the final answer
 
@@ -272,7 +272,7 @@ Score separate dimensions and preserve the trace behind each score.
 | User experience | The user receives a comprehensible explanation of the next step. |
 | Trace integrity | The record contains enough evidence to reproduce the judgment. |
 
-AgentLeak demonstrates why this matters for multi-agent systems: sensitive data can travel through inter-agent messages, shared memory, and tool arguments even when the final answer looks safe.[5] A synthetic-user harness should therefore log and evaluate the channels that the deployment actually exposes, subject to privacy minimization. Output-only audits are not enough for systems whose behavior is distributed across internal channels.
+AgentLeak demonstrates why this matters for multi-agent systems: sensitive data can travel through inter-agent messages, shared memory, and tool arguments even when the final answer looks safe. A synthetic-user harness should therefore log and evaluate the channels that the deployment actually exposes, subject to privacy minimization. Output-only audits are not enough for systems whose behavior is distributed across internal channels.
 
 ## Avoid self-confirming synthetic loops
 
@@ -295,7 +295,7 @@ A good benchmark exposes uncertainty instead of hiding it in one decimal score. 
 
 ## Continuous evaluation without contaminating the future
 
-Synthetic scenarios are most useful when they become a maintained test system rather than a one-time dataset. Every prompt, model, tool, policy, and orchestration change can alter behavior. OpenAI recommends continuous evaluation and growing the set with new cases from production feedback.[1]
+Synthetic scenarios are most useful when they become a maintained test system rather than a one-time dataset. Every prompt, model, tool, policy, and orchestration change can alter behavior. OpenAI recommends continuous evaluation and growing the set with new cases from production feedback.
 
 A safe update loop can look like this:
 

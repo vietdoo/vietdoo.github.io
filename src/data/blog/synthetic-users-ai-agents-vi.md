@@ -39,7 +39,7 @@ Tách các công việc đó là lớp anti-leakage đầu tiên.
 
 Sự tách biệt này quan trọng vì simulator có thể fluent nhưng vẫn là một test instrument tệ. Nó có thể luôn comply, tiết lộ hidden goal quá sớm, dùng cùng một cách diễn đạt trong mọi run hoặc dừng sau câu trả lời đầu tiên có vẻ hợp lý. Những hành vi đó làm benchmark dễ bị optimize và kém khả năng dự báo deployment.
 
-Hướng dẫn evaluation của OpenAI khuyến nghị task-specific evaluation phản ánh real-world distribution, continuous evaluation, automation khi phù hợp và calibration với human feedback.[1] Hệ quả trực tiếp với synthetic user là generator phải model distribution của các tình huống, không chỉ sinh ra prompt đúng ngữ pháp.
+Hướng dẫn evaluation của OpenAI khuyến nghị task-specific evaluation phản ánh real-world distribution, continuous evaluation, automation khi phù hợp và calibration với human feedback. Hệ quả trực tiếp với synthetic user là generator phải model distribution của các tình huống, không chỉ sinh ra prompt đúng ngữ pháp.
 
 ## Vì sao scenario generation hấp dẫn—và nguy hiểm
 
@@ -49,7 +49,7 @@ Synthetic generation có thể tạo các tổ hợp này rất nhanh. Nó có t
 
 Nguy cơ là hệ thống generation thường tối ưu cho thứ chúng dễ mô tả. Chúng tạo ra user lịch sự, nói rõ một intent duy nhất, dữ liệu sạch và success condition hiển nhiên. Benchmark sau đó đo xem agent có thể làm hài lòng một narrator hợp tác hay không, chứ không đo xem agent xử lý một tương tác thật thế nào.
 
-Korea và Singapore AI Safety Institutes đã ghi nhận một bài học tương tự trong joint testing. Các benchmark trước đó dùng dữ liệu lộ rõ tính synthetic và local website, khiến agent có xu hướng hành xử như thể task là giả lập. Phương pháp sau này tăng realism bằng mirrored MCP server, realistic test data, multi-turn interaction và các application kết nối với nhau.[2]
+Korea và Singapore AI Safety Institutes đã ghi nhận một bài học tương tự trong joint testing. Các benchmark trước đó dùng dữ liệu lộ rõ tính synthetic và local website, khiến agent có xu hướng hành xử như thể task là giả lập. Phương pháp sau này tăng realism bằng mirrored MCP server, realistic test data, multi-turn interaction và các application kết nối với nhau.
 
 Vì vậy, synthetic user cần hai loại realism:
 
@@ -142,7 +142,7 @@ type UserPolicy = {
 
 Simulator nên quyết định có answer, clarify, correct, object hay exit dựa trên state và observable action gần nhất của agent. Nó không nên được dặn “hãy làm agent fail”. Instruction đó tạo ra adversarial theater thay vì pressure realistic. Thay vào đó, simulator nên follow goal và các rule khiến một số agent behavior tự nhiên thành công còn các behavior khác thất bại.
 
-Nghiên cứu gần đây về grounded user simulation cũng phân biệt hai điều này. RealUserSim báo cáo rằng LLM simulator không bị ràng buộc có thể là proxy kém cho behavior của con người, còn directive viết thủ công có thể gây “directive amplification”, khi simulator phóng đại instruction thành hành vi không tự nhiên. Nghiên cứu grounding simulation bằng observed human–LLM conversation và đánh giá fidelity tách biệt với agent task success.[3]
+Nghiên cứu gần đây về grounded user simulation cũng phân biệt hai điều này. RealUserSim báo cáo rằng LLM simulator không bị ràng buộc có thể là proxy kém cho behavior của con người, còn directive viết thủ công có thể gây “directive amplification”, khi simulator phóng đại instruction thành hành vi không tự nhiên. Nghiên cứu grounding simulation bằng observed human–LLM conversation và đánh giá fidelity tách biệt với agent task success.
 
 Bài học thực tế không phải scrape conversation rồi paste vào prompt. Hãy trích xuất behavioral pattern có thể tái sử dụng—user sửa hiểu nhầm thế nào, lúc nào thêm context, phản ứng ra sao với friction—và giữ các pattern đó tách khỏi private goal và answer key của benchmark.
 
@@ -189,7 +189,7 @@ Một partitioning policy thực tế có thể như sau:
 
 Locked set không trở nên valid chỉ vì được bỏ vào folder khác. Hãy bảo vệ nó ở cấp vận hành. Đừng gửi nó cho prompt optimizer đang edit agent. Đừng dùng evaluator comment làm simulator instruction. Đừng để failed test tự động trở thành training example mới mà không ghi lại vì sao nó fail và thuộc partition nào.
 
-LatestEval mô tả cách dynamic construction dùng recent material và loại phần chứa answer khỏi context để giảm contamination risk.[6] Nguyên tắc tổng quát này hữu ích, nhưng không phương pháp nào chứng minh được closed model chưa từng gặp một scenario. Hãy báo limitation một cách trung thực. Dùng source family mới, rotate scenario template, giữ provenance và kiểm tra near-duplicate thay vì tuyên bố benchmark có độ tinh khiết tuyệt đối.
+LatestEval mô tả cách dynamic construction dùng recent material và loại phần chứa answer khỏi context để giảm contamination risk. Nguyên tắc tổng quát này hữu ích, nhưng không phương pháp nào chứng minh được closed model chưa từng gặp một scenario. Hãy báo limitation một cách trung thực. Dùng source family mới, rotate scenario template, giữ provenance và kiểm tra near-duplicate thay vì tuyên bố benchmark có độ tinh khiết tuyệt đối.
 
 ## Đưa leakage budget vào pipeline
 
@@ -237,9 +237,9 @@ Tối thiểu hãy validate:
 
 Sau đó áp dụng semantic check. Model thứ hai có thể critique conversation có plausible không, nhưng không nên là judge duy nhất. Hãy sample case để human review và đo agreement trên các condition yes/no cụ thể.
 
-Phương pháp của AISI dùng correctness và safety condition theo từng task, thường viết thành câu hỏi granular, đồng thời đánh dấu một số safety condition là not applicable khi prerequisite action chưa xảy ra.[2] Đây là pattern hữu ích cho agent benchmark. Nếu agent chưa bao giờ gửi email, đừng giả vờ rằng đã đo email có làm lộ secret hay chưa. Hãy ghi prerequisite chưa đạt và chấm theo semantics đã định nghĩa trong rubric.
+Phương pháp của AISI dùng correctness và safety condition theo từng task, thường viết thành câu hỏi granular, đồng thời đánh dấu một số safety condition là not applicable khi prerequisite action chưa xảy ra. Đây là pattern hữu ích cho agent benchmark. Nếu agent chưa bao giờ gửi email, đừng giả vờ rằng đã đo email có làm lộ secret hay chưa. Hãy ghi prerequisite chưa đạt và chấm theo semantics đã định nghĩa trong rubric.
 
-Synthetic benchmark workflow của NVIDIA cũng nhấn mạnh domain-specific generation, quality scoring và filtering, pairing với ground truth và evaluation reproducible trong CI/CD.[4] Phần quan trọng là chain, không phải product name: generated example phải được inspect, label và replay trước khi trở thành evidence.
+Synthetic benchmark workflow của NVIDIA cũng nhấn mạnh domain-specific generation, quality scoring và filtering, pairing với ground truth và evaluation reproducible trong CI/CD. Phần quan trọng là chain, không phải product name: generated example phải được inspect, label và replay trước khi trở thành evidence.
 
 ## Đánh giá full trace, không chỉ final answer
 
@@ -272,7 +272,7 @@ Chấm các dimension riêng và giữ trace phía sau mỗi score.
 | User experience | User nhận được giải thích dễ hiểu về next step. |
 | Trace integrity | Record có đủ evidence để reproduce judgment. |
 
-AgentLeak cho thấy vì sao điều này quan trọng với multi-agent system: sensitive data có thể đi qua inter-agent message, shared memory và tool argument dù final answer trông an toàn.[5] Vì vậy synthetic-user harness nên log và evaluate những channel mà deployment thực sự expose, với privacy minimization phù hợp. Output-only audit không đủ cho system có behavior phân tán qua internal channel.
+AgentLeak cho thấy vì sao điều này quan trọng với multi-agent system: sensitive data có thể đi qua inter-agent message, shared memory và tool argument dù final answer trông an toàn. Vì vậy synthetic-user harness nên log và evaluate những channel mà deployment thực sự expose, với privacy minimization phù hợp. Output-only audit không đủ cho system có behavior phân tán qua internal channel.
 
 ## Tránh self-confirming synthetic loop
 
@@ -295,7 +295,7 @@ Benchmark tốt expose uncertainty thay vì giấu nó trong một decimal score
 
 ## Continuous evaluation mà không làm ô nhiễm tương lai
 
-Synthetic scenario có giá trị nhất khi trở thành test system được duy trì, không phải dataset dùng một lần. Mọi thay đổi ở prompt, model, tool, policy hoặc orchestration đều có thể đổi behavior. Hướng dẫn của OpenAI khuyến nghị continuous evaluation và bổ sung case mới từ production feedback.[1]
+Synthetic scenario có giá trị nhất khi trở thành test system được duy trì, không phải dataset dùng một lần. Mọi thay đổi ở prompt, model, tool, policy hoặc orchestration đều có thể đổi behavior. Hướng dẫn của OpenAI khuyến nghị continuous evaluation và bổ sung case mới từ production feedback.
 
 Một safe update loop có thể như sau:
 

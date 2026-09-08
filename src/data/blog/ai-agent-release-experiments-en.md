@@ -71,7 +71,7 @@ Offline evals, shadow traffic, replay, canary, and full rollout are often descri
 
 A useful discipline is to write the exit condition for each mode before running it. “The new model feels better” is not an exit condition. “No critical safety invariant regressed, p95 latency is within budget, and the candidate improves task completion on the target slice” is measurable, even if the measurements remain imperfect.
 
-OpenAI’s evaluation guidance emphasizes task-specific tests, production-shaped data, continuous evaluation, and human calibration rather than generic scores.[1] Anthropic’s agent evaluation guidance makes a similar distinction between the transcript and the final environment outcome, and recommends combining code-based, model-based, and human graders.[2] Those ideas matter here because a release can sound better while leaving the wrong database state behind.
+OpenAI’s evaluation guidance emphasizes task-specific tests, production-shaped data, continuous evaluation, and human calibration rather than generic scores. Anthropic’s agent evaluation guidance makes a similar distinction between the transcript and the final environment outcome, and recommends combining code-based, model-based, and human graders. Those ideas matter here because a release can sound better while leaving the wrong database state behind.
 
 ## Start with a release ledger
 
@@ -141,7 +141,7 @@ Offline evals tell you whether the candidate can handle the cases you already kn
 
 ## Shadow traffic is real traffic with the effects removed
 
-A proper shadow test copies the input to a candidate while only the stable route returns a response to the calling application. AWS describes shadow testing as a way to compare a deployed variant against the current infrastructure, including operational metrics such as latency and error rate, without end-user impact.[3]
+A proper shadow test copies the input to a candidate while only the stable route returns a response to the calling application. AWS describes shadow testing as a way to compare a deployed variant against the current infrastructure, including operational metrics such as latency and error rate, without end-user impact.
 
 For an agent, “no user impact” needs a stricter definition than “we do not display the candidate answer.” The candidate must not send an email, mutate a CRM record, reserve inventory, charge money, or leak a private tool result into a shared log. The side-effect boundary belongs in the tool gateway, not only in the UI.
 
@@ -211,7 +211,7 @@ Replay is also where teams discover that they did not store enough evidence. Tha
 
 After offline and shadow checks, a canary exposes the candidate to a controlled cohort. A cohort can be selected by tenant, feature flag, internal users, geography, request class, or a stable hash. The selection rule is part of the experiment because a canary made only of friendly internal prompts will not represent the hardest traffic.
 
-Progressive delivery systems commonly express a canary as a sequence of traffic weights and pauses, with analysis deciding whether the rollout proceeds or is aborted.[4] The same idea works for agents, but the metrics must include behavior and effects, not only HTTP health.
+Progressive delivery systems commonly express a canary as a sequence of traffic weights and pauses, with analysis deciding whether the rollout proceeds or is aborted. The same idea works for agents, but the metrics must include behavior and effects, not only HTTP health.
 
 ```text
 candidate  ->  1%  -> pause + analyze

@@ -17,7 +17,7 @@ Nó có request ID, status 200 và một con số latency. Nó không nói model
 
 Đó là khoảng trống observability của nhiều AI system. Team thêm logging xung quanh một LLM call, nhưng production agent không phải một LLM call. Nó là một distributed decision path đi qua model provider, retrieval system, tool server, policy gate, queue, human approval và external side effect.
 
-Công việc về GenAI semantic conventions của OpenTelemetry đáng chú ý vì xem những signal này như một vocabulary dùng chung thay vì một dashboard feature của từng provider.[1] Giá trị cốt lõi là portability: trace phát ra từ model gateway này vẫn phải hiểu được sau khi team đổi provider, router, orchestration framework hoặc MCP server.
+Công việc về GenAI semantic conventions của OpenTelemetry đáng chú ý vì xem những signal này như một vocabulary dùng chung thay vì một dashboard feature của từng provider. Giá trị cốt lõi là portability: trace phát ra từ model gateway này vẫn phải hiểu được sau khi team đổi provider, router, orchestration framework hoặc MCP server.
 
 > **Luận điểm:** Telemetry là contract giữa các system boundary. Nếu vocabulary đổi mỗi lần model provider đổi, tổ chức chưa thật sự sở hữu observability của mình.
 
@@ -89,7 +89,7 @@ Observability schema nên có sensitivity classification. Field an toàn trong l
 
 ## Instrument MCP như một protocol boundary
 
-MCP không chỉ là một HTTP endpoint khác. Specification của nó định nghĩa lifecycle và capability exchange, đồng thời coi tools, resources, prompts, roots, sampling và elicitation là những protocol concept riêng.[2] Telemetry nên giữ nguyên hình dạng đó.
+MCP không chỉ là một HTTP endpoint khác. Specification của nó định nghĩa lifecycle và capability exchange, đồng thời coi tools, resources, prompts, roots, sampling và elicitation là những protocol concept riêng. Telemetry nên giữ nguyên hình dạng đó.
 
 Khi initialize session, ghi nhận server identity, protocol version, capability đã negotiate, transport class và outcome. Khi list tool, ghi schema version hoặc fingerprint thay vì copy tool description có thể nhạy cảm vào mọi trace. Khi invoke tool, ghi logical name, validation result, approval state và mutation class. Khi đọc resource, ghi stable identifier và access decision.
 
@@ -165,7 +165,7 @@ Câu hỏi hữu ích không phải “model nào dùng nhiều token nhất?”
 
 ## Privacy là một phần của telemetry design
 
-OWASP xem sensitive information disclosure là rủi ro lớn của LLM application và khuyến nghị sanitization, strict access controls, tokenization, redaction cùng system configuration cẩn thận.[3] Các kiểm soát này không thể gắn thêm sau khi trace schema đã bị copy vào năm backend.
+OWASP xem sensitive information disclosure là rủi ro lớn của LLM application và khuyến nghị sanitization, strict access controls, tokenization, redaction cùng system configuration cẩn thận. Các kiểm soát này không thể gắn thêm sau khi trace schema đã bị copy vào năm backend.
 
 Hãy định nghĩa capture policy theo field và environment. Development có thể ghi một prompt ngắn, synthetic. Staging có thể ghi template đã redact và hash. Production có thể chỉ ghi metadata cho high-risk tenant. Incident mode có thể cấp quyền có thời hạn vào encrypted payload kèm approval record rõ ràng.
 

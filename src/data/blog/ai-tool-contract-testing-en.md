@@ -17,7 +17,7 @@ Nothing in the dashboard looked dramatic. There was no model outage and no obvio
 
 That gap deserves its own engineering discipline: **contract testing for AI tools**.
 
-Traditional contract testing asks whether a consumer and provider agree on the messages exchanged between them. Pact describes this as testing an integration point in isolation against a shared understanding, rather than relying only on expensive, brittle end-to-end integration tests.[1] For AI systems, the consumer is not just a frontend or service client. It may be an agent runtime that asks a model to select a tool, a gateway that translates provider formats, an MCP client that discovers tools, or a workflow engine that interprets structured results.
+Traditional contract testing asks whether a consumer and provider agree on the messages exchanged between them. Pact describes this as testing an integration point in isolation against a shared understanding, rather than relying only on expensive, brittle end-to-end integration tests. For AI systems, the consumer is not just a frontend or service client. It may be an agent runtime that asks a model to select a tool, a gateway that translates provider formats, an MCP client that discovers tools, or a workflow engine that interprets structured results.
 
 The provider is not just an HTTP server either. It may be a model family, a hosted endpoint, an MCP server, a tool implementation, or a versioned adapter. The contract must therefore cover more than field names. It must cover **what the tool means, when it may be called, how it fails, what side effect it creates, and what the next model is allowed to believe about the result**.
 
@@ -27,7 +27,7 @@ This article is not about making every provider behave identically. That goal is
 
 ## Why schema validation is necessary but not sufficient
 
-A JSON Schema is an excellent starting point. It can describe types, required properties, constraints, arrays, references, and other machine-readable rules.[3] An MCP tool definition uses an `inputSchema` for expected parameters and may provide an `outputSchema` for structured results. The MCP specification says that servers providing an output schema must return structured results that conform to it, while clients should validate those results.[2]
+A JSON Schema is an excellent starting point. It can describe types, required properties, constraints, arrays, references, and other machine-readable rules. An MCP tool definition uses an `inputSchema` for expected parameters and may provide an `outputSchema` for structured results. The MCP specification says that servers providing an output schema must return structured results that conform to it, while clients should validate those results.
 
 That gives us a **shape contract**. It catches a missing `customer_id`, a number serialized as an object, or an output that omits a required `status`. But many production failures remain valid according to the schema.
 
@@ -133,7 +133,7 @@ The point is not to encode every business rule in a test. The point is to identi
 
 A tool may be structurally and semantically correct while still being unauthorized. The policy contract defines who may invoke it, which data classes may cross the boundary, whether human confirmation is required, and which tenant or region restrictions apply.
 
-The MCP tools specification recommends validating inputs, implementing access controls, rate-limiting invocations, sanitizing tool outputs, and keeping a human in the loop for sensitive operations.[2] Those are runtime responsibilities, but they should also appear in tests.
+The MCP tools specification recommends validating inputs, implementing access controls, rate-limiting invocations, sanitizing tool outputs, and keeping a human in the loop for sensitive operations. Those are runtime responsibilities, but they should also appear in tests.
 
 A policy test should ask questions such as:
 
@@ -145,7 +145,7 @@ A policy test should ask questions such as:
 | Tool requires approval but approval token is absent | `needs_confirmation`, no side effect |
 | Tool description changes from read to write | Compatibility gate fails |
 
-Descriptions and annotations are useful hints, not authority. The MCP specification explicitly warns that tool annotations should be treated as untrusted unless they come from trusted servers.[2] Enforce policy from signed or centrally managed metadata, not from prose the model can read.
+Descriptions and annotations are useful hints, not authority. The MCP specification explicitly warns that tool annotations should be treated as untrusted unless they come from trusted servers. Enforce policy from signed or centrally managed metadata, not from prose the model can read.
 
 ### 4. Side-effect contract
 

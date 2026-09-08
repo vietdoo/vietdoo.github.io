@@ -25,7 +25,7 @@ Playbook này xem incident như một state machine vận hành thay vì một n
 
 Service truyền thống thường fail theo những cách dễ nhận biết: process exit, request trả error hoặc dependency timeout. Agent có thể fail trong khi vẫn trả HTTP response hợp lệ. Failure có thể là semantic, tích lũy theo thời gian hoặc bị che sau một tool call thành công. Agent có thể chọn nhầm tool, dùng credential hợp lệ cho mục đích không hợp lệ, ghi sai state hoặc mô tả một action chưa commit như đã hoàn tất.
 
-Hướng dẫn về agentic AI của OWASP xem các hệ thống này là tổ hợp tự chủ của model, tool, data và action, với rủi ro cần threat modeling và mitigation chứ không phải một bộ lọc đơn ở ranh giới model.[1] Cách nhìn đó làm thay đổi câu hỏi về incident. Ta không chỉ hỏi model có sẵn sàng hay không. Ta hỏi toàn bộ đường dẫn action còn xứng đáng có authority hay không.
+Hướng dẫn về agentic AI của OWASP xem các hệ thống này là tổ hợp tự chủ của model, tool, data và action, với rủi ro cần threat modeling và mitigation chứ không phải một bộ lọc đơn ở ranh giới model. Cách nhìn đó làm thay đổi câu hỏi về incident. Ta không chỉ hỏi model có sẵn sàng hay không. Ta hỏi toàn bộ đường dẫn action còn xứng đáng có authority hay không.
 
 Phân biệt hữu ích nhất là giữa **availability** và **authority**. Availability hỏi agent có thể trả lời hay không. Authority hỏi agent còn được phép thay đổi điều gì. Trong incident, giữ lại hỗ trợ read-only có thể hợp lý dù mọi write đều phải dừng. Không phải sự cố nào cũng cần biến thành outage toàn hệ thống.
 

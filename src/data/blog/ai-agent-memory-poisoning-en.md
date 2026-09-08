@@ -17,7 +17,7 @@ This is the core idea behind **memory poisoning**. An attacker does not need to 
 
 > **Working definition:** memory poisoning is the deliberate corruption of an agent's persistent memory so that later retrieval changes the agent's behavior, decisions, or actions.
 
-A recent systematic study identifies four memory-write channels and nine structural weaknesses across the model, prompt, and system architecture. It also reports that agents designed to write and retrieve memories more aggressively are more exploitable, while ordinary prompt-injection defenses do not fully cover the problem [1]. OWASP now frames the issue as **ASI06: Memory Poisoning** and describes persistent memory as mutable runtime state that can contain goals, user context, conversation history, and permissions [2].
+A recent systematic study identifies four memory-write channels and nine structural weaknesses across the model, prompt, and system architecture. It also reports that agents designed to write and retrieve memories more aggressively are more exploitable, while ordinary prompt-injection defenses do not fully cover the problem. OWASP now frames the issue as **ASI06: Memory Poisoning** and describes persistent memory as mutable runtime state that can contain goals, user context, conversation history, and permissions.
 
 The practical implication is uncomfortable but useful: **the memory database is part of the agent's security perimeter**.
 

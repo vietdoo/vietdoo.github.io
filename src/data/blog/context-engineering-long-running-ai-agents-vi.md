@@ -19,7 +19,7 @@ Request có thể đúng. Tool có thể sẵn sàng. Hệ thống retrieval có
 
 > **Luận điểm:** Hãy xem context là một resource hữu hạn, chịu sự quản lý của policy và được lắp ráp qua pipeline. Hệ thống phải quyết định nên fetch gì, fetch lúc nào, nén ra sao và quên điều gì trước khi model đưa ra quyết định tiếp theo.
 
-Anthropic mô tả context engineering là việc tuyển chọn và duy trì tập token tối ưu được đưa vào model ở mỗi lần inference.[1] Sourcegraph cũng đẩy cách nhìn này về phía production: khi agent có tool, retrieval và memory, prompt chỉ còn là một thành phần trong pipeline thông tin lớn hơn.[2] Hệ quả thực tế rất đáng giá: ta có thể thiết kế, test và vận hành context giống như một subsystem production khác.
+Anthropic mô tả context engineering là việc tuyển chọn và duy trì tập token tối ưu được đưa vào model ở mỗi lần inference. Sourcegraph cũng đẩy cách nhìn này về phía production: khi agent có tool, retrieval và memory, prompt chỉ còn là một thành phần trong pipeline thông tin lớn hơn. Hệ quả thực tế rất đáng giá: ta có thể thiết kế, test và vận hành context giống như một subsystem production khác.
 
 ## Context không chỉ là prompt
 
@@ -117,7 +117,7 @@ Retrieval result cũng phải có giới hạn. Đặt budget theo từng source
 
 Conversation dài và workflow nhiều tool cuối cùng sẽ tạo ra nhiều material hơn mức call tiếp theo có thể dùng. Vì vậy compression phải là operation hạng nhất, không phải thao tác cắt chuỗi khi đã sát hard limit.
 
-Hướng dẫn production của Anthropic mô tả compaction như một high-fidelity summary mang theo architectural decision, unresolved bug và implementation detail vào context window mới.[1] Cụm “high-fidelity” rất quan trọng. Một summary nghe trôi chảy nhưng làm mất constraint không phải compression thành công; đó là data-loss event được viết bằng văn phong tốt.
+Hướng dẫn production của Anthropic mô tả compaction như một high-fidelity summary mang theo architectural decision, unresolved bug và implementation detail vào context window mới. Cụm “high-fidelity” rất quan trọng. Một summary nghe trôi chảy nhưng làm mất constraint không phải compression thành công; đó là data-loss event được viết bằng văn phong tốt.
 
 Một compaction record thực tế nên giữ bốn nhóm information:
 
@@ -128,7 +128,7 @@ Một compaction record thực tế nên giữ bốn nhóm information:
 | Open loop | “Đang chờ invoice identifier; billing API trả về hai candidate.” |
 | Reference | “API response đầy đủ lưu ở artifact `toolrun_1842`; được phép fetch lại sau policy check.” |
 
-Tool-result clearing là operation nhẹ hơn. Nếu một result lớn có thể fetch lại và active state đã chứa decision được suy ra từ nó, hãy bỏ raw payload khỏi window nhưng giữ reference và freshness. [Claude Cookbook] giải thích khác biệt này rất rõ: compaction nén toàn bộ window, clearing bỏ dữ liệu cũ có thể fetch lại, còn memory đưa thông tin bền vững ra ngoài active window.[3]
+Tool-result clearing là operation nhẹ hơn. Nếu một result lớn có thể fetch lại và active state đã chứa decision được suy ra từ nó, hãy bỏ raw payload khỏi window nhưng giữ reference và freshness. [Claude Cookbook] giải thích khác biệt này rất rõ: compaction nén toàn bộ window, clearing bỏ dữ liệu cũ có thể fetch lại, còn memory đưa thông tin bền vững ra ngoài active window.
 
 ![Active context dài được compaction thành summary có fidelity cao, trong khi durable notes nằm ngoài window](/blog/context-engineering/compaction-memory.svg)
 
@@ -154,7 +154,7 @@ Một số task cần exploration sâu: đọc repository, so sánh nhiều docu
 
 ![Lead agent điều phối các specialist có context riêng và nhận về các summary card nhỏ gọn](/blog/context-engineering/subagent-isolation.svg)
 
-Sub-agent architecture giải quyết bằng cách cấp cho specialist một context window sạch. Researcher có thể đọc hàng chục source, implementer làm việc với code và test, còn verifier thách thức assumption. Lead agent chỉ nhận result có giới hạn thay vì toàn bộ exploration history. Anthropic mô tả pattern này như cách cô lập search context chi tiết để lead tập trung vào synthesis.[1]
+Sub-agent architecture giải quyết bằng cách cấp cho specialist một context window sạch. Researcher có thể đọc hàng chục source, implementer làm việc với code và test, còn verifier thách thức assumption. Lead agent chỉ nhận result có giới hạn thay vì toàn bộ exploration history. Anthropic mô tả pattern này như cách cô lập search context chi tiết để lead tập trung vào synthesis.
 
 Isolation không có nghĩa là parallelism vô hạn. Mỗi specialist cần role, input contract, tool allow-list, exploration budget tối đa và output schema. Summary nên có conclusion, evidence reference, uncertainty, failed approach và next action đề xuất. Specialist trả về đúng chữ “done” đã tiết kiệm token nhưng phá hỏng observability.
 

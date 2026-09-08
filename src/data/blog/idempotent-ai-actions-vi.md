@@ -23,7 +23,7 @@ Bài viết này là một playbook production cho các AI tool có khả năng 
 
 ## Retry không đồng nghĩa với một ý định thứ hai
 
-Trong distributed system, client có thể mất response sau khi server đã commit operation. Client khi đó đứng trước một lựa chọn khó chịu. Nếu không làm gì, người dùng có thể chờ vô hạn. Nếu gửi request lần nữa, hệ thống có thể tạo thêm một side effect. AWS mô tả chính xác sự giằng co này trong hướng dẫn về idempotent API: retry chỉ làm cho việc recovery đơn giản hơn khi service nhận diện được đây là lần lặp của cùng một request và không cộng thêm một effect mới.[1]
+Trong distributed system, client có thể mất response sau khi server đã commit operation. Client khi đó đứng trước một lựa chọn khó chịu. Nếu không làm gì, người dùng có thể chờ vô hạn. Nếu gửi request lần nữa, hệ thống có thể tạo thêm một side effect. AWS mô tả chính xác sự giằng co này trong hướng dẫn về idempotent API: retry chỉ làm cho việc recovery đơn giản hơn khi service nhận diện được đây là lần lặp của cùng một request và không cộng thêm một effect mới.
 
 Từ quan trọng ở đây là **cùng**. Hai request có parameter giống hệt nhau vẫn có thể là hai ý định riêng biệt. Người dùng có thể thực sự muốn tạo hai calendar event giống nhau hoặc hai compute instance giống nhau. Ngược lại, cùng một logical intent có thể đến với transport metadata khác, một HTTP connection khác, hoặc một LLM tool-call identifier mới được sinh lại.
 
@@ -36,7 +36,7 @@ Idempotency key làm cho ý định được biểu đạt rõ ràng. Nó nói r
 | **At-least-once delivery** | Message hoặc retry có thể được giao nhiều hơn một lần. | Tự nó không ngăn được duplicate. |
 | **Exactly-once outcome** | Business result nhìn từ bên ngoài xuất hiện một lần. | Thường là kết quả ở cấp hệ thống, được ghép từ durable state, deduplication và reconciliation; không phải một thuộc tính kỳ diệu của transport. |
 
-HTTP semantics vốn đã phân biệt các method có tính idempotent vì request có thể được tự động lặp lại sau lỗi truyền thông.[2] Tuy nhiên, AI action thường đến dưới dạng command giống `POST`, vì vậy application cần thêm một contract rõ ràng thay vì hy vọng HTTP verb sẽ giải quyết mọi thứ.
+HTTP semantics vốn đã phân biệt các method có tính idempotent vì request có thể được tự động lặp lại sau lỗi truyền thông. Tuy nhiên, AI action thường đến dưới dạng command giống `POST`, vì vậy application cần thêm một contract rõ ràng thay vì hy vọng HTTP verb sẽ giải quyết mọi thứ.
 
 ## Vì sao AI agent làm bài toán retry cũ khó hơn
 
@@ -116,7 +116,7 @@ type IdempotencyRecord = {
 };
 ```
 
-Record này là một **business safety boundary**. Nó cần được scope theo tenant và actor khi cần, được bảo vệ bằng unique constraint, và được giữ ít nhất lâu bằng khoảng thời gian một late retry có thể xuất hiện. Tài liệu API của Stripe mô tả một contract tương tự: kết quả đầu tiên được lưu cho một key, request sau với cùng key nhận lại cùng kết quả, còn parameter mismatch bị reject thay vì được coi là một operation mới.[3]
+Record này là một **business safety boundary**. Nó cần được scope theo tenant và actor khi cần, được bảo vệ bằng unique constraint, và được giữ ít nhất lâu bằng khoảng thời gian một late retry có thể xuất hiện. Tài liệu API của Stripe mô tả một contract tương tự: kết quả đầu tiên được lưu cho một key, request sau với cùng key nhận lại cùng kết quả, còn parameter mismatch bị reject thay vì được coi là một operation mới.
 
 ![Ba transport attempt hội tụ vào một idempotency record được bảo vệ, còn parameter mismatch bị từ chối](/blog/idempotent-ai-actions/dedup-record.webp)
 
@@ -214,7 +214,7 @@ Reservation cũng phải ngăn worker thứ hai chạy vượt qua record `start
 
 Nhiều AI action vừa cập nhật local state vừa gọi external tool. Ví dụ, scheduling agent có thể tạo một dòng `booking_intent` rồi gọi calendar API. Nếu database commit thành công nhưng process crash trước API call, action chưa hoàn tất. Nếu API call thành công nhưng process crash trước local commit, application có thể quên resource đã tạo.
 
-Transactional outbox giảm một nửa sự không chắc chắn này. Application ghi business state và outbox event trong cùng database transaction. Sau đó relay giao event tới external system. Outbox tồn tại vì database và message broker thường không thể dùng một two-phase transaction thực tế; pattern này cũng thừa nhận relay có thể publish event nhiều lần, nên consumer vẫn cần idempotency.[4]
+Transactional outbox giảm một nửa sự không chắc chắn này. Application ghi business state và outbox event trong cùng database transaction. Sau đó relay giao event tới external system. Outbox tồn tại vì database và message broker thường không thể dùng một two-phase transaction thực tế; pattern này cũng thừa nhận relay có thể publish event nhiều lần, nên consumer vẫn cần idempotency.
 
 ![Agent intent được commit cùng outbox event, relay tới external API, rồi reconcile thành commit hoặc compensation](/blog/idempotent-ai-actions/outbox-reconciliation.webp)
 

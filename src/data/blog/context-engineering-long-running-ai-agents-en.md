@@ -19,7 +19,7 @@ That is not primarily a prompt-writing problem. It is a context engineering prob
 
 > **Thesis:** Treat context as a finite, policy-governed resource assembled by a pipeline. Decide what to fetch, when to fetch it, how to compress it, and what to forget before the model has to make its next decision.
 
-Anthropic describes context engineering as the work of curating and maintaining the optimal set of tokens available during inference.[1] Sourcegraph makes the same shift practical: once an agent has tools, retrieval and memory, the prompt is only one input to a larger pipeline that must manage information flow.[2] The useful consequence is that we can design, test and operate context in the same way we design any other production subsystem.
+Anthropic describes context engineering as the work of curating and maintaining the optimal set of tokens available during inference. Sourcegraph makes the same shift practical: once an agent has tools, retrieval and memory, the prompt is only one input to a larger pipeline that must manage information flow. The useful consequence is that we can design, test and operate context in the same way we design any other production subsystem.
 
 ## Context is more than a prompt
 
@@ -117,7 +117,7 @@ This is different from the chunking lessons in the [RAG production mentoring art
 
 Long conversations and tool-heavy workflows eventually produce more material than the next call can use. Compression should therefore be a first-class operation, not an emergency string truncation.
 
-Anthropic's production guidance describes compaction as a high-fidelity summary that carries architectural decisions, unresolved bugs and implementation details into a new context window.[1] The important phrase is high-fidelity. A summary that sounds fluent but drops a constraint is not a successful compression; it is a data-loss event with good grammar.
+Anthropic's production guidance describes compaction as a high-fidelity summary that carries architectural decisions, unresolved bugs and implementation details into a new context window. The important phrase is high-fidelity. A summary that sounds fluent but drops a constraint is not a successful compression; it is a data-loss event with good grammar.
 
 A practical compaction record can preserve four groups of information:
 
@@ -128,7 +128,7 @@ A practical compaction record can preserve four groups of information:
 | Open loops | “Waiting for the invoice identifier; billing API returned two candidates.” |
 | References | “Full API response stored as artifact `toolrun_1842`; re-fetch allowed after policy check.” |
 
-Tool-result clearing is a lighter operation. If a large result can be fetched again and the active state already contains the decision derived from it, remove the raw payload from the window while retaining a reference and its freshness. The [Claude Cookbook] explains the distinction clearly: compaction compresses the whole window, clearing drops stale re-fetchable data, and memory moves durable information outside the active window.[3]
+Tool-result clearing is a lighter operation. If a large result can be fetched again and the active state already contains the decision derived from it, remove the raw payload from the window while retaining a reference and its freshness. The [Claude Cookbook] explains the distinction clearly: compaction compresses the whole window, clearing drops stale re-fetchable data, and memory moves durable information outside the active window.
 
 ![A long active context is compacted into a high-fidelity summary while durable notes remain outside the window](/blog/context-engineering/compaction-memory.svg)
 
@@ -154,7 +154,7 @@ Some tasks require deep exploration: reading a repository, comparing many docume
 
 ![A lead agent coordinates isolated specialist contexts and receives compact summary cards](/blog/context-engineering/subagent-isolation.svg)
 
-Sub-agent architectures solve this by giving specialist workers clean context windows. The researcher can inspect dozens of sources, the implementer can work with code and tests, and the verifier can challenge assumptions. The lead agent receives a bounded result rather than the entire exploration history. Anthropic describes this pattern as a way to keep detailed search context isolated while the lead focuses on synthesis.[1]
+Sub-agent architectures solve this by giving specialist workers clean context windows. The researcher can inspect dozens of sources, the implementer can work with code and tests, and the verifier can challenge assumptions. The lead agent receives a bounded result rather than the entire exploration history. Anthropic describes this pattern as a way to keep detailed search context isolated while the lead focuses on synthesis.
 
 Isolation does not mean unlimited parallelism. Each specialist needs a role, an input contract, a tool allow-list, a maximum exploration budget and an output schema. The summary should include conclusions, evidence references, uncertainty, failed approaches and recommended next action. A specialist that returns only “done” has saved tokens but destroyed observability.
 

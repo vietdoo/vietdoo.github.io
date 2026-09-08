@@ -36,7 +36,7 @@ Từ *timeout* hấp dẫn vì nó có vẻ giải quyết mọi vấn đề ch�
 | Observation freshness | Fact này có thể được tin trong bao lâu? | “Tồn kho được quan sát lúc 10:02, hợp lệ 30 giây” | Đọc lại source trước khi quyết định |
 | Plan validity | Điều kiện nào khiến multi-step plan còn áp dụng? | “Refund chỉ thực hiện khi invoice và approval chưa đổi” | Revalidate, replan hoặc refuse |
 
-Các clock có thể liên quan, nhưng nên được biểu diễn riêng. Mô tả của Martin Fowler về distributed lease nắm đúng ý cốt lõi: quyền truy cập được cấp trong một khoảng thời gian hữu hạn và cần được renew trước khi hết hạn; node đã crash hoặc bị ngắt kết nối không được giữ quyền mãi mãi.[1] Tài liệu Temporal bổ sung một phân biệt quan trọng: timeout dùng để phát hiện failure, còn timer dùng để thực hiện business logic.[2]
+Các clock có thể liên quan, nhưng nên được biểu diễn riêng. Mô tả của Martin Fowler về distributed lease nắm đúng ý cốt lõi: quyền truy cập được cấp trong một khoảng thời gian hữu hạn và cần được renew trước khi hết hạn; node đã crash hoặc bị ngắt kết nối không được giữ quyền mãi mãi. Tài liệu Temporal bổ sung một phân biệt quan trọng: timeout dùng để phát hiện failure, còn timer dùng để thực hiện business logic.
 
 AI agent còn thêm một vấn đề thứ năm: plan là cách diễn giải các observation. Timer có thể nói rằng năm phút đã trôi qua. Nó không thể nói evidence đứng sau plan còn áp dụng hay không. Vì vậy, một run được resume cần cả timer cơ học lẫn semantic revalidation.
 
@@ -105,13 +105,13 @@ async function callWithBudget<T>(
 }
 ```
 
-Phân biệt này cũng làm rõ retry. Retry policy mô tả cách thử lại sau một failure; nó không được âm thầm tạo ra một business obligation vô hạn. Temporal mô tả exponential backoff và các giới hạn tách biệt cho từng attempt với tổng thời gian effort.[3] Nguyên tắc tương tự áp dụng ngay cả khi agent runtime là code tự xây: hãy giới hạn toàn bộ outcome, không chỉ từng request.
+Phân biệt này cũng làm rõ retry. Retry policy mô tả cách thử lại sau một failure; nó không được âm thầm tạo ra một business obligation vô hạn. Temporal mô tả exponential backoff và các giới hạn tách biệt cho từng attempt với tổng thời gian effort. Nguyên tắc tương tự áp dụng ngay cả khi agent runtime là code tự xây: hãy giới hạn toàn bộ outcome, không chỉ từng request.
 
 Expiry path phải là một product decision. Có workflow có thể pause và chờ người dùng. Có workflow nên trả về partial result. Có workflow phải refuse vì làm muộn còn tệ hơn không làm. Deadline không đi kèm expiry outcome rõ ràng thì chỉ là một timestamp.
 
 ## Lease bảo vệ ownership, không bảo đảm truth
 
-Lease hữu ích khi một action cần có đúng một owner hiện tại. Lease phổ biến trong distributed systems vì worker có thể crash hoặc bị network partition; lease giới hạn thời gian ngăn worker đó giữ resource vô thời hạn.[1]
+Lease hữu ích khi một action cần có đúng một owner hiện tại. Lease phổ biến trong distributed systems vì worker có thể crash hoặc bị network partition; lease giới hạn thời gian ngăn worker đó giữ resource vô thời hạn.
 
 Với agent, resource có thể là task, customer conversation, browser session, shopping cart hoặc reconciliation job. Lease phải gắn với owner và được kiểm tra ở nơi side effect được commit.
 
@@ -157,7 +157,7 @@ function isFresh<T>(observation: Observation<T>, now = Date.now()) {
 }
 ```
 
-Freshness không đồng nghĩa với recency. Một policy đổi từ hôm qua vẫn có thể hợp lệ nếu có version và được approve. Một stock count từ mười giây trước đã có thể không an toàn nếu sản phẩm đang được bán đồng thời. Các bài viết gần đây về data readiness cho agentic system cũng coi freshness SLA, data contract và traceability là một phần của data layer, thay vì metadata tùy chọn.[4]
+Freshness không đồng nghĩa với recency. Một policy đổi từ hôm qua vẫn có thể hợp lệ nếu có version và được approve. Một stock count từ mười giây trước đã có thể không an toàn nếu sản phẩm đang được bán đồng thời. Các bài viết gần đây về data readiness cho agentic system cũng coi freshness SLA, data contract và traceability là một phần của data layer, thay vì metadata tùy chọn.
 
 Câu hỏi hữu ích không phải “Data có fresh không?” mà là “Fresh đủ cho action nào?” Observation cũ có thể đủ để tạo draft answer nhưng không đủ để mua hàng. Nó có thể đủ để xếp hạng lựa chọn nhưng không đủ để commit reservation.
 

@@ -15,7 +15,7 @@ Một hệ thống RAG thông thường trả lời câu hỏi: “Tài liệu n
 
 Khác biệt này rất dễ bị bỏ qua vì vector search tạo cảm giác thông minh. Đưa vào query “Chính sách hoàn tiền của chúng ta vào tháng 3 là gì?”, hệ thống có thể tìm ra những tài liệu chứa từ _refund_ và _March_. Nhưng semantic similarity không tự hiểu rằng policy phát hành tháng 6 đã thay thế policy từng có hiệu lực tháng 3. Nó có thể trả về câu trả lời mới hơn, trau chuốt hơn nhưng sai về lịch sử.
 
-Đây là bài toán của **Temporal Retrieval-Augmented Generation**. Thách thức không phải thêm một trường `published_at` vào chunk rồi hy vọng model tự chú ý. System cần temporal model rõ ràng, luật retrieval, cách hiển thị bằng chứng và bộ eval phân biệt “đúng bây giờ” với “đúng vào lúc đó”. Nghiên cứu gần đây về diachronic question answering cũng xem time-aware retrieval là một bài toán riêng, không chỉ là biến thể nhỏ của semantic search thông thường.[1]
+Đây là bài toán của **Temporal Retrieval-Augmented Generation**. Thách thức không phải thêm một trường `published_at` vào chunk rồi hy vọng model tự chú ý. System cần temporal model rõ ràng, luật retrieval, cách hiển thị bằng chứng và bộ eval phân biệt “đúng bây giờ” với “đúng vào lúc đó”. Nghiên cứu gần đây về diachronic question answering cũng xem time-aware retrieval là một bài toán riêng, không chỉ là biến thể nhỏ của semantic search thông thường.
 
 > **Luận điểm:** Nếu câu trả lời có tham chiếu thời gian, time là một phần của retrieval contract, không phải một chi tiết trang trí trong prompt.
 

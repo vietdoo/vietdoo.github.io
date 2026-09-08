@@ -17,7 +17,7 @@ The context firewall is not a prompt-injection filter, a DLP scanner bolted onto
 
 > **A context firewall is the last controlled boundary before untrusted and sensitive data becomes model-visible.**
 
-This matters now because tracing is becoming common while production quality remains difficult. LangChain's 2026 State of AI Agents reports that 89% of surveyed organizations have implemented some form of agent observability, but quality remains the largest production barrier.[1] Seeing a bad context after the fact is useful. Preventing an unjustified field from entering it is better.
+This matters now because tracing is becoming common while production quality remains difficult. LangChain's 2026 State of AI Agents reports that 89% of surveyed organizations have implemented some form of agent observability, but quality remains the largest production barrier. Seeing a bad context after the fact is useful. Preventing an unjustified field from entering it is better.
 
 ## Context is a data plane, not a string
 

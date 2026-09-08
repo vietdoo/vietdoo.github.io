@@ -21,7 +21,7 @@ This is the uncomfortable difference between **deleting a record** and **honorin
 
 > **The thesis:** An AI system should treat deletion as a propagation protocol, not a database button. Block retrieval immediately, remove or invalidate every derived projection, and produce evidence that proves what was covered without copying the deleted content into the audit log.
 
-This is an engineering playbook, not individualized legal advice. Privacy obligations depend on jurisdiction, purpose, lawful basis, contracts, retention requirements, and the facts of a particular request. GDPR Article 17 describes a right to erasure in specified circumstances and also lists exceptions, including legal obligations, freedom of expression, public-interest archiving or research, and legal claims.[1] The architectural lesson is still general: if a system promises to forget, it needs a scope, a state machine, and a way to demonstrate completion.
+This is an engineering playbook, not individualized legal advice. Privacy obligations depend on jurisdiction, purpose, lawful basis, contracts, retention requirements, and the facts of a particular request. GDPR Article 17 describes a right to erasure in specified circumstances and also lists exceptions, including legal obligations, freedom of expression, public-interest archiving or research, and legal claims. The architectural lesson is still general: if a system promises to forget, it needs a scope, a state machine, and a way to demonstrate completion.
 
 ## Deletion is a graph, not a row
 
@@ -100,7 +100,7 @@ The check belongs at the retrieval boundary, not only in the UI. A cached result
 
 ## Provider delete APIs are projection operations
 
-Vector databases normally provide a way to delete points by ID or metadata filter. Pinecone documents deletion by ID, metadata filter, all records in a namespace, or an entire namespace; it also notes that deletes consume write units.[3] Qdrant documents deletion by point ID or filter and distinguishes deleting an entire point from deleting selected vectors or payload.[4]
+Vector databases normally provide a way to delete points by ID or metadata filter. Pinecone documents deletion by ID, metadata filter, all records in a namespace, or an entire namespace; it also notes that deletes consume write units. Qdrant documents deletion by point ID or filter and distinguishes deleting an entire point from deleting selected vectors or payload.
 
 Those APIs are useful, but they are not an end-to-end erasure protocol. They operate on one index. They do not know whether the same source was summarized into another table, copied to a cache, included in a trace, or exported to a data warehouse.
 
@@ -183,7 +183,7 @@ Classify each projection before building the deletion worker. A practical policy
 
 Do not use “anonymized” as a magic word. An irreversible transformation must be assessed against the data, the attacker model, and the surrounding fields. Hashing a stable email into an audit table may still permit correlation. Replacing content with a short secret token may still allow a privileged operator to re-identify the subject. If the evidence must remain, minimize it and separate access to it from access to product data.
 
-NIST describes the AI RMF as voluntary guidance for incorporating trustworthiness considerations into the design, development, use, and evaluation of AI products and systems.[2] It does not prescribe one deletion implementation. For an engineering team, the useful implication is to treat deletion as a governed risk control with an owner, testable outcomes, and documented residual risk.
+NIST describes the AI RMF as voluntary guidance for incorporating trustworthiness considerations into the design, development, use, and evaluation of AI products and systems. It does not prescribe one deletion implementation. For an engineering team, the useful implication is to treat deletion as a governed risk control with an owner, testable outcomes, and documented residual risk.
 
 ## The evidence ledger should prove scope without becoming a shadow archive
 

@@ -15,7 +15,7 @@ A RAG demo often ends with a reassuring sentence: “The answer is grounded in y
 
 A retrieved chunk may have come from an old document. A parser may have dropped the table header. A reranker may have selected a nearby paragraph while missing the figure that changed its meaning. The model may then combine three pieces of evidence into a claim that no source actually made. The final answer contains citations, but the citations do not explain how the claim was formed.
 
-This is where **provenance** becomes useful. Observability tells us what the system did: which model ran, how long the request took, and which retriever returned which IDs. Provenance asks a different question: **which entities, activities, and agents contributed to this particular claim, and can a reviewer follow that lineage back to the source?** The W3C PROV model uses those concepts to reason about the quality, reliability, and trustworthiness of produced data.[1]
+This is where **provenance** becomes useful. Observability tells us what the system did: which model ran, how long the request took, and which retriever returned which IDs. Provenance asks a different question: **which entities, activities, and agents contributed to this particular claim, and can a reviewer follow that lineage back to the source?** The W3C PROV model uses those concepts to reason about the quality, reliability, and trustworthiness of produced data.
 
 > **The thesis:** A citation is a pointer. Provenance is the chain of custody behind the pointer.
 

@@ -23,7 +23,7 @@ No prompt injection was required. No provider outage occurred. The model was doi
 
 > **The thesis:** Authorization requirements for AI agents should be executable, testable policy—not prose in a prompt, a comment beside a tool, or an undocumented convention in an adapter. The model may propose an action; deterministic application code must decide whether that action is allowed, record why, and refuse by default when the evidence is incomplete.
 
-This article presents an application-level pattern for policy-as-code in tool-using agents. It uses Open Policy Agent (OPA), Cedar, and OpenFGA as useful reference points, not as a recommendation that every team adopt one specific engine. OPA describes policy as code as declarative rules evaluated through structured input and decoupled from enforcement.[1] Its testing framework demonstrates how positive and negative authorization cases can become repeatable regression checks.[2] Cedar’s validation model adds an important reminder: a policy can be syntactically valid while still referring to the wrong types, actions, or attributes, so policy changes need schema-aware validation before they reach the authorization engine.[3] OpenFGA’s agent-authorization guidance shows why scoped, task-specific permissions matter when agents act for users or access third-party systems.[4]
+This article presents an application-level pattern for policy-as-code in tool-using agents. It uses Open Policy Agent (OPA), Cedar, and OpenFGA as useful reference points, not as a recommendation that every team adopt one specific engine. OPA describes policy as code as declarative rules evaluated through structured input and decoupled from enforcement. Its testing framework demonstrates how positive and negative authorization cases can become repeatable regression checks. Cedar’s validation model adds an important reminder: a policy can be syntactically valid while still referring to the wrong types, actions, or attributes, so policy changes need schema-aware validation before they reach the authorization engine. OpenFGA’s agent-authorization guidance shows why scoped, task-specific permissions matter when agents act for users or access third-party systems.
 
 ## A permission in a prompt is not an authorization decision
 
@@ -192,7 +192,7 @@ test_export_is_not_implied_by_read if {
 }
 ```
 
-OPA’s documentation describes test rules with a `test_` prefix and the `opa test` command for executing them.[2] The specific engine is less important than the habit: authorization changes should produce a diff in executable tests, and CI should fail when a deny boundary disappears.
+OPA’s documentation describes test rules with a `test_` prefix and the `opa test` command for executing them. The specific engine is less important than the habit: authorization changes should produce a diff in executable tests, and CI should fail when a deny boundary disappears.
 
 Do not let an empty test run count as success. A renamed package, a broken path, or a misspelled test selector can create a green build that executed nothing. The test command and CI wrapper should fail when the expected test set is empty, and the result should be exported in a machine-readable form for the release system.
 
@@ -202,7 +202,7 @@ A policy can be logically wrong even when all of its tests pass. It can also be 
 
 Suppose a rule refers to `customer.tenantId`, while the application sends `customer.tenant_id`. The rule may simply never match. Suppose an action is named `customer.read` in the schema but `customer.read_record` in one policy file. The policy can look plausible in code review while becoming dead logic in production.
 
-Cedar’s validation documentation makes this distinction explicit. A policy can be well-formed according to syntax rules while containing typos, undefined attributes, or invalid comparisons. Cedar uses a schema describing entity types, attributes, relationships, actions, and request component types to validate policies before they are used by the authorization engine.[3]
+Cedar’s validation documentation makes this distinction explicit. A policy can be well-formed according to syntax rules while containing typos, undefined attributes, or invalid comparisons. Cedar uses a schema describing entity types, attributes, relationships, actions, and request component types to validate policies before they are used by the authorization engine.
 
 That suggests a three-layer check:
 

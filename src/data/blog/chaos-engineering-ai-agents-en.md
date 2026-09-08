@@ -25,11 +25,11 @@ The distinction matters. Offline evaluation asks whether an agent can solve a ta
 
 A conventional test often mocks every tool as fast, complete, and truthful. The model receives a clean schema, the retriever returns the right document, and the final assertion compares text with an expected answer. That is useful for basic correctness, but it does not exercise the boundary between reasoning and execution.
 
-ReliabilityBench separates agent reliability into consistency, robustness, and fault tolerance. Its fault-tolerance dimension covers infrastructure failures such as timeouts, rate limits, partial responses, and schema changes; its evaluation uses end-state verification rather than text similarity.[1] This is a better mental model for production: a response can be worded differently and still be correct, while a beautifully worded response can hide a broken state.
+ReliabilityBench separates agent reliability into consistency, robustness, and fault tolerance. Its fault-tolerance dimension covers infrastructure failures such as timeouts, rate limits, partial responses, and schema changes; its evaluation uses end-state verification rather than text similarity. This is a better mental model for production: a response can be worded differently and still be correct, while a beautifully worded response can hide a broken state.
 
 The number of steps makes the problem sharper. If each action has an independent five-percent failure chance, a twenty-action workflow is not “95% reliable.” Its probability of completing every step is approximately 0.95^20, or about 36%. Real systems have correlated failures and retries, so the arithmetic is not a service-level promise. It is a reminder that a small local failure rate becomes a large workflow problem when the agent has many opportunities to act.
 
-MLflow’s production guidance similarly frames agents as distributed systems that need runtime governance, deterministic execution for critical operations, embedded evaluation, and shadow deployment for major changes.[2] Chaos experiments turn those principles into evidence instead of assumptions.
+MLflow’s production guidance similarly frames agents as distributed systems that need runtime governance, deterministic execution for critical operations, embedded evaluation, and shadow deployment for major changes. Chaos experiments turn those principles into evidence instead of assumptions.
 
 ## Start with a failure model, not a random fault generator
 
@@ -129,7 +129,7 @@ This is where chaos testing connects to idempotency without replacing the existi
 
 A fluent recovery message is not proof of recovery. Each experiment needs a deterministic oracle that can inspect the system state before and after the run. The oracle may compare database snapshots, event counts, object versions, authorization decisions, queue offsets, or a signed action ledger.
 
-ReliabilityBench’s action metamorphic relations provide a useful pattern: after a fault or an equivalent perturbation, correctness can be determined by end-state equivalence rather than identical wording.[1] For example, an agent may say “I could not complete the reservation” or “The reservation remains pending while inventory is refreshed.” Both can be acceptable if the state is pending, no duplicate reservation exists, and the user receives an honest next step.
+ReliabilityBench’s action metamorphic relations provide a useful pattern: after a fault or an equivalent perturbation, correctness can be determined by end-state equivalence rather than identical wording. For example, an agent may say “I could not complete the reservation” or “The reservation remains pending while inventory is refreshed.” Both can be acceptable if the state is pending, no duplicate reservation exists, and the user receives an honest next step.
 
 ![State snapshots, invariant checks, evidence capture, and a release gate verify whether an agent really recovered after a fault](/blog/chaos-engineering-ai-agents/verification-oracle.webp)
 

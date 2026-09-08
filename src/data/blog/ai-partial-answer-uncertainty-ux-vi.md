@@ -27,7 +27,7 @@ Phần mềm truyền thống thường có điều kiện thành công tương 
 
 Điều đó làm thay đổi ý nghĩa của “đã xong”. Câu trả lời không hoàn tất chỉ vì luồng token đi tới stop condition. Nó hoàn tất khi hệ thống có thể giải thích, ở mức phù hợp với tác vụ, phần nào được hỗ trợ, phần nào chưa chắc chắn và người dùng có thể làm gì tiếp theo.
 
-Điểm này quan trọng vì con người sẽ điều chỉnh hành vi dựa trên thông điệp của AI. Nghiên cứu về selective prediction cho thấy quyết định defer của hệ thống và cách quyết định đó được truyền đạt có thể thay đổi hiệu quả của con người. Trong một nghiên cứu của AAAI, khi được cho biết AI đã chuyển một trường hợp cho con người—nhưng không đơn giản là phơi ra dự đoán thiếu chắc chắn của mô hình—nhóm người và AI đạt kết quả tốt hơn.[1] Như vậy, giao diện là một phần của cơ chế tin cậy chứ không phải lớp trang trí thêm vào sau mô hình.
+Điểm này quan trọng vì con người sẽ điều chỉnh hành vi dựa trên thông điệp của AI. Nghiên cứu về selective prediction cho thấy quyết định defer của hệ thống và cách quyết định đó được truyền đạt có thể thay đổi hiệu quả của con người. Trong một nghiên cứu của AAAI, khi được cho biết AI đã chuyển một trường hợp cho con người—nhưng không đơn giản là phơi ra dự đoán thiếu chắc chắn của mô hình—nhóm người và AI đạt kết quả tốt hơn. Như vậy, giao diện là một phần của cơ chế tin cậy chứ không phải lớp trang trí thêm vào sau mô hình.
 
 ![Bốn trạng thái bằng chứng tiến tới quyết định trả lời mà không giả vờ rằng mọi trạng thái đều hoàn chỉnh](/blog/ai-partial-answer-uncertainty/evidence-states.webp)
 
@@ -130,9 +130,9 @@ Thiết kế partial-answer cần các metric nối trạng thái hệ thống v
 | **Human-AI joint quality** | Chất lượng quyết định cuối sau khi con người tương tác với trạng thái không chắc chắn. | Thông điệp neo người dùng vào dự đoán sai hoặc tạo distrust không cần thiết. |
 | **Handoff completeness** | Handoff có chuyển request, evidence, conflict và các bước đã thử cho con người không. | Người phụ trách phải điều tra lại từ đầu. |
 
-Kết quả từ nghiên cứu selective prediction của AAAI nhắc chúng ta rằng chính message có thể thay đổi kết quả chung.[1] Vì vậy, human testing không chỉ nên so sánh output của model mà còn so sánh các cách trình bày: raw confidence, trạng thái phân loại, tín hiệu defer rõ ràng và bounded partial answer. Nên thử với người có mức độ chuyên môn khác nhau, vì một câu hữu ích với kỹ sư có thể gây hiểu lầm cho khách hàng.
+Kết quả từ nghiên cứu selective prediction của AAAI nhắc chúng ta rằng chính message có thể thay đổi kết quả chung. Vì vậy, human testing không chỉ nên so sánh output của model mà còn so sánh các cách trình bày: raw confidence, trạng thái phân loại, tín hiệu defer rõ ràng và bounded partial answer. Nên thử với người có mức độ chuyên môn khác nhau, vì một câu hữu ích với kỹ sư có thể gây hiểu lầm cho khách hàng.
 
-Các hướng dẫn về human-AI interaction khuyến nghị hiển thị thông tin phù hợp với ngữ cảnh và giới hạn phạm vi dịch vụ khi hệ thống không chắc chắn.[2] Trong thực tế, điều đó nghĩa là hiển thị mẩu bằng chứng nhỏ nhất cần thiết cho quyết định tiếp theo—không đổ cả trace, không giấu ranh giới và không bắt người dùng giải mã jargon thống kê.
+Các hướng dẫn về human-AI interaction khuyến nghị hiển thị thông tin phù hợp với ngữ cảnh và giới hạn phạm vi dịch vụ khi hệ thống không chắc chắn. Trong thực tế, điều đó nghĩa là hiển thị mẩu bằng chứng nhỏ nhất cần thiết cho quyết định tiếp theo—không đổ cả trace, không giấu ranh giới và không bắt người dùng giải mã jargon thống kê.
 
 ![Bảng evaluation bốn phần so sánh correctness, abstention, độ hữu ích của recovery và chất lượng quyết định của con người](/blog/ai-partial-answer-uncertainty/evaluation-matrix.webp)
 

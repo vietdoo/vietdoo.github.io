@@ -24,7 +24,7 @@ That is where the “MCP is just an API wrapper for an LLM” mental model fails
 
 > **Core thesis:** Treat MCP as a capability boundary. OAuth consent provides delegated, revocable, scoped authority; server-side policy decides whether this particular request is permissible *now*; and human approval, when required, is a just-in-time authorization bound to a specific effect, argument set, limit, and expiry. None of those layers substitutes for another.
 
-The MCP authorization specification models a protected MCP server as an OAuth resource server, the MCP client as an OAuth client acting for a resource owner, and an authorization server as the system that interacts with the user and issues access tokens.[1] MCP tools are model-controlled, yet the tools specification recommends a human in the loop who can deny invocations and a UI that makes the invoked tool clear.[3] This article turns those principles into an implementation blueprint.
+The MCP authorization specification models a protected MCP server as an OAuth resource server, the MCP client as an OAuth client acting for a resource owner, and an authorization server as the system that interacts with the user and issues access tokens. MCP tools are model-controlled, yet the tools specification recommends a human in the loop who can deny invocations and a UI that makes the invoked tool clear. This article turns those principles into an implementation blueprint.
 
 The running example is **OpsBridge**, a multi-tenant support-and-operations MCP server. Its tool names, data, and policies are illustrative; they are not a new MCP standard or a compliance certification.
 
@@ -43,7 +43,7 @@ Before choosing an SDK or policy engine, separate the decisions that are too oft
 
 These correspond to four planes: **delegation**, **capability discovery**, **runtime authorization**, and **commit approval**. OAuth is excellent at delegated authorization. It does not, by itself, know whether a row belongs to the caller’s tenant, whether a refund is eligible, whether an amount breaches a role limit, or whether the session has just ingested untrusted content.
 
-MCP permits `tools/list` to vary according to authorization present in the request. That is a significant architectural advantage: do not expose a global tool catalog to a model and hope a prompt restrains it. Show the model only tools the current authority can plausibly use.[3] OpsBridge can start with this narrow surface.
+MCP permits `tools/list` to vary according to authorization present in the request. That is a significant architectural advantage: do not expose a global tool catalog to a model and hope a prompt restrains it. Show the model only tools the current authority can plausibly use. OpsBridge can start with this narrow surface.
 
 | Tool | Narrow capability | Effect | Default decision |
 | --- | --- | --- | --- |
@@ -54,7 +54,7 @@ MCP permits `tools/list` to vary according to authorization present in the reque
 | `rotate_api_key` | `keys:rotate` | Destructive security effect | Approval required |
 | `post_status_update` | `status:write` | External communication | Policy or approval |
 
-A simple tool with a tight schema and an explicit effect is easier to protect than `execute_anything` or `ops:*`. OWASP similarly recommends per-tool scoping, separation of toolsets by trust level, and explicit authorization for sensitive operations.[6]
+A simple tool with a tight schema and an explicit effect is easier to protect than `execute_anything` or `ops:*`. OWASP similarly recommends per-tool scoping, separation of toolsets by trust level, and explicit authorization for sensitive operations.
 
 ![An oversized ops:* master key opens every drawer while narrow capability keys open only one appropriate tool](/blog/mcp-security-capability-map.webp)
 
@@ -94,11 +94,11 @@ Policy:     subject has support_lead role
 
 That avoids both extremes. OAuth scope alone is usually too coarse for row ownership, state transitions, destination trust, or spending limits. An internal policy layer alone, without a scope and token boundary, tends to inflate the tool catalog and make revocation of delegation ambiguous.
 
-MCP’s authorization guidance supports least privilege: a resource server can signal required scopes with `WWW-Authenticate`; a client should treat challenge scopes as authoritative for the current operation and use step-up authorization rather than requesting broad rights upfront.[1] A `401` requesting `refunds:draft` is not necessarily a bad user experience. It can be the correct signal to request only the authority needed for the next step.
+MCP’s authorization guidance supports least privilege: a resource server can signal required scopes with `WWW-Authenticate`; a client should treat challenge scopes as authoritative for the current operation and use step-up authorization rather than requesting broad rights upfront. A `401` requesting `refunds:draft` is not necessarily a bad user experience. It can be the correct signal to request only the authority needed for the next step.
 
 ### A token is admission to this server, not a passport everywhere
 
-MCP security guidance calls **token passthrough** an anti-pattern: a server must not accept a token, skip checking whether the token was meant for it, and blindly forward that token to a downstream API.[2] A resource server validates issuer, signature, expiry, audience/resource indicator, and scope before calling its policy layer. A token whose audience is `calendar.example` must not become a credential for `send_refund` merely because both systems use OAuth.
+MCP security guidance calls **token passthrough** an anti-pattern: a server must not accept a token, skip checking whether the token was meant for it, and blindly forward that token to a downstream API. A resource server validates issuer, signature, expiry, audience/resource indicator, and scope before calling its policy layer. A token whose audience is `calendar.example` must not become a credential for `send_refund` merely because both systems use OAuth.
 
 The practical consequence is straightforward: the **MCP server is the policy enforcement point**. If a downstream credential is necessary, it should be a separate, narrowly-audienced delegation or service credential whose lifecycle the server controls—not an unrestricted token passed through from an MCP client.
 
@@ -115,17 +115,17 @@ The practical consequence is straightforward: the **MCP server is the policy enf
 
 ## OAuth consent answers: which client, which scope, which resource?
 
-Consent is not decorative UI. It is an auditable relationship among a resource owner, a client, a requested scope, and a protected resource. In the MCP HTTP authorization flow, protected resource metadata helps a client discover the authorization server; the client then uses authorization-server metadata/discovery, appropriate client registration, PKCE, a resource indicator, and authorization-code exchange.[1]
+Consent is not decorative UI. It is an auditable relationship among a resource owner, a client, a requested scope, and a protected resource. In the MCP HTTP authorization flow, protected resource metadata helps a client discover the authorization server; the client then uses authorization-server metadata/discovery, appropriate client registration, PKCE, a resource indicator, and authorization-code exchange.
 
-RFC 9700 requires exact matching of registered redirect URIs, with a limited localhost-port exception for native apps, prohibits open redirectors, and recommends PKCE for confidential clients while requiring it for public clients. `S256` is the appropriate PKCE method because the verifier is not exposed in the authorization request.[5] Those details are not incidental OAuth plumbing. They stop authorization codes and tokens from being delivered to an attacker-controlled redirect endpoint.
+RFC 9700 requires exact matching of registered redirect URIs, with a limited localhost-port exception for native apps, prohibits open redirectors, and recommends PKCE for confidential clients while requiring it for public clients. `S256` is the appropriate PKCE method because the verifier is not exposed in the authorization request. Those details are not incidental OAuth plumbing. They stop authorization codes and tokens from being delivered to an attacker-controlled redirect endpoint.
 
 ![A secure OAuth consent flow binds client identity, selected scopes, exact redirect URI, MCP proxy, and authorization server](/blog/mcp-security-consent-proxy.webp)
 
 ### The MCP proxy trap: upstream consent is not consent for every MCP client
 
-MCP Security Best Practices highlights an important confused-deputy path. Imagine an MCP proxy that uses a static upstream OAuth client ID for a third-party API but accepts dynamic registration from many MCP clients. If the third party remembers a consent cookie for the proxy’s static client, a malicious client can initiate a flow with its own redirect URI and leverage the old consent to obtain an MCP authorization code.[2]
+MCP Security Best Practices highlights an important confused-deputy path. Imagine an MCP proxy that uses a static upstream OAuth client ID for a third-party API but accepts dynamic registration from many MCP clients. If the third party remembers a consent cookie for the proxy’s static client, a malicious client can initiate a flow with its own redirect URI and leverage the old consent to obtain an MCP authorization code.
 
-The remedy is not merely another checkbox. The MCP proxy needs **its own consent per client** before it forwards a user to the third party. The proxy consent page must identify the requesting client, requested third-party scopes, and registered redirect URI; it must use CSRF protection, prevent clickjacking, and bind the decision to the actual `client_id`.[2]
+The remedy is not merely another checkbox. The MCP proxy needs **its own consent per client** before it forwards a user to the third party. The proxy consent page must identify the requesting client, requested third-party scopes, and registered redirect URI; it must use CSRF protection, prevent clickjacking, and bind the decision to the actual `client_id`.
 
 | A good consent view answers | OpsBridge example |
 | --- | --- |
@@ -228,14 +228,14 @@ Approval becomes click fatigue if it guards every read. It becomes meaningless i
 
 ## Tool annotations improve UX; they are not an authorization contract
 
-MCP tool annotations such as `readOnlyHint`, `destructiveHint`, `idempotentHint`, and `openWorldHint` are useful vocabulary for client UX. But the specification says clients should treat annotations as untrusted unless they come from a trusted server.[3] An MCP maintainer explainer makes the same point: annotations are **hints**, cannot self-enforce, and missing annotations should lead to conservative handling.[4]
+MCP tool annotations such as `readOnlyHint`, `destructiveHint`, `idempotentHint`, and `openWorldHint` are useful vocabulary for client UX. But the specification says clients should treat annotations as untrusted unless they come from a trusted server. An MCP maintainer explainer makes the same point: annotations are **hints**, cannot self-enforce, and missing annotations should lead to conservative handling.
 
 That produces two engineering rules.
 
 1. Use annotations to choose interaction design. A read-only tool from a trusted server can be lower friction; a destructive tool should show a preview or confirmation.
 2. Never use annotations as the source of truth. A server-side policy registry must classify tool and effect using reviewed configuration or code. A tool claiming `readOnlyHint: true` must not grant itself authority.
 
-Risk is also a property of the **path**, not merely of one tool. A session that combines private-data access, untrusted content, and external communication can form an exfiltration path through prompt injection. MCP’s tooling guidance describes this combination as a “lethal trifecta” for agentic systems.[4]
+Risk is also a property of the **path**, not merely of one tool. A session that combines private-data access, untrusted content, and external communication can form an exfiltration path through prompt injection. MCP’s tooling guidance describes this combination as a “lethal trifecta” for agentic systems.
 
 ![A session tainted by untrusted content has its path from private data to external communication blocked by policy and human approval](/blog/mcp-security-taint-path.webp)
 
@@ -272,7 +272,7 @@ Instrument denials as carefully as permits. A post-rollout denial-rate spike may
 
 Start with inventory, not “add OAuth.” List every tool, downstream dependency, data class, destination, side effect, and current credential. Then narrow the manifest: split read, draft, and commit actions; remove generic shell or administrative tools from user-facing agents; make `tools/list` scope-aware.
 
-Next, standardize the authorization contract: protected-resource metadata and discovery, strict redirect URI handling, PKCE, issuer/audience validation, short token lifetime, and a per-client consent record. MCP’s authorization specification defines protected-resource metadata and steers clients toward discovery; RFC 9700 supplies the OAuth baseline for redirect, PKCE, mix-up, and CSRF defenses.[1] [5]
+Next, standardize the authorization contract: protected-resource metadata and discovery, strict redirect URI handling, PKCE, issuer/audience validation, short token lifetime, and a per-client consent record. MCP’s authorization specification defines protected-resource metadata and steers clients toward discovery; RFC 9700 supplies the OAuth baseline for redirect, PKCE, mix-up, and CSRF defenses.
 
 Then put the policy engine on the path before every provider call. It needs subject, client, tool, capability, tenant/resource, business state, destination, amount, taint, and policy version. Only after that should you add approval envelopes for high-impact effects—and they must be single-use and revalidated.
 

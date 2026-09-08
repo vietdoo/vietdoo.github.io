@@ -25,11 +25,11 @@ Sự phân biệt này rất quan trọng. Offline evaluation hỏi agent có gi
 
 Một test thông thường hay mock mọi tool thành nhanh, đầy đủ và trung thực. Model nhận schema sạch, retriever trả đúng document và assertion cuối so sánh text với một câu trả lời kỳ vọng. Cách làm này có ích cho correctness cơ bản, nhưng chưa chạm vào ranh giới giữa reasoning và execution.
 
-ReliabilityBench tách reliability của agent thành consistency, robustness và fault tolerance. Trong đó, fault tolerance bao gồm timeout, rate limit, partial response và schema change; phần đánh giá dùng end-state verification thay vì text similarity.[1] Đây là mental model tốt hơn cho production: hai câu trả lời có thể khác nhau về cách diễn đạt nhưng cùng đúng state, trong khi một câu trả lời rất mượt vẫn có thể che giấu state bị hỏng.
+ReliabilityBench tách reliability của agent thành consistency, robustness và fault tolerance. Trong đó, fault tolerance bao gồm timeout, rate limit, partial response và schema change; phần đánh giá dùng end-state verification thay vì text similarity. Đây là mental model tốt hơn cho production: hai câu trả lời có thể khác nhau về cách diễn đạt nhưng cùng đúng state, trong khi một câu trả lời rất mượt vẫn có thể che giấu state bị hỏng.
 
 Số bước làm vấn đề nghiêm trọng hơn. Nếu mỗi action có xác suất failure độc lập là năm phần trăm, workflow hai mươi action không “reliable 95%”. Xác suất hoàn thành tất cả bước xấp xỉ 0,95^20, tức khoảng 36%. Hệ thống thực tế có correlated failure và retry nên phép tính này không phải service-level promise. Nó chỉ nhắc rằng một local failure nhỏ sẽ trở thành workflow problem lớn khi agent có quá nhiều cơ hội để hành động.
 
-Hướng dẫn production của MLflow cũng xem agent là distributed system cần runtime governance, deterministic execution cho critical operation, evaluation nhúng trong workflow và shadow deployment cho thay đổi lớn.[2] Chaos experiment biến các nguyên tắc đó thành bằng chứng thay vì giả định.
+Hướng dẫn production của MLflow cũng xem agent là distributed system cần runtime governance, deterministic execution cho critical operation, evaluation nhúng trong workflow và shadow deployment cho thay đổi lớn. Chaos experiment biến các nguyên tắc đó thành bằng chứng thay vì giả định.
 
 ## Bắt đầu bằng failure model, không phải random fault generator
 
@@ -129,7 +129,7 @@ planned -> dispatched -> outcome_unknown -> reconcile
 
 Một recovery message trôi chảy không phải bằng chứng recovery đã xảy ra. Mỗi experiment cần deterministic oracle có thể đọc state trước và sau run. Oracle có thể so sánh database snapshot, event count, object version, authorization decision, queue offset hoặc signed action ledger.
 
-Action metamorphic relation trong ReliabilityBench gợi ý một pattern tốt: sau fault hoặc perturbation tương đương, correctness được quyết định bằng end-state equivalence thay vì wording giống nhau.[1] Ví dụ agent có thể nói “Tôi không thể hoàn tất reservation” hoặc “Reservation đang pending trong lúc inventory được refresh.” Cả hai đều có thể chấp nhận nếu state là pending, không có duplicate reservation và user nhận được next step trung thực.
+Action metamorphic relation trong ReliabilityBench gợi ý một pattern tốt: sau fault hoặc perturbation tương đương, correctness được quyết định bằng end-state equivalence thay vì wording giống nhau. Ví dụ agent có thể nói “Tôi không thể hoàn tất reservation” hoặc “Reservation đang pending trong lúc inventory được refresh.” Cả hai đều có thể chấp nhận nếu state là pending, không có duplicate reservation và user nhận được next step trung thực.
 
 ![State snapshot, invariant check, evidence capture và release gate xác minh agent có thật sự recover sau fault hay không](/blog/chaos-engineering-ai-agents/verification-oracle.webp)
 

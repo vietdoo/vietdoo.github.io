@@ -13,7 +13,7 @@ Dấu hiệu đầu tiên cho thấy một team AI đã vượt qua giai đoạn
 
 Câu hỏi nghe có vẻ đơn giản cho đến khi team phát hiện một developer đã sửa prompt trên dashboard dùng chung, service staging fetch `latest`, production fetch `production`, dataset evaluation đã thay đổi từ tuần trước, còn trace thì không ghi lại commit hoặc prompt version đã tạo ra câu trả lời. Ai cũng có một lời giải thích hợp lý. Nhưng không ai có thể tái lập chính xác hành vi đó.
 
-Langfuse thường được đưa vào hệ thống như một nơi để xem trace và so sánh output của model. Điều đó hữu ích, nhưng chưa giải quyết toàn bộ bài toán vận hành. Một AI system trưởng thành cần release path nối được thay đổi prompt hoặc model với bằng chứng, phê duyệt, deployment, quan sát và rollback. Langfuse cung cấp nhiều mảnh ghép quan trọng qua prompt versioning, label, dataset, experiment, score, tracing, API và tích hợp CI/CD.[1](https://langfuse.com/docs/prompt-management/features/prompt-version-control) [2](https://langfuse.com/docs/evaluation/experiments/datasets) [3](https://langfuse.com/docs/prompt-management/features/github-integration)
+Langfuse thường được đưa vào hệ thống như một nơi để xem trace và so sánh output của model. Điều đó hữu ích, nhưng chưa giải quyết toàn bộ bài toán vận hành. Một AI system trưởng thành cần release path nối được thay đổi prompt hoặc model với bằng chứng, phê duyệt, deployment, quan sát và rollback. Langfuse cung cấp nhiều mảnh ghép quan trọng qua prompt versioning, label, dataset, experiment, score, tracing, API và tích hợp CI/CD.
 
 ![Một hệ thống release Langfuse kết nối prompt version, trace, dataset, evaluation, CI/CD gate và rollback production](/blog/langfuse-dev-prod-cicd/hero.webp)
 
@@ -41,7 +41,7 @@ Mục tiêu không phải làm cho mọi môi trường giống hệt nhau. Mụ
 | Trace payload | Nhiều trường debug nhưng phải mask | Đủ chẩn đoán với quyền kiểm soát | Chỉ ghi dữ liệu cần thiết, masking và retention chặt hơn |
 | Quyền promotion | Tác giả hoặc reviewer trong team | Release owner và evaluation gate | Approver hoặc change policy được bảo vệ |
 
-Langfuse quản lý prompt version trong phạm vi một project, và tài liệu chính thức mô tả label như một cơ chế có thể đại diện cho environment, tenant hoặc experiment. Label `latest` trỏ tới version mới nhất, trong khi label production rõ ràng xác định version đã được chọn để chạy production. Có thể rollback bằng cách chuyển label production về version trước đó; protected label giới hạn người được phép thay đổi pointer này.[1](https://langfuse.com/docs/prompt-management/features/prompt-version-control)
+Langfuse quản lý prompt version trong phạm vi một project, và tài liệu chính thức mô tả label như một cơ chế có thể đại diện cho environment, tenant hoặc experiment. Label `latest` trỏ tới version mới nhất, trong khi label production rõ ràng xác định version đã được chọn để chạy production. Có thể rollback bằng cách chuyển label production về version trước đó; protected label giới hạn người được phép thay đổi pointer này.
 
 Điều đó tạo ra một lựa chọn thiết kế quan trọng. Label là một deployment pointer, không phải bằng chứng release. Ứng dụng nên ghi lại prompt name, version, label sau khi resolve và release ID trong trace metadata. Nếu không, việc di chuyển label sau này có thể khiến việc tái dựng hành vi trong quá khứ trở nên khó khăn.
 
@@ -51,7 +51,7 @@ Thiết kế đồng bộ nguy hiểm nhất là thiết kế có hai source of 
 
 Có ba ownership pattern hợp lý.
 
-Pattern thứ nhất là **registry-first**. Langfuse sở hữu việc authoring và versioning prompt. Reviewer tạo prompt version mới, ghi change description, chạy experiment rồi chuyển environment label sau khi được phê duyệt. GitHub Actions có thể được trigger khi prompt thay đổi thông qua Repository Dispatch integration được Langfuse tài liệu hóa.[3](https://langfuse.com/docs/prompt-management/features/github-integration) Pattern này thuận tiện cho team chủ yếu chỉnh prompt trong Langfuse, nhưng đòi hỏi webhook security chặt và audit rule ngăn những thay đổi production không được ghi nhận.
+Pattern thứ nhất là **registry-first**. Langfuse sở hữu việc authoring và versioning prompt. Reviewer tạo prompt version mới, ghi change description, chạy experiment rồi chuyển environment label sau khi được phê duyệt. GitHub Actions có thể được trigger khi prompt thay đổi thông qua Repository Dispatch integration được Langfuse tài liệu hóa. Pattern này thuận tiện cho team chủ yếu chỉnh prompt trong Langfuse, nhưng đòi hỏi webhook security chặt và audit rule ngăn những thay đổi production không được ghi nhận.
 
 Pattern thứ hai là **Git-first**. Prompt template, configuration và evaluation definition nằm trong repository. CI validate rồi publish prompt version mới vào Langfuse. Langfuse trở thành runtime registry và observation surface, còn Git vẫn là source thay đổi có thể review. Mô hình này hợp lý khi prompt gắn chặt với application code hoặc phải đi qua cùng pull-request process như code.
 
@@ -116,7 +116,7 @@ rollback:
 
 Manifest không nhằm duplicate mọi trace. Nó là tuyên bố cô đọng về release dự kiến dùng gì và bằng chứng nào cho phép nó đi tiếp. Ở runtime, trace nên mang manifest ID hoặc release ID, còn manifest trỏ lại prompt và dataset version chính xác.
 
-Khi ứng dụng fetch prompt theo label, hãy dùng SDK retrieval path của Langfuse, vốn hỗ trợ client-side caching, retry và fallback, thay vì tự xây lại logic quanh một raw request.[6](https://langfuse.com/docs/api-and-data-platform/features/public-api) Ở production, ưu tiên environment label rõ ràng hoặc version đã resolve. Dùng `latest` cho exploration, không dùng như một dependency production chưa review.
+Khi ứng dụng fetch prompt theo label, hãy dùng SDK retrieval path của Langfuse, vốn hỗ trợ client-side caching, retry và fallback, thay vì tự xây lại logic quanh một raw request. Ở production, ưu tiên environment label rõ ràng hoặc version đã resolve. Dùng `latest` cho exploration, không dùng như một dependency production chưa review.
 
 Fetch contract an toàn có thể như sau:
 
@@ -137,11 +137,11 @@ Nếu registry tạm thời không sẵn sàng, fallback cũng phải observable
 
 ## Đồng bộ project mà không copy nhầm dữ liệu
 
-Trong nhiều kịch bản self-hosted, Langfuse khuyến nghị bắt đầu với một deployment duy nhất, sử dụng organization, project và RBAC để tách logic. Nhiều deployment có thể cần thiết nếu có yêu cầu nghiêm ngặt về regulatory hoặc infrastructure, nhưng chúng làm tăng chi phí vận hành và khiến việc đồng bộ prompt, dataset khó hơn.[7](https://langfuse.com/self-hosting/security/deployment-strategies)
+Trong nhiều kịch bản self-hosted, Langfuse khuyến nghị bắt đầu với một deployment duy nhất, sử dụng organization, project và RBAC để tách logic. Nhiều deployment có thể cần thiết nếu có yêu cầu nghiêm ngặt về regulatory hoặc infrastructure, nhưng chúng làm tăng chi phí vận hành và khiến việc đồng bộ prompt, dataset khó hơn.
 
 Team vì thế cần chọn boundary có chủ đích. Một deployment duy nhất với project tách biệt có thể đủ cho dev, staging và production nếu access control, network policy và retention phù hợp. Instance riêng có thể cần thiết khi production data phải nằm ở network hoặc jurisdiction khác, hoặc compliance policy yêu cầu physical separation.
 
-Project separation cũng ảnh hưởng tới việc di chuyển prompt. Vì prompt nằm trong phạm vi project, không thể mặc định rằng prompt version tồn tại ở project khác chỉ vì name giống nhau.[1](https://langfuse.com/docs/prompt-management/features/prompt-version-control) Promotion giữa các project nên dùng một publish hoặc export/import step rõ ràng, ghi lại source version, destination version, checksum và actor.
+Project separation cũng ảnh hưởng tới việc di chuyển prompt. Vì prompt nằm trong phạm vi project, không thể mặc định rằng prompt version tồn tại ở project khác chỉ vì name giống nhau. Promotion giữa các project nên dùng một publish hoặc export/import step rõ ràng, ghi lại source version, destination version, checksum và actor.
 
 Hãy dùng synchronization policy sau:
 
@@ -156,7 +156,7 @@ Hãy dùng synchronization policy sau:
 | Production secret | Tuyệt đối không copy | Credential thuộc về từng environment |
 | Score và experiment result | Export summary hoặc reproduce theo dataset version đã khai báo | Tránh trộn bằng chứng từ những data state khác nhau |
 
-Thay đổi item trong Langfuse dataset tạo ra version được theo dõi bằng timestamp, và dataset có thể được fetch tại một version cụ thể để chạy experiment tái lập được.[2](https://langfuse.com/docs/evaluation/experiments/datasets) Điều này đặc biệt hữu ích khi team cần giải thích vì sao prompt pass trong tháng 2 nhưng fail khi chạy lại với dataset mới có thêm edge case.
+Thay đổi item trong Langfuse dataset tạo ra version được theo dõi bằng timestamp, và dataset có thể được fetch tại một version cụ thể để chạy experiment tái lập được. Điều này đặc biệt hữu ích khi team cần giải thích vì sao prompt pass trong tháng 2 nhưng fail khi chạy lại với dataset mới có thêm edge case.
 
 Không dùng production làm training ground mặc định cho development. Thay vào đó, tạo controlled path từ production observation thành regression item đã redaction. Path này cần data owner approval, PII check, tenant authorization và record giải thích tại sao example đó cần thiết. Production trace là bằng chứng, không tự động trở thành test fixture hợp lệ.
 
@@ -193,9 +193,9 @@ Giá trị phải do application kiểm soát và nhất quán giữa các servi
 
 Trace contract cũng cần một negative definition. Hãy quy định các field không được ghi: access token, payment detail đầy đủ, private key, health information chưa redaction và secret thô nằm trong tool response. Khi có thể, application nên tránh tạo những attribute đó ngay từ đầu.
 
-Langfuse hỗ trợ masking trace input, output, metadata và OpenTelemetry attribute trước khi export. Với Python SDK hiện tại, tài liệu khuyến nghị `mask_otel_spans` cho masking ở export stage; các SDK hoặc OpenTelemetry configuration khác có hook riêng.[4](https://langfuse.com/docs/observability/features/masking) Masking function phải deterministic và nhanh. Một masking implementation làm nghẽn export hoặc bất ngờ fail-open có thể tạo cảm giác an toàn giả.
+Langfuse hỗ trợ masking trace input, output, metadata và OpenTelemetry attribute trước khi export. Với Python SDK hiện tại, tài liệu khuyến nghị `mask_otel_spans` cho masking ở export stage; các SDK hoặc OpenTelemetry configuration khác có hook riêng. Masking function phải deterministic và nhanh. Một masking implementation làm nghẽn export hoặc bất ngờ fail-open có thể tạo cảm giác an toàn giả.
 
-Trong self-hosted deployment, Langfuse mô tả cả client-side masking và server-side ingestion masking. Client-side masking là boundary nên dùng khi data không được phép rời application. Server-side masking có thể làm centralized safety net, nhưng có thể yêu cầu Enterprise và không thay thế client-side protection.[5](https://langfuse.com/self-hosting/security/data-masking)
+Trong self-hosted deployment, Langfuse mô tả cả client-side masking và server-side ingestion masking. Client-side masking là boundary nên dùng khi data không được phép rời application. Server-side masking có thể làm centralized safety net, nhưng có thể yêu cầu Enterprise và không thay thế client-side protection.
 
 Trace cũng nên ghi version của masking policy. Về sau, investigator cần phân biệt “answer sai” với “evaluator không nhìn thấy evidence vì đã redaction”. Observability và privacy không phải hai dự án tách rời; trace contract là nơi chúng gặp nhau.
 
@@ -213,7 +213,7 @@ Hãy tổ chức dataset theo mục đích thay vì theo người tạo:
 | Performance | Long context, concurrency và path đắt | Latency, token và cost |
 | Adversarial | Input mơ hồ, mâu thuẫn hoặc thao túng | Robustness và abstention |
 
-Tên dataset nên thể hiện contract của nó. `support/golden` ít thông tin hơn `support/golden/v3` nếu team không định nghĩa rõ suffix là semantic release, dataset folder hay application version. Langfuse hỗ trợ folder qua tên dataset có dấu slash, còn thay đổi dataset item tạo version theo timestamp.[2](https://langfuse.com/docs/evaluation/experiments/datasets)
+Tên dataset nên thể hiện contract của nó. `support/golden` ít thông tin hơn `support/golden/v3` nếu team không định nghĩa rõ suffix là semantic release, dataset folder hay application version. Langfuse hỗ trợ folder qua tên dataset có dấu slash, còn thay đổi dataset item tạo version theo timestamp.
 
 Mỗi CI run phải ghi dataset name và exact version timestamp. Nếu CI fetch “latest dataset”, kết quả không tái lập được: đồng đội có thể chạy lại cùng commit vào ngày mai với test set khác và nhận gate outcome khác.
 
@@ -232,7 +232,7 @@ missing_prompt_version = 0
 
 Các threshold trên chỉ là ví dụ, không phải default áp dụng cho mọi hệ thống. Team phải calibrate chúng với human label và business risk. Automated evaluator score là bằng chứng có bất định, không phải lý do để bỏ qua critical failure.
 
-Langfuse experiment có thể chạy qua SDK workflow trên local hoặc hosted dataset; khả năng dùng versioned dataset giúp so sánh candidate với một data state đã biết.[2](https://langfuse.com/docs/evaluation/experiments/datasets) CI system nên lưu experiment identifier, evaluator code version, model dùng để evaluate và summary result vào release record.
+Langfuse experiment có thể chạy qua SDK workflow trên local hoặc hosted dataset; khả năng dùng versioned dataset giúp so sánh candidate với một data state đã biết. CI system nên lưu experiment identifier, evaluator code version, model dùng để evaluate và summary result vào release record.
 
 ## CI/CD phải promote bằng chứng
 
@@ -257,7 +257,7 @@ Một pipeline thực tế có năm gate:
    di chuyển protected production label, canary, monitor, rollback khi cần
 ```
 
-Langfuse tài liệu hóa hai pattern tích hợp GitHub: Repository Dispatch có thể trigger workflow khi prompt thay đổi, còn Prompt Version Webhook có thể đồng bộ prompt version vào repository thông qua webhook server.[3](https://langfuse.com/docs/prompt-management/features/github-integration) Đây là integration primitive, chưa phải release policy hoàn chỉnh. Workflow vẫn cần signature verification, idempotency, credential tối thiểu, dataset pinning và rule xử lý khi CI fail.
+Langfuse tài liệu hóa hai pattern tích hợp GitHub: Repository Dispatch có thể trigger workflow khi prompt thay đổi, còn Prompt Version Webhook có thể đồng bộ prompt version vào repository thông qua webhook server. Đây là integration primitive, chưa phải release policy hoàn chỉnh. Workflow vẫn cần signature verification, idempotency, credential tối thiểu, dataset pinning và rule xử lý khi CI fail.
 
 Một GitHub Actions workflow tối thiểu có thể có hình dạng như sau:
 
@@ -307,9 +307,9 @@ jobs:
       - run: ./ci/start-canary.sh
 ```
 
-Các command chỉ là placeholder có chủ đích. Implementation production nên gọi Langfuse API hoặc CLI đã được tài liệu hóa và validate response theo API reference, thay vì tự đoán endpoint hoặc field name.[5](https://langfuse.com/docs/api-and-data-platform/features/cli) [6](https://langfuse.com/docs/api-and-data-platform/features/public-api)
+Các command chỉ là placeholder có chủ đích. Implementation production nên gọi Langfuse API hoặc CLI đã được tài liệu hóa và validate response theo API reference, thay vì tự đoán endpoint hoặc field name.
 
-Workflow tuyệt đối không được in `LANGFUSE_SECRET_KEY`, prompt content có customer data hoặc raw webhook payload vào public CI log. Dùng key riêng theo project cho từng environment, lưu chúng trong CI secret manager và chỉ cấp operation mà job cần. Langfuse CLI dùng cùng project API key pair với SDK/public API, đồng thời hỗ trợ base URL theo region hoặc self-hosted thông qua environment variable.[5](https://langfuse.com/docs/api-and-data-platform/features/cli)
+Workflow tuyệt đối không được in `LANGFUSE_SECRET_KEY`, prompt content có customer data hoặc raw webhook payload vào public CI log. Dùng key riêng theo project cho từng environment, lưu chúng trong CI secret manager và chỉ cấp operation mà job cần. Langfuse CLI dùng cùng project API key pair với SDK/public API, đồng thời hỗ trợ base URL theo region hoặc self-hosted thông qua environment variable.
 
 ## Promotion là một state transition
 
@@ -329,7 +329,7 @@ State transition phải idempotent. Nếu CI job retry sau network timeout, nó 
 
 Một release approval phải gồm diff, không chỉ score. Reviewer cần thấy prompt variable nào đổi, tool contract có đổi không, model parameter nào đổi, dataset version nào được dùng, candidate so với production hiện tại ra sao và rollback target là gì.
 
-Protected production label hữu ích vì biến convention thành permission boundary. Label nên được di chuyển bởi release identity và operator đã được phê duyệt, không phải bởi mọi developer có quyền edit prompt.[1](https://langfuse.com/docs/prompt-management/features/prompt-version-control)
+Protected production label hữu ích vì biến convention thành permission boundary. Label nên được di chuyển bởi release identity và operator đã được phê duyệt, không phải bởi mọi developer có quyền edit prompt.
 
 ![CI/CD gate so sánh các prompt version trên dataset đã pin trước khi staging, approval, promotion production và rollback](/blog/langfuse-dev-prod-cicd/ci-cd-gates.webp)
 
@@ -390,7 +390,7 @@ Thứ sáu là **cho rằng label move đã là rollback hoàn chỉnh**. Phải
 
 Thứ bảy là **tạo bidirectional sync loop**. Nếu Langfuse ghi vào Git và Git ghi ngược vào Langfuse mà không có ownership rule rõ ràng, một thay đổi có thể nhân thành nhiều version. Hãy thêm loop prevention và chỉ định một hệ thống authoritative cho từng artifact.
 
-Thứ tám là **chỉ masking ở dashboard**. Dữ liệu không được phép rời application phải được mask trước export. Viewer permission không thể sửa một ingestion boundary không an toàn.[4](https://langfuse.com/docs/observability/features/masking) [5](https://langfuse.com/self-hosting/security/data-masking)
+Thứ tám là **chỉ masking ở dashboard**. Dữ liệu không được phép rời application phải được mask trước export. Viewer permission không thể sửa một ingestion boundary không an toàn.
 
 ## Rollout plan cho team nhỏ
 

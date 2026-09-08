@@ -43,7 +43,7 @@ Vì vậy, hãy xem router như admission control trong hệ phân tán. Nó quy
 
 ## Ba tín hiệu cần thiết nhưng chưa đủ
 
-Bài viết của NVIDIA về model routing production nhóm các tín hiệu quan trọng thành **capability của model, cost profile của model và trạng thái hạ tầng**.[1] Đây là điểm bắt đầu tốt, nhưng platform agent thường cần chiều thứ tư: authority và chính sách dữ liệu.
+Bài viết của NVIDIA về model routing production nhóm các tín hiệu quan trọng thành **capability của model, cost profile của model và trạng thái hạ tầng**. Đây là điểm bắt đầu tốt, nhưng platform agent thường cần chiều thứ tư: authority và chính sách dữ liệu.
 
 | Tín hiệu | Router cần biết gì | Ví dụ quyết định |
 |---|---|---|

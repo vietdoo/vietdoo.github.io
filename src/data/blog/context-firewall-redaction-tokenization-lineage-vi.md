@@ -17,7 +17,7 @@ Context firewall không phải prompt-injection filter, không phải DLP scanne
 
 > **Context firewall là ranh giới có kiểm soát cuối cùng trước khi dữ liệu không tin cậy hoặc dữ liệu nhạy cảm trở thành thứ model có thể nhìn thấy.**
 
-Điều này càng đáng chú ý khi tracing đang dần trở thành tiêu chuẩn nhưng chất lượng production vẫn khó giải. Báo cáo *State of AI Agents* năm 2026 của LangChain cho biết 89% tổ chức được khảo sát đã có một dạng observability cho agent, trong khi quality vẫn là rào cản lớn nhất khi đưa agent vào production.[1] Nhìn thấy một context xấu sau khi sự việc xảy ra là hữu ích. Ngăn field không có căn cứ đi vào context ngay từ đầu còn tốt hơn.
+Điều này càng đáng chú ý khi tracing đang dần trở thành tiêu chuẩn nhưng chất lượng production vẫn khó giải. Báo cáo *State of AI Agents* năm 2026 của LangChain cho biết 89% tổ chức được khảo sát đã có một dạng observability cho agent, trong khi quality vẫn là rào cản lớn nhất khi đưa agent vào production. Nhìn thấy một context xấu sau khi sự việc xảy ra là hữu ích. Ngăn field không có căn cứ đi vào context ngay từ đầu còn tốt hơn.
 
 ## Context là data plane, không phải một string
 

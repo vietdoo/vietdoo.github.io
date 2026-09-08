@@ -21,7 +21,7 @@ This is why voice reliability is not the same as transcription accuracy. A voice
 
 > **The thesis:** A natural voice agent is not one that talks quickly. It is one that yields quickly, preserves partial intent, cancels work that is no longer relevant, and knows when a human should take over.
 
-LiveKit’s turn-handling documentation describes turn detection as the process of determining when a user begins or ends a turn, and distinguishes VAD, endpointing, semantic turn detectors, realtime-model detection, and manual control.[1] Those are implementation choices. The production design question is broader: what state may change when the user speaks over the agent, and how do we prevent the old response from leaking into the new one?
+LiveKit’s turn-handling documentation describes turn detection as the process of determining when a user begins or ends a turn, and distinguishes VAD, endpointing, semantic turn detectors, realtime-model detection, and manual control. Those are implementation choices. The production design question is broader: what state may change when the user speaks over the agent, and how do we prevent the old response from leaking into the new one?
 
 ## Conversation turns are state transitions
 
@@ -64,7 +64,7 @@ The state transition from `speaking` to `interrupted` must be fast and authorita
 
 Voice activity detection is useful because it detects speech and silence quickly. It cannot always tell whether a person has finished a thought. Endpointing adds a delay, but a fixed delay is a compromise: too short causes premature responses, too long makes the agent feel slow. Semantic turn detection can use the meaning of speech in addition to acoustics. Realtime models may provide their own server-side detection.
 
-LiveKit documents these modes and supporting options, including endpointing delay, adaptive interruption handling, VAD, and noise cancellation.[1] The correct choice depends on language, channel quality, latency budget, and whether the session is a phone call, browser microphone, push-to-talk tool, or meeting with multiple speakers.
+LiveKit documents these modes and supporting options, including endpointing delay, adaptive interruption handling, VAD, and noise cancellation. The correct choice depends on language, channel quality, latency budget, and whether the session is a phone call, browser microphone, push-to-talk tool, or meeting with multiple speakers.
 
 Do not treat the detector as a universal truth. Treat it as a signal with confidence and a policy around it. For a low-risk informational query, an early endpoint can be repaired conversationally. Before an irreversible action, an uncertain endpoint should not be enough to trigger a commit.
 

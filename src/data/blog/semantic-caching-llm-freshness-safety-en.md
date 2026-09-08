@@ -27,9 +27,9 @@ This article builds a practical playbook for LLM and RAG applications. It covers
 
 Traditional caching uses a deterministic key. A request such as `GET /products/4821?currency=VND` maps to a known cache key, and the system either finds that exact representation or misses. The contract is relatively simple: the key describes the request, and the expiration policy describes how long the representation may be reused.
 
-LLM requests are less repetitive at the string level. A customer may ask “Can I return this item?” or “What is the refund window for this order?” or “I changed my mind — how many days do I have to send it back?” The wording differs, but the intent may be similar. An embedding turns a text string into a vector, and a similarity search can locate previous requests that are close in meaning. OpenAI describes embeddings as vector representations used to measure relatedness between text strings, with cosine similarity as a common comparison function.[1]
+LLM requests are less repetitive at the string level. A customer may ask “Can I return this item?” or “What is the refund window for this order?” or “I changed my mind — how many days do I have to send it back?” The wording differs, but the intent may be similar. An embedding turns a text string into a vector, and a similarity search can locate previous requests that are close in meaning. OpenAI describes embeddings as vector representations used to measure relatedness between text strings, with cosine similarity as a common comparison function.
 
-Redis describes the basic semantic-cache flow as embedding the incoming query, searching stored vectors, returning a cached response when the similarity is above a threshold, and calling the LLM on a miss.[2] That is the useful starting point. It is not the full production contract.
+Redis describes the basic semantic-cache flow as embedding the incoming query, searching stored vectors, returning a cached response when the similarity is above a threshold, and calling the LLM on a miss. That is the useful starting point. It is not the full production contract.
 
 ![A request moves through normalization, scope checks, semantic lookup, freshness validation, and either a safe cache hit or a new model run](/blog/semantic-caching/pipeline.webp)
 
@@ -60,7 +60,7 @@ There are at least four cache boundaries:
 
 A useful rule is to cache the **lowest layer that is expensive and still safe to recompute into the current request**. If a product catalog changes often, cache a normalized retrieval result with document versions rather than a final sentence that says “the product costs 599,000 VND.” If a classification step is stable and tenant-independent, cache the classification. If the output grants credit, changes account state, or exposes personal data, do not treat the final answer as a freely shareable object.
 
-Research on semantic caching for contextual summaries makes a similar point: intermediate results can be reused across related requests and can better tolerate partial document updates and changing access patterns than only caching an end-to-end answer.[3] The practical implication is that the cache boundary is an architecture decision, not a storage optimization.
+Research on semantic caching for contextual summaries makes a similar point: intermediate results can be reused across related requests and can better tolerate partial document updates and changing access patterns than only caching an end-to-end answer. The practical implication is that the cache boundary is an architecture decision, not a storage optimization.
 
 ## Give every entry a cache envelope
 
@@ -113,7 +113,7 @@ The semantic index can still search by embedding, but every candidate must pass 
 
 ## Freshness is not the same as TTL
 
-A time-to-live is useful, but it is only one expression of freshness. RFC 9111 makes the distinction clear for HTTP caches: a response is fresh when its age is within its freshness lifetime, and a stale response may require validation before reuse.[4] The same mental model works for LLM caches, with one important addition: **the origin is often a document store, policy service, database, or tool—not only a web server**.
+A time-to-live is useful, but it is only one expression of freshness. RFC 9111 makes the distinction clear for HTTP caches: a response is fresh when its age is within its freshness lifetime, and a stale response may require validation before reuse. The same mental model works for LLM caches, with one important addition: **the origin is often a document store, policy service, database, or tool—not only a web server**.
 
 Imagine a policy answer generated at 09:00 with `policyVersion=41`. At 09:05, the policy service publishes version 42. The cached answer may have a one-hour TTL, but it is no longer fresh relative to the policy source. Waiting until 10:00 is not a freshness policy; it is delayed bug discovery.
 
@@ -146,7 +146,7 @@ The entry does not need to be deleted immediately for every update. A stale mark
 
 ## Thresholds are tuned with outcomes, not vibes
 
-A similarity threshold is a useful control, but it is not a universal constant. A lower threshold tends to produce more hits and more false positives. A higher threshold tends to be safer but may miss useful reuse. The right value depends on language, domain, embedding model, query distribution, risk, and the amount of context preserved in the cached record. The semantic-caching research literature treats threshold selection as a trade-off between utility and hit rate rather than a one-number recipe.[3]
+A similarity threshold is a useful control, but it is not a universal constant. A lower threshold tends to produce more hits and more false positives. A higher threshold tends to be safer but may miss useful reuse. The right value depends on language, domain, embedding model, query distribution, risk, and the amount of context preserved in the cached record. The semantic-caching research literature treats threshold selection as a trade-off between utility and hit rate rather than a one-number recipe.
 
 Build an offline threshold set from real, sanitized traffic. Pair queries with labels such as:
 
@@ -185,7 +185,7 @@ There are several poisoning paths:
 
 The mitigations are architectural. Separate cache write permissions from cache read permissions. Mark unreviewed entries as generated rather than trusted. Never cache a tool’s authorization decision as if it were a user-independent fact. Store provenance and keep a revocation path. For high-risk flows, use the cache only to retrieve evidence and force a fresh policy/model decision.
 
-This also connects to prompt-injection defenses. A cached response is still model-produced data. If a malicious document can influence a cached answer, later users may encounter the payload without submitting the original malicious query. Treat cached text as untrusted input at the next prompt boundary, preserve source identifiers, and apply the same data/instruction separation used elsewhere in an agent system.[5]
+This also connects to prompt-injection defenses. A cached response is still model-produced data. If a malicious document can influence a cached answer, later users may encounter the payload without submitting the original malicious query. Treat cached text as untrusted input at the next prompt boundary, preserve source identifiers, and apply the same data/instruction separation used elsewhere in an agent system.
 
 ## Scope is a security property, not a performance detail
 
@@ -201,7 +201,7 @@ At minimum, decide whether each cache boundary is:
 | Session | A temporary conversation assumption | Keyed to session/thread and short-lived. |
 | Action | A decision or authorization | Do not reuse as a general answer; recompute or revalidate. |
 
-The scope must be checked before vector similarity. This is analogous to double-keying in web caches to reduce privacy risk: the identity context becomes part of the lookup contract rather than an afterthought.[4]
+The scope must be checked before vector similarity. This is analogous to double-keying in web caches to reduce privacy risk: the identity context becomes part of the lookup contract rather than an afterthought.
 
 Do not let a model infer scope from the question. Scope should come from authenticated request context, server-side policy, and the current authorization snapshot. If the current user cannot access a source document, the cache must not reveal a summary of it, even if the summary itself appears harmless.
 

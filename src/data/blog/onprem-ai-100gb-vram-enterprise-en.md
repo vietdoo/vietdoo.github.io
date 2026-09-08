@@ -19,7 +19,7 @@ The first question is what the system must do, how many requests it must serve a
 
 > **The thesis:** approximately 100 GB of total VRAM is not a promise to run a 100-billion-parameter model. It is a capacity envelope that must be divided between weights, runtime buffers, KV cache, concurrency, and operational headroom. Production success comes from workload-first sizing, not from filling every byte with model weights.
 
-This distinction matters because a model that loads successfully can still be unusable. It may have no room for a realistic context window, queue requests behind a single long prompt, OOM during graph capture, or produce acceptable answers too slowly when several departments use it at once. vLLM’s own deployment guidance separates the case where a model fits on one GPU from single-node tensor parallelism and multi-node combinations of tensor and pipeline parallelism.[1](https://docs.vllm.ai/en/stable/serving/parallelism_scaling/) That is a serving decision, not merely a model-loading trick.
+This distinction matters because a model that loads successfully can still be unusable. It may have no room for a realistic context window, queue requests behind a single long prompt, OOM during graph capture, or produce acceptable answers too slowly when several departments use it at once. vLLM’s own deployment guidance separates the case where a model fits on one GPU from single-node tensor parallelism and multi-node combinations of tensor and pipeline parallelism. That is a serving decision, not merely a model-loading trick.
 
 ## Start with the workload, not the parameter count
 
@@ -54,7 +54,7 @@ memory available for weights and KV cache
 = usable serving memory
 ```
 
-For rough model selection, weight memory is approximately parameter count multiplied by bytes per weight. FP16 or BF16 is close to two bytes per parameter, INT8 is close to one byte, and INT4 is close to half a byte before scales, metadata, padding, and runtime overhead. Hugging Face describes quantization as storing weights at lower precision to reduce memory requirements while preserving as much accuracy as possible, and emphasizes that supported methods have different trade-offs and hardware requirements.[2](https://huggingface.co/docs/transformers/quantization/overview)
+For rough model selection, weight memory is approximately parameter count multiplied by bytes per weight. FP16 or BF16 is close to two bytes per parameter, INT8 is close to one byte, and INT4 is close to half a byte before scales, metadata, padding, and runtime overhead. Hugging Face describes quantization as storing weights at lower precision to reduce memory requirements while preserving as much accuracy as possible, and emphasizes that supported methods have different trade-offs and hardware requirements.
 
 The arithmetic is useful for rejecting impossible plans. It is not accurate enough to approve a production capacity target.
 
@@ -68,15 +68,15 @@ The arithmetic is useful for rejecting impossible plans. It is not accurate enou
 | 30–32B at INT4 | 18–24 GB before runtime overhead | Medium reasoning, coding, or document workflows | Larger KV cache and output length can dominate memory |
 | 70B at INT4 | 40–50 GB before runtime overhead | Specialist high-quality tier with multi-GPU serving | Two-GPU parallelism, lower concurrency, and interconnect become central |
 
-The table is deliberately approximate. It excludes the KV cache, which grows with the number of active sequences, context length, layer count, and attention dimensions. vLLM reports the KV-cache capacity and an estimate of maximum concurrency from the configured sequence length; that is why `max-model-len` is a capacity control rather than just a user-facing feature toggle.[1](https://docs.vllm.ai/en/stable/serving/parallelism_scaling/)
+The table is deliberately approximate. It excludes the KV cache, which grows with the number of active sequences, context length, layer count, and attention dimensions. vLLM reports the KV-cache capacity and an estimate of maximum concurrency from the configured sequence length; that is why `max-model-len` is a capacity control rather than just a user-facing feature toggle.
 
 A team should therefore reserve memory before it chooses a quantization level. Filling a 48 GB card to 47.9 GB with weights may look efficient in a static model summary and fail as soon as the server admits a second long request.
 
 ## A practical hardware interpretation
 
-There are several ways to approach an approximately 100 GB envelope. A pair of 48 GB-class data-center or workstation GPUs gives 96 GB nominal VRAM. Two NVIDIA L40S cards are a natural example: NVIDIA lists the L40S at 350 W maximum power and reports FP32, FP16 Tensor Core, and FP8 Tensor Core performance figures on the product page.[3](https://www.nvidia.com/en-us/data-center/l40s/) The important point is not the advertised FLOPS. It is that two cards provide either two independent serving slots or a shared tensor-parallel pool, depending on the workload.
+There are several ways to approach an approximately 100 GB envelope. A pair of 48 GB-class data-center or workstation GPUs gives 96 GB nominal VRAM. Two NVIDIA L40S cards are a natural example: NVIDIA lists the L40S at 350 W maximum power and reports FP32, FP16 Tensor Core, and FP8 Tensor Core performance figures on the product page. The important point is not the advertised FLOPS. It is that two cards provide either two independent serving slots or a shared tensor-parallel pool, depending on the workload.
 
-An H100 SXM has 80 GB of memory and 3.35 TB/s memory bandwidth, while the H100 NVL is listed with 94 GB and 3.9 TB/s.[4](https://www.nvidia.com/en-us/data-center/h100/) One large GPU can be operationally simpler than two smaller cards when a model fits, but it does not automatically provide more total capacity, redundancy, or concurrency. A single-card design also creates a larger failure domain.
+An H100 SXM has 80 GB of memory and 3.35 TB/s memory bandwidth, while the H100 NVL is listed with 94 GB and 3.9 TB/s. One large GPU can be operationally simpler than two smaller cards when a model fits, but it does not automatically provide more total capacity, redundancy, or concurrency. A single-card design also creates a larger failure domain.
 
 | Topology | Nominal memory | Best fit | What it does not solve |
 |---|---:|---|---|
@@ -95,7 +95,7 @@ An enterprise on-premise deployment should have a model ladder with explicit pro
 
 A sensible first tier is a 7B–8B instruct model in BF16, FP16, or a carefully validated 8-bit format. It handles classification, extraction, routing, short summaries, and structured transformations. Its value is predictable latency and high concurrency. If the workload is mostly schema-constrained, a small model with good validation can outperform a larger model that is repeatedly retried because its output is difficult to parse.
 
-The second tier is a 14B–32B model. Qwen3-14B is documented as a 14.8B-parameter model with 32,768 native context and validated extension to 131,072 tokens using YaRN; its model card identifies Apache-2.0 licensing and deployment paths for vLLM, SGLang, and llama.cpp.[5](https://huggingface.co/Qwen/Qwen3-14B) Mistral Small 3.1 24B is another representative medium model; its card identifies Apache-2.0 licensing and recommends vLLM for serving.[6](https://huggingface.co/mistralai/Mistral-Small-3.1-24B-Instruct-2503)
+The second tier is a 14B–32B model. Qwen3-14B is documented as a 14.8B-parameter model with 32,768 native context and validated extension to 131,072 tokens using YaRN; its model card identifies Apache-2.0 licensing and deployment paths for vLLM, SGLang, and llama.cpp. Mistral Small 3.1 24B is another representative medium model; its card identifies Apache-2.0 licensing and recommends vLLM for serving.
 
 The second tier is where most enterprise teams should begin. It offers a meaningful quality step without forcing every request through multi-GPU model parallelism. Quantize it to INT4 or INT8 only after measuring the tasks that matter. A lower-bit model that loses the company’s terminology, tool-call discipline, or refusal behavior is not cheaper if it increases human review and retries.
 
@@ -130,7 +130,7 @@ Keep a full-precision or higher-precision reference for comparison. The result y
 
 Weights are static. KV cache is dynamic. Every active sequence stores attention state, and the amount grows as prompts and generated outputs get longer. A server that looks comfortable with one short request can become unstable when a retrieval pipeline adds 10,000 tokens or when a coding agent keeps a long tool history in context.
 
-Set context limits by workload rather than exposing the model’s maximum context to every caller. A 128k-capable model does not mean the production gateway should admit 128k tokens. Long-context requests should receive a separate budget, queue, or model tier. Qwen3’s model card explicitly distinguishes native context from YaRN-scaled context, which is a useful reminder that extended context requires configuration and validation.[5](https://huggingface.co/Qwen/Qwen3-14B)
+Set context limits by workload rather than exposing the model’s maximum context to every caller. A 128k-capable model does not mean the production gateway should admit 128k tokens. Long-context requests should receive a separate budget, queue, or model tier. Qwen3’s model card explicitly distinguishes native context from YaRN-scaled context, which is a useful reminder that extended context requires configuration and validation.
 
 Track four signals together: GPU memory utilization, KV-cache utilization, active sequences, and queue wait. A rise in GPU memory without a rise in active sequences may indicate fragmentation or temporary buffers. A rise in queue wait with stable memory may indicate scheduler limits. An OOM after a long prompt is not solved by increasing the request timeout.
 
@@ -156,9 +156,9 @@ validation + safety checks ---- shared observability
 accepted outcome / abstention / human escalation
 ```
 
-Run one serving process per GPU when the model fits independently. Use tensor parallelism when a single model needs more memory than one card, and benchmark the communication path. vLLM documents tensor parallelism for single-node multi-GPU deployment and pipeline parallelism for models that exceed a node’s capacity.[1](https://docs.vllm.ai/en/stable/serving/parallelism_scaling/)
+Run one serving process per GPU when the model fits independently. Use tensor parallelism when a single model needs more memory than one card, and benchmark the communication path. vLLM documents tensor parallelism for single-node multi-GPU deployment and pipeline parallelism for models that exceed a node’s capacity.
 
-Use an OpenAI-compatible internal API so applications do not become tightly coupled to the serving engine. Qwen3’s model card points to vLLM, SGLang, and llama.cpp as local or deployment options.[5](https://huggingface.co/Qwen/Qwen3-14B) The choice should depend on supported model architecture, batching behavior, observability, quantization path, and the team’s operational familiarity.
+Use an OpenAI-compatible internal API so applications do not become tightly coupled to the serving engine. Qwen3’s model card points to vLLM, SGLang, and llama.cpp as local or deployment options. The choice should depend on supported model architecture, batching behavior, observability, quantization path, and the team’s operational familiarity.
 
 Do not let the router hide the evidence needed to operate the system. Propagate model ID, quantization format, prompt and output token counts, queue time, time to first token, inter-token latency, finish reason, safety decision, and outcome ID. The folio’s existing model-router and SLO articles are useful companions here: routing chooses a path, while the serving contract proves whether the path was healthy.
 

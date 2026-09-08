@@ -29,7 +29,7 @@ Large organizations often inherit a mixture of names: `dev`, `develop`, `staging
 
 Our rule is simple: choose one canonical production branch. In a newer repository it may be `main`; in a legacy repository it may still be `master`. The name is less important than the contract. The production branch is protected, reviewed, continuously validated, and the only branch from which a production release can be promoted. If both `main` and `master` exist during a migration, one is canonical and the other is explicitly transitional. They are not two independent production truths.
 
-A short-lived feature branch still gives developers isolation and a review surface. It should not become a private development environment that diverges from the product for weeks. DORA describes trunk-based development as frequent integration of small batches into a shared trunk and connects it to continuous integration; its guidance emphasizes keeping trunk green and avoiding large integration phases.[1] That does not mean every regulated organization must deploy directly from trunk. It means the distance between a change and the shared truth should stay small.
+A short-lived feature branch still gives developers isolation and a review surface. It should not become a private development environment that diverges from the product for weeks. DORA describes trunk-based development as frequent integration of small batches into a shared trunk and connects it to continuous integration; its guidance emphasizes keeping trunk green and avoiding large integration phases. That does not mean every regulated organization must deploy directly from trunk. It means the distance between a change and the shared truth should stay small.
 
 | Branch or environment | Purpose | Who can change it | What it must never become |
 |---|---|---|---|
@@ -249,7 +249,7 @@ Disable `igate.step3.citizen_email` first; then roll back the image if needed.
 No destructive schema change. Adds an outbox index and a nullable delivery-status field.
 ```
 
-For important branches, GitHub supports protection settings such as required pull-request reviews, required status checks, conversation resolution, signed commits, linear history, merge queue, successful deployments, and restricted pushes.[2] The exact configuration is a repository governance decision, but the principle is universal: a protected production branch should not depend on personal memory or the goodwill of the person holding an admin token.
+For important branches, GitHub supports protection settings such as required pull-request reviews, required status checks, conversation resolution, signed commits, linear history, merge queue, successful deployments, and restricted pushes. The exact configuration is a repository governance decision, but the principle is universal: a protected production branch should not depend on personal memory or the goodwill of the person holding an admin token.
 
 Code owners should review authorization, data handling, and external side effects. A UI reviewer should check the operator experience. A service owner should check compatibility and operational load. The number of approvals should reflect risk rather than become a ritual that makes small changes wait for days.
 
@@ -263,7 +263,7 @@ git rebase origin/dev
 git push --force-with-lease origin feature/igate-step3-citizen-email
 ```
 
-The PR should merge only after the required checks pass on the current base. If the repository is busy, a merge queue is safer than a race between several green PRs. GitHub describes a merge queue as a way to validate a change on the latest target branch together with changes already queued, using temporary merge-group branches and required checks.[3]
+The PR should merge only after the required checks pass on the current base. If the repository is busy, a merge queue is safer than a race between several green PRs. GitHub describes a merge queue as a way to validate a change on the latest target branch together with changes already queued, using temporary merge-group branches and required checks.
 
 That distinction matters. A feature can be green on its own branch and fail when combined with another change that touches the workflow transition, notification template, or database index. The integration branch is where contract tests, service-to-service tests, and realistic fixture flows should expose that incompatibility.
 
@@ -289,7 +289,7 @@ UAT should follow the citizen and officer journey, not just invoke an endpoint:
 6. Review audit evidence without exposing unnecessary personal content.
 7. Disable the feature flag and confirm the rest of processing still works.
 
-If a database change is required, make it compatible with both the old and new application versions. An additive outbox index or nullable delivery field can be deployed before the new code. A destructive column removal should wait for a later contract phase after all old pods and workers are gone. Kubernetes supports gradual `RollingUpdate` replacement and keeps revision history for rollback, but the deployment controller cannot tell whether the citizen workflow is semantically correct.[5]
+If a database change is required, make it compatible with both the old and new application versions. An additive outbox index or nullable delivery field can be deployed before the new code. A destructive column removal should wait for a later contract phase after all old pods and workers are gone. Kubernetes supports gradual `RollingUpdate` replacement and keeps revision history for rollback, but the deployment controller cannot tell whether the citizen workflow is semantically correct.
 
 ## Promote to `main` or `master`, not around it
 
@@ -340,7 +340,7 @@ PR checks
   -> promote or abort
 ```
 
-GitHub environments can attach protection rules to deployment targets; a job referencing an environment must satisfy those rules before it can run or access that environment’s secrets.[4] The equivalent control in another CI/CD platform may be called an approval gate, protected environment, change window, or deployment policy. The name is less important than the separation between build credentials, staging credentials, and production credentials.
+GitHub environments can attach protection rules to deployment targets; a job referencing an environment must satisfy those rules before it can run or access that environment’s secrets. The equivalent control in another CI/CD platform may be called an approval gate, protected environment, change window, or deployment policy. The name is less important than the separation between build credentials, staging credentials, and production credentials.
 
 For the email feature, the production gate should answer:
 
@@ -368,7 +368,7 @@ For a public-service email action, a cohort can be safer than a random percentag
 
 A rolling update changes instances gradually. A canary exposes a smaller traffic or user cohort to the new version. A feature flag controls capability exposure independently of process rollout. They can be combined, but none is a substitute for the others.
 
-Kubernetes documents `RollingUpdate`, readiness, rollout status, revision history, and rollback to a previous revision.[5] Those primitives answer whether pods can be replaced and whether a deployment is progressing. They do not prove that the right citizen received the right message. Business metrics are part of the release signal.
+Kubernetes documents `RollingUpdate`, readiness, rollout status, revision history, and rollback to a previous revision. Those primitives answer whether pods can be replaced and whether a deployment is progressing. They do not prove that the right citizen received the right message. Business metrics are part of the release signal.
 
 For the feature, define abort thresholds before deployment:
 

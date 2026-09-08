@@ -30,7 +30,7 @@ This article is a companion to [Model Router for AI Agents](/blog/model-router-a
 
 A provider and a model are different dimensions. The same model family may be available through a model vendor, a cloud-hosted endpoint, a regional deployment, or a gateway with its own capacity and privacy controls. A provider can be unhealthy while the model family remains the right choice. Conversely, every provider for the preferred model can be healthy while the model itself is the wrong tool for a long-context or structured-output task.
 
-OpenRouter documents this distinction directly: provider routing can try available providers for the requested model, while model fallbacks move to a different model when the first model’s providers fail or refuse to answer.[1] The distinction matters because a provider switch should usually preserve the model contract, while a model switch may change tool behavior, context capacity, reasoning style, output format, or safety characteristics.
+OpenRouter documents this distinction directly: provider routing can try available providers for the requested model, while model fallbacks move to a different model when the first model’s providers fail or refuse to answer. The distinction matters because a provider switch should usually preserve the model contract, while a model switch may change tool behavior, context capacity, reasoning style, output format, or safety characteristics.
 
 | Decision layer | Question | Safe default |
 |---|---|---|
@@ -86,9 +86,9 @@ The selector should combine at least five signals: **admission**, **health**, **
 | Policy | Region, retention, data class, tenant restrictions | Remove ineligible providers before scoring them. |
 | Quality | Schema validity, tool success, evidence checks, business outcome | Avoid routes whose “successful” responses require repairs. |
 
-OpenAI’s rate-limit guidance recommends honoring `Retry-After` when present, adding jitter, bounding attempts and total retry time, and not retrying quota or billing errors that require action.[2] Anthropic exposes request, token, input-token, and output-token remaining/reset signals, and also warns that sudden traffic acceleration can hit a separate limit.[3] A provider rotation layer should normalize these signals into a common admission interface while preserving the raw headers for diagnosis.
+OpenAI’s rate-limit guidance recommends honoring `Retry-After` when present, adding jitter, bounding attempts and total retry time, and not retrying quota or billing errors that require action. Anthropic exposes request, token, input-token, and output-token remaining/reset signals, and also warns that sudden traffic acceleration can hit a separate limit. A provider rotation layer should normalize these signals into a common admission interface while preserving the raw headers for diagnosis.
 
-One useful mental model is **AIMD admission**. Add capacity gradually after success; multiply admission down after a rate-limit or overload signal. Sierra describes a similar congestion-aware selector to avoid oscillation between providers, including priority-aware shedding when capacity is constrained.[4] The exact coefficients are product-specific, but the principle is portable: recovery should be gradual, not a synchronized flood.
+One useful mental model is **AIMD admission**. Add capacity gradually after success; multiply admission down after a rate-limit or overload signal. Sierra describes a similar congestion-aware selector to avoid oscillation between providers, including priority-aware shedding when capacity is constrained. The exact coefficients are product-specific, but the principle is portable: recovery should be gradual, not a synchronized flood.
 
 A simplified decision function might look like this:
 
@@ -188,7 +188,7 @@ For a tool-using agent, pair this with the idempotency contract described in [Id
 
 A fallback can return a response while still losing the task. This is especially visible in chat and voice systems, but the same problem exists in multi-step agents. If the fallback provider receives only the latest user message, it may not know the plan, tool results, constraints, or decisions that shaped the current turn.
 
-ContinuityBench frames this as a measurable distinction between availability and conversational continuity. Its paper proposes forwarding enough history to reconstruct state across heterogeneous endpoints and reports a 99.20% Continuity Preservation Rate in its own evaluation of 750 failover events.[5] That result is useful as evidence that continuity can be measured; it is not a guarantee that any implementation will achieve the same number.
+ContinuityBench frames this as a measurable distinction between availability and conversational continuity. Its paper proposes forwarding enough history to reconstruct state across heterogeneous endpoints and reports a 99.20% Continuity Preservation Rate in its own evaluation of 750 failover events. That result is useful as evidence that continuity can be measured; it is not a guarantee that any implementation will achieve the same number.
 
 ![A hand-drawn stateful failover timeline showing immutable tool events, a state hash, a route lease, and a broken stream boundary](/blog/provider-rotation/stateful-failover.webp)
 
@@ -207,7 +207,7 @@ A stateful failover design should define a **continuity envelope**:
 
 Forwarding the entire transcript is not always the right answer. It can increase latency and leak irrelevant data. A safer design stores a canonical event history, then builds a provider-specific context projection with a stable state hash. The projection can be compacted, but the runtime should be able to explain which events were included and which were intentionally omitted.
 
-A provider switch after streaming begins needs its own rule. If the user has already seen half a sentence, silently continuing with a different model can create a visible tone or factual discontinuity. Stop the stream and retry only when the product can mark the boundary, or keep the original route sticky until the turn finishes. Sierra makes the same practical point: switching after user-visible streaming has begun may be inappropriate when it changes behavior or consistency.[4]
+A provider switch after streaming begins needs its own rule. If the user has already seen half a sentence, silently continuing with a different model can create a visible tone or factual discontinuity. Stop the stream and retry only when the product can mark the boundary, or keep the original route sticky until the turn finishes. Sierra makes the same practical point: switching after user-visible streaming has begun may be inappropriate when it changes behavior or consistency.
 
 ## Model rotation needs quality gates, not only health checks
 

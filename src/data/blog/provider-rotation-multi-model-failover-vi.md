@@ -30,7 +30,7 @@ Bài này là phần tiếp theo của [Model Router cho AI Agent](/blog/model-r
 
 Provider và model là hai chiều khác nhau. Cùng một model family có thể được cung cấp bởi vendor của model, cloud endpoint, deployment theo vùng hoặc gateway có capacity và chính sách riêng. Provider có thể unhealthy trong khi model family vẫn là lựa chọn đúng. Ngược lại, tất cả provider của model ưu tiên có thể vẫn khỏe nhưng bản thân model lại không phù hợp cho tác vụ cần long context hoặc structured output.
 
-OpenRouter cũng tách hai lớp này: provider routing cố gắng phục vụ model được yêu cầu thông qua các provider sẵn có, còn model fallback chuyển sang model khác khi provider của model đầu tiên thất bại hoặc từ chối trả lời.[1] Sự khác biệt này quan trọng vì đổi provider thường nên giữ nguyên model contract, trong khi đổi model có thể làm thay đổi tool behavior, context capacity, reasoning style, output format hoặc safety characteristic.
+OpenRouter cũng tách hai lớp này: provider routing cố gắng phục vụ model được yêu cầu thông qua các provider sẵn có, còn model fallback chuyển sang model khác khi provider của model đầu tiên thất bại hoặc từ chối trả lời. Sự khác biệt này quan trọng vì đổi provider thường nên giữ nguyên model contract, trong khi đổi model có thể làm thay đổi tool behavior, context capacity, reasoning style, output format hoặc safety characteristic.
 
 | Lớp quyết định | Câu hỏi | Mặc định an toàn |
 |---|---|---|
@@ -86,9 +86,9 @@ Selector nên kết hợp ít nhất năm tín hiệu: **admission**, **health**
 | Policy | Region, retention, data class, tenant restriction | Loại provider không hợp lệ trước khi chấm điểm. |
 | Quality | Schema validity, tool success, evidence check, business outcome | Tránh route có response “thành công” nhưng luôn cần sửa. |
 
-Tài liệu OpenAI khuyến nghị tôn trọng `Retry-After` khi có, thêm jitter, giới hạn số attempt và tổng thời gian retry, đồng thời không retry quota hoặc billing error cần người vận hành xử lý.[2] Anthropic cung cấp tín hiệu remaining/reset cho request, token, input token và output token, đồng thời cảnh báo traffic tăng đột ngột có thể chạm acceleration limit riêng.[3] Lớp provider rotation nên chuẩn hóa các tín hiệu này thành admission interface chung, nhưng vẫn lưu raw header để chẩn đoán.
+Tài liệu OpenAI khuyến nghị tôn trọng `Retry-After` khi có, thêm jitter, giới hạn số attempt và tổng thời gian retry, đồng thời không retry quota hoặc billing error cần người vận hành xử lý. Anthropic cung cấp tín hiệu remaining/reset cho request, token, input token và output token, đồng thời cảnh báo traffic tăng đột ngột có thể chạm acceleration limit riêng. Lớp provider rotation nên chuẩn hóa các tín hiệu này thành admission interface chung, nhưng vẫn lưu raw header để chẩn đoán.
 
-Một mental model hữu ích là **AIMD admission**. Sau khi thành công, tăng capacity từ từ; sau rate-limit hoặc overload, giảm admission theo cấp số nhân. Sierra mô tả một selector có nhận biết congestion để tránh việc traffic dao động giữa provider, cùng với priority-aware shedding khi capacity bị giới hạn.[4] Hệ số cụ thể tùy sản phẩm, nhưng nguyên tắc có thể dùng rộng rãi: phục hồi phải từ từ, không phải một đợt flood đồng bộ.
+Một mental model hữu ích là **AIMD admission**. Sau khi thành công, tăng capacity từ từ; sau rate-limit hoặc overload, giảm admission theo cấp số nhân. Sierra mô tả một selector có nhận biết congestion để tránh việc traffic dao động giữa provider, cùng với priority-aware shedding khi capacity bị giới hạn. Hệ số cụ thể tùy sản phẩm, nhưng nguyên tắc có thể dùng rộng rãi: phục hồi phải từ từ, không phải một đợt flood đồng bộ.
 
 Một hàm quyết định đơn giản có thể như sau:
 
@@ -188,7 +188,7 @@ Với agent dùng tool, cần kết hợp cơ chế này với [Idempotent AI Ac
 
 Fallback có thể trả response nhưng vẫn làm mất task. Điều này dễ thấy ở chat và voice, nhưng cũng xảy ra trong agent nhiều bước. Nếu provider mới chỉ nhận message cuối cùng, nó không biết plan, tool result, constraint hay quyết định đã tạo ra turn hiện tại.
 
-ContinuityBench mô tả đây là khác biệt đo được giữa availability và conversational continuity. Nghiên cứu đề xuất forward state đủ để tái dựng hội thoại trên các endpoint khác nhau, và báo cáo Continuity Preservation Rate 99,20% trong chính evaluation với 750 failover event.[5] Kết quả này cho thấy continuity có thể đo được; nó không phải lời bảo đảm mọi implementation sẽ đạt cùng con số.
+ContinuityBench mô tả đây là khác biệt đo được giữa availability và conversational continuity. Nghiên cứu đề xuất forward state đủ để tái dựng hội thoại trên các endpoint khác nhau, và báo cáo Continuity Preservation Rate 99,20% trong chính evaluation với 750 failover event. Kết quả này cho thấy continuity có thể đo được; nó không phải lời bảo đảm mọi implementation sẽ đạt cùng con số.
 
 ![Minh họa vẽ tay về stateful failover với immutable tool event, state hash, route lease và stream boundary bị ngắt](/blog/provider-rotation/stateful-failover.webp)
 
@@ -207,7 +207,7 @@ Thiết kế stateful failover nên định nghĩa một **continuity envelope**
 
 Forward toàn bộ transcript không luôn đúng. Nó làm tăng latency và có thể làm lộ dữ liệu không liên quan. Thiết kế an toàn hơn là lưu canonical event history, sau đó dựng provider-specific context projection cùng state hash ổn định. Projection có thể được compact, nhưng runtime phải giải thích được event nào được đưa vào và event nào bị bỏ qua có chủ đích.
 
-Provider switch sau khi stream bắt đầu cần rule riêng. Nếu người dùng đã nhìn thấy nửa câu, việc lặng lẽ tiếp tục bằng model khác có thể tạo discontinuity về giọng điệu hoặc sự thật. Hãy dừng stream và retry nếu sản phẩm có thể đánh dấu boundary rõ, hoặc giữ route hiện tại cho đến khi turn kết thúc. Sierra cũng lưu ý rằng chuyển model sau khi user-visible streaming đã bắt đầu có thể không phù hợp nếu behavior hoặc consistency thay đổi.[4]
+Provider switch sau khi stream bắt đầu cần rule riêng. Nếu người dùng đã nhìn thấy nửa câu, việc lặng lẽ tiếp tục bằng model khác có thể tạo discontinuity về giọng điệu hoặc sự thật. Hãy dừng stream và retry nếu sản phẩm có thể đánh dấu boundary rõ, hoặc giữ route hiện tại cho đến khi turn kết thúc. Sierra cũng lưu ý rằng chuyển model sau khi user-visible streaming đã bắt đầu có thể không phù hợp nếu behavior hoặc consistency thay đổi.
 
 ## Model rotation cần quality gate, không chỉ health check
 

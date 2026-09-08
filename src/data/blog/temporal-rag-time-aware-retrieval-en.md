@@ -15,7 +15,7 @@ A normal RAG system answers the question, “Which documents are semantically si
 
 That distinction is easy to miss because vector search feels intelligent. Give it a query such as “What was our refund policy in March?” and it can retrieve documents containing the words _refund_ and _March_. But semantic similarity does not understand that a policy published in June superseded a policy that was valid in March. It can return a newer, more polished answer that is historically wrong.
 
-This is the core problem of **Temporal Retrieval-Augmented Generation**. The challenge is not adding a `published_at` field to a chunk and hoping the model notices it. The system needs an explicit temporal model, retrieval rules, evidence display, and evaluation cases that distinguish “true now” from “true then.” Recent work on diachronic question answering treats time-aware retrieval as a problem in its own right rather than a small variation of ordinary semantic search.[1]
+This is the core problem of **Temporal Retrieval-Augmented Generation**. The challenge is not adding a `published_at` field to a chunk and hoping the model notices it. The system needs an explicit temporal model, retrieval rules, evidence display, and evaluation cases that distinguish “true now” from “true then.” Recent work on diachronic question answering treats time-aware retrieval as a problem in its own right rather than a small variation of ordinary semantic search.
 
 > **Thesis:** If the answer contains a time reference, time is part of the retrieval contract—not decoration in the prompt.
 

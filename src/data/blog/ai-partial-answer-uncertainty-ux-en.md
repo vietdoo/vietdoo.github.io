@@ -27,7 +27,7 @@ Traditional software often has a crisp success condition. A database query retur
 
 That changes what “done” means. The answer is not done merely because a token stream reached its stop condition. It is done when the system can explain, at the level required by the task, which parts are supported, which parts are uncertain, and what the user can do next.
 
-The distinction matters because people adapt their behavior around AI messages. Research on selective prediction shows that a system’s decision to defer, and the way that decision is communicated, can change human performance. In an AAAI study, informing people that the AI had deferred—without simply exposing the model’s uncertain prediction—improved the performance of the human-AI team.[1] The interface is therefore part of the reliability mechanism, not a decorative layer added after the model.
+The distinction matters because people adapt their behavior around AI messages. Research on selective prediction shows that a system’s decision to defer, and the way that decision is communicated, can change human performance. In an AAAI study, informing people that the AI had deferred—without simply exposing the model’s uncertain prediction—improved the performance of the human-AI team. The interface is therefore part of the reliability mechanism, not a decorative layer added after the model.
 
 ![Four evidence states move toward a final answer decision without pretending that every state is complete](/blog/ai-partial-answer-uncertainty/evidence-states.webp)
 
@@ -130,9 +130,9 @@ A partial-answer design needs metrics that connect system state to user outcome.
 | **Human-AI joint quality** | The quality of the final decision after people interact with the uncertainty state. | The message anchors people to a wrong prediction or causes needless distrust. |
 | **Handoff completeness** | Whether a human receives the relevant request, evidence, conflict, and attempted steps. | The handoff restarts the investigation from zero. |
 
-The AAAI evidence on selective prediction is a reminder that the message itself can change the joint outcome.[1] Human testing should therefore compare not only model outputs but also alternative presentations: a raw confidence score, a categorical state, an explicit defer signal, and a bounded partial answer. The test should include people with different levels of domain expertise, because a phrase that helps an engineer may mislead a customer.
+The AAAI evidence on selective prediction is a reminder that the message itself can change the joint outcome. Human testing should therefore compare not only model outputs but also alternative presentations: a raw confidence score, a categorical state, an explicit defer signal, and a bounded partial answer. The test should include people with different levels of domain expertise, because a phrase that helps an engineer may mislead a customer.
 
-Human-AI interaction guidance recommends showing contextually relevant information and scoping services when the system is uncertain.[2] In practical terms, this means showing the smallest piece of evidence needed to make the next decision—not dumping a trace, not hiding the boundary, and not forcing the user to interpret statistical jargon.
+Human-AI interaction guidance recommends showing contextually relevant information and scoping services when the system is uncertain. In practical terms, this means showing the smallest piece of evidence needed to make the next decision—not dumping a trace, not hiding the boundary, and not forcing the user to interpret statistical jargon.
 
 ![A four-part evaluation board compares correctness, abstention, recovery usefulness, and human decision quality](/blog/ai-partial-answer-uncertainty/evaluation-matrix.webp)
 

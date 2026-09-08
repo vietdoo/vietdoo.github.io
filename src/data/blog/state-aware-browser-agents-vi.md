@@ -21,7 +21,7 @@ Không có gì crash. Browser trả về event thành công. Agent báo rằng s
 
 > **Luận điểm:** Một browser action chỉ an toàn khi state đã biện minh cho action đó vẫn khớp với state tại thời điểm thực thi. Hãy observe, fingerprint, revalidate rồi mới act. Nếu fingerprint stale, dừng thay vì đoán.
 
-Những benchmark web agent thực tế như WebArena hữu ích vì đánh giá agent trong môi trường chức năng với task nhiều bước, không chỉ trên câu trả lời văn bản riêng lẻ.[1] Production cần thêm một lớp: hệ thống phải chứng minh page và authority context vẫn ổn định trước mỗi click không thể hoàn tác.
+Những benchmark web agent thực tế như WebArena hữu ích vì đánh giá agent trong môi trường chức năng với task nhiều bước, không chỉ trên câu trả lời văn bản riêng lẻ. Production cần thêm một lớp: hệ thống phải chứng minh page và authority context vẫn ổn định trước mỗi click không thể hoàn tác.
 
 ## Screenshot là observation, không phải contract
 
@@ -188,7 +188,7 @@ Với mỗi task, hãy ghi xem resource mong muốn có thật sự đổi khôn
 | Recovery loop count | Site bất ổn hay locator yếu | Đổ lỗi cho model mà không xét site |
 | Side-effect leakage | Exploration có vô tình mutate state không | Nghĩ read action mặc định luôn an toàn |
 
-Cách WebArena đặt vấn đề là điểm khởi đầu tốt cho task có thể verify, nhưng production evaluation cần state oracle và authorization model của chính ứng dụng.[1] Browser reliability không chỉ là “agent có hoàn tất không?” mà là “đúng principal có tạo đúng state transition không, và ta có chứng minh được không?”
+Cách WebArena đặt vấn đề là điểm khởi đầu tốt cho task có thể verify, nhưng production evaluation cần state oracle và authorization model của chính ứng dụng. Browser reliability không chỉ là “agent có hoàn tất không?” mà là “đúng principal có tạo đúng state transition không, và ta có chứng minh được không?”
 
 ## Checklist rollout thực tế
 

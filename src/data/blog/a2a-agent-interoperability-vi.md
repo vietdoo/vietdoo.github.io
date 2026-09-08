@@ -15,7 +15,7 @@ Trước đây, tôi thường mô tả mọi tích hợp AI bằng cụm từ *
 
 Đến lúc đó, gọi hệ thống bên kia là một “tool” bắt đầu che giấu nhiều hơn là giải thích. Remote system có thể có model, memory, policy, user context, runtime và failure mode riêng. Nó có thể không hề chia sẻ chain-of-thought hay danh sách tool nội bộ. Thứ đi qua ranh giới không còn là implementation của một function; đó là một cuộc trao đổi về task, authority, tiến độ và kết quả.
 
-Đó là không gian bài toán mà **Agent2Agent (A2A)** hướng tới: một open protocol cho phép các agentic application có thể cộng tác dù được xây dựng bởi framework hay vendor khác nhau. Thiết kế chính thức nhấn mạnh agent discovery, các transport tiêu chuẩn, enterprise authentication, long-running task, state update và trao đổi dữ liệu đa dạng.[1] Đặc tả mới nhất tổ chức các ý tưởng đó thành operation, data model, cơ chế cập nhật task, capability validation, versioning và security object.[2]
+Đó là không gian bài toán mà **Agent2Agent (A2A)** hướng tới: một open protocol cho phép các agentic application có thể cộng tác dù được xây dựng bởi framework hay vendor khác nhau. Thiết kế chính thức nhấn mạnh agent discovery, các transport tiêu chuẩn, enterprise authentication, long-running task, state update và trao đổi dữ liệu đa dạng. Đặc tả mới nhất tổ chức các ý tưởng đó thành operation, data model, cơ chế cập nhật task, capability validation, versioning và security object.
 
 Điểm quan trọng không phải là mọi agent phải lập tức trở thành một phần của “swarm” tự trị khổng lồ. Điểm quan trọng là **một agent-to-agent call chính là một ranh giới của distributed system**. Khi nhìn nó theo cách đó, hàng loạt câu hỏi thiết kế trở nên bắt buộc: Làm sao client biết remote agent thực sự làm được gì? Quyền được ủy quyền bị giới hạn ra sao? “Đang xử lý” có ý nghĩa gì? Điều gì xảy ra khi stream bị ngắt giữa chừng? Client có thể retry an toàn không? Con người hủy một công việc đã bắt đầu như thế nào?
 
@@ -45,7 +45,7 @@ _Hình 1. Discovery phải thu hẹp ranh giới delegation trước khi client 
 
 ## Agent Card là capability contract, không phải hồ sơ marketing
 
-Client không thể ủy quyền có trách nhiệm nếu chỉ biết một remote endpoint đang tồn tại. Nó cần một mô tả machine-readable về identity, skill, interface, authentication requirement và capability mà remote agent hỗ trợ. A2A gọi mô tả này là **Agent Card**.[1] [2]
+Client không thể ủy quyền có trách nhiệm nếu chỉ biết một remote endpoint đang tồn tại. Nó cần một mô tả machine-readable về identity, skill, interface, authentication requirement và capability mà remote agent hỗ trợ. A2A gọi mô tả này là **Agent Card**.
 
 Ta rất dễ xem Agent Card như một entry trong catalogue: tên, mô tả và danh sách những việc agent tuyên bố có thể làm. Production cần nhiều hơn thế. Một card hữu ích gần với capability contract. Nó giúp client trả lời bốn câu hỏi thực tế trước khi gửi dữ liệu người dùng sang boundary bên kia.
 
@@ -77,7 +77,7 @@ Bước thứ sáu quan trọng hơn vẻ bề ngoài. Remote agent không cần
 
 ## Task là state machine có owner
 
-Thay đổi thiết kế quan trọng nhất là ngừng xem delegated request như một response đơn lẻ. Remote agent có thể trả về một **Task**, một object có state và đi qua lifecycle được định nghĩa. Từ vựng chính xác của protocol không quan trọng bằng kỷ luật engineering phía sau: client cần biết công việc đã được accept, đang chạy, cần thêm input, hoàn tất, thất bại hay đã bị hủy.[2]
+Thay đổi thiết kế quan trọng nhất là ngừng xem delegated request như một response đơn lẻ. Remote agent có thể trả về một **Task**, một object có state và đi qua lifecycle được định nghĩa. Từ vựng chính xác của protocol không quan trọng bằng kỷ luật engineering phía sau: client cần biết công việc đã được accept, đang chạy, cần thêm input, hoàn tất, thất bại hay đã bị hủy.
 
 ![Task đi qua các trạng thái rõ ràng thay vì bị biểu diễn bằng một response mơ hồ](/blog/a2a-agent-interoperability/task-lifecycle.webp)
 
@@ -107,7 +107,7 @@ Phân biệt này cũng giúp kiểm soát cost. Khi task chờ con người, cl
 
 ## Chọn delivery semantics một cách có chủ ý
 
-A2A hỗ trợ nhiều cách giao progress và result. Client có thể nhận response ngay, subscribe vào stream update hoặc cấu hình push notification cho công việc asynchronous.[1] [2] Đây không chỉ là lựa chọn transport. Mỗi kiểu kéo theo một UX và failure mode khác nhau.
+A2A hỗ trợ nhiều cách giao progress và result. Client có thể nhận response ngay, subscribe vào stream update hoặc cấu hình push notification cho công việc asynchronous. Đây không chỉ là lựa chọn transport. Mỗi kiểu kéo theo một UX và failure mode khác nhau.
 
 Synchronous delivery phù hợp với task ngắn, có giới hạn và ít khả năng cần con người. Nó giữ request path đơn giản nhưng không phù hợp với công việc kéo dài vài phút hay vài giờ. Streaming hữu ích khi client cần status hoặc artifact tăng dần trong lúc task chạy. Nó làm hệ thống phản hồi nhanh hơn, nhưng đưa vào bài toán reconnect, event ordering và duplicate event. Push notification hữu ích khi client không nên giữ connection mở, nhưng yêu cầu callback handler an toàn, replay protection và chiến lược fetch authoritative task state sau khi nhận notification.
 

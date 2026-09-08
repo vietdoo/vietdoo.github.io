@@ -17,7 +17,7 @@ Không có dashboard nào trông quá nghiêm trọng. Không có model outage r
 
 Khoảng cách đó cần một kỷ luật kỹ thuật riêng: **contract testing cho AI tool**.
 
-Contract testing truyền thống hỏi consumer và provider có thống nhất về các message trao đổi hay không. Pact mô tả đây là cách kiểm thử một integration point trong isolation dựa trên một shared understanding, thay vì chỉ dựa vào các end-to-end integration test đắt đỏ và dễ vỡ.[1] Với AI system, consumer không chỉ là frontend hay service client. Nó có thể là agent runtime yêu cầu model chọn tool, gateway chuyển đổi format giữa các provider, MCP client discovery tool, hoặc workflow engine diễn giải structured result.
+Contract testing truyền thống hỏi consumer và provider có thống nhất về các message trao đổi hay không. Pact mô tả đây là cách kiểm thử một integration point trong isolation dựa trên một shared understanding, thay vì chỉ dựa vào các end-to-end integration test đắt đỏ và dễ vỡ. Với AI system, consumer không chỉ là frontend hay service client. Nó có thể là agent runtime yêu cầu model chọn tool, gateway chuyển đổi format giữa các provider, MCP client discovery tool, hoặc workflow engine diễn giải structured result.
 
 Provider cũng không chỉ là một HTTP server. Nó có thể là model family, hosted endpoint, MCP server, tool implementation hoặc versioned adapter. Vì vậy contract phải bao phủ nhiều hơn tên field. Nó phải trả lời được **tool có ý nghĩa gì, được gọi khi nào, thất bại ra sao, tạo side effect nào, và model ở bước sau được phép tin điều gì về kết quả**.
 
@@ -27,7 +27,7 @@ Bài này không nhằm biến mọi provider thành giống hệt nhau. Mục t
 
 ## Vì sao schema validation cần thiết nhưng chưa đủ
 
-JSON Schema là điểm bắt đầu rất tốt. Nó mô tả type, required field, constraint, array, reference và các rule máy có thể kiểm tra.[3] MCP tool definition dùng `inputSchema` cho parameter đầu vào và có thể cung cấp `outputSchema` cho structured result. MCP specification nói rằng nếu server cung cấp output schema thì structured result phải tuân theo schema đó, còn client nên validate kết quả.[2]
+JSON Schema là điểm bắt đầu rất tốt. Nó mô tả type, required field, constraint, array, reference và các rule máy có thể kiểm tra. MCP tool definition dùng `inputSchema` cho parameter đầu vào và có thể cung cấp `outputSchema` cho structured result. MCP specification nói rằng nếu server cung cấp output schema thì structured result phải tuân theo schema đó, còn client nên validate kết quả.
 
 Đó là **shape contract**. Nó bắt được lỗi thiếu `customer_id`, số bị serialize thành object, hoặc output thiếu `status` bắt buộc. Nhưng nhiều lỗi production vẫn hoàn toàn hợp lệ theo schema.
 
@@ -133,7 +133,7 @@ Mục tiêu không phải là biến mọi business rule thành test. Mục tiê
 
 Một tool có thể đúng về structure và semantics nhưng vẫn không được phép gọi. Policy contract định nghĩa ai được invoke, data class nào được đi qua boundary, có cần human confirmation không, và hạn chế tenant hoặc region nào áp dụng.
 
-MCP tools specification khuyến nghị validate input, thực thi access control, rate-limit invocation, sanitize tool output và duy trì human-in-the-loop với operation nhạy cảm.[2] Đây là trách nhiệm runtime, nhưng cũng nên xuất hiện trong test.
+MCP tools specification khuyến nghị validate input, thực thi access control, rate-limit invocation, sanitize tool output và duy trì human-in-the-loop với operation nhạy cảm. Đây là trách nhiệm runtime, nhưng cũng nên xuất hiện trong test.
 
 Một policy test nên hỏi:
 
@@ -145,7 +145,7 @@ Một policy test nên hỏi:
 | Tool cần approval nhưng thiếu approval token | `needs_confirmation`, không có side effect |
 | Tool description đổi từ read thành write | Compatibility gate fail |
 
-Description và annotation là gợi ý, không phải authority. MCP specification cảnh báo tool annotation phải được coi là không đáng tin nếu không đến từ trusted server.[2] Policy phải được enforce từ metadata được ký hoặc quản lý tập trung, không phải từ đoạn prose model đọc được.
+Description và annotation là gợi ý, không phải authority. MCP specification cảnh báo tool annotation phải được coi là không đáng tin nếu không đến từ trusted server. Policy phải được enforce từ metadata được ký hoặc quản lý tập trung, không phải từ đoạn prose model đọc được.
 
 ### 4. Side-effect contract
 

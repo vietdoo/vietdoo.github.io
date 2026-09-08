@@ -29,7 +29,7 @@ Doanh nghiệp lớn thường kế thừa một hỗn hợp tên branch: `dev`,
 
 Quy tắc của chúng tôi khá đơn giản: chọn một canonical production branch. Với repository mới, branch đó có thể là `main`; với repository legacy, nó vẫn có thể là `master`. Tên ít quan trọng hơn contract. Production branch phải được bảo vệ, review, validate liên tục và là branch duy nhất từ đó production release được promotion. Nếu `main` và `master` cùng tồn tại trong giai đoạn migration, một branch phải là canonical còn branch kia được đánh dấu rõ là transitional. Không được coi chúng là hai production truth độc lập.
 
-Short-lived feature branch vẫn đem lại isolation và review surface cho developer. Nhưng nó không được trở thành một private development environment tách khỏi sản phẩm trong nhiều tuần. DORA mô tả trunk-based development là cách tích hợp các batch nhỏ vào trunk dùng chung với tần suất cao, đồng thời liên hệ cách làm này với continuous integration; hướng dẫn cũng nhấn mạnh việc giữ trunk luôn green và tránh các giai đoạn integration quá lớn.[1] Điều đó không có nghĩa mọi tổ chức regulated đều phải deploy trực tiếp từ trunk. Ý nghĩa thực tế là khoảng cách giữa một thay đổi và shared truth nên càng nhỏ càng tốt.
+Short-lived feature branch vẫn đem lại isolation và review surface cho developer. Nhưng nó không được trở thành một private development environment tách khỏi sản phẩm trong nhiều tuần. DORA mô tả trunk-based development là cách tích hợp các batch nhỏ vào trunk dùng chung với tần suất cao, đồng thời liên hệ cách làm này với continuous integration; hướng dẫn cũng nhấn mạnh việc giữ trunk luôn green và tránh các giai đoạn integration quá lớn. Điều đó không có nghĩa mọi tổ chức regulated đều phải deploy trực tiếp từ trunk. Ý nghĩa thực tế là khoảng cách giữa một thay đổi và shared truth nên càng nhỏ càng tốt.
 
 | Branch hoặc environment | Mục đích | Ai được thay đổi | Không được biến thành |
 |---|---|---|---|
@@ -249,7 +249,7 @@ Disable `igate.step3.citizen_email` first; then roll back the image if needed.
 No destructive schema change. Adds an outbox index and a nullable delivery-status field.
 ```
 
-Với các branch quan trọng, GitHub hỗ trợ những protected-branch setting như required pull-request review, required status checks, conversation resolution, signed commits, linear history, merge queue, successful deployments và giới hạn quyền push.[2] Cấu hình chính xác là quyết định governance của từng repository, nhưng nguyên tắc có tính phổ quát: protected production branch không nên phụ thuộc vào trí nhớ cá nhân hoặc thiện chí của người đang giữ admin token.
+Với các branch quan trọng, GitHub hỗ trợ những protected-branch setting như required pull-request review, required status checks, conversation resolution, signed commits, linear history, merge queue, successful deployments và giới hạn quyền push. Cấu hình chính xác là quyết định governance của từng repository, nhưng nguyên tắc có tính phổ quát: protected production branch không nên phụ thuộc vào trí nhớ cá nhân hoặc thiện chí của người đang giữ admin token.
 
 Code owner nên review authorization, data handling và external side effect. UI reviewer kiểm tra trải nghiệm operator. Service owner kiểm tra compatibility và operational load. Số lượng approval nên phản ánh risk, không nên trở thành nghi thức khiến một thay đổi nhỏ phải chờ nhiều ngày.
 
@@ -263,7 +263,7 @@ git rebase origin/dev
 git push --force-with-lease origin feature/igate-step3-citizen-email
 ```
 
-PR chỉ nên merge sau khi required check pass trên base hiện tại. Nếu repository có nhiều PR, merge queue an toàn hơn việc nhiều PR xanh cùng cạnh tranh merge. GitHub mô tả merge queue là cách validate change trên bản mới nhất của target branch cùng với những change đã ở trong queue, thông qua temporary merge-group branch và required check.[3]
+PR chỉ nên merge sau khi required check pass trên base hiện tại. Nếu repository có nhiều PR, merge queue an toàn hơn việc nhiều PR xanh cùng cạnh tranh merge. GitHub mô tả merge queue là cách validate change trên bản mới nhất của target branch cùng với những change đã ở trong queue, thông qua temporary merge-group branch và required check.
 
 Sự khác biệt này rất quan trọng. Một feature có thể xanh trên branch riêng nhưng fail khi ghép với change khác chạm vào workflow transition, notification template hoặc database index. Integration branch là nơi contract test, service-to-service test và fixture flow thực tế phát hiện incompatibility.
 
@@ -289,7 +289,7 @@ UAT nên đi theo hành trình của cán bộ và công dân, không chỉ gọ
 6. Kiểm tra audit evidence nhưng không hiển thị dữ liệu cá nhân không cần thiết.
 7. Tắt feature flag và xác nhận phần xử lý hồ sơ còn lại vẫn hoạt động.
 
-Nếu cần database change, thay đổi phải tương thích với cả application version cũ và mới. Có thể deploy trước một outbox index dạng additive hoặc delivery field nullable. Việc xóa column mang tính destructive nên để ở contract phase sau, khi mọi old pod và worker đã biến mất. Kubernetes hỗ trợ thay pod dần bằng `RollingUpdate` và giữ revision history cho rollback, nhưng deployment controller không thể biết workflow của công dân có đúng về mặt nghiệp vụ hay không.[5]
+Nếu cần database change, thay đổi phải tương thích với cả application version cũ và mới. Có thể deploy trước một outbox index dạng additive hoặc delivery field nullable. Việc xóa column mang tính destructive nên để ở contract phase sau, khi mọi old pod và worker đã biến mất. Kubernetes hỗ trợ thay pod dần bằng `RollingUpdate` và giữ revision history cho rollback, nhưng deployment controller không thể biết workflow của công dân có đúng về mặt nghiệp vụ hay không.
 
 ## Promotion lên `main` hoặc `master`, không đi vòng qua nó
 
@@ -340,7 +340,7 @@ PR checks
   -> promote hoặc abort
 ```
 
-GitHub environment có thể gắn protection rule vào từng deployment target; job tham chiếu environment phải vượt qua các rule trước khi chạy hoặc truy cập environment secret.[4] Ở nền tảng CI/CD khác, control tương đương có thể gọi là approval gate, protected environment, change window hoặc deployment policy. Tên gọi ít quan trọng hơn việc tách build credential, staging credential và production credential.
+GitHub environment có thể gắn protection rule vào từng deployment target; job tham chiếu environment phải vượt qua các rule trước khi chạy hoặc truy cập environment secret. Ở nền tảng CI/CD khác, control tương đương có thể gọi là approval gate, protected environment, change window hoặc deployment policy. Tên gọi ít quan trọng hơn việc tách build credential, staging credential và production credential.
 
 Với feature email, production gate phải trả lời được:
 
@@ -368,7 +368,7 @@ Với action gửi email trong dịch vụ công, cohort có thể an toàn hơn
 
 Rolling update thay đổi instance theo từng phần. Canary expose một traffic slice hoặc user cohort nhỏ cho version mới. Feature flag điều khiển capability exposure độc lập với process rollout. Ba control có thể kết hợp, nhưng không cái nào thay thế hoàn toàn hai cái còn lại.
 
-Kubernetes tài liệu hóa `RollingUpdate`, readiness, rollout status, revision history và rollback về revision trước.[5] Các primitive đó trả lời pod có được thay dần không và deployment có đang tiến triển không. Chúng không chứng minh đúng công dân đã nhận đúng message. Business metrics cũng phải là một phần của release signal.
+Kubernetes tài liệu hóa `RollingUpdate`, readiness, rollout status, revision history và rollback về revision trước. Các primitive đó trả lời pod có được thay dần không và deployment có đang tiến triển không. Chúng không chứng minh đúng công dân đã nhận đúng message. Business metrics cũng phải là một phần của release signal.
 
 Với feature này, hãy định nghĩa abort threshold trước khi deploy:
 

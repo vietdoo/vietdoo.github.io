@@ -93,7 +93,7 @@ type AgentPlan = {
 
 The manifest is not a prompt transcript. It is a compact statement of what the application must check before allowing a side effect. Keep sensitive content out of it unless the content itself is the dependency. Hash large schemas and policies where a hash is sufficient; retain a resolvable version identifier so an operator can inspect the exact artifact later.
 
-Semantic Versioning is a useful starting convention for public APIs: incompatible changes should increment the major version, while compatible additions and fixes can use minor or patch increments.[1] An agent platform should not blindly assume that a version number proves compatibility, however. A tool may preserve its JSON schema and still change side-effect semantics. Record both a declared contract version and a machine-checkable semantic fingerprint for the parts that matter to the action.
+Semantic Versioning is a useful starting convention for public APIs: incompatible changes should increment the major version, while compatible additions and fixes can use minor or patch increments. An agent platform should not blindly assume that a version number proves compatibility, however. A tool may preserve its JSON schema and still change side-effect semantics. Record both a declared contract version and a machine-checkable semantic fingerprint for the parts that matter to the action.
 
 ## Compatibility is a matrix, not a boolean
 
@@ -257,7 +257,7 @@ A drift detector that only blocks actions will eventually be disabled as “too 
 
 The goal is not to drive drift to zero. Change is normal in a production system. The goal is to make change visible, classify it correctly, and prevent the dangerous subset from becoming an unreviewed side effect.
 
-This matters because controlled evaluations do not fully predict behavior in a changing environment. The International AI Safety Report 2026 describes an evaluation gap: pre-deployment tests do not reliably establish real-world utility or risk, while autonomous operation makes intervention harder when failures occur.[3] Drift management is one practical response to that gap. It adds checks at the point where the agent meets the live system rather than assuming that a successful test permanently proves compatibility.
+This matters because controlled evaluations do not fully predict behavior in a changing environment. The International AI Safety Report 2026 describes an evaluation gap: pre-deployment tests do not reliably establish real-world utility or risk, while autonomous operation makes intervention harder when failures occur. Drift management is one practical response to that gap. It adds checks at the point where the agent meets the live system rather than assuming that a successful test permanently proves compatibility.
 
 ## A rollout sequence that does not freeze the platform
 

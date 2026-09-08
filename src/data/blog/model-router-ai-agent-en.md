@@ -43,7 +43,7 @@ A router should therefore be treated like admission control in a distributed sys
 
 ## Three signals are necessary, but not sufficient
 
-NVIDIA’s description of production model routing groups the most important signals into **model capability, model cost profile, and infrastructure state**.[1] That is a useful starting point, but an agent platform usually needs a fourth dimension: authority and data policy.
+NVIDIA’s description of production model routing groups the most important signals into **model capability, model cost profile, and infrastructure state**. That is a useful starting point, but an agent platform usually needs a fourth dimension: authority and data policy.
 
 | Signal | What the router needs to know | Example decision |
 |---|---|---|

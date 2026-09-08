@@ -33,7 +33,7 @@ Một registry hữu ích phải nối **identity được khai báo** của age
 
 Điểm khác biệt là reconciliation. Registry chỉ tiếp nhận declaration sẽ biến thành một compliance form. Registry so sánh declaration với runtime evidence mới có thể trở thành security control.
 
-Báo cáo Cyber Pulse 2026 của Microsoft mô tả điểm mù ở cấp tổ chức bằng những câu hỏi rất thực tế: có agent nào đang tồn tại, ai sở hữu chúng, chúng chạm vào hệ thống và dữ liệu nào, và agent nào được sanction hay đang là shadow agent [1]. Khảo sát State of Agent Engineering 2026 của LangChain cũng cho thấy lý do chủ đề này quan trọng: 57,3% người trả lời cho biết họ đã có agent chạy production, trong khi quality vẫn là rào cản lớn nhất và observability đã trở nên phổ biến [2]. Visibility không còn là vấn đề của tương lai; nó đã là một phần của production surface.
+Báo cáo Cyber Pulse 2026 của Microsoft mô tả điểm mù ở cấp tổ chức bằng những câu hỏi rất thực tế: có agent nào đang tồn tại, ai sở hữu chúng, chúng chạm vào hệ thống và dữ liệu nào, và agent nào được sanction hay đang là shadow agent. Khảo sát State of Agent Engineering 2026 của LangChain cũng cho thấy lý do chủ đề này quan trọng: 57,3% người trả lời cho biết họ đã có agent chạy production, trong khi quality vẫn là rào cản lớn nhất và observability đã trở nên phổ biến. Visibility không còn là vấn đề của tương lai; nó đã là một phần của production surface.
 
 ## Bốn loại record mà mỗi agent cần có
 
@@ -141,7 +141,7 @@ Một registry review không nên hỏi agent “có vẻ an toàn không”. N�
 
 Review cần tạo ra một capability contract rõ ràng. “Có thể draft ticket và xin approval” khác bản chất với “có thể close ticket và thông báo cho khách hàng”. Một autonomy label không đi kèm action-level contract quá mơ hồ để enforce.
 
-Hướng dẫn production của MLflow cũng nhấn mạnh một điểm liên quan: runtime governance nên nằm bên dưới model layer, deterministic control phải ngăn action không được phép trước khi action ra wire, và boundary của skill hoặc plugin cần được chú ý đặc biệt [3]. Registry là nơi các runtime control đó có được một subject ổn định.
+Hướng dẫn production của MLflow cũng nhấn mạnh một điểm liên quan: runtime governance nên nằm bên dưới model layer, deterministic control phải ngăn action không được phép trước khi action ra wire, và boundary của skill hoặc plugin cần được chú ý đặc biệt. Registry là nơi các runtime control đó có được một subject ổn định.
 
 ## Quarantine: trạng thái trung gian mà phần lớn inventory còn thiếu
 

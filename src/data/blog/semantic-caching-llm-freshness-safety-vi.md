@@ -27,9 +27,9 @@ Bài viết này xây dựng một playbook thực tế cho LLM và RAG applicat
 
 Caching truyền thống dùng một key xác định. Request như `GET /products/4821?currency=VND` ánh xạ tới một cache key đã biết, rồi hệ thống hoặc tìm thấy representation chính xác đó, hoặc cache miss. Contract tương đối đơn giản: key mô tả request và expiration policy mô tả thời gian representation được phép reuse.
 
-LLM request thường không lặp lại ở cấp độ chuỗi ký tự. Một khách hàng có thể hỏi “Tôi có được trả lại món hàng này không?”, “Thời hạn hoàn tiền cho đơn này là bao lâu?” hoặc “Tôi đổi ý thì có bao nhiêu ngày để gửi hàng trở lại?”. Cách diễn đạt khác nhau, nhưng intent có thể tương tự. Embedding biến một chuỗi văn bản thành một vector, còn similarity search có thể tìm những request trước đó gần về mặt ý nghĩa. Tài liệu OpenAI mô tả embedding là biểu diễn vector dùng để đo mức độ liên quan giữa các chuỗi văn bản, trong đó cosine similarity là một cách so sánh phổ biến.[1]
+LLM request thường không lặp lại ở cấp độ chuỗi ký tự. Một khách hàng có thể hỏi “Tôi có được trả lại món hàng này không?”, “Thời hạn hoàn tiền cho đơn này là bao lâu?” hoặc “Tôi đổi ý thì có bao nhiêu ngày để gửi hàng trở lại?”. Cách diễn đạt khác nhau, nhưng intent có thể tương tự. Embedding biến một chuỗi văn bản thành một vector, còn similarity search có thể tìm những request trước đó gần về mặt ý nghĩa. Tài liệu OpenAI mô tả embedding là biểu diễn vector dùng để đo mức độ liên quan giữa các chuỗi văn bản, trong đó cosine similarity là một cách so sánh phổ biến.
 
-Redis mô tả semantic-cache flow cơ bản gồm embedding query mới, tìm kiếm vector đã lưu, trả cached response khi similarity vượt threshold, và gọi LLM khi cache miss.[2] Đây là điểm bắt đầu hữu ích. Nó chưa phải production contract.
+Redis mô tả semantic-cache flow cơ bản gồm embedding query mới, tìm kiếm vector đã lưu, trả cached response khi similarity vượt threshold, và gọi LLM khi cache miss. Đây là điểm bắt đầu hữu ích. Nó chưa phải production contract.
 
 ![Request đi qua normalization, scope check, semantic lookup và freshness validation trước khi được phép cache hit hoặc chạy model mới](/blog/semantic-caching/pipeline.webp)
 
@@ -60,7 +60,7 @@ Có ít nhất bốn cache boundary:
 
 Một nguyên tắc thực dụng là cache **lớp thấp nhất vừa tốn chi phí vừa đủ an toàn để recompute vào request hiện tại**. Nếu product catalog thay đổi thường xuyên, hãy cache retrieval result đã normalized cùng document version thay vì một câu cuối cùng nói “sản phẩm có giá 599.000 VND”. Nếu classification ổn định và không phụ thuộc tenant, có thể cache classification. Nếu output cấp credit, thay đổi account state hoặc làm lộ dữ liệu cá nhân, đừng xem final answer là object có thể chia sẻ tự do.
 
-Nghiên cứu về semantic caching cho contextual summary cũng đi đến một hướng tương tự: intermediate result có thể được reuse giữa các request liên quan và chịu được partial document update cùng thay đổi access pattern tốt hơn việc chỉ cache end-to-end answer.[3] Hệ quả thực tế là cache boundary là một quyết định kiến trúc, không phải một tối ưu storage.
+Nghiên cứu về semantic caching cho contextual summary cũng đi đến một hướng tương tự: intermediate result có thể được reuse giữa các request liên quan và chịu được partial document update cùng thay đổi access pattern tốt hơn việc chỉ cache end-to-end answer. Hệ quả thực tế là cache boundary là một quyết định kiến trúc, không phải một tối ưu storage.
 
 ## Mỗi entry cần có cache envelope
 
@@ -113,7 +113,7 @@ Semantic index vẫn có thể tìm bằng embedding, nhưng mọi candidate ph�
 
 ## Freshness không đồng nghĩa với TTL
 
-Time-to-live hữu ích, nhưng TTL chỉ là một cách biểu đạt freshness. RFC 9111 phân biệt khá rõ với HTTP cache: response là fresh khi age còn nằm trong freshness lifetime, còn stale response có thể cần được validation trước khi reuse.[4] Mental model này áp dụng tốt cho LLM cache, với một bổ sung quan trọng: **origin thường là document store, policy service, database hoặc tool — không chỉ là web server**.
+Time-to-live hữu ích, nhưng TTL chỉ là một cách biểu đạt freshness. RFC 9111 phân biệt khá rõ với HTTP cache: response là fresh khi age còn nằm trong freshness lifetime, còn stale response có thể cần được validation trước khi reuse. Mental model này áp dụng tốt cho LLM cache, với một bổ sung quan trọng: **origin thường là document store, policy service, database hoặc tool — không chỉ là web server**.
 
 Hãy tưởng tượng policy answer được tạo lúc 09:00 với `policyVersion=41`. Đến 09:05, policy service publish version 42. Cached answer có thể mang TTL một giờ, nhưng nó không còn fresh so với policy source. Chờ đến 10:00 không phải freshness policy; đó là cách trì hoãn việc phát hiện bug.
 
@@ -146,7 +146,7 @@ Entry không nhất thiết phải bị xóa ngay lập tức sau mọi update. 
 
 ## Threshold phải được tune bằng outcome, không phải cảm giác
 
-Similarity threshold là một control hữu ích nhưng không có một giá trị đúng cho mọi nơi. Threshold thấp thường tạo nhiều hit hơn và nhiều false positive hơn. Threshold cao an toàn hơn nhưng có thể bỏ lỡ những cơ hội reuse tốt. Giá trị phù hợp phụ thuộc vào ngôn ngữ, domain, embedding model, query distribution, risk và lượng context được giữ trong cached record. Nghiên cứu về semantic caching xem threshold là trade-off giữa utility và hit rate, không phải một công thức một con số.[3]
+Similarity threshold là một control hữu ích nhưng không có một giá trị đúng cho mọi nơi. Threshold thấp thường tạo nhiều hit hơn và nhiều false positive hơn. Threshold cao an toàn hơn nhưng có thể bỏ lỡ những cơ hội reuse tốt. Giá trị phù hợp phụ thuộc vào ngôn ngữ, domain, embedding model, query distribution, risk và lượng context được giữ trong cached record. Nghiên cứu về semantic caching xem threshold là trade-off giữa utility và hit rate, không phải một công thức một con số.
 
 Hãy xây một threshold set offline từ traffic thật đã được sanitize. Gắn nhãn các cặp query theo những nhóm như sau:
 
@@ -185,7 +185,7 @@ Có một số đường poisoning phổ biến:
 
 Mitigation phải nằm ở kiến trúc. Tách quyền ghi cache khỏi quyền đọc cache. Đánh dấu entry chưa review là generated chứ không phải trusted. Đừng cache authorization decision của tool như thể đó là một fact độc lập với user. Lưu provenance và luôn có đường revocation. Với flow risk cao, chỉ dùng cache để retrieve evidence rồi buộc current policy/model đưa ra quyết định mới.
 
-Điều này liên quan trực tiếp tới prompt-injection defense. Cached response vẫn là model-produced data. Nếu một document độc hại tác động được vào cached answer, user sau đó có thể gặp payload mà không hề gửi original malicious query. Hãy coi cached text là untrusted input ở prompt boundary kế tiếp, giữ source identifier và áp dụng cùng cách tách data khỏi instruction như trong agent system nói chung.[5]
+Điều này liên quan trực tiếp tới prompt-injection defense. Cached response vẫn là model-produced data. Nếu một document độc hại tác động được vào cached answer, user sau đó có thể gặp payload mà không hề gửi original malicious query. Hãy coi cached text là untrusted input ở prompt boundary kế tiếp, giữ source identifier và áp dụng cùng cách tách data khỏi instruction như trong agent system nói chung.
 
 ## Scope là security property, không phải chi tiết hiệu năng
 
@@ -201,7 +201,7 @@ Tối thiểu, hãy quyết định cache boundary thuộc scope nào:
 | Session | Assumption tạm trong một conversation | Key theo session/thread, sống ngắn. |
 | Action | Decision hoặc authorization | Không reuse như answer chung; recompute hoặc revalidate. |
 
-Scope phải được kiểm tra trước vector similarity. Điều này tương tự double-keying trong web cache để giảm privacy risk: identity context là một phần của lookup contract chứ không phải việc sửa sau cùng.[4]
+Scope phải được kiểm tra trước vector similarity. Điều này tương tự double-keying trong web cache để giảm privacy risk: identity context là một phần của lookup contract chứ không phải việc sửa sau cùng.
 
 Đừng để model tự suy ra scope từ câu hỏi. Scope phải đến từ authenticated request context, server-side policy và authorization snapshot hiện tại. Nếu user hiện tại không truy cập được source document, cache không được tiết lộ summary của document đó, dù summary trông có vẻ vô hại.
 

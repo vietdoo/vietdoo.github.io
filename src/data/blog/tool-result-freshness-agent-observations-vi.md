@@ -23,7 +23,7 @@ Sự khác biệt này quan trọng ở bất kỳ nơi nào AI agent quan sát 
 
 > **Luận điểm chính:** Tool result là một observation có tuổi, phạm vi, version và mục đích sử dụng. Nó có thể an toàn cho việc giải thích nhưng đã không còn an toàn cho một action không thể đảo ngược. Production agent cần freshness contract và action-time revalidation gate—không phải thêm một instruction bảo model “luôn dùng dữ liệu mới nhất”.
 
-Bài viết này trình bày một pattern ở application level cho agent sử dụng tool. Pattern mượn vocabulary hữu ích từ HTTP caching, nơi một stored response chỉ được xem là fresh trong một lifetime xác định và có thể cần validation trước khi dùng lại.[1] Nó cũng mượn ý tưởng request precondition trong HTTP semantics: một write có thể phụ thuộc vào điều kiện representation vẫn khớp với thứ client đã quan sát.[2] Đây không phải yêu cầu phải triển khai HTTP, cũng không thay thế database transaction. Đây là cách làm cho time và state trở nên rõ ràng ở ranh giới nơi agent muốn tạo ra một effect.
+Bài viết này trình bày một pattern ở application level cho agent sử dụng tool. Pattern mượn vocabulary hữu ích từ HTTP caching, nơi một stored response chỉ được xem là fresh trong một lifetime xác định và có thể cần validation trước khi dùng lại. Nó cũng mượn ý tưởng request precondition trong HTTP semantics: một write có thể phụ thuộc vào điều kiện representation vẫn khớp với thứ client đã quan sát. Đây không phải yêu cầu phải triển khai HTTP, cũng không thay thế database transaction. Đây là cách làm cho time và state trở nên rõ ràng ở ranh giới nơi agent muốn tạo ra một effect.
 
 ## Observation không phải là thế giới
 
@@ -173,7 +173,7 @@ Với một read-only answer, một RAG retrieval mới có thể đủ. Với m
 | Authorization service | Policy decision hiện tại và grant expiry | Deny và yêu cầu authorization mới. |
 | External provider | Provider-side confirmation hoặc idempotent reservation | Đánh dấu outcome là unknown rồi reconcile. |
 
-HTTP caching đưa ra một distinction hữu ích về mặt khái niệm. Cached response có thể fresh để reuse trong freshness lifetime; sau khi cần validation, client phải kiểm tra với origin thay vì giả định representation được lưu vẫn còn hợp lệ.[1] Distinction tương tự hoạt động với agent observation, nhưng policy phải nghiêm ngặt hơn với action có side effect.
+HTTP caching đưa ra một distinction hữu ích về mặt khái niệm. Cached response có thể fresh để reuse trong freshness lifetime; sau khi cần validation, client phải kiểm tra với origin thay vì giả định representation được lưu vẫn còn hợp lệ. Distinction tương tự hoạt động với agent observation, nhưng policy phải nghiêm ngặt hơn với action có side effect.
 
 Revalidation call nên hẹp. Nó không nên yêu cầu model lặp lại toàn bộ conversation hoặc chạy lại mọi tool. Nó chỉ nên xác nhận lượng state nhỏ nhất cần thiết cho proposed action:
 
@@ -187,7 +187,7 @@ Revalidation call nên hẹp. Nó không nên yêu cầu model lặp lại toàn
 }
 ```
 
-Nếu source hỗ trợ conditional write, hãy gộp check và write khi có thể. Tương đương với một `If-Match` precondition có nghĩa là: chỉ thực hiện write nếu current representation của server vẫn khớp với version client đã quan sát trước đó.[2] Cách này đóng race mà một read “latest” riêng lẻ vẫn để lại nếu agent chờ một khoảng thời gian rồi mới write.
+Nếu source hỗ trợ conditional write, hãy gộp check và write khi có thể. Tương đương với một `If-Match` precondition có nghĩa là: chỉ thực hiện write nếu current representation của server vẫn khớp với version client đã quan sát trước đó. Cách này đóng race mà một read “latest” riêng lẻ vẫn để lại nếu agent chờ một khoảng thời gian rồi mới write.
 
 ## Race window mới là bug thật sự
 

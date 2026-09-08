@@ -19,7 +19,7 @@ Monthly total không trả lời được các câu hỏi đó. AI agent không 
 
 > **Luận điểm chính:** AI FinOps trở nên hữu ích khi cost được phân bổ theo đúng những dimension mà business dùng để quản lý công việc: tenant, workflow, outcome và owner. Token usage là meter, nhưng accountable unit economics mới là sản phẩm.
 
-[FinOps Foundation trong phần tổng quan FinOps for AI](https://www.finops.org/wg/finops-for-ai-overview/) mô tả cả tính liên tục lẫn thay đổi. Công thức cơ bản `Price × Quantity = Cost` vẫn đúng, nhưng AI thêm vào pricing biến động, SKU mới, token meter, GPU scarcity, native tagging hạn chế và một quality dimension kéo dài trong suốt vòng đời.[1](https://www.finops.org/wg/finops-for-ai-overview/) Bài viết này chuyển các nguyên tắc đó thành một thiết kế ở application level cho team xây agent.
+[FinOps Foundation trong phần tổng quan FinOps for AI](https://www.finops.org/wg/finops-for-ai-overview/) mô tả cả tính liên tục lẫn thay đổi. Công thức cơ bản `Price × Quantity = Cost` vẫn đúng, nhưng AI thêm vào pricing biến động, SKU mới, token meter, GPU scarcity, native tagging hạn chế và một quality dimension kéo dài trong suốt vòng đời. Bài viết này chuyển các nguyên tắc đó thành một thiết kế ở application level cho team xây agent.
 
 ## AI spend là một workflow, không phải một line item
 
@@ -174,7 +174,7 @@ Khi không thể allocation công bằng, hãy đánh dấu cost là shared thay
 
 ## Usage meter không thể hoán đổi cho nhau
 
-Token accounting phức tạp hơn đếm character trong user prompt. Billed input có thể khác visible input sau templating, retrieval, compression, tool schema expansion hoặc provider-side processing. FinOps Foundation lưu ý AI service có thể có các token meter khác nhau và user input không luôn là quantity được tính phí tại endpoint.[1](https://www.finops.org/wg/finops-for-ai-overview/)
+Token accounting phức tạp hơn đếm character trong user prompt. Billed input có thể khác visible input sau templating, retrieval, compression, tool schema expansion hoặc provider-side processing. FinOps Foundation lưu ý AI service có thể có các token meter khác nhau và user input không luôn là quantity được tính phí tại endpoint.
 
 Khi provider expose meter, hãy ghi riêng:
 

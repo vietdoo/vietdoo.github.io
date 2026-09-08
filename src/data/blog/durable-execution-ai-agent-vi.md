@@ -25,7 +25,7 @@ Agent có thể phải đọc nhiều hệ thống, chờ approval, retry provid
 
 Câu hỏi khó chịu nhưng rất đơn giản là: **nếu process biến mất sau bước thứ tư, điều gì nói cho hệ thống biết phải resume ở đâu, công việc nào đã xảy ra và effect nào an toàn để lặp lại?**
 
-Đây là bài toán durable execution. Temporal định nghĩa khái niệm này là “crash-proof execution”: một abstraction cho phép application work tiếp tục sau khi process hoặc machine lỗi, đồng thời giữ state cần thiết để đi tiếp.[1] Khái niệm đó hữu ích, nhưng agent có thêm nhiều phức tạp. Model response không deterministic, tool call có side effect, context có thể bị compact và người dùng có thể đợi hàng giờ hoặc nhiều ngày giữa hai bước.
+Đây là bài toán durable execution. Temporal định nghĩa khái niệm này là “crash-proof execution”: một abstraction cho phép application work tiếp tục sau khi process hoặc machine lỗi, đồng thời giữ state cần thiết để đi tiếp. Khái niệm đó hữu ích, nhưng agent có thêm nhiều phức tạp. Model response không deterministic, tool call có side effect, context có thể bị compact và người dùng có thể đợi hàng giờ hoặc nhiều ngày giữa hai bước.
 
 Bài viết xem durable execution như một kiến trúc workflow cho AI agent. Đây không phải product tutorial và cũng không phải lời hứa rằng workflow engine loại bỏ mọi failure. Thiết kế vẫn cần idempotent effect, timeout rõ ràng, retry budget, lease, versioning và reconciliation.
 

@@ -13,7 +13,7 @@ The most dangerous output from an AI math tutor is not an obviously absurd answe
 
 That failure mode changes the engineering question. The question is not whether an LLM can generate a problem, solve an equation, or explain a fraction. It often can. The question is whether an EdTech product can **know when the generated artifact is correct, solvable, pedagogically appropriate, and safe to publish**.
 
-An LLM API is a useful generator, paraphraser, and tutor interface. It is not a mathematical source of truth. Research on LLM tutoring has found that responses can be aligned with pedagogical best practices while still containing frequent inaccuracies, and that plausible errors can create misconceptions for learners.[1](https://arxiv.org/html/2503.16460v1) Research on stepwise verification similarly finds that identifying the first incorrect step in a student solution is difficult for current models, while an independent verifier can improve the correctness and targeting of feedback.[2](https://aclanthology.org/2024.emnlp-main.478/)
+An LLM API is a useful generator, paraphraser, and tutor interface. It is not a mathematical source of truth. Research on LLM tutoring has found that responses can be aligned with pedagogical best practices while still containing frequent inaccuracies, and that plausible errors can create misconceptions for learners. Research on stepwise verification similarly finds that identifying the first incorrect step in a student solution is difficult for current models, while an independent verifier can improve the correctness and targeting of feedback.
 
 ![An LLM math candidate enters independent verification gates before an EdTech release can publish it](/blog/llm-math-correctness-edtech/hero.webp)
 
@@ -38,7 +38,7 @@ Treating all of these as `correct: true/false` hides the real failure. A better 
 | Pedagogical fit | Does the item match grade, skill, difficulty, and hint policy? | Curriculum rubric and trained reviewer |
 | Release safety | Did quality, safety, cost, and latency stay within thresholds? | Regression suite and release gate |
 
-The distinction matters because a structured response is not automatically a correct response. Structured Outputs can constrain an API response to a supplied JSON Schema and make refusals detectable, but the documentation also warns that structured outputs can still contain mistakes.[3](https://developers.openai.com/api/docs/guides/structured-outputs) Schema compliance is the first gate, not the mathematical proof.
+The distinction matters because a structured response is not automatically a correct response. Structured Outputs can constrain an API response to a supplied JSON Schema and make refusals detectable, but the documentation also warns that structured outputs can still contain mistakes. Schema compliance is the first gate, not the mathematical proof.
 
 ## Separate the generation contract from the mathematics contract
 
@@ -118,9 +118,9 @@ A canonicalizer should preserve the original student-facing text for display whi
 
 ## Layer two: recompute with an independent engine
 
-The simplest useful rule is to compute the answer twice using different mechanisms. If the LLM says that `3/4 + 2/3 = 17/12`, an exact rational library can verify the result without asking another model. For algebra, a symbolic system can solve the equation and substitute the candidate answer back into the original constraints. SymPy documents symbolic equation solving through tools such as `solveset` and related solver APIs.[4](https://docs.sympy.org/latest/modules/solvers/solvers.html)
+The simplest useful rule is to compute the answer twice using different mechanisms. If the LLM says that `3/4 + 2/3 = 17/12`, an exact rational library can verify the result without asking another model. For algebra, a symbolic system can solve the equation and substitute the candidate answer back into the original constraints. SymPy documents symbolic equation solving through tools such as `solveset` and related solver APIs.
 
-For constraint-heavy problems, an SMT solver can express variables, domains, inequalities, and logical relationships. Z3's programming guide presents a practical API for solving arithmetic and logical constraints.[5](https://theory.stanford.edu/~nikolaj/programmingz3.html) The point is not that every school problem needs a theorem prover. The point is that the final answer should be checked by a system whose operation is not the same as the language model's token prediction.
+For constraint-heavy problems, an SMT solver can express variables, domains, inequalities, and logical relationships. Z3's programming guide presents a practical API for solving arithmetic and logical constraints. The point is not that every school problem needs a theorem prover. The point is that the final answer should be checked by a system whose operation is not the same as the language model's token prediction.
 
 A minimal verification routine for a linear equation might follow this shape:
 
@@ -146,7 +146,7 @@ A correct final answer can be reached through an invalid step. Consider a genera
 
 Represent each step as a claim plus an operation. The step verifier checks whether the next claim follows from the previous claim under the operation and its side conditions. For an equation transformation, it can compare the solution sets before and after the step. For a numerical computation, it can recompute both sides exactly. For geometry or word problems, it may require a domain-specific checker or a constrained template.
 
-Research on formal verification for LLM-based mathematical problem solving uses a formalizer and critic design, converting natural-language reasoning into a structured language and checking statements with tools such as a computer algebra system and an SMT solver.[6](https://arxiv.org/html/2505.20869v1) That pattern is valuable for EdTech because it makes the verifier inspect a dependency graph of claims rather than merely asking a second LLM whether the paragraph sounds correct.
+Research on formal verification for LLM-based mathematical problem solving uses a formalizer and critic design, converting natural-language reasoning into a structured language and checking statements with tools such as a computer algebra system and an SMT solver. That pattern is valuable for EdTech because it makes the verifier inspect a dependency graph of claims rather than merely asking a second LLM whether the paragraph sounds correct.
 
 ## Layer four: verify the problem itself
 

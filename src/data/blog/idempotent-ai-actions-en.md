@@ -23,7 +23,7 @@ This article is a production playbook for write-oriented AI tools: creating a pa
 
 ## A retry is not a second intention
 
-In distributed systems, a client can lose a response after the server has already committed the operation. The client then has an uncomfortable choice. If it does nothing, the user may wait forever. If it sends the request again, it may create a second side effect. AWS describes this exact tension in its guidance on idempotent APIs: retries simplify recovery only when the service can identify a repeat of the same request and avoid adding another effect.[1]
+In distributed systems, a client can lose a response after the server has already committed the operation. The client then has an uncomfortable choice. If it does nothing, the user may wait forever. If it sends the request again, it may create a second side effect. AWS describes this exact tension in its guidance on idempotent APIs: retries simplify recovery only when the service can identify a repeat of the same request and avoid adding another effect.
 
 The important word is **same**. Two requests can have identical parameters and still represent two separate intentions. A user may legitimately want two identical calendar events or two identical compute instances. Conversely, the same logical intention may arrive with different transport metadata, a different HTTP connection, or a regenerated LLM tool-call identifier.
 
@@ -36,7 +36,7 @@ An idempotency key makes the intention explicit. It says: “These attempts belo
 | **At-least-once delivery** | A message or retry may be delivered more than once. | It does not prevent duplicates by itself. |
 | **Exactly-once outcome** | The externally visible business result appears once. | It is usually a system-level outcome assembled from durable state, deduplication, and reconciliation—not a magical transport property. |
 
-HTTP semantics already distinguish idempotent methods because a request may be repeated automatically after a communication failure.[2] An AI action usually arrives as a `POST`-like command, however, so the application must add an explicit contract rather than hoping that the verb will save it.
+HTTP semantics already distinguish idempotent methods because a request may be repeated automatically after a communication failure. An AI action usually arrives as a `POST`-like command, however, so the application must add an explicit contract rather than hoping that the verb will save it.
 
 ## Why AI agents make the old retry problem harder
 
@@ -116,7 +116,7 @@ type IdempotencyRecord = {
 };
 ```
 
-The record is a **business safety boundary**. It should be scoped by tenant and actor where necessary, protected by a unique constraint, and retained for at least as long as a late retry can arrive. Stripe’s API documentation describes a similar contract: the first result is saved for a key, later requests with that key return the same result, and a parameter mismatch is rejected rather than treated as a new operation.[3]
+The record is a **business safety boundary**. It should be scoped by tenant and actor where necessary, protected by a unique constraint, and retained for at least as long as a late retry can arrive. Stripe’s API documentation describes a similar contract: the first result is saved for a key, later requests with that key return the same result, and a parameter mismatch is rejected rather than treated as a new operation.
 
 ![Three transport attempts converge on one protected idempotency record, while a parameter mismatch is rejected](/blog/idempotent-ai-actions/dedup-record.webp)
 
@@ -214,7 +214,7 @@ The reservation must also prevent a second worker from racing past a `started` r
 
 Many AI actions update local state and then call an external tool. For example, a scheduling agent may create a `booking_intent` row and then call a calendar API. If the database commit succeeds but the process crashes before the API call, the action is incomplete. If the API call succeeds but the process crashes before the local commit, the application may forget what it created.
 
-A transactional outbox reduces one half of this uncertainty. The application writes the business state and an outbox event in the same database transaction. A relay then delivers the event to the external system. The outbox pattern exists because a database and a message broker generally cannot share a practical two-phase transaction; it also acknowledges that the relay may publish an event more than once, so consumers still need idempotency.[4]
+A transactional outbox reduces one half of this uncertainty. The application writes the business state and an outbox event in the same database transaction. A relay then delivers the event to the external system. The outbox pattern exists because a database and a message broker generally cannot share a practical two-phase transaction; it also acknowledges that the relay may publish an event more than once, so consumers still need idempotency.
 
 ![The agent intent is committed with an outbox event, relayed to an external API, then reconciled into a commit or compensation](/blog/idempotent-ai-actions/outbox-reconciliation.webp)
 

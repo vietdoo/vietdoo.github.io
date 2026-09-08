@@ -17,7 +17,7 @@ Một chatbot stateless sẽ quên chỉ dẫn xấu khi cuộc trò chuyện k�
 
 > **Định nghĩa làm việc:** memory poisoning là việc cố ý làm sai lệch persistent memory của agent, khiến các lần truy hồi sau đó thay đổi hành vi, quyết định hoặc action của agent.
 
-Một nghiên cứu có hệ thống gần đây xác định bốn kênh ghi memory và chín điểm yếu ở cấp model, prompt và system architecture. Nghiên cứu cũng cho thấy những agent được thiết kế để ghi và truy hồi memory tích cực hơn thì dễ bị khai thác hơn, trong khi các cơ chế chống prompt injection thông thường chưa bao phủ đầy đủ vấn đề này [1]. OWASP đã xếp rủi ro này vào **ASI06: Memory Poisoning**, đồng thời mô tả persistent memory là runtime state có thể bị thay đổi, chứa goal, user context, conversation history và permission [2].
+Một nghiên cứu có hệ thống gần đây xác định bốn kênh ghi memory và chín điểm yếu ở cấp model, prompt và system architecture. Nghiên cứu cũng cho thấy những agent được thiết kế để ghi và truy hồi memory tích cực hơn thì dễ bị khai thác hơn, trong khi các cơ chế chống prompt injection thông thường chưa bao phủ đầy đủ vấn đề này. OWASP đã xếp rủi ro này vào **ASI06: Memory Poisoning**, đồng thời mô tả persistent memory là runtime state có thể bị thay đổi, chứa goal, user context, conversation history và permission.
 
 Hệ quả thực tế hơi khó chịu nhưng rất hữu ích: **memory database là một phần của security perimeter của agent**.
 

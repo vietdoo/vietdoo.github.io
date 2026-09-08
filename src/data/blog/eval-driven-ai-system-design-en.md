@@ -17,7 +17,7 @@ That question changes the whole engineering posture. A demo asks whether the mod
 
 The difference is not solved by writing a longer system prompt. It is solved by making evaluation part of the architecture.
 
-OpenAI’s eval-driven system design guidance describes a practical path from a tiny labeled seed to initial evaluations, business KPI alignment, iterative improvement, and post-development monitoring.[1] The important idea is not the particular framework. It is the discipline of converting uncertainty into a repeatable decision loop.
+OpenAI’s eval-driven system design guidance describes a practical path from a tiny labeled seed to initial evaluations, business KPI alignment, iterative improvement, and post-development monitoring. The important idea is not the particular framework. It is the discipline of converting uncertainty into a repeatable decision loop.
 
 > **Thesis:** An AI release should be promoted because the system produced evidence against a contract, not because a reviewer felt that the latest demo looked better.
 
@@ -188,7 +188,7 @@ observe -> sanitize -> cluster -> label -> add or refine case
       -> change system -> replay -> compare -> promote or revert
 ```
 
-The `sanitize` step matters. Traces often contain customer data, secrets, or proprietary prompts. The evaluation record should preserve the failure signal while minimizing copied sensitive content. OWASP recommends sanitization, least-privilege access, tokenization, and redaction as part of reducing sensitive-information disclosure risk.[4]
+The `sanitize` step matters. Traces often contain customer data, secrets, or proprietary prompts. The evaluation record should preserve the failure signal while minimizing copied sensitive content. OWASP recommends sanitization, least-privilege access, tokenization, and redaction as part of reducing sensitive-information disclosure risk.
 
 The `cluster` step prevents a hundred similar tickets from becoming a hundred noisy test cases. Group failures by invariant: wrong tenant, stale policy, unsupported action, missing citation, retry storm, or poor clarification. The test suite should encode behavior, not the exact wording of one customer.
 

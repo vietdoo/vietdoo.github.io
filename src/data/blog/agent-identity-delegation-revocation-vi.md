@@ -17,7 +17,7 @@ Một senior engineer có thể được phép xoá replica production. Một su
 
 > **Luận điểm:** AI agent là một principal độc lập. Delegation chỉ nên chuyển phần authority cần cho task hiện tại, giữ lại identity của người khởi tạo, giới hạn role riêng của agent và có thể revoke khi run vẫn đang diễn ra.
 
-Đây đang trở thành bài toán identity và authorization chứ không còn chỉ là bài toán viết prompt. NCCoE thuộc NIST đã kêu gọi nghiên cứu về identification, authorization, auditing và non-repudiation cho software agent.[1] Một Internet-Draft của IETF đề xuất OAuth extension có thể ghi nhận user, client application và agent trong flow delegated authorization.[2] Các sáng kiến này không loại bỏ quyết định thiết kế cục bộ, nhưng hướng đi đã khá rõ: identity của agent phải được biểu diễn có chủ đích.
+Đây đang trở thành bài toán identity và authorization chứ không còn chỉ là bài toán viết prompt. NCCoE thuộc NIST đã kêu gọi nghiên cứu về identification, authorization, auditing và non-repudiation cho software agent. Một Internet-Draft của IETF đề xuất OAuth extension có thể ghi nhận user, client application và agent trong flow delegated authorization. Các sáng kiến này không loại bỏ quyết định thiết kế cục bộ, nhưng hướng đi đã khá rõ: identity của agent phải được biểu diễn có chủ đích.
 
 ## Identity triangle: user, client và agent
 
@@ -38,7 +38,7 @@ Sự tách biệt này quan trọng ngay cả khi mọi thành phần do cùng m
 
 ## Delegation không phải impersonation
 
-OAuth token exchange phân biệt khá rõ **delegation** và **impersonation**. Trong impersonation, principal A nhận token khiến A gần như không thể phân biệt với principal B trong hệ thống nhận request. Trong delegation, A vẫn giữ identity riêng nhưng hành động thay mặt B. RFC 8693 mô tả hai semantics này khác nhau và hỗ trợ token mang thông tin về cả subject lẫn actor.[3]
+OAuth token exchange phân biệt khá rõ **delegation** và **impersonation**. Trong impersonation, principal A nhận token khiến A gần như không thể phân biệt với principal B trong hệ thống nhận request. Trong delegation, A vẫn giữ identity riêng nhưng hành động thay mặt B. RFC 8693 mô tả hai semantics này khác nhau và hỗ trợ token mang thông tin về cả subject lẫn actor.
 
 Đối với AI agent, khác biệt này rất thực tế. Nếu agent impersonate user, downstream API có thể chỉ thấy `user:alice`. Nó không biết Alice trực tiếp tạo request, client gọi agent hay agent thứ hai đã rewrite task. Nếu agent delegate thay mặt Alice, downstream API có thể enforce policy trên cả hai identity: “Alice khởi tạo, nhưng `agent:ticket-assistant` là actor; token chỉ hợp lệ cho ticket read đến 14:00.”
 
@@ -72,9 +72,9 @@ Giả sử một engineer có quyền đọc deployment, rollback release và xo
 
 ![Phần giao của user permission, agent role, task scope, audience và environment](/blog/agent-identity-delegation-revocation/intersection-authority-playwright.webp)
 
-WorkOS gọi đây là intersection rule: permission của user là một ceiling, không phải toàn bộ grant. Scope riêng của agent là ceiling thứ hai.[4] Cách này ngăn failure mode phổ biến trong đó một nhân viên có quyền cao vô tình cấp cho general-purpose agent khả năng thực hiện mọi privileged action mà nhân viên đó có thể làm.
+WorkOS gọi đây là intersection rule: permission của user là một ceiling, không phải toàn bộ grant. Scope riêng của agent là ceiling thứ hai. Cách này ngăn failure mode phổ biến trong đó một nhân viên có quyền cao vô tình cấp cho general-purpose agent khả năng thực hiện mọi privileged action mà nhân viên đó có thể làm.
 
-Intersection nên được đánh giá ở policy boundary, tốt nhất là tại mỗi tool call nhạy cảm. Đừng yêu cầu model tự quyết định action có được phép hay không. Model có thể đề xuất action; policy engine hoặc resource server phải quyết định action có được authorize không. Đây cũng là hướng OWASP khuyến nghị trong phần excessive agency: giảm functionality và permission, chạy extension trong user context, yêu cầu approval cho action có tác động lớn và enforce complete mediation ở downstream.[5]
+Intersection nên được đánh giá ở policy boundary, tốt nhất là tại mỗi tool call nhạy cảm. Đừng yêu cầu model tự quyết định action có được phép hay không. Model có thể đề xuất action; policy engine hoặc resource server phải quyết định action có được authorize không. Đây cũng là hướng OWASP khuyến nghị trong phần excessive agency: giảm functionality và permission, chạy extension trong user context, yêu cầu approval cho action có tác động lớn và enforce complete mediation ở downstream.
 
 Input cho policy cần nhiều cấu trúc hơn một scope string:
 
@@ -111,7 +111,7 @@ Một decision bị deny là dữ liệu có giá trị. Nó cho biết agent xi
 
 ## Token exchange: tạo credential có hình dạng của task
 
-Agent không nên forward browser session token của user tới mọi downstream service. Nó nên exchange subject token đã được authenticate để nhận credential mới, gắn với resource, audience và task cụ thể. RFC 8693 định nghĩa OAuth-based token exchange để lấy token có thể được scope hẹp hơn cho downstream service.[3]
+Agent không nên forward browser session token của user tới mọi downstream service. Nó nên exchange subject token đã được authenticate để nhận credential mới, gắn với resource, audience và task cụ thể. RFC 8693 định nghĩa OAuth-based token exchange để lấy token có thể được scope hẹp hơn cho downstream service.
 
 Request đơn giản có thể trông như sau:
 
@@ -153,7 +153,7 @@ Token hoặc authorization context được cấp nên làm mối quan hệ có 
 }
 ```
 
-Điểm quan trọng không phải exact JSON shape. Resource server phải nhận diện được agent thực thi, attribution được user delegate, audience bị giới hạn, task boundary rõ ràng và credential bị từ chối khi hết hạn hoặc không còn phù hợp policy. ScaleKit mô tả cùng nhu cầu này qua dual identity enforcement, scoped permission, cross-service attribution, expiry/revocation check và auditability ở quy mô lớn.[6]
+Điểm quan trọng không phải exact JSON shape. Resource server phải nhận diện được agent thực thi, attribution được user delegate, audience bị giới hạn, task boundary rõ ràng và credential bị từ chối khi hết hạn hoặc không còn phù hợp policy. ScaleKit mô tả cùng nhu cầu này qua dual identity enforcement, scoped permission, cross-service attribution, expiry/revocation check và auditability ở quy mô lớn.
 
 ## Delegation chain cần có maximum depth
 

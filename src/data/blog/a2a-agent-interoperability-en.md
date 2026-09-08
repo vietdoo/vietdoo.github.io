@@ -15,7 +15,7 @@ I used to describe every AI integration as a tool call. It was a useful simplifi
 
 At that point, calling the other system a “tool” starts to hide more than it explains. The remote system may have its own model, memory, policies, user context, runtime, and failure modes. It may not expose its internal chain of thought or its tools at all. What crosses the boundary is not a function implementation; it is a conversation about a task, its authority, its progress, and its result.
 
-That is the problem space addressed by **Agent2Agent (A2A)**, an open protocol for collaboration between agentic applications that may be built by different vendors or frameworks. The official design emphasizes agent discovery, standard transports, enterprise authentication, long-running tasks, state updates, and multimodal data exchange.[1] The latest specification organizes those ideas into operations, a data model, task update mechanisms, capability validation, versioning, and security objects.[2]
+That is the problem space addressed by **Agent2Agent (A2A)**, an open protocol for collaboration between agentic applications that may be built by different vendors or frameworks. The official design emphasizes agent discovery, standard transports, enterprise authentication, long-running tasks, state updates, and multimodal data exchange. The latest specification organizes those ideas into operations, a data model, task update mechanisms, capability validation, versioning, and security objects.
 
 The important idea is not that every agent should suddenly become part of a giant autonomous swarm. The important idea is that **an agent-to-agent call is a distributed-systems boundary**. Once we treat it that way, several design questions become unavoidable: How does a client discover what the remote agent can actually do? How is delegated authority constrained? What does “in progress” mean? What happens when a stream disconnects halfway through? Can the client safely retry? How does a human cancel work that has already started?
 
@@ -45,7 +45,7 @@ _Figure 1. Discovery should narrow the delegation boundary before the client sen
 
 ## Agent Cards are capability contracts, not marketing profiles
 
-A client cannot delegate responsibly if it knows only that a remote endpoint exists. It needs a machine-readable description of the remote agent’s identity, skills, interfaces, authentication requirements, and supported capabilities. A2A calls this description an **Agent Card**.[1] [2]
+A client cannot delegate responsibly if it knows only that a remote endpoint exists. It needs a machine-readable description of the remote agent’s identity, skills, interfaces, authentication requirements, and supported capabilities. A2A calls this description an **Agent Card**.
 
 It is tempting to treat an Agent Card as a catalogue entry: a name, a description, and a list of impressive things the agent claims to do. That is not enough for production. A useful card is closer to a capability contract. It should help the client answer four practical questions before it sends user data across the boundary.
 
@@ -77,7 +77,7 @@ The sixth step matters more than it first appears. A remote agent does not need 
 
 ## A Task is a state machine with an owner
 
-The most important design shift is to stop treating a delegated request as a single response. The remote agent may return a **Task**, a stateful object that progresses through a defined lifecycle. The exact protocol vocabulary is less important than the engineering discipline behind it: the client needs to know whether the work was accepted, is active, needs input, completed, failed, or was canceled.[2]
+The most important design shift is to stop treating a delegated request as a single response. The remote agent may return a **Task**, a stateful object that progresses through a defined lifecycle. The exact protocol vocabulary is less important than the engineering discipline behind it: the client needs to know whether the work was accepted, is active, needs input, completed, failed, or was canceled.
 
 ![A task moves through explicit states instead of being represented as one ambiguous response](/blog/a2a-agent-interoperability/task-lifecycle.webp)
 
@@ -107,7 +107,7 @@ This distinction also improves cost control. A client can stop polling while a t
 
 ## Choose delivery semantics deliberately
 
-A2A supports more than one way to deliver progress and results. The client may receive an immediate response, subscribe to a stream of updates, or configure push notifications for asynchronous work.[1] [2] These are not interchangeable transport preferences. They imply different user experiences and failure modes.
+A2A supports more than one way to deliver progress and results. The client may receive an immediate response, subscribe to a stream of updates, or configure push notifications for asynchronous work. These are not interchangeable transport preferences. They imply different user experiences and failure modes.
 
 Synchronous delivery is appropriate when the task is short, bounded, and unlikely to require a human. It keeps the request path simple, but it is a poor fit for work that may take minutes or hours. Streaming is useful when the client needs incremental status or artifacts while the task is active. It improves responsiveness, but it introduces reconnect, ordering, and duplicate-event concerns. Push notifications are useful when the client should not hold an open connection, but they require secure callback handling, replay protection, and a strategy for fetching the authoritative task state after a notification.
 

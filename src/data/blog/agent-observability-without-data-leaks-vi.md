@@ -25,7 +25,7 @@ Phản xạ tự nhiên là **log tất cả**. Prompt, response, tool arguments
 
 > **Luận điểm chính:** Một trace là *bằng chứng thực thi*, không phải một transcript hội thoại. Hãy lưu đủ bằng chứng để giải thích đường đi, chi phí, quyền hạn và policy của agent; còn raw content phải đi vào một làn riêng, chỉ bật khi được phê duyệt, có thời hạn và có kiểm soát truy cập.
 
-Đây không phải lời kêu gọi “đừng quan sát agent”. Ngược lại, agent có tool call cần quan sát sâu hơn request-response truyền thống: nó có thể gọi nhiều model, đi qua retrieval, retry, branching và tác động ra thế giới bên ngoài. OpenTelemetry đã chuẩn hóa phần lớn vocabulary cần thiết—model, token input/output, duration, tool call và, **khi opt-in**, cả content. Việc content capture tắt mặc định là một signal kiến trúc quan trọng: visibility không đồng nghĩa với được phép thu thập nội dung.[1]
+Đây không phải lời kêu gọi “đừng quan sát agent”. Ngược lại, agent có tool call cần quan sát sâu hơn request-response truyền thống: nó có thể gọi nhiều model, đi qua retrieval, retry, branching và tác động ra thế giới bên ngoài. OpenTelemetry đã chuẩn hóa phần lớn vocabulary cần thiết—model, token input/output, duration, tool call và, **khi opt-in**, cả content. Việc content capture tắt mặc định là một signal kiến trúc quan trọng: visibility không đồng nghĩa với được phép thu thập nội dung.
 
 Bài viết này đưa ra một blueprint production cho trace prompt, tool call, token và cost mà không biến log thành rò rỉ dữ liệu. Ví dụ xuyên suốt là **RelayDesk**, một agent CSKH đa tenant có thể tra knowledge base, đọc trạng thái tài khoản, tạo refund draft và gửi email sau approval. Mọi customer data, token, giá tiền và trace bên dưới đều là **dữ liệu minh họa**.
 
@@ -46,7 +46,7 @@ Trước khi chọn vendor, SDK hay schema, hãy viết các câu hỏi mà on-c
 
 Bảng này buộc team bỏ một giả định nguy hiểm: **“biết nội dung” là cách duy nhất để debug**. Nhiều incident không cần content để xác định nguyên nhân. Nếu `tool.get_customer_profile` có p99 4,8 giây, được retry ba lần vì `UPSTREAM_429`, và output đã bị policy gắn `restricted`, bạn đã có đủ hướng điều tra mà không cần nhìn địa chỉ hay bearer token của khách hàng.
 
-NIST mô tả monitoring sau triển khai của AI không chỉ là operational uptime. Nó còn chạm vào functionality, human factors, security và compliance; các team trong thực tế gặp rào cản như logging phân mảnh, drift khó phát hiện và cân bằng giữa automation với human-validated monitoring.[5] Với agent, một dashboard latency đơn thuần không giải được những lớp câu hỏi đó.
+NIST mô tả monitoring sau triển khai của AI không chỉ là operational uptime. Nó còn chạm vào functionality, human factors, security và compliance; các team trong thực tế gặp rào cản như logging phân mảnh, drift khó phát hiện và cân bằng giữa automation với human-validated monitoring. Với agent, một dashboard latency đơn thuần không giải được những lớp câu hỏi đó.
 
 ---
 
@@ -63,7 +63,7 @@ Một hệ thống lành mạnh tách các loại bằng chứng theo câu hỏi
 | **Events / audit logs** | Policy, retry, approval hay side effect nào đã xảy ra? | Event có schema cứng | Không; chỉ evidence của quyết định | SRE + Security |
 | **Restricted evidence** | Fragment chính xác nào tạo ra incident? | Snapshot đã sanitize / reference mã hóa | Chỉ explicit sample, theo policy | Break-glass, hai người phê duyệt |
 
-OpenTelemetry khuyến nghị data minimization và nhắc rõ rằng instrumentation library không thể tự biết dữ liệu nào nhạy cảm với business của bạn. Người triển khai phải review telemetry được phát ra, chỉ giữ dữ liệu có mục đích quan sát rõ ràng, và cân nhắc aggregate/anonymize thay cho attribute gốc.[2] Vì vậy, “cài auto-instrumentation rồi xem sau” không phải production architecture.
+OpenTelemetry khuyến nghị data minimization và nhắc rõ rằng instrumentation library không thể tự biết dữ liệu nào nhạy cảm với business của bạn. Người triển khai phải review telemetry được phát ra, chỉ giữ dữ liệu có mục đích quan sát rõ ràng, và cân nhắc aggregate/anonymize thay cho attribute gốc. Vì vậy, “cài auto-instrumentation rồi xem sau” không phải production architecture.
 
 ### Một nguyên tắc gọn: spans để giải thích *shape*, không phải để mang *payload*
 
@@ -83,7 +83,7 @@ Một child LLM span có thể mang model, temperature band, prompt template ver
 
 ![Bản đồ trace cho thấy agent root span, LLM, retrieval và tool call được quan sát qua metadata an toàn](/blog/agent-observability-trace-map.webp)
 
-Cách này vẫn cho bạn đúng hierarchy: `invoke_agent → plan → retrieve_policy → get_customer_profile → draft_refund`. Bài viết về GenAI telemetry của OpenTelemetry cũng minh họa đúng cấu trúc root agent span với child chat và execute-tool spans, cùng token count, model và finish reason. Khi content capture được bật, prompt/tool content có thể xuất hiện—đó phải là một quyết định policy, không phải side effect mặc định.[1]
+Cách này vẫn cho bạn đúng hierarchy: `invoke_agent → plan → retrieve_policy → get_customer_profile → draft_refund`. Bài viết về GenAI telemetry của OpenTelemetry cũng minh họa đúng cấu trúc root agent span với child chat và execute-tool spans, cùng token count, model và finish reason. Khi content capture được bật, prompt/tool content có thể xuất hiện—đó phải là một quyết định policy, không phải side effect mặc định.
 
 ---
 
@@ -142,7 +142,7 @@ Redaction không phải regex cuối pipeline. Nó là một quyết định dat
 | PII / credentials / confidential content | **Redact** | `match_category=authorization_header`, `redacted_fields=1` | Chứng minh policy chạy mà không giữ secret |
 | Không phục vụ observability | **Drop** | Không có field | Bề mặt tấn công nhỏ nhất |
 
-Một lưu ý quan trọng: hash không tự động biến dữ liệu thành anonymous. OpenTelemetry nêu rõ hash có thể bị đảo ngược trong thực tế nếu không gian input nhỏ hoặc dự đoán được, ví dụ numeric user ID.[2] Nếu cần correlation, dùng HMAC với secret được quản lý, scope theo tenant hoặc rotation window; và vẫn xem kết quả như dữ liệu nhạy cảm dưới access policy. Đừng đưa email SHA-256 thô lên dashboard rồi gọi đó là privacy.
+Một lưu ý quan trọng: hash không tự động biến dữ liệu thành anonymous. OpenTelemetry nêu rõ hash có thể bị đảo ngược trong thực tế nếu không gian input nhỏ hoặc dự đoán được, ví dụ numeric user ID. Nếu cần correlation, dùng HMAC với secret được quản lý, scope theo tenant hoặc rotation window; và vẫn xem kết quả như dữ liệu nhạy cảm dưới access policy. Đừng đưa email SHA-256 thô lên dashboard rồi gọi đó là privacy.
 
 ### Metadata-first wrapper trong TypeScript
 
@@ -208,7 +208,7 @@ function traceToolCall(span: { setAttribute(k: string, v: string | number | bool
 }
 ```
 
-Pattern này không thay thế DLP hay semantic PII detection. Nó đặt một **default safe shape**: kể cả khi exporter down, retry, sample hay vendor backend thay đổi, code path bình thường cũng chưa từng attach raw payload vào span. Grafana mô tả cùng tinh thần qua SDK-side secret sanitizer: sanitize message, system prompt, tool call và result **trước khi** generation data được export; server-side guard là lớp bổ sung cho policy tập trung.[3]
+Pattern này không thay thế DLP hay semantic PII detection. Nó đặt một **default safe shape**: kể cả khi exporter down, retry, sample hay vendor backend thay đổi, code path bình thường cũng chưa từng attach raw payload vào span. Grafana mô tả cùng tinh thần qua SDK-side secret sanitizer: sanitize message, system prompt, tool call và result **trước khi** generation data được export; server-side guard là lớp bổ sung cho policy tập trung.
 
 ---
 
@@ -226,7 +226,7 @@ Một thiết kế production thường cần ít nhất năm checkpoint.
 | **4. Backend routing & RBAC** | Tách standard trace store khỏi restricted evidence, encrypt, access log | Không phát hiện semantic PII mà classifier bỏ sót |
 | **5. Detection & test** | Canary secret, DLP scan, adversarial fixtures, alert khi policy bypass | Không thay thế preventive control |
 
-Đừng dựa vào “redact ở backend sau khi ingest”. Nếu raw prompt đã qua network, queue, retry buffer hoặc SaaS backend, bạn đã mở nhiều bề mặt lưu trữ. OpenTelemetry cung cấp collector processors để modify, filter, redact hoặc transform data—nhưng đồng thời nhấn mạnh cách tốt nhất để không thu thập dữ liệu nhạy cảm là không collect nó ngay từ đầu.[2]
+Đừng dựa vào “redact ở backend sau khi ingest”. Nếu raw prompt đã qua network, queue, retry buffer hoặc SaaS backend, bạn đã mở nhiều bề mặt lưu trữ. OpenTelemetry cung cấp collector processors để modify, filter, redact hoặc transform data—nhưng đồng thời nhấn mạnh cách tốt nhất để không thu thập dữ liệu nhạy cảm là không collect nó ngay từ đầu.
 
 Một pseudo-config có chủ đích **allowlist-first** có thể được review như sau. Hãy kiểm tra syntax chính xác theo phiên bản Collector của bạn trước khi deploy.
 
@@ -261,7 +261,7 @@ telemetry_policy:
 
 ### “Tôi sẽ truncate 1.000 ký tự” cũng không an toàn
 
-Truncate giảm volume, không giảm bản chất nhạy cảm. Token có thể nằm ở 20 ký tự đầu; tên, email hay case number cũng vậy. Tương tự, redaction dựa vào regex chỉ mạnh ở pattern đã biết. Tài liệu Grafana phân biệt secret pattern sanitizer với evaluator/guard semantically phát hiện PII—mỗi loại có coverage và trade-off khác nhau; response side, streaming và reasoning block có thể cần control khác.[3]
+Truncate giảm volume, không giảm bản chất nhạy cảm. Token có thể nằm ở 20 ký tự đầu; tên, email hay case number cũng vậy. Tương tự, redaction dựa vào regex chỉ mạnh ở pattern đã biết. Tài liệu Grafana phân biệt secret pattern sanitizer với evaluator/guard semantically phát hiện PII—mỗi loại có coverage và trade-off khác nhau; response side, streaming và reasoning block có thể cần control khác.
 
 Đó là lý do cần test pipeline bằng dữ liệu **synthetic nhưng độc hại**: fake bearer token, email giả, số định danh giả, nested JSON, base64-like string, payload tool chứa header, response streaming. Test không phải để chứng minh redactor “đẹp”; test để chứng minh không có raw value nào xuất hiện trong export mock, dead-letter queue và restricted-store audit ngoài expected lane.
 
@@ -311,7 +311,7 @@ Nếu final output bị groundedness regression, hãy bắt đầu với prompt 
 
 Tool calling là nơi agent observability cần đi xa hơn API logging. `HTTP 200` không có nghĩa là an toàn: agent có thể gọi write tool sai tenant; tool trả về PII quá mức; agent có thể loop read tool và tạo denial-of-wallet; hoặc tool success nhưng action phải chờ approval.
 
-OWASP liệt kê tool abuse, excessive autonomy, data exfiltration, prompt injection, denial-of-wallet và sensitive data exposure trong context/logs như rủi ro đặc trưng của agent. Khuyến nghị nền tảng là least privilege, per-tool permission scope, control cho high-impact action, monitoring và data classification.[4]
+OWASP liệt kê tool abuse, excessive autonomy, data exfiltration, prompt injection, denial-of-wallet và sensitive data exposure trong context/logs như rủi ro đặc trưng của agent. Khuyến nghị nền tảng là least privilege, per-tool permission scope, control cho high-impact action, monitoring và data classification.
 
 Một tool span tốt nên mang đủ “hành vi”:
 
@@ -357,7 +357,7 @@ Không hardcode price trong dashboard query. Hãy version hóa price card, captu
 | **Per-trace** | Agent loop, retry storm, fallback chain đắt | Stop khi vượt `max_model_turns`, `max_tool_calls`, `max_cost_estimate` |
 | **Per-tenant / period** | Denial-of-wallet, rollout bad, abuse | Quota và anomaly alert theo tenant tier + route |
 
-`cost` không được gắn với user email, raw prompt hay full tool args để “giải thích billing”. Hãy dùng route, model class, prompt version, tool name, tenant tier và risk tier—các dimension đã được xem xét cardinality và access. LangChain cũng nhấn mạnh trace có ích để attribute token usage và latency theo step, còn scale production cần sampling/retention policy vì con người không thể review mọi trace.[6]
+`cost` không được gắn với user email, raw prompt hay full tool args để “giải thích billing”. Hãy dùng route, model class, prompt version, tool name, tenant tier và risk tier—các dimension đã được xem xét cardinality và access. LangChain cũng nhấn mạnh trace có ích để attribute token usage và latency theo step, còn scale production cần sampling/retention policy vì con người không thể review mọi trace.
 
 ---
 
@@ -392,7 +392,7 @@ Thiết kế một flow nhỏ, có chủ đích:
 
 ![Tủ debug khóa bằng break-glass, approval hai người và time-boxed access cho evidence nhạy cảm](/blog/agent-observability-break-glass.webp)
 
-Cách làm này nghe “nặng”, nhưng nó tạo một boundary có thể audit. Nó cũng ngăn incident response bình thường trở thành pretext xem customer conversation hàng loạt. Tài liệu về redaction của Grafana nêu rõ SDK sanitizer và server guard có coverage khác nhau; không layer nào tự động bảo đảm response, streaming hay model thinking block đều đã được xử lý.[3] Break-glass không thay thế prevention, nhưng là cách thừa nhận nhu cầu điều tra mà không bình thường hóa raw-content access.
+Cách làm này nghe “nặng”, nhưng nó tạo một boundary có thể audit. Nó cũng ngăn incident response bình thường trở thành pretext xem customer conversation hàng loạt. Tài liệu về redaction của Grafana nêu rõ SDK sanitizer và server guard có coverage khác nhau; không layer nào tự động bảo đảm response, streaming hay model thinking block đều đã được xử lý. Break-glass không thay thế prevention, nhưng là cách thừa nhận nhu cầu điều tra mà không bình thường hóa raw-content access.
 
 ---
 
@@ -443,7 +443,7 @@ Tạo SDK sanitizer, Collector allowlist và canary fixtures. Viết tests chứ
 
 ### Tuần 4: vận hành feedback loop
 
-Định nghĩa sampling/retention, mở break-glass process, đưa policy bypass alert vào on-call, và biến safe summaries từ incident thành case cho regression eval. MLflow mô tả observability của agent như tổ hợp tracing, evaluation, monitoring, cost/latency, feedback và governance—đó là feedback loop cần có, không phải các tính năng rời rạc.[7]
+Định nghĩa sampling/retention, mở break-glass process, đưa policy bypass alert vào on-call, và biến safe summaries từ incident thành case cho regression eval. MLflow mô tả observability của agent như tổ hợp tracing, evaluation, monitoring, cost/latency, feedback và governance—đó là feedback loop cần có, không phải các tính năng rời rạc.
 
 ---
 

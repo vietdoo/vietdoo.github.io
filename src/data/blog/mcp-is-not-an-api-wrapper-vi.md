@@ -22,7 +22,7 @@ Một agent vận hành vừa đọc một issue: *“Khách hàng này rất b�
 
 > **Luận điểm chính:** Hãy coi MCP là một capability boundary. OAuth consent cấp một uỷ quyền được ủy thác, có thể thu hồi và có scope; policy server-side quyết định request cụ thể có được phép *lúc này* hay không; còn human approval, nếu cần, là một uỷ quyền just-in-time gắn với hiệu ứng, arguments, giới hạn và thời hạn cụ thể. Không lớp nào được thay thế lớp khác.
 
-MCP mô tả protected MCP server như OAuth resource server, MCP client như OAuth client hành động thay resource owner, và authorization server là nơi tương tác với người dùng để phát hành access token.[1] Tool trong MCP là model-controlled, nhưng specification vẫn khuyến nghị luôn có human-in-the-loop có khả năng từ chối invocation và UI làm rõ tool nào đang được gọi.[3] Bài này biến hai nguyên tắc đó thành một blueprint triển khai thực dụng.
+MCP mô tả protected MCP server như OAuth resource server, MCP client như OAuth client hành động thay resource owner, và authorization server là nơi tương tác với người dùng để phát hành access token. Tool trong MCP là model-controlled, nhưng specification vẫn khuyến nghị luôn có human-in-the-loop có khả năng từ chối invocation và UI làm rõ tool nào đang được gọi. Bài này biến hai nguyên tắc đó thành một blueprint triển khai thực dụng.
 
 Ví dụ xuyên suốt là **OpsBridge**, một MCP server đa tenant cho support và operations. Tên tool, dữ liệu và policy bên dưới là **minh họa**, không phải một chuẩn MCP mới hay một chứng nhận compliance.
 
@@ -41,7 +41,7 @@ Trước khi tranh luận về framework, hãy tách bốn quyết định vốn
 
 Bốn câu hỏi tạo thành bốn mặt phẳng: **delegation**, **capability discovery**, **authorization**, và **commit approval**. OAuth rất phù hợp cho delegation; nó không tự biết record nào thuộc tenant nào, refund có vượt hạn mức không, hay session vừa đọc dữ liệu không tin cậy. Ngược lại, một popup “Are you sure?” không thể thay token audience validation, scope, hay policy server-side.
 
-MCP cho phép `tools/list` thay đổi theo authorization có mặt trên request. Đây là một lợi thế kiến trúc: đừng trả cho model một catalog tool toàn cục rồi hy vọng prompt sẽ kiềm chế nó; hãy cho model thấy đúng tool mà authority hiện tại có thể sử dụng.[3] Với OpsBridge, catalog tối thiểu có thể như sau.
+MCP cho phép `tools/list` thay đổi theo authorization có mặt trên request. Đây là một lợi thế kiến trúc: đừng trả cho model một catalog tool toàn cục rồi hy vọng prompt sẽ kiềm chế nó; hãy cho model thấy đúng tool mà authority hiện tại có thể sử dụng. Với OpsBridge, catalog tối thiểu có thể như sau.
 
 | Tool | Capability hẹp | Hiệu ứng | Default decision |
 | --- | --- | --- | --- |
@@ -52,7 +52,7 @@ MCP cho phép `tools/list` thay đổi theo authorization có mặt trên reques
 | `rotate_api_key` | `keys:rotate` | Destructive security effect | Approval bắt buộc |
 | `post_status_update` | `status:write` | External communication | Policy hoặc approval |
 
-Một tool đơn giản, schema chặt và tên rõ ràng là bề mặt policy dễ bảo vệ hơn một `execute_anything` hay `ops:*`. OWASP cũng khuyến nghị per-tool scoping, toolset tách theo trust level và explicit authorization cho sensitive operation.[6]
+Một tool đơn giản, schema chặt và tên rõ ràng là bề mặt policy dễ bảo vệ hơn một `execute_anything` hay `ops:*`. OWASP cũng khuyến nghị per-tool scoping, toolset tách theo trust level và explicit authorization cho sensitive operation.
 
 ![So sánh master key ops:* mở mọi ngăn kéo với bộ capability key hẹp cho từng loại tool](/blog/mcp-security-capability-map.webp)
 
@@ -92,11 +92,11 @@ Policy:     subject is support_lead
 
 Điều này giải quyết hai cực đoan. Nếu chỉ dùng OAuth scope, bạn có quyền quá thô để bảo vệ row-level ownership, state transition hoặc spending limit. Nếu chỉ dùng policy nội bộ mà không có scope/token boundary, tool catalogue lại dễ phình to và việc revoke delegation trở nên mơ hồ.
 
-MCP authorization hướng client tới least privilege: server có thể đưa scope cần thiết qua `WWW-Authenticate`; client nên xem scope trong challenge là authoritative cho operation hiện tại và mở rộng scope theo step-up authorization thay vì xin quá mức ngay từ đầu.[1] Một `401` cần scope `refunds:draft` không phải là lỗi UX; nó là tín hiệu để client xin đúng quyền cho đúng bước.
+MCP authorization hướng client tới least privilege: server có thể đưa scope cần thiết qua `WWW-Authenticate`; client nên xem scope trong challenge là authoritative cho operation hiện tại và mở rộng scope theo step-up authorization thay vì xin quá mức ngay từ đầu. Một `401` cần scope `refunds:draft` không phải là lỗi UX; nó là tín hiệu để client xin đúng quyền cho đúng bước.
 
 ### Token là vé vào server, không phải hộ chiếu đi mọi nơi
 
-MCP security guidance gọi **token passthrough** là anti-pattern: server không được nhận token, bỏ qua kiểm tra token có dành cho nó hay không, rồi chuyển nguyên token xuống downstream API.[2] Resource server cần validate issuer, signature, expiry, audience/resource indicator và scope trước khi gọi policy. Nếu OpsBridge nhận token có `aud=calendar.example`, token đó không được trở thành credential hợp lệ để chạy `send_refund` chỉ vì cả hai đều dùng OAuth.
+MCP security guidance gọi **token passthrough** là anti-pattern: server không được nhận token, bỏ qua kiểm tra token có dành cho nó hay không, rồi chuyển nguyên token xuống downstream API. Resource server cần validate issuer, signature, expiry, audience/resource indicator và scope trước khi gọi policy. Nếu OpsBridge nhận token có `aud=calendar.example`, token đó không được trở thành credential hợp lệ để chạy `send_refund` chỉ vì cả hai đều dùng OAuth.
 
 Tư duy chính xác là: **MCP server là policy enforcement point**. Downstream credential, nếu cần, phải là một delegation/credential riêng có audience hẹp và lifecycle do server kiểm soát—không phải tấm vé client mang vào được pass-through vô điều kiện.
 
@@ -113,17 +113,17 @@ Tư duy chính xác là: **MCP server là policy enforcement point**. Downstream
 
 ## OAuth consent: đồng ý cho **client nào**, với **scope nào**, tới **resource nào**
 
-Consent không phải checkbox trang trí. Nó là hồ sơ về relationship giữa resource owner, client, requested scope và protected resource. Trong MCP HTTP authorization flow, protected resource metadata giúp client khám phá authorization server; client sau đó dùng authorization server metadata/discovery, đăng ký client phù hợp, PKCE, resource indicator và authorization code exchange.[1]
+Consent không phải checkbox trang trí. Nó là hồ sơ về relationship giữa resource owner, client, requested scope và protected resource. Trong MCP HTTP authorization flow, protected resource metadata giúp client khám phá authorization server; client sau đó dùng authorization server metadata/discovery, đăng ký client phù hợp, PKCE, resource indicator và authorization code exchange.
 
-RFC 9700 yêu cầu redirect URI phải exact-match với URI đã đăng ký (ngoại trừ port localhost cho native app), cấm open redirector, và nhấn mạnh PKCE cho public client; với confidential client, PKCE vẫn được khuyến nghị. `S256` là phương thức phù hợp vì không lộ verifier trong authorization request.[5] Những chi tiết này nghe giống “OAuth plumbing”, nhưng chính chúng ngăn code/token rơi vào redirect URI của kẻ khác.
+RFC 9700 yêu cầu redirect URI phải exact-match với URI đã đăng ký (ngoại trừ port localhost cho native app), cấm open redirector, và nhấn mạnh PKCE cho public client; với confidential client, PKCE vẫn được khuyến nghị. `S256` là phương thức phù hợp vì không lộ verifier trong authorization request. Những chi tiết này nghe giống “OAuth plumbing”, nhưng chính chúng ngăn code/token rơi vào redirect URI của kẻ khác.
 
 ![Luồng OAuth consent an toàn: client identity, scope, redirect URI chính xác, MCP proxy và authorization server](/blog/mcp-security-consent-proxy.webp)
 
 ### Bẫy MCP proxy: consent ở upstream không đồng nghĩa consent cho mọi MCP client
 
-MCP Security Best Practices mô tả một confused-deputy path đặc biệt quan trọng. Giả sử MCP proxy dùng static upstream OAuth client ID để gọi third-party API, nhưng chấp nhận dynamic registration từ nhiều MCP client. Nếu third-party đã ghi nhớ consent cookie cho static client đó, một client độc hại có thể tạo authorization flow với redirect URI của hắn và lợi dụng consent cũ để lấy MCP authorization code.[2]
+MCP Security Best Practices mô tả một confused-deputy path đặc biệt quan trọng. Giả sử MCP proxy dùng static upstream OAuth client ID để gọi third-party API, nhưng chấp nhận dynamic registration từ nhiều MCP client. Nếu third-party đã ghi nhớ consent cookie cho static client đó, một client độc hại có thể tạo authorization flow với redirect URI của hắn và lợi dụng consent cũ để lấy MCP authorization code.
 
-Biện pháp không phải chỉ là thêm một checkbox. MCP proxy phải có **consent của chính nó theo từng client** trước khi forward sang third-party. Consent page cần nêu rõ requesting client, third-party scopes, registered redirect URI; cần CSRF protection, chống clickjacking, và consent decision phải bind với `client_id`.[2]
+Biện pháp không phải chỉ là thêm một checkbox. MCP proxy phải có **consent của chính nó theo từng client** trước khi forward sang third-party. Consent page cần nêu rõ requesting client, third-party scopes, registered redirect URI; cần CSRF protection, chống clickjacking, và consent decision phải bind với `client_id`.
 
 | Consent UI tốt phải trả lời | Ví dụ trong OpsBridge |
 | --- | --- |
@@ -226,14 +226,14 @@ Approval trở thành “click fatigue” nếu áp dụng lên mọi read; ngư
 
 ## Tool annotations hỗ trợ UX, nhưng không phải authorization contract
 
-MCP tool annotations như `readOnlyHint`, `destructiveHint`, `idempotentHint` và `openWorldHint` tạo vocabulary hữu ích cho client UI. Nhưng spec nói rõ client phải coi annotation là untrusted trừ khi đến từ trusted server.[3] Bài phân tích của MCP maintainers cũng nhấn mạnh annotations là **hints**, không thể tự enforcement, và default cho tool thiếu annotation là thận trọng.[4]
+MCP tool annotations như `readOnlyHint`, `destructiveHint`, `idempotentHint` và `openWorldHint` tạo vocabulary hữu ích cho client UI. Nhưng spec nói rõ client phải coi annotation là untrusted trừ khi đến từ trusted server. Bài phân tích của MCP maintainers cũng nhấn mạnh annotations là **hints**, không thể tự enforcement, và default cho tool thiếu annotation là thận trọng.
 
 Điều đó dẫn tới hai rule thiết kế:
 
 1. Dùng annotation để chọn UX: read-only tool từ server đáng tin có thể ít ma sát hơn; destructive tool nên show preview/confirmation.
 2. Không dùng annotation làm source of truth. Server policy phải tự classify tool/effect bằng registry hoặc code đã review; tool tự quảng cáo `readOnlyHint: true` không được phép tự cấp quyền.
 
-Rủi ro còn là thuộc tính của **path**, không chỉ của một tool. Khi một session có private-data read, access tới untrusted content và external communication, prompt injection có thể ghép ba capability thành exfiltration path. MCP blog gọi đây là “lethal trifecta” trong bối cảnh agentic tooling.[4]
+Rủi ro còn là thuộc tính của **path**, không chỉ của một tool. Khi một session có private-data read, access tới untrusted content và external communication, prompt injection có thể ghép ba capability thành exfiltration path. MCP blog gọi đây là “lethal trifecta” trong bối cảnh agentic tooling.
 
 ![Một session bị taint bởi nội dung không tin cậy; đường từ private data sang external communication bị policy chặn](/blog/mcp-security-taint-path.webp)
 
@@ -270,7 +270,7 @@ Hãy instrument cả deny. Một deny rate tăng sau khi rollout có thể là t
 
 Bắt đầu bằng inventory thay vì “thêm OAuth”. Liệt kê mọi tool, downstream dependency, data class, destination, side effect và current credential. Sau đó làm hẹp tool manifest trước: tách read/draft/commit, bỏ generic shell/admin tool khỏi user-facing agent, và làm `tools/list` scope-aware.
 
-Tiếp theo, chuẩn hóa authorization contract: resource metadata/discovery, strict redirect URI, PKCE, issuer/audience validation, short token lifetime và consent record per client. MCP authorization specification yêu cầu protected resource metadata cho MCP server và định hướng client dùng discovery; RFC 9700 cung cấp baseline cho redirect, PKCE, mix-up và CSRF defenses.[1] [5]
+Tiếp theo, chuẩn hóa authorization contract: resource metadata/discovery, strict redirect URI, PKCE, issuer/audience validation, short token lifetime và consent record per client. MCP authorization specification yêu cầu protected resource metadata cho MCP server và định hướng client dùng discovery; RFC 9700 cung cấp baseline cho redirect, PKCE, mix-up và CSRF defenses.
 
 Sau đó đưa policy engine vào đường đi trước provider call. Policy phải biết subject, client, tool, capability, tenant/resource, state, destination, amount, taint và policy version. Cuối cùng mới thêm approval envelope cho effect high impact—và đừng quên consume-once + revalidation.
 
