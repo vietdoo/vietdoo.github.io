@@ -41,6 +41,9 @@ importers:
       '@rive-app/canvas':
         specifier: 2.37.1
         version: 2.37.1
+      '@vercel/analytics':
+        specifier: ^2.0.1
+        version: 2.0.1(svelte@5.55.4(@typescript-eslint/types@8.58.2))
       astro:
         specifier: ^7.0.9
         version: 7.0.9(@astrojs/markdown-remark@7.2.1)(@emnapi/core@1.11.1)(@emnapi/runtime@1.11.1)(@netlify/blobs@10.7.8)(@types/node@25.6.0)(@vercel/functions@3.7.6(ws@8.20.0))(jiti@2.6.1)(rollup@4.60.1)(yaml@2.8.3)
@@ -2078,6 +2081,35 @@ packages:
       '@sveltejs/kit':
         optional: true
       next:
+        optional: true
+      react:
+        optional: true
+      svelte:
+        optional: true
+      vue:
+        optional: true
+      vue-router:
+        optional: true
+
+  '@vercel/analytics@2.0.1':
+    resolution: {integrity: sha512-MTQG6V9qQrt1tsDeF+2Uoo5aPjqbVPys1xvnIftXSJYG2SrwXRHnqEvVoYID7BTruDz4lCd2Z7rM1BdkUehk2g==}
+    peerDependencies:
+      '@remix-run/react': ^2
+      '@sveltejs/kit': ^1 || ^2
+      next: '>= 13'
+      nuxt: '>= 3'
+      react: ^18 || ^19 || ^19.0.0-rc
+      svelte: '>= 4'
+      vue: ^3
+      vue-router: ^4
+    peerDependenciesMeta:
+      '@remix-run/react':
+        optional: true
+      '@sveltejs/kit':
+        optional: true
+      next:
+        optional: true
+      nuxt:
         optional: true
       react:
         optional: true
@@ -8607,6 +8639,10 @@ snapshots:
       d3-transition: 3.0.1(d3-selection@3.0.0)
 
   '@vercel/analytics@1.6.1(svelte@5.55.4(@typescript-eslint/types@8.58.2))':
+    optionalDependencies:
+      svelte: 5.55.4(@typescript-eslint/types@8.58.2)
+
+  '@vercel/analytics@2.0.1(svelte@5.55.4(@typescript-eslint/types@8.58.2))':
     optionalDependencies:
       svelte: 5.55.4(@typescript-eslint/types@8.58.2)
 
