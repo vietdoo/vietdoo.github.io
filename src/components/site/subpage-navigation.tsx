@@ -149,7 +149,7 @@ export function SubpageNavigation(props: SubpageNavigationProps) {
                   window.location.href = "/";
                 }
               }}
-              class="flex items-center gap-1.5 sm:gap-2 px-3 sm:px-4 py-1.5 sm:py-2 rounded-full bg-darkslate-600/70 hover:bg-darkslate-500 border border-darkslate-400/50 text-white hover:border-primary-500/50 hover:shadow-md active:scale-95 transition-all text-xs sm:text-sm font-semibold cursor-pointer shrink-0"
+              class="subpage-back-btn flex items-center gap-1.5 sm:gap-2 px-3 sm:px-4 py-1.5 sm:py-2 rounded-full bg-darkslate-600/70 hover:bg-darkslate-500 border border-darkslate-400/50 text-white hover:border-primary-500/50 hover:shadow-md active:scale-95 transition-all text-xs sm:text-sm font-semibold cursor-pointer shrink-0"
               aria-label="Quay lại"
             >
               <svg
@@ -398,7 +398,7 @@ export function SubpageNavigation(props: SubpageNavigationProps) {
             )}
             <a
               href="/"
-              class={`items-center gap-1 text-sm text-darkslate-200 hover:text-white transition-colors group ${
+              class={`subpage-home-link items-center gap-1 text-sm text-darkslate-200 hover:text-white transition-colors group ${
                 props.cta ? "hidden md:flex" : "flex"
               }`}
             >

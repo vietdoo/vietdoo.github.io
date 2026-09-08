@@ -265,7 +265,13 @@ const jsonLdGraph = {
     <script is:inline>
       (() => {
         try {
-          const theme = localStorage.getItem("portfolio:ui-mode") === "light" ? "light" : "dark";
+          const params = new URLSearchParams(window.location.search);
+          const themeParam = params.get("theme");
+          let theme = themeParam || localStorage.getItem("portfolio:ui-mode") || "dark";
+          if (theme !== "light" && theme !== "dark") theme = "dark";
+          if (themeParam) {
+            localStorage.setItem("portfolio:ui-mode", theme);
+          }
           document.documentElement.dataset.uiTheme = theme;
           document.documentElement.style.colorScheme = theme;
           document.querySelector('meta[name="theme-color"]')?.setAttribute("content", theme === "light" ? "#e8dfd0" : "#171717");

@@ -1091,33 +1091,178 @@ html[data-ui-theme="light"] .card:has(.visit-card-bg):hover {
     inset 0 1px 0 rgba(255, 250, 241, 0.82) !important;
 }
 
-/* Header and search controls: dark ink pills against paper, not pale-on-pale controls. */
-html[data-ui-theme="light"] nav button.bg-darkslate-600\/70,
-html[data-ui-theme="light"] nav .bg-darkslate-900\/90,
-html[data-ui-theme="light"] nav .bg-darkslate-900\/95,
-html[data-ui-theme="light"] nav .bg-darkslate-900\/98 {
-  background: var(--light-ink-strong) !important;
-  color: var(--light-surface-strong) !important;
-  border-color: var(--light-ink-strong) !important;
+/* ── Header navigation light mode refinement ───────────────── */
+/* Nav pill container floating background */
+html[data-ui-theme="light"] header nav {
+  background-color: color-mix(
+    in srgb,
+    var(--light-surface) 92%,
+    transparent
+  ) !important;
+  border-color: var(--light-line) !important;
+  box-shadow: 0 10px 30px rgba(76, 57, 51, 0.12) !important;
 }
 
-html[data-ui-theme="light"] nav button.bg-darkslate-600\/70:hover {
-  background: var(--light-accent-strong) !important;
-  border-color: var(--light-accent-strong) !important;
+/* Logo in header */
+html[data-ui-theme="light"] header nav a img[src*="vndo.png"] {
+  border: 1px solid var(--light-line);
+  box-shadow: 0 1px 3px var(--light-shadow);
 }
 
+/* Back button in light mode */
+html[data-ui-theme="light"] header nav button.bg-darkslate-600\/70,
+html[data-ui-theme="light"] header nav .subpage-back-btn {
+  background: color-mix(
+    in srgb,
+    var(--light-surface-strong) 84%,
+    transparent
+  ) !important;
+  color: var(--light-ink-strong) !important;
+  border-color: var(--light-line) !important;
+  box-shadow: 0 2px 8px var(--light-shadow) !important;
+}
+
+html[data-ui-theme="light"] header nav button.bg-darkslate-600\/70:hover,
+html[data-ui-theme="light"] header nav .subpage-back-btn:hover {
+  background: var(--light-surface-strong) !important;
+  color: var(--light-accent-strong) !important;
+  border-color: var(--light-accent-soft) !important;
+  box-shadow: 0 4px 12px var(--light-shadow) !important;
+}
+
+html[data-ui-theme="light"] header nav button.bg-darkslate-600\/70 svg,
+html[data-ui-theme="light"] header nav .subpage-back-btn svg {
+  color: inherit !important;
+}
+
+/* Language toggle container in light mode */
+html[data-ui-theme="light"] [data-lang-toggle],
+html[data-ui-theme="light"] nav .bg-darkslate-900\/90[data-lang-toggle] {
+  background: color-mix(
+    in srgb,
+    var(--light-surface-strong) 84%,
+    transparent
+  ) !important;
+  border-color: var(--light-line) !important;
+  box-shadow: 0 2px 8px var(--light-shadow) !important;
+}
+
+/* Inactive language toggle option */
+html[data-ui-theme="light"] [data-lang-toggle] [data-lang-option] {
+  color: var(--light-ink-soft) !important;
+  background-color: transparent !important;
+}
+
+html[data-ui-theme="light"] [data-lang-toggle] [data-lang-option]:hover {
+  color: var(--light-ink-strong) !important;
+  background-color: rgba(76, 57, 51, 0.08) !important;
+}
+
+/* Active language toggle option */
+html[data-ui-theme="light"] [data-lang-toggle] [data-lang-option][data-active="true"] {
+  background-color: var(--light-accent) !important;
+  color: #fff9f0 !important;
+  font-weight: 700 !important;
+  box-shadow: 0 1px 4px rgba(139, 73, 59, 0.28) !important;
+}
+
+/* Inactive explicit */
+html[data-ui-theme="light"] [data-lang-toggle] [data-lang-option][data-active="false"] {
+  background-color: transparent !important;
+  color: var(--light-ink-soft) !important;
+}
+
+html[data-ui-theme="light"] [data-lang-toggle] [data-lang-option][data-active="false"]:hover {
+  color: var(--light-ink-strong) !important;
+  background-color: rgba(76, 57, 51, 0.08) !important;
+}
+
+/* Nav links and Home link in light mode */
+html[data-ui-theme="light"] header nav a.group,
+html[data-ui-theme="light"] header nav .subpage-home-link {
+  color: var(--light-ink) !important;
+}
+
+html[data-ui-theme="light"] header nav a.group:hover,
+html[data-ui-theme="light"] header nav .subpage-home-link:hover {
+  color: var(--light-accent-strong) !important;
+}
+
+/* Center subpage label indicator */
+html[data-ui-theme="light"] header nav .font-mono.tracking-widest {
+  color: var(--light-ink-soft) !important;
+}
+
+/* Search input controls in light mode */
 html[data-ui-theme="light"] nav input,
 html[data-ui-theme="light"] nav textarea,
 html[data-ui-theme="light"] .mobile-search-panel input {
   background: var(--light-surface-strong) !important;
   color: var(--light-ink-strong) !important;
-  border-color: var(--light-line-strong) !important;
-  box-shadow: 0 2px 10px rgba(76, 57, 51, 0.07) inset !important;
+  border-color: var(--light-line) !important;
+  box-shadow: 0 2px 8px rgba(76, 57, 51, 0.06) inset !important;
 }
 
 html[data-ui-theme="light"] nav input::placeholder,
 html[data-ui-theme="light"] .mobile-search-panel input::placeholder {
   color: var(--light-ink-soft) !important;
+  opacity: 0.9 !important;
+}
+
+html[data-ui-theme="light"] nav .desktop-search-form svg,
+html[data-ui-theme="light"] nav .mobile-search-panel svg {
+  color: var(--light-ink-soft) !important;
+}
+
+/* Shortcut kbd in search bar */
+html[data-ui-theme="light"] nav kbd {
+  background: var(--light-surface) !important;
+  border-color: var(--light-line) !important;
+  color: var(--light-ink-soft) !important;
+}
+
+/* Mobile search trigger and panel */
+html[data-ui-theme="light"] .mobile-search-trigger {
+  background: color-mix(
+    in srgb,
+    var(--light-surface-strong) 84%,
+    transparent
+  ) !important;
+  border-color: var(--light-line) !important;
+  color: var(--light-ink) !important;
+}
+
+html[data-ui-theme="light"] .mobile-search-panel {
+  background: var(--light-surface-strong) !important;
+  border-color: var(--light-line) !important;
+  box-shadow: 0 16px 36px var(--light-shadow) !important;
+}
+
+html[data-ui-theme="light"] .mobile-search-close {
+  border-color: var(--light-line) !important;
+  color: var(--light-ink) !important;
+}
+
+html[data-ui-theme="light"] .mobile-search-close:hover {
+  color: var(--light-accent-strong) !important;
+  border-color: var(--light-accent-soft) !important;
+}
+
+/* Landing mobile menu button and panel */
+html[data-ui-theme="light"] header button[aria-controls="mobile-navigation"] {
+  border-color: var(--light-line) !important;
+  background: color-mix(
+    in srgb,
+    var(--light-surface-strong) 84%,
+    transparent
+  ) !important;
+  color: var(--light-ink) !important;
+}
+
+html[data-ui-theme="light"] #mobile-navigation {
+  background: var(--light-surface-strong) !important;
+  border-color: var(--light-line) !important;
+  box-shadow: 0 20px 40px var(--light-shadow) !important;
 }
 
 html[data-ui-theme="light"] nav a.bg-primary-500,
@@ -1132,19 +1277,6 @@ html[data-ui-theme="light"] #formatToggle {
   background: var(--light-surface-strong) !important;
   color: var(--light-ink-strong) !important;
   border-color: var(--light-line-strong) !important;
-}
-
-html[data-ui-theme="light"]
-  [data-lang-toggle]
-  [data-lang-option][data-active="true"] {
-  background: var(--light-accent) !important;
-  color: #fff9f0 !important;
-}
-
-html[data-ui-theme="light"]
-  [data-lang-toggle]
-  [data-lang-option][data-active="false"] {
-  color: var(--light-ink-soft) !important;
 }
 
 @media (max-width: 767px) {

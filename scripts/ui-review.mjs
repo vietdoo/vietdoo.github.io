@@ -59,6 +59,7 @@ const capture = await capturePage({
   waitMs,
   selector,
   fullPage,
+  theme: args.theme || null,
 });
 
 if (command === "before") {
@@ -113,7 +114,7 @@ if (command === "before") {
   console.log(`Report: ${reportPath}`);
 }
 
-async function capturePage({ url, viewport, waitMs, selector, fullPage }) {
+async function capturePage({ url, viewport, waitMs, selector, fullPage, theme }) {
   const consoleErrors = [];
   const pageErrors = [];
   const failedRequests = [];
@@ -129,6 +130,11 @@ async function capturePage({ url, viewport, waitMs, selector, fullPage }) {
 
   try {
     const page = await browser.newPage({ viewport, deviceScaleFactor: 1 });
+    if (theme) {
+      await page.addInitScript((t) => {
+        window.localStorage.setItem("portfolio:ui-mode", t);
+      }, theme);
+    }
     page.on("console", (message) => {
       if (message.type() === "error") consoleErrors.push(message.text());
     });
