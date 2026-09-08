@@ -1069,14 +1069,22 @@ html[data-ui-theme="light"] .card:has(.visit-card-bg) .visit-card-marquee {
 html[data-ui-theme="light"]
   .card:has(.visit-card-bg)
   .visit-card-marquee
-  .text-primary-400 {
+  .text-primary-400,
+html[data-ui-theme="light"]
+  .card:has(.visit-card-bg)
+  .visit-card-marquee
+  .text-white\/30 {
   color: var(--light-accent-strong) !important;
 }
 
 html[data-ui-theme="light"]
   .card:has(.visit-card-bg)
   .visit-card-marquee
-  .text-white\/80 {
+  .text-white\/80,
+html[data-ui-theme="light"]
+  .card:has(.visit-card-bg)
+  .visit-card-marquee
+  .text-white\/15 {
   color: var(--light-ink-soft) !important;
 }
 

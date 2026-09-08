@@ -1,6 +1,5 @@
 ---
 import Card from "./Card/index.astro";
-import { SITE } from "../site-config";
 
 interface Props {
   colSpan?: string;
@@ -39,35 +38,35 @@ const textRow2 =
   height="min-h-[82px] sm:min-h-[96px] md:min-h-0 md:h-full"
   padding="p-3 sm:p-4"
   arrowCorner
-  title="Vietnam Journey"
+  title="Journey"
 >
   <div
     slot="background"
-    class="visit-card-bg absolute inset-0 -z-10 flex flex-col justify-center overflow-hidden bg-darkslate-800"
+    class="visit-card-bg absolute inset-0 -z-10 flex flex-col justify-center overflow-hidden bg-[#0a0a0a]"
   >
     <!-- Vignette / Radial Gradient Overlay for depth -->
     <div
-      class="visit-card-vignette pointer-events-none absolute inset-0 z-10 bg-[radial-gradient(ellipse_at_center,_transparent_20%,_#17202d_85%)]"
+      class="visit-card-vignette pointer-events-none absolute inset-0 z-10 bg-[radial-gradient(ellipse_at_center,_transparent_15%,_#0a0a0a_85%)]"
     >
     </div>
 
     <!-- Edge Fades -->
     <div
-      class="visit-card-edge-fade pointer-events-none absolute inset-x-0 top-0 z-10 h-6 bg-gradient-to-b from-darkslate-800 to-transparent"
+      class="visit-card-edge-fade pointer-events-none absolute inset-x-0 top-0 z-10 h-6 bg-gradient-to-b from-[#0a0a0a] to-transparent"
     >
     </div>
     <div
-      class="visit-card-edge-fade pointer-events-none absolute inset-x-0 bottom-0 z-10 h-6 bg-gradient-to-t from-darkslate-800 to-transparent"
+      class="visit-card-edge-fade pointer-events-none absolute inset-x-0 bottom-0 z-10 h-6 bg-gradient-to-t from-[#0a0a0a] to-transparent"
     >
     </div>
 
     <!-- Rotated Marquee Text Container (-rotate-12 for diagonal slant) -->
     <div
-      class="visit-card-marquee transform -rotate-12 scale-110 select-none flex flex-col gap-2.5 opacity-20 transition-opacity duration-500 group-hover:opacity-40 sm:scale-125 sm:gap-3"
+      class="visit-card-marquee transform -rotate-12 scale-110 select-none flex flex-col gap-2.5 opacity-20 transition-opacity duration-500 group-hover:opacity-35 sm:scale-125 sm:gap-3"
     >
       <!-- Row 1: Left Scrolling -->
       <div
-        class="flex whitespace-nowrap gap-3 sm:gap-4 marquee-left text-[10px] sm:text-xs font-extrabold uppercase tracking-widest text-primary-400"
+        class="flex whitespace-nowrap gap-3 sm:gap-4 marquee-left text-[10px] sm:text-xs font-extrabold uppercase tracking-widest text-white/30"
       >
         <span>{textRow1}</span>
         <span>{textRow1}</span>
@@ -75,7 +74,7 @@ const textRow2 =
 
       <!-- Row 2: Right Scrolling -->
       <div
-        class="flex whitespace-nowrap gap-3 sm:gap-4 marquee-right text-[10px] sm:text-xs font-bold uppercase tracking-widest text-white/80"
+        class="flex whitespace-nowrap gap-3 sm:gap-4 marquee-right text-[10px] sm:text-xs font-bold uppercase tracking-widest text-white/15"
       >
         <span>{textRow2}</span>
         <span>{textRow2}</span>
@@ -83,18 +82,13 @@ const textRow2 =
 
       <!-- Row 3: Left Scrolling -->
       <div
-        class="flex whitespace-nowrap gap-3 sm:gap-4 marquee-left text-[10px] sm:text-xs font-extrabold uppercase tracking-widest text-primary-400"
+        class="flex whitespace-nowrap gap-3 sm:gap-4 marquee-left text-[10px] sm:text-xs font-extrabold uppercase tracking-widest text-white/30"
       >
         <span>{textRow1}</span>
         <span>{textRow1}</span>
       </div>
     </div>
   </div>
-
-  <span class="visit-card-count mt-auto text-[10px] text-white/60 sm:text-xs">
-    {SITE.visitedProvinces.length}
-    {SITE.visitedProvinces.length === 1 ? "province" : "provinces"}
-  </span>
 </Card>
 
 <style>
