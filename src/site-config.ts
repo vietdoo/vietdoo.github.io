@@ -26,6 +26,7 @@ export const SITE = {
     ],
     jobTitle: "Software Engineer",
     jobTitleFull: "Software Engineer @ VNPT | Founder @ VNDO",
+    yearsOfExperience: "3+",
     company: "VNPT",
     companyVi: "VNPT",
     companyEn: "VNPT Group",
