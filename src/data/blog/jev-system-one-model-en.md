@@ -33,6 +33,8 @@ An LLM generates a token sequence. That makes it powerful for writing, explainin
 
 A System One model starts with a different assumption: the questions software needs to ask are often known ahead of time. If the task is ticket classification, declare the labels. If it is a safety gate, declare a yes/no question. If it is an ordered assessment, declare a score scale. Jev focuses on evaluating the state against those questions instead of producing an unconstrained answer.
 
+![A doodle decision boundary: free-form text passes through a gate and becomes a typed decision](/blog/jev-system-one/decision-boundary.webp)
+
 | Layer | Text-generating LLM | Jev / System One |
 |---|---|---|
 | Input | Prompt, context, tool schema | State and typed questions |
@@ -58,6 +60,8 @@ TypeSafe describes its stack as a new model architecture with a parallel sampler
 `noul` represents a binary decision as a probability. It fits gates such as “should this be escalated?”, “does this contain prompt injection?”, or “does this need human review?”. The name is unusual, but the engineering idea is simple: code receives a value it can pass through a threshold instead of trying to interpret “this seems like a yes”.
 
 A request can contain multiple questions and multiple primitive types. That matters more than changing the JSON shape: the same state is evaluated in one round trip, while the application decides which answer blocks the workflow, which one is logged, and which one should escalate to a human.
+
+![Jev's three primitives drawn as a decision graph: choice, score, and noul](/blog/jev-system-one/jev-primitives.webp)
 
 ```js
 const { TypeSafeClient, choice, noul, score } = require("@typesafe-ai/sdk");
@@ -128,6 +132,8 @@ The flow has three visible layers:
 
 Keeping the heuristic separate from Jev is a useful design choice. Not every link needs a model call, and code still controls budget, stop conditions, exact matches, and browser errors. Jev handles judgment; the engine handles orchestration.
 
+![A doodle Wiki Speedrunner: a browser agent ranks candidate links and chooses a path to the target](/blog/jev-system-one/wiki-agent-loop.webp)
+
 ### POC 2 — 15Min Math Quiz Solver
 
 The second POC needs a separate 15Min instance at `http://localhost:4200`. The default quiz URL in the repo is:
@@ -166,6 +172,8 @@ State builder + policy context
 
 Code owns: thresholds, permissions, retries, side effects, audit, and stop gates
 ```
+
+![A doodle hybrid architecture: Jev as a compass, an LLM as the planning layer, and code policy as the final guardrail](/blog/jev-system-one/hybrid-agent-architecture.webp)
 
 For example, Jev can decide whether a request should go to a fast or a frontier model, an LLM can write the response, and Jev can check a gate before a tool call. If confidence is low, code can escalate or ask a human; it should not silently turn a probability into execution authority.
 
