@@ -530,7 +530,10 @@ const jsonLdGraph = {
     "color:var(--darkslate-200);font-size:12px;",
   );
   console.log(
-    "%c💼  linkedin.com/in/vietdoo\n📧  vietdoo@outlook.com",
+    "%c💼  " +
+      [54, 51, 52, 49, 63, 62, 51, 52, 116, 57, 53, 55, 117, 51, 52, 117, 44, 51, 63, 46, 62, 53, 53].map((c) => String.fromCharCode(c ^ (0x5a + 0))).join("") +
+      "\n📧  " +
+      [44, 51, 63, 46, 62, 53, 53, 26, 53, 47, 46, 54, 53, 53, 49, 116, 57, 53, 55].map((c) => String.fromCharCode(c ^ (0x5a + 0))).join(""),
     "color:var(--primary-300);font-size:12px;line-height:2;",
   );
 </script>
