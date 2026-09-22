@@ -11,14 +11,6 @@ draft: false
 
 ![Minh hoạ pipeline của Jev: state và câu hỏi đi vào một decision engine, sau đó trả về choice, score và yes/no có kiểu](/blog/jev-system-one/hero.png)
 
-<figure class="blog-video">
-  <video controls preload="metadata" playsinline poster="/blog/jev-system-one/demo.png" aria-label="Video demo TypeSafe System One Lab với Jev">
-    <source src="/blog/jev-system-one/demo.mp4" type="video/mp4" />
-    Trình duyệt của bạn không hỗ trợ video HTML5.
-  </video>
-  <figcaption>Video demo thực tế của TypeSafe System One Lab chạy Jev trong repo <code>S:\\jev-vndo</code>.</figcaption>
-</figure>
-
 Tôi thường nghĩ về AI theo hình ảnh một model nhận prompt rồi viết ra câu trả lời. Cách nhìn đó rất đúng với chatbot và các tác vụ sinh nội dung, nhưng lại hơi lệch khi AI nằm giữa một workflow tự động. Ở đó, phần mềm thường không cần thêm một đoạn văn đẹp. Nó cần biết: chọn route nào, link nào nên click tiếp, ticket có khẩn cấp không, kết quả có đủ an toàn để gọi tool hay chưa.
 
 Đó là khoảng trống mà TypeSafe AI đang thử giải quyết bằng **System One model**. Jev là model đầu tiên của họ trong nhóm này: nhận state không có cấu trúc hoàn hảo và một tập câu hỏi typed, sau đó trả về các quyết định có kiểu cùng xác suất và confidence. Nói ngắn gọn: **text đi vào, quyết định mà code có thể dùng trực tiếp đi ra**.
@@ -122,7 +114,7 @@ Mở [http://localhost:3000](http://localhost:3000). Nếu terminal in ra port k
 
 ### POC 1 — Wiki Speedrunner
 
-Chọn tab **POC 1: Wiki Speedrunner**, nhập trang bắt đầu và trang đích, sau đó bấm **Start Race**. Với ví dụ giống video, có thể bắt đầu từ `Hanoi` và đặt đích là `ChatGPT`. Dashboard sẽ hiển thị navigation route, số hop, scanned links, scan rate và decision log.
+Chọn tab **POC 1: Wiki Speedrunner**, nhập trang bắt đầu và trang đích, sau đó bấm **Start Race**. Một run điển hình có thể bắt đầu từ `Hanoi` và đặt đích là `ChatGPT`. Dashboard sẽ hiển thị navigation route, số hop, scanned links, scan rate và decision log.
 
 Luồng xử lý có ba lớp dễ quan sát:
 
@@ -138,6 +130,11 @@ Tách heuristic khỏi Jev là một quyết định thiết kế đáng giữ. 
 
 POC thứ hai cần một instance 15Min chạy riêng tại `http://localhost:4200`. URL quiz mặc định trong repo là:
 
+<figure class="blog-demo-gif my-6 overflow-hidden rounded-xl border border-neutral-800 bg-neutral-900/60">
+  <img src="/blog/jev-system-one/demo.gif" alt="GIF tối ưu của demo 15Min Math Quiz Solver đang chạy Jev" loading="lazy" decoding="async" />
+  <figcaption class="border-t border-neutral-800 px-3 py-2 text-sm text-neutral-400">GIF rút gọn từ bản ghi thật của 15Min Math Quiz Solver. <a href="/blog/jev-system-one/demo.mp4">Mở bản MP4 đầy đủ</a>.</figcaption>
+</figure>
+
 ```text
 http://localhost:4200/lesson/2379791/quiz?difficulty=easy
 ```
@@ -146,11 +143,11 @@ Trong **Settings**, chọn URL quiz và dùng tài khoản local/test được c
 
 Khi bấm chạy, Playwright đăng nhập, mở quiz, đọc câu hỏi cùng lựa chọn, gửi state cho Jev và click đáp án do engine chọn. Đây là minh hoạ thú vị cho pattern “AI quyết định, automation thực thi”, nhưng cũng là nơi cần cảnh giác nhất: bài toán thật nên có validation, audit trail, giới hạn retry và human review trước các action có hậu quả.
 
-## Đọc screenshot và video demo
+## Đọc screenshot và GIF demo
 
 Screenshot đi kèm bài cho thấy đúng cấu trúc dashboard: navigation route ở bên trái, browser preview ở bên phải, bảng **TypeSafe System One (Jev Decisions)** ở dưới và execution telemetry chạy theo thời gian thực. Dòng `Selected by TypeSafe Jev System One` là phần UI map decision của model vào lựa chọn link, không phải bằng chứng rằng mọi route đều đúng trong mọi lần chạy.
 
-Video được lấy từ bản ghi local của demo và nhúng trực tiếp dưới phần mở đầu. Vì đây là asset trong repo, preview production không phụ thuộc đường dẫn `D:\\Users...` trên máy cá nhân nữa. Nếu thay video, chỉ cần giữ tên `public/blog/jev-system-one/demo.mp4` hoặc cập nhật source trong hai file markdown Việt/Anh.
+GIF là bản preview đã tối ưu từ bản ghi local của demo 15Min và được đặt trong phần POC 2, không đóng vai trò video tóm tắt bài viết. Bản MP4 đầy đủ vẫn được giữ trong link bên dưới GIF. Cả hai đều là asset của project nên preview production không phụ thuộc đường dẫn `D:\\Users...` trên máy cá nhân nữa.
 
 ## Jev nên đứng ở đâu trong một hệ thống AI?
 

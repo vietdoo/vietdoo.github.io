@@ -11,14 +11,6 @@ draft: false
 
 ![An illustration of Jev's pipeline: state and questions enter a decision engine and come back as typed choice, score, and yes/no outputs](/blog/jev-system-one/hero.png)
 
-<figure class="blog-video">
-  <video controls preload="metadata" playsinline poster="/blog/jev-system-one/demo.png" aria-label="TypeSafe System One Lab demo running Jev">
-    <source src="/blog/jev-system-one/demo.mp4" type="video/mp4" />
-    Your browser does not support HTML5 video.
-  </video>
-  <figcaption>A real recording of the TypeSafe System One Lab demo running Jev from <code>S:\\jev-vndo</code>.</figcaption>
-</figure>
-
 I usually think about AI as a model that receives a prompt and writes an answer. That is exactly the right mental model for chat and content generation, but it becomes incomplete when AI sits in the middle of an automated workflow. The software often does not need another paragraph. It needs to know which route to take, which link to click next, whether a ticket is urgent, or whether it is safe to call a tool.
 
 That is the gap TypeSafe AI is exploring with a **System One model**. Jev is its first model in this category: it receives an imperfect state and a set of typed questions, then returns typed decisions with probabilities and confidence. In short: **messy state in, structured decisions that code can use directly out**.
@@ -122,7 +114,7 @@ Open [http://localhost:3000](http://localhost:3000). If `PORT` is already set, u
 
 ### POC 1 — Wiki Speedrunner
 
-Select **POC 1: Wiki Speedrunner**, enter a start page and a target page, and press **Start Race**. To reproduce the run shown in the video, start at `Hanoi` and use `ChatGPT` as the target. The dashboard shows the navigation route, hop count, scanned links, scan rate, and decision log.
+Select **POC 1: Wiki Speedrunner**, enter a start page and a target page, and press **Start Race**. A typical run starts at `Hanoi` and uses `ChatGPT` as the target. The dashboard shows the navigation route, hop count, scanned links, scan rate, and decision log.
 
 The flow has three visible layers:
 
@@ -138,6 +130,11 @@ Keeping the heuristic separate from Jev is a useful design choice. Not every lin
 
 The second POC needs a separate 15Min instance at `http://localhost:4200`. The default quiz URL in the repo is:
 
+<figure class="blog-demo-gif my-6 overflow-hidden rounded-xl border border-neutral-800 bg-neutral-900/60">
+  <img src="/blog/jev-system-one/demo.gif" alt="Optimized GIF of the 15Min Math Quiz Solver demo running Jev" loading="lazy" decoding="async" />
+  <figcaption class="border-t border-neutral-800 px-3 py-2 text-sm text-neutral-400">A compact GIF preview of the real 15Min Math Quiz Solver run. <a href="/blog/jev-system-one/demo.mp4">Open the full MP4 recording</a>.</figcaption>
+</figure>
+
 ```text
 http://localhost:4200/lesson/2379791/quiz?difficulty=easy
 ```
@@ -146,11 +143,11 @@ In **Settings**, choose the quiz URL and use the local/test account provisioned 
 
 When started, Playwright signs in, opens the quiz, reads the question and choices, sends state to Jev, and clicks the answer selected by the engine. This is a neat demonstration of “AI decides, automation executes”, but it is also where the safety boundary matters most: a real system needs validation, an audit trail, bounded retries, and human review before consequential actions.
 
-## Reading the screenshot and demo video
+## Reading the screenshot and demo GIF
 
 The screenshot included with this article shows the dashboard structure: the navigation route on the left, the browser preview on the right, the **TypeSafe System One (Jev Decisions)** table below, and execution telemetry updating in realtime. The `Selected by TypeSafe Jev System One` line maps a model decision to a link choice; it is not evidence that every route will be correct on every run.
 
-The video is copied from the local demo recording and embedded below the introduction. Since it is now a project asset, the preview no longer depends on the personal `D:\\Users...` path. To replace it, keep the filename `public/blog/jev-system-one/demo.mp4` or update the source in both language versions.
+The GIF is an optimized preview of the local 15Min demo recording and sits with POC 2 rather than acting as an article summary. The full MP4 remains available from the link under the GIF. Both files are project assets, so the preview no longer depends on the personal `D:\\Users...` path.
 
 ## Where should Jev sit in an AI system?
 
