@@ -1,5 +1,6 @@
-import { createSignal, onCleanup, onMount, For } from "solid-js";
+import { createSignal, onCleanup, onMount, For, Show } from "solid-js";
 import { ThemeToggle } from "@/components/ThemeToggle";
+import type { ContactDetails } from "@/lib/contact-secure";
 
 const navLinks = [
   { name: "Blog", href: "/blog" },
@@ -73,20 +74,26 @@ export function Navigation() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = createSignal(false);
   const [isContactOpen, setIsContactOpen] = createSignal(false);
   const [isPhoneCopied, setIsPhoneCopied] = createSignal(false);
+  const [contact, setContact] = createSignal<ContactDetails | null>(null);
 
-  const phoneNumber = "0845846788";
   const closeMobileMenu = () => setIsMobileMenuOpen(false);
   const closeContact = () => {
     setIsContactOpen(false);
     setIsPhoneCopied(false);
   };
-  const openContact = () => {
+  const openContact = async () => {
     closeMobileMenu();
     setIsContactOpen(true);
+    if (!contact()) {
+      const { getContactDetails } = await import("@/lib/contact-secure");
+      setContact(getContactDetails());
+    }
   };
   const copyPhoneNumber = async () => {
+    const phone = contact()?.phone;
+    if (!phone) return;
     try {
-      await navigator.clipboard.writeText(phoneNumber);
+      await navigator.clipboard.writeText(phone);
       setIsPhoneCopied(true);
       window.setTimeout(() => setIsPhoneCopied(false), 2200);
     } catch {
@@ -443,8 +450,18 @@ export function Navigation() {
           </div>
 
           <div class="relative mt-5 grid gap-2.5">
+            <Show
+              when={contact()}
+              fallback={
+                <p class="m-0 rounded-xl border border-darkslate-700 bg-darkslate-800/20 p-4 text-center text-[13px] text-darkslate-300">
+                  Đang tải thông tin liên hệ…
+                </p>
+              }
+            >
+              {(c) => (
+                <>
             <a
-              href="mailto:vietdoo@outlook.com"
+              href={c().mailto}
               class="group flex items-start gap-3 rounded-xl border border-darkslate-700 bg-darkslate-800/20 p-3 transition-colors duration-200 hover:border-darkslate-600 hover:bg-darkslate-800/70"
             >
               <span
@@ -470,7 +487,7 @@ export function Navigation() {
                   Email
                 </span>
                 <span class="mt-0.5 block truncate text-[13px] font-medium text-darkslate-100">
-                  vietdoo@outlook.com
+                  {c().email}
                 </span>
               </span>
               <span
@@ -482,7 +499,7 @@ export function Navigation() {
             </a>
 
             <a
-              href={`https://zalo.me/${phoneNumber}`}
+              href={c().zalo}
               target="_blank"
               rel="noreferrer"
               class="group flex items-start gap-3 rounded-xl border border-darkslate-700 bg-darkslate-800/20 p-3 transition-colors duration-200 hover:border-darkslate-600 hover:bg-darkslate-800/70"
@@ -502,7 +519,7 @@ export function Navigation() {
                   Zalo
                 </span>
                 <span class="mt-0.5 block text-[13px] font-medium text-darkslate-100">
-                  {phoneNumber}
+                  {c().phone}
                 </span>
               </span>
               <span
@@ -537,7 +554,7 @@ export function Navigation() {
                   Số điện thoại
                 </span>
                 <span class="mt-0.5 block text-[13px] font-medium text-darkslate-100">
-                  {phoneNumber}
+                  {c().phone}
                 </span>
               </span>
               <button
@@ -549,6 +566,9 @@ export function Navigation() {
                 {isPhoneCopied() ? "Đã copy" : "Copy"}
               </button>
             </div>
+                </>
+              )}
+            </Show>
           </div>
 
           <p class="relative m-0 mt-4 text-center text-[10px] text-darkslate-500">
