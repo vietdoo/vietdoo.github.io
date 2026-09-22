@@ -33,6 +33,8 @@ LLM sinh chuỗi token. Điều đó làm nó rất mạnh trong việc viết, 
 
 System One model bắt đầu từ một giả định khác: câu hỏi mà phần mềm cần hỏi thường đã biết trước. Nếu cần phân loại ticket, ta khai báo các nhãn. Nếu cần một cổng an toàn, ta khai báo câu hỏi yes/no. Nếu cần xếp hạng mức độ, ta khai báo một thang score. Jev tập trung vào việc đánh giá state theo những câu hỏi đó thay vì sinh một câu trả lời tự do.
 
+![Decision boundary dạng doodle: text tự do đi qua một cánh cổng và trở thành typed decision](/blog/jev-system-one/decision-boundary.webp)
+
 | Lớp | LLM sinh text | Jev / System One |
 |---|---|---|
 | Input | Prompt, context, tool schema | State và các câu hỏi typed |
@@ -58,6 +60,8 @@ TypeSafe mô tả stack của họ gồm kiến trúc model mới, parallel samp
 `noul` là một quyết định nhị phân được biểu diễn bằng xác suất. Nó phù hợp cho các cổng như “có nên escalate không?”, “input có chứa prompt injection không?” hoặc “có cần human review không?”. Tên gọi hơi lạ, nhưng ý tưởng thực dụng: code nhận một giá trị có thể đưa qua threshold thay vì phải đoán ý từ câu “có vẻ nên làm”.
 
 Một request có thể chứa nhiều câu hỏi thuộc các primitive khác nhau. Điều này quan trọng hơn việc chỉ đổi JSON output: cùng một state được đánh giá trong một round trip, còn ứng dụng tự quyết định câu hỏi nào là blocking, câu hỏi nào chỉ dùng để log, và câu hỏi nào cần chuyển sang human.
+
+![Ba primitive của Jev được vẽ như một decision graph: choice, score và noul](/blog/jev-system-one/jev-primitives.webp)
 
 ```js
 const { TypeSafeClient, choice, noul, score } = require("@typesafe-ai/sdk");
@@ -128,6 +132,8 @@ Luồng xử lý có ba lớp dễ quan sát:
 
 Tách heuristic khỏi Jev là một quyết định thiết kế đáng giữ. Không phải mọi link đều cần gửi lên model, và code vẫn kiểm soát budget, stop condition, exact match và các lỗi browser. Jev làm phần judgment; engine làm phần orchestration.
 
+![Doodle Wiki Speedrunner: browser agent xếp hạng candidate links rồi chọn đường tới target](/blog/jev-system-one/wiki-agent-loop.webp)
+
 ### POC 2 — 15Min Math Quiz Solver
 
 POC thứ hai cần một instance 15Min chạy riêng tại `http://localhost:4200`. URL quiz mặc định trong repo là:
@@ -166,6 +172,8 @@ State builder + policy context
 
 Code owns: thresholds, permissions, retries, side effects, audit and stop gates
 ```
+
+![Kiến trúc hybrid dạng doodle: Jev như la bàn, LLM như lớp lập kế hoạch, code policy là thanh chắn cuối](/blog/jev-system-one/hybrid-agent-architecture.webp)
 
 Ví dụ, Jev có thể đánh giá một request nên đi model nhanh hay model mạnh, LLM viết câu trả lời, rồi Jev lại kiểm tra một gate trước khi gọi tool. Nếu decision confidence thấp, code có thể escalate hoặc yêu cầu human; nó không nên âm thầm biến probability thành quyền thực thi.
 
