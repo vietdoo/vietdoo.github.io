@@ -98,7 +98,7 @@ Set-Location S:\jev-vndo
 npm install
 ```
 
-2. Cấu hình key trong session hiện tại, hoặc nhập key ở màn hình Settings của dashboard. Không commit key vào repo và không dán key thật vào screenshot/video công khai:
+2. Cấu hình key trong session hiện tại, hoặc nhập key ở màn hình Settings của dashboard. Không đưa key đang hoạt động vào source control hay bất kỳ bản ghi công khai nào:
 
 ```powershell
 $env:TYPESAFE_API_KEY = "<your-typesafe-api-key>"
@@ -128,12 +128,13 @@ Tách heuristic khỏi Jev là một quyết định thiết kế đáng giữ. 
 
 ### POC 2 — 15Min Math Quiz Solver
 
-POC thứ hai cần một instance 15Min chạy riêng tại `http://localhost:4200`. URL quiz mặc định trong repo là:
+POC thứ hai kết nối với một instance 15Min chạy riêng tại `http://localhost:4200`. Đây không phải benchmark về độ đúng của quiz, mà là một trace cụ thể cho mô hình “decision-in-the-loop”: runner đọc câu hỏi hiện tại, dựng state có cấu trúc, yêu cầu Jev chọn trong tập đáp án hữu hạn rồi mới thực thi thao tác trên trình duyệt.
 
 <figure class="blog-demo-gif my-6 overflow-hidden rounded-xl border border-neutral-800 bg-neutral-900/60">
-  <img src="/blog/jev-system-one/demo.gif" alt="GIF tối ưu của demo 15Min Math Quiz Solver đang chạy Jev" loading="lazy" decoding="async" />
-  <figcaption class="border-t border-neutral-800 px-3 py-2 text-sm text-neutral-400">GIF rút gọn từ bản ghi thật của 15Min Math Quiz Solver. <a href="/blog/jev-system-one/demo.mp4">Mở bản MP4 đầy đủ</a>.</figcaption>
+  <img src="/blog/jev-system-one/demo.gif" alt="15Min Math Quiz Solver đang chạy với Jev" width="640" height="273" loading="lazy" decoding="async" />
 </figure>
+
+URL quiz mặc định trong repo là:
 
 ```text
 http://localhost:4200/lesson/2379791/quiz?difficulty=easy
@@ -141,13 +142,7 @@ http://localhost:4200/lesson/2379791/quiz?difficulty=easy
 
 Trong **Settings**, chọn URL quiz và dùng tài khoản local/test được cấp cho môi trường đó. README của demo có các giá trị mặc định; không nên sao chép credential test vào một bài blog public nếu chúng còn hoạt động.
 
-Khi bấm chạy, Playwright đăng nhập, mở quiz, đọc câu hỏi cùng lựa chọn, gửi state cho Jev và click đáp án do engine chọn. Đây là minh hoạ thú vị cho pattern “AI quyết định, automation thực thi”, nhưng cũng là nơi cần cảnh giác nhất: bài toán thật nên có validation, audit trail, giới hạn retry và human review trước các action có hậu quả.
-
-## Đọc screenshot và GIF demo
-
-Screenshot đi kèm bài cho thấy đúng cấu trúc dashboard: navigation route ở bên trái, browser preview ở bên phải, bảng **TypeSafe System One (Jev Decisions)** ở dưới và execution telemetry chạy theo thời gian thực. Dòng `Selected by TypeSafe Jev System One` là phần UI map decision của model vào lựa chọn link, không phải bằng chứng rằng mọi route đều đúng trong mọi lần chạy.
-
-GIF là bản preview đã tối ưu từ bản ghi local của demo 15Min và được đặt trong phần POC 2, không đóng vai trò video tóm tắt bài viết. Bản MP4 đầy đủ vẫn được giữ trong link bên dưới GIF. Cả hai đều là asset của project nên preview production không phụ thuộc đường dẫn `D:\\Users...` trên máy cá nhân nữa.
+Khi bấm chạy, Playwright đăng nhập, mở quiz, đọc câu hỏi cùng lựa chọn, gửi state cho Jev và click đáp án do engine chọn. Giá trị của ví dụ không nằm ở việc tự động chọn một đáp án, mà ở ranh giới vận hành nó phơi bày: quyền thực thi, validation, audit trail, giới hạn retry và cơ chế chuyển sang human review phải được quyết định bởi hệ thống bao quanh model.
 
 ## Jev nên đứng ở đâu trong một hệ thống AI?
 
@@ -177,7 +172,7 @@ Ví dụ, Jev có thể đánh giá một request nên đi model nhanh hay model
 ## Các giới hạn cần ghi nhớ
 
 - Jev là hosted model được gọi qua API, không phải model local trong repo demo.
-- Demo hiện gửi state dạng text/data structure; screenshot browser không có nghĩa Jev đang nhìn trực tiếp pixel của trang.
+- Demo gửi state dạng text/data structure vào model; đây không phải một vision system đọc trực tiếp pixel của trình duyệt.
 - Jev trả quyết định có kiểu, nhưng vẫn có thể đánh giá sai. Confidence là tín hiệu để policy sử dụng, không phải chứng nhận đúng.
 - Không nên dùng Jev để thay thế reasoning mở, viết nội dung dài hoặc các tình huống mà option space chưa thể định nghĩa.
 - API key cần được giữ ở server/session an toàn. UI “API Key” của demo phù hợp cho local experiment, không nên bê nguyên cách nhập key của người dùng vào production public app.
@@ -192,4 +187,3 @@ Jev vì vậy hợp với những chỗ nhỏ nhưng xuất hiện dày đặc t
 - [Jev dashboard — Try the System One model & API](https://www.jevtypesafeai.com/dashboard)
 - [Jev System One model overview](https://jevtypesafeai.com/jev/system-one)
 - [Official TypeScript/JavaScript SDK](https://github.com/typesafe-ai/typesafe-sdk-js)
-- Demo source: `S:\\jev-vndo\README.md`, `server.js`, `src/typesafe-client.js`
