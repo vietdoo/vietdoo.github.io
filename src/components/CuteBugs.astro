@@ -2,12 +2,21 @@
 // CuteBugs.astro - Customizable AI Agent bugs (Claude, OpenAI, Gemini, Grok, DeepSeek, etc.) crawling with large crisp image logos & name tags
 ---
 
-<div id="bugs-container" class="absolute inset-0 z-0 pointer-events-auto overflow-hidden select-none">
+<div
+  id="bugs-container"
+  class="absolute inset-0 z-0 pointer-events-auto overflow-hidden select-none"
+>
   <canvas id="bugs-canvas" class="w-full h-full block"></canvas>
 </div>
 
 <script>
-  import { BUGS_CONFIG, DEV_JOKES, HIDING_JOKES, CLICK_JOKES, type BugDefinition } from "../data/bugsConfig";
+  import {
+    BUGS_CONFIG,
+    DEV_JOKES,
+    HIDING_JOKES,
+    CLICK_JOKES,
+    type BugDefinition,
+  } from "../data/bugsConfig";
 
   interface Bug {
     id: number;
@@ -21,22 +30,40 @@
     targetAngle: number;
     speed: number;
     baseSpeed: number;
-    state: 'WALK' | 'PAUSE' | 'HIDE' | 'PEEK' | 'SCARED';
+    state: "WALK" | "PAUSE" | "HIDE" | "PEEK" | "SCARED";
     stateTimer: number;
     legPhase: number;
     size: number;
-    hidingSpot: { x: number; y: number; edgeAngle: number; type: 'edge' | 'button' } | null;
+    hidingSpot: {
+      x: number;
+      y: number;
+      edgeAngle: number;
+      type: "edge" | "button";
+    } | null;
     peekAmount: number;
     emotion: string | null;
     emotionTimer: number;
     chatText: string | null;
     chatTimer: number;
     nextChatTimer: number;
-    sparkles: Array<{ x: number; y: number; vy: number; alpha: number; char: string }>;
+    sparkles: Array<{
+      x: number;
+      y: number;
+      vy: number;
+      alpha: number;
+      char: string;
+    }>;
     config: BugDefinition;
   }
 
-  function drawRoundedRect(ctx: CanvasRenderingContext2D, x: number, y: number, w: number, h: number, r: number) {
+  function drawRoundedRect(
+    ctx: CanvasRenderingContext2D,
+    x: number,
+    y: number,
+    w: number,
+    h: number,
+    r: number,
+  ) {
     ctx.beginPath();
     ctx.moveTo(x + r, y);
     ctx.lineTo(x + w - r, y);
@@ -68,7 +95,12 @@
     let isHovering = false;
 
     // Cached bounds of the text/buttons block bugs and their speech bubbles should avoid.
-    let avoidRect: { left: number; right: number; top: number; bottom: number } | null = null;
+    let avoidRect: {
+      left: number;
+      right: number;
+      top: number;
+      bottom: number;
+    } | null = null;
 
     // Filter bugs enabled in bugsConfig.ts
     const activeBugsConfig = BUGS_CONFIG.filter((b) => b.enabled);
@@ -107,11 +139,17 @@
     }
 
     resize();
+    // ⚡ Bolt: Debounce the ResizeObserver callback to prevent layout thrashing and main thread blocking
+    // during continuous resize events. This ensures heavy canvas calculations only run when resizing stops.
+    let resizeTimer: ReturnType<typeof setTimeout>;
     const resizeObserver = new ResizeObserver(() => {
-      resize();
-      if (bugs.length === 0 && width > 100 && height > 100) {
-        initBugs();
-      }
+      clearTimeout(resizeTimer);
+      resizeTimer = setTimeout(() => {
+        resize();
+        if (bugs.length === 0 && width > 100 && height > 100) {
+          initBugs();
+        }
+      }, 250);
     });
     resizeObserver.observe(container);
 
@@ -125,7 +163,9 @@
     // The text/buttons block bugs and their speech bubbles shouldn't cover, in container-relative coordinates.
     function measureAvoidRect() {
       const card = container!.closest(".card");
-      const safeBelowEl = card?.querySelector<HTMLElement>("[data-bug-safe-below]");
+      const safeBelowEl = card?.querySelector<HTMLElement>(
+        "[data-bug-safe-below]",
+      );
       if (!card || !safeBelowEl) return null;
       const rect = safeBelowEl.getBoundingClientRect();
       const containerRect = container!.getBoundingClientRect();
@@ -138,14 +178,34 @@
     }
 
     function getHidingSpots() {
-      const spots: Array<{ x: number; y: number; edgeAngle: number; type: 'edge' | 'button' }> = [];
+      const spots: Array<{
+        x: number;
+        y: number;
+        edgeAngle: number;
+        type: "edge" | "button";
+      }> = [];
       const introCard = container!.closest(".card");
       if (!introCard) return spots;
 
-      spots.push({ x: 40, y: height - 8, edgeAngle: -Math.PI / 2, type: 'edge' });
-      spots.push({ x: width / 2, y: height - 8, edgeAngle: -Math.PI / 2, type: 'edge' });
-      spots.push({ x: width - 50, y: height - 8, edgeAngle: -Math.PI / 2, type: 'edge' });
-      spots.push({ x: 12, y: height * 0.75, edgeAngle: 0, type: 'edge' });
+      spots.push({
+        x: 40,
+        y: height - 8,
+        edgeAngle: -Math.PI / 2,
+        type: "edge",
+      });
+      spots.push({
+        x: width / 2,
+        y: height - 8,
+        edgeAngle: -Math.PI / 2,
+        type: "edge",
+      });
+      spots.push({
+        x: width - 50,
+        y: height - 8,
+        edgeAngle: -Math.PI / 2,
+        type: "edge",
+      });
+      spots.push({ x: 12, y: height * 0.75, edgeAngle: 0, type: "edge" });
 
       const buttons = introCard.querySelectorAll("button, a");
       const containerRect = container!.getBoundingClientRect();
@@ -155,7 +215,12 @@
         const relX = btnRect.left - containerRect.left + btnRect.width / 2;
         const relY = btnRect.top - containerRect.top + btnRect.height;
         if (relX > 0 && relX < width && relY > 0 && relY < height) {
-          spots.push({ x: relX, y: relY - 4, edgeAngle: -Math.PI / 2, type: 'button' });
+          spots.push({
+            x: relX,
+            y: relY - 4,
+            edgeAngle: -Math.PI / 2,
+            type: "button",
+          });
         }
       });
 
@@ -178,23 +243,32 @@
           const x = minX + Math.random() * (maxX - minX);
           const y = minY + Math.random() * (maxY - minY);
           const inside =
-            x > avoid.left - pad && x < avoid.right + pad && y > avoid.top - pad && y < avoid.bottom + pad;
+            x > avoid.left - pad &&
+            x < avoid.right + pad &&
+            y > avoid.top - pad &&
+            y < avoid.bottom + pad;
           if (!inside) return { x, y };
         }
         // No free spot found after several tries (very cramped card): hug the floor
         // just beneath the text/buttons block instead of overlapping it.
-        const fallbackY = Math.min(Math.max(avoid.bottom + size * 0.6, minY), maxY);
+        const fallbackY = Math.min(
+          Math.max(avoid.bottom + size * 0.6, minY),
+          maxY,
+        );
         return { x: minX + Math.random() * (maxX - minX), y: fallbackY };
       }
 
-      return { x: minX + Math.random() * (maxX - minX), y: minY + Math.random() * (maxY - minY) };
+      return {
+        x: minX + Math.random() * (maxX - minX),
+        y: minY + Math.random() * (maxY - minY),
+      };
     }
 
     function setRandomWalkTarget(bug: Bug) {
       const point = pickWalkPoint(bug.size);
       bug.targetX = point.x;
       bug.targetY = point.y;
-      bug.state = 'WALK';
+      bug.state = "WALK";
       bug.stateTimer = 3 + Math.random() * 4;
       bug.speed = bug.baseSpeed;
       bug.hidingSpot = null;
@@ -210,7 +284,7 @@
       bug.hidingSpot = spot;
       bug.targetX = spot.x;
       bug.targetY = spot.y;
-      bug.state = 'HIDE';
+      bug.state = "HIDE";
       bug.speed = bug.baseSpeed * 1.3;
     }
 
@@ -233,7 +307,8 @@
       bugs.length = 0;
       const sizeScale = getSizeScale();
       // Narrow cards (mobile) only get a few bugs so their name tags and speech bubbles don't pile up.
-      const spawnConfig = width < 420 ? activeBugsConfig.slice(0, 3) : activeBugsConfig;
+      const spawnConfig =
+        width < 420 ? activeBugsConfig.slice(0, 3) : activeBugsConfig;
       spawnConfig.forEach((specInfo, i) => {
         const bug: Bug = {
           id: i,
@@ -247,7 +322,7 @@
           targetAngle: 0,
           speed: 0.85 + Math.random() * 0.35,
           baseSpeed: 0.85 + Math.random() * 0.35,
-          state: 'WALK',
+          state: "WALK",
           stateTimer: 2 + Math.random() * 3,
           legPhase: Math.random() * Math.PI * 2,
           size: (25 + Math.random() * 3) * sizeScale,
@@ -259,7 +334,7 @@
           chatTimer: 0,
           nextChatTimer: 1.5 + i * 2.2 + Math.random() * 2.5,
           sparkles: [],
-          config: specInfo
+          config: specInfo,
         };
         setRandomWalkTarget(bug);
         bugs.push(bug);
@@ -273,14 +348,14 @@
       bug.emotionTimer = 1.4;
     }
 
-    function addSparkles(bug: Bug, char = '♥') {
+    function addSparkles(bug: Bug, char = "♥") {
       for (let i = 0; i < 4; i++) {
         bug.sparkles.push({
           x: bug.x + (Math.random() - 0.5) * 16,
           y: bug.y - 10,
           vy: -0.9 - Math.random() * 0.9,
           alpha: 1,
-          char
+          char,
         });
       }
     }
@@ -309,16 +384,22 @@
         const dist = Math.hypot(dx, dy);
 
         if (dist < bug.size * 1.8) {
-          triggerEmotion(bug, '♥');
-          addSparkles(bug, Math.random() > 0.5 ? '♥' : '✨');
+          triggerEmotion(bug, "♥");
+          addSparkles(bug, Math.random() > 0.5 ? "♥" : "✨");
           speakJoke(bug, CLICK_JOKES);
-          bug.state = 'SCARED';
+          bug.state = "SCARED";
           bug.stateTimer = 1.8;
           bug.speed = bug.baseSpeed * 2.5;
           bug.targetX = bug.x + Math.sign(dx || 1) * (80 + Math.random() * 60);
           bug.targetY = bug.y + Math.sign(dy || 1) * (50 + Math.random() * 40);
-          bug.targetX = Math.max(bug.size * 0.85, Math.min(width - bug.size * 0.85, bug.targetX));
-          bug.targetY = Math.max(height * 0.3, Math.min(maxBugY(bug.size), bug.targetY));
+          bug.targetX = Math.max(
+            bug.size * 0.85,
+            Math.min(width - bug.size * 0.85, bug.targetX),
+          );
+          bug.targetY = Math.max(
+            height * 0.3,
+            Math.min(maxBugY(bug.size), bug.targetY),
+          );
         }
       });
     });
@@ -339,7 +420,7 @@
 
         bug.nextChatTimer -= dt;
         if (bug.nextChatTimer <= 0) {
-          if (bug.state === 'PEEK') {
+          if (bug.state === "PEEK") {
             speakJoke(bug, HIDING_JOKES);
           } else {
             speakJoke(bug);
@@ -353,44 +434,50 @@
         });
         bug.sparkles = bug.sparkles.filter((s) => s.alpha > 0);
 
-        if (isHovering && bug.state !== 'SCARED' && bug.state !== 'PEEK') {
+        if (isHovering && bug.state !== "SCARED" && bug.state !== "PEEK") {
           const dx = bug.x - mouseX;
           const dy = bug.y - mouseY;
           const dist = Math.hypot(dx, dy);
           if (dist < 35) {
-            triggerEmotion(bug, '!');
-            bug.state = 'SCARED';
+            triggerEmotion(bug, "!");
+            bug.state = "SCARED";
             bug.stateTimer = 1.5;
             bug.speed = bug.baseSpeed * 2.2;
             bug.targetX = bug.x + (dx / (dist || 1)) * 90;
             bug.targetY = bug.y + (dy / (dist || 1)) * 70;
-            bug.targetX = Math.max(bug.size * 0.85, Math.min(width - bug.size * 0.85, bug.targetX));
-            bug.targetY = Math.max(height * 0.3, Math.min(maxBugY(bug.size), bug.targetY));
+            bug.targetX = Math.max(
+              bug.size * 0.85,
+              Math.min(width - bug.size * 0.85, bug.targetX),
+            );
+            bug.targetY = Math.max(
+              height * 0.3,
+              Math.min(maxBugY(bug.size), bug.targetY),
+            );
           }
         }
 
         switch (bug.state) {
-          case 'WALK':
-          case 'HIDE':
-          case 'SCARED': {
+          case "WALK":
+          case "HIDE":
+          case "SCARED": {
             const dx = bug.targetX - bug.x;
             const dy = bug.targetY - bug.y;
             const dist = Math.hypot(dx, dy);
 
             if (dist < 10) {
-              if (bug.state === 'HIDE') {
-                bug.state = 'PEEK';
+              if (bug.state === "HIDE") {
+                bug.state = "PEEK";
                 bug.stateTimer = 3 + Math.random() * 4;
                 bug.peekAmount = 0.75;
-                triggerEmotion(bug, '?');
+                triggerEmotion(bug, "?");
                 speakJoke(bug, HIDING_JOKES);
-              } else if (bug.state === 'SCARED') {
+              } else if (bug.state === "SCARED") {
                 setHidingTarget(bug);
               } else {
                 const rand = Math.random();
                 if (rand < 0.4) setHidingTarget(bug);
                 else if (rand < 0.7) {
-                  bug.state = 'PAUSE';
+                  bug.state = "PAUSE";
                   bug.stateTimer = 1.5 + Math.random() * 2.5;
                 } else setRandomWalkTarget(bug);
               }
@@ -409,14 +496,14 @@
             }
 
             bug.stateTimer -= dt;
-            if (bug.stateTimer <= 0 && bug.state === 'WALK') {
+            if (bug.stateTimer <= 0 && bug.state === "WALK") {
               if (Math.random() < 0.5) setHidingTarget(bug);
               else setRandomWalkTarget(bug);
             }
             break;
           }
 
-          case 'PAUSE': {
+          case "PAUSE": {
             bug.legPhase += dt * 2;
             bug.stateTimer -= dt;
             if (bug.stateTimer <= 0) {
@@ -426,14 +513,14 @@
             break;
           }
 
-          case 'PEEK': {
+          case "PEEK": {
             bug.legPhase += dt * 1.5;
             bug.stateTimer -= dt;
             bug.peekAmount = 0.7 + Math.sin(performance.now() * 0.004) * 0.1;
 
             if (bug.stateTimer <= 0) {
-              bug.state = 'WALK';
-              triggerEmotion(bug, '✨');
+              bug.state = "WALK";
+              triggerEmotion(bug, "✨");
               setRandomWalkTarget(bug);
             }
             break;
@@ -446,15 +533,16 @@
       ctx!.save();
       ctx!.translate(b.x, b.y);
 
-      const renderAngle = b.state === 'PEEK' && b.hidingSpot ? b.hidingSpot.edgeAngle : b.angle;
+      const renderAngle =
+        b.state === "PEEK" && b.hidingSpot ? b.hidingSpot.edgeAngle : b.angle;
       const s = b.size;
 
       // Draw Sparks/Hearts
       b.sparkles.forEach((sp) => {
         ctx!.save();
         ctx!.globalAlpha = sp.alpha;
-        ctx!.fillStyle = '#f43f5e';
-        ctx!.font = 'bold 9px sans-serif';
+        ctx!.fillStyle = "#f43f5e";
+        ctx!.font = "bold 9px sans-serif";
         ctx!.fillText(sp.char, sp.x - b.x, sp.y - b.y);
         ctx!.restore();
       });
@@ -462,7 +550,8 @@
       // Draw Dev Joke Chat Bubble in White-Gray Slate Theme (Boundary-clamped)
       if (b.chatText && b.chatTimer > 0) {
         ctx!.save();
-        const font = 'bold 8.5px -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif';
+        const font =
+          'bold 8.5px -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif';
         ctx!.font = font;
         const textWidth = ctx!.measureText(b.chatText).width;
         const padX = 6;
@@ -473,7 +562,7 @@
         // Clamp horizontal bubble box position so it never overflows canvas
         let bX = -bubbleW / 2;
         const minRelativeX = margin - b.x;
-        const maxRelativeX = (width - margin) - b.x;
+        const maxRelativeX = width - margin - b.x;
 
         if (bX < minRelativeX) {
           bX = minRelativeX;
@@ -491,7 +580,8 @@
         if (avoidRect) {
           const bubbleAbsLeft = b.x + bX;
           const bubbleAbsRight = b.x + bX + bubbleW;
-          const overlapsAvoidX = bubbleAbsRight > avoidRect.left && bubbleAbsLeft < avoidRect.right;
+          const overlapsAvoidX =
+            bubbleAbsRight > avoidRect.left && bubbleAbsLeft < avoidRect.right;
           if (overlapsAvoidX) {
             minAllowedTop = Math.max(margin, avoidRect.bottom + margin);
           }
@@ -507,13 +597,13 @@
         ctx!.globalAlpha = Math.min(1, b.chatTimer * 2.5);
 
         // Soft Drop Shadow
-        ctx!.shadowColor = 'rgba(0, 0, 0, 0.4)';
+        ctx!.shadowColor = "rgba(0, 0, 0, 0.4)";
         ctx!.shadowBlur = 4;
         ctx!.shadowOffsetY = 1.5;
 
         // White-Gray Bubble Box
-        ctx!.fillStyle = '#f8fafc';
-        ctx!.strokeStyle = '#cbd5e1';
+        ctx!.fillStyle = "#f8fafc";
+        ctx!.strokeStyle = "#cbd5e1";
         ctx!.lineWidth = 1.0;
         drawRoundedRect(ctx!, bX, bY, bubbleW, bubbleH, 4);
         ctx!.fill();
@@ -535,12 +625,12 @@
         ctx!.stroke();
 
         // Reset shadow for text
-        ctx!.shadowColor = 'transparent';
+        ctx!.shadowColor = "transparent";
 
         // Crisp Dark Slate Text
-        ctx!.fillStyle = '#0f172a';
-        ctx!.textAlign = 'center';
-        ctx!.textBaseline = 'middle';
+        ctx!.fillStyle = "#0f172a";
+        ctx!.textAlign = "center";
+        ctx!.textBaseline = "middle";
         ctx!.fillText(b.chatText, bX + bubbleW / 2, bY + bubbleH / 2 + 0.5);
         ctx!.restore();
       }
@@ -548,21 +638,23 @@
       // Draw Upright Agent Name Tag (Non-rotated, always horizontal and clean)
       if (b.peekAmount < 0.4) {
         ctx!.save();
-        const nameFont = 'bold 8.5px -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif';
+        const nameFont =
+          'bold 8.5px -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif';
         ctx!.font = nameFont;
         const nameW = ctx!.measureText(b.name).width + 10;
         const nameH = 13;
         // Flip the tag above the bug when there's no room for it below (e.g. bugs
         // hiding at the bottom edge, or the short bug strip on mobile).
-        const nameY = b.y + s * 1.05 + nameH + 4 > height ? -(s * 1.05 + nameH) : s * 1.05;
+        const nameY =
+          b.y + s * 1.05 + nameH + 4 > height ? -(s * 1.05 + nameH) : s * 1.05;
 
-        const accentBorder = b.config.colors.accent || '#d97706';
+        const accentBorder = b.config.colors.accent || "#d97706";
 
-        ctx!.shadowColor = 'rgba(0, 0, 0, 0.45)';
+        ctx!.shadowColor = "rgba(0, 0, 0, 0.45)";
         ctx!.shadowBlur = 4;
         ctx!.shadowOffsetY = 1;
 
-        ctx!.fillStyle = 'rgba(15, 23, 42, 0.9)';
+        ctx!.fillStyle = "rgba(15, 23, 42, 0.9)";
         ctx!.strokeStyle = accentBorder;
         ctx!.lineWidth = 1.0;
 
@@ -570,10 +662,10 @@
         ctx!.fill();
         ctx!.stroke();
 
-        ctx!.shadowColor = 'transparent';
-        ctx!.fillStyle = '#f8fafc';
-        ctx!.textAlign = 'center';
-        ctx!.textBaseline = 'middle';
+        ctx!.shadowColor = "transparent";
+        ctx!.fillStyle = "#f8fafc";
+        ctx!.textAlign = "center";
+        ctx!.textBaseline = "middle";
         ctx!.fillText(b.name, 0, nameY + nameH / 2 + 0.5);
         ctx!.restore();
       }
@@ -584,12 +676,12 @@
       // Draw Emotion indicator if present
       if (b.emotion && !b.chatText) {
         ctx!.save();
-        ctx!.shadowColor = 'rgba(0, 0, 0, 0.4)';
+        ctx!.shadowColor = "rgba(0, 0, 0, 0.4)";
         ctx!.shadowBlur = 4;
         ctx!.shadowOffsetY = 1.5;
 
-        ctx!.fillStyle = '#f8fafc';
-        ctx!.strokeStyle = '#cbd5e1';
+        ctx!.fillStyle = "#f8fafc";
+        ctx!.strokeStyle = "#cbd5e1";
         ctx!.lineWidth = 1.0;
         const eX = 0;
         const eY = -s * 1.35;
@@ -599,11 +691,11 @@
         ctx!.fill();
         ctx!.stroke();
 
-        ctx!.shadowColor = 'transparent';
-        ctx!.fillStyle = '#0f172a';
-        ctx!.font = 'bold 8px sans-serif';
-        ctx!.textAlign = 'center';
-        ctx!.textBaseline = 'middle';
+        ctx!.shadowColor = "transparent";
+        ctx!.fillStyle = "#0f172a";
+        ctx!.font = "bold 8px sans-serif";
+        ctx!.textAlign = "center";
+        ctx!.textBaseline = "middle";
         ctx!.fillText(b.emotion, eX, eY);
         ctx!.restore();
       }
@@ -616,9 +708,9 @@
       }
 
       // 6 Wiggly Legs
-      ctx!.strokeStyle = '#0f172a';
+      ctx!.strokeStyle = "#0f172a";
       ctx!.lineWidth = 1.7;
-      ctx!.lineCap = 'round';
+      ctx!.lineCap = "round";
 
       for (let side = -1; side <= 1; side += 2) {
         for (let legIdx = 0; legIdx < 3; legIdx++) {
@@ -641,11 +733,11 @@
       }
 
       // Antennae Tip Color per AI Agent Config
-      const tipColor = b.config.colors.tip || '#f59e0b';
+      const tipColor = b.config.colors.tip || "#f59e0b";
 
       // Antennae
       const antennaPhase = Math.sin(performance.now() * 0.008 + b.id) * 0.25;
-      ctx!.strokeStyle = '#0f172a';
+      ctx!.strokeStyle = "#0f172a";
       ctx!.lineWidth = 1.4;
 
       for (let side = -1; side <= 1; side += 2) {
@@ -669,7 +761,12 @@
       ctx!.save();
 
       const colors = b.config.colors;
-      const grad = ctx!.createLinearGradient(-s * 0.4, -s * 0.4, s * 0.4, s * 0.4);
+      const grad = ctx!.createLinearGradient(
+        -s * 0.4,
+        -s * 0.4,
+        s * 0.4,
+        s * 0.4,
+      );
       if (colors.gradient.length === 1) {
         grad.addColorStop(0, colors.gradient[0]);
         grad.addColorStop(1, colors.gradient[0]);
@@ -685,8 +782,8 @@
       ctx!.fill();
 
       // Rim accent if grok or custom
-      if (b.species === 'grok') {
-        ctx!.strokeStyle = 'rgba(56, 189, 248, 0.5)';
+      if (b.species === "grok") {
+        ctx!.strokeStyle = "rgba(56, 189, 248, 0.5)";
         ctx!.lineWidth = 1.2;
         ctx!.stroke();
       }
@@ -713,17 +810,17 @@
         const logoR = s * 0.38;
 
         // Drop shadow for logo circle badge
-        ctx!.shadowColor = 'rgba(0, 0, 0, 0.4)';
+        ctx!.shadowColor = "rgba(0, 0, 0, 0.4)";
         ctx!.shadowBlur = 4;
         ctx!.shadowOffsetY = 1;
 
         // White circular backing for crisp icon contrast
-        ctx!.fillStyle = '#ffffff';
+        ctx!.fillStyle = "#ffffff";
         ctx!.beginPath();
         ctx!.arc(0, 0, logoR, 0, Math.PI * 2);
         ctx!.fill();
 
-        ctx!.shadowColor = 'transparent';
+        ctx!.shadowColor = "transparent";
 
         // Clip image inside circular badge
         ctx!.beginPath();
@@ -735,21 +832,29 @@
       }
 
       // Glossy Highlight
-      ctx!.fillStyle = 'rgba(255, 255, 255, 0.35)';
+      ctx!.fillStyle = "rgba(255, 255, 255, 0.35)";
       ctx!.beginPath();
-      ctx!.ellipse(-s * 0.16, -s * 0.16, s * 0.11, s * 0.2, -Math.PI / 4, 0, Math.PI * 2);
+      ctx!.ellipse(
+        -s * 0.16,
+        -s * 0.16,
+        s * 0.11,
+        s * 0.2,
+        -Math.PI / 4,
+        0,
+        Math.PI * 2,
+      );
       ctx!.fill();
 
       // Cute Big White Eyes
-      ctx!.fillStyle = '#ffffff';
+      ctx!.fillStyle = "#ffffff";
       ctx!.beginPath();
       ctx!.arc(-s * 0.13, -s * 0.46, s * 0.095, 0, Math.PI * 2);
       ctx!.arc(s * 0.13, -s * 0.46, s * 0.095, 0, Math.PI * 2);
       ctx!.fill();
 
       // Black Pupils
-      ctx!.fillStyle = '#0f172a';
-      if (b.state === 'PEEK' || b.state === 'PAUSE') {
+      ctx!.fillStyle = "#0f172a";
+      if (b.state === "PEEK" || b.state === "PAUSE") {
         const pX = Math.sin(performance.now() * 0.004) * (s * 0.03);
         ctx!.beginPath();
         ctx!.arc(-s * 0.13 + pX, -s * 0.46, s * 0.05, 0, Math.PI * 2);
@@ -782,6 +887,7 @@
 
     return () => {
       cancelAnimationFrame(animId);
+      clearTimeout(resizeTimer);
       resizeObserver.disconnect();
     };
   }
@@ -793,7 +899,10 @@
     cleanup = initCuteBugs();
   }
 
-  if (document.readyState === "complete" || document.readyState === "interactive") {
+  if (
+    document.readyState === "complete" ||
+    document.readyState === "interactive"
+  ) {
     setup();
   } else {
     document.addEventListener("DOMContentLoaded", setup);
