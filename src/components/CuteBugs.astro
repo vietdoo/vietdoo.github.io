@@ -107,11 +107,15 @@
     }
 
     resize();
+    let resizeTimer: ReturnType<typeof setTimeout>;
     const resizeObserver = new ResizeObserver(() => {
-      resize();
-      if (bugs.length === 0 && width > 100 && height > 100) {
-        initBugs();
-      }
+      clearTimeout(resizeTimer);
+      resizeTimer = setTimeout(() => {
+        resize();
+        if (bugs.length === 0 && width > 100 && height > 100) {
+          initBugs();
+        }
+      }, 250);
     });
     resizeObserver.observe(container);
 
@@ -782,6 +786,7 @@
 
     return () => {
       cancelAnimationFrame(animId);
+      clearTimeout(resizeTimer);
       resizeObserver.disconnect();
     };
   }
