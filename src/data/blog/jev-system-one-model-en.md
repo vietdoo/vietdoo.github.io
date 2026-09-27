@@ -1,6 +1,6 @@
 ---
 title: "Jev and System One: When AI Returns Typed Decisions Instead of Prose"
-description: 'A practical introduction to TypeSafe AI''s System One model, how Jev turns state and typed questions into decisions, and how to run the Wiki Speedrunner and Quiz Solver demos from S:\\jev-vndo.'
+description: 'A practical introduction to TypeSafe AI''s System One model, how Jev turns state and typed questions into decisions, and how to run two demos: Wiki Speedrunner and Quiz Solver.'
 pubDate: 2026-09-22
 category: "ai"
 image: "/blog/jev-system-one/hero.png"
@@ -15,7 +15,7 @@ I usually think about AI as a model that receives a prompt and writes an answer.
 
 That is the gap TypeSafe AI is exploring with a **System One model**. Jev is its first model in this category: it receives an imperfect state and a set of typed questions, then returns typed decisions with probabilities and confidence. In short: **messy state in, structured decisions that code can use directly out**.
 
-This article is both a practical explanation and a running note from the demo in `S:\\jev-vndo`. The project contains two POCs: a Wiki Speedrunner that uses Jev to choose the next hop between Wikipedia pages, and a 15Min Math Quiz Solver that uses Jev inside a Playwright loop to help select answers.
+This article combines a practical explanation of the architecture with two runnable examples: a Wiki Speedrunner that uses Jev to choose the next hop between Wikipedia pages, and a 15Min Math Quiz Solver that uses Jev inside a Playwright loop to help select answers.
 
 > **Thesis:** Jev is not a smaller chatbot. It is a decision layer for software: the model evaluates against a declared schema, while code owns orchestration, thresholds, side effects, and recovery.
 
@@ -85,7 +85,7 @@ console.log(result.answers.escalate.noul);
 
 The value of this contract is that application code does not need to guess whether the model returned valid JSON. But typed does not mean correct. Jev can still choose poorly, a question can be ambiguous, an option set can be incomplete, and confidence is not proof. Production code still needs thresholds, fallbacks, observability, and an explicit safe exit.
 
-## Running the demo from `S:\\jev-vndo`
+## Running the demo
 
 The demo is a small Node.js application built with Express, WebSocket, and Playwright. `server.js` serves the dashboard on port `3000`, while the engines emit realtime events for telemetry. The Wiki path calls `@typesafe-ai/sdk`, pre-ranks candidates with a heuristic, and then asks Jev to choose among the top contenders with `choice`.
 
@@ -140,7 +140,7 @@ The default quiz URL in the repo is:
 http://localhost:4200/lesson/2379791/quiz?difficulty=easy
 ```
 
-In **Settings**, choose the quiz URL and use the local/test account provisioned for that environment. The demo README contains default values; do not copy test credentials into a public article while they are still valid.
+In **Settings**, choose the quiz URL and use the local/test account provisioned for that environment. The defaults belong to the test environment; do not copy credentials that are still valid into a public article.
 
 When started, Playwright signs in, opens the quiz, reads the question and choices, sends state to Jev, and clicks the answer selected by the engine. The value of the example is not automatic answer selection; it is the operational boundary it exposes. Execution authority, validation, auditability, retry limits, and escalation to human review must be defined by the system around the model.
 
@@ -171,7 +171,7 @@ For example, Jev can decide whether a request should go to a fast or a frontier 
 
 ## Limits worth keeping in view
 
-- Jev is a hosted model called through an API, not a local model bundled with this demo.
+- Jev is a hosted model called through an API, not a local model bundled with the application.
 - The demo passes text/data-structure state into the model; it is not a vision system reading browser pixels directly.
 - Jev returns typed decisions, but it can still be wrong. Confidence is a policy signal, not a correctness certificate.
 - It should not replace open-ended reasoning, long-form writing, or cases where the option space cannot be declared.
