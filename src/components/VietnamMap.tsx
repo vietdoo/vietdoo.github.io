@@ -399,6 +399,21 @@ const GRATICULE_STROKE = "#16283b";
 const TOOLTIP_BG = "#0c131d";
 const TOOLTIP_BORDER = "#334155";
 
+const UI_THEME_STORAGE_KEY = "portfolio:ui-mode";
+
+function readCurrentTheme(): "dark" | "light" {
+  if (typeof document !== "undefined") {
+    if (document.documentElement.dataset.uiTheme === "light") return "light";
+    if (document.documentElement.dataset.uiTheme === "dark") return "dark";
+  }
+  if (typeof window !== "undefined") {
+    return window.localStorage.getItem(UI_THEME_STORAGE_KEY) === "light"
+      ? "light"
+      : "dark";
+  }
+  return "dark";
+}
+
 export default function VietnamMap() {
   let containerRef: HTMLDivElement | undefined;
   let zoomBehavior: d3.ZoomBehavior<SVGSVGElement, unknown> | null = null;
@@ -408,6 +423,11 @@ export default function VietnamMap() {
     null,
     undefined
   > | null = null;
+
+  const [currentTheme, setCurrentTheme] = createSignal<"dark" | "light">(
+    readCurrentTheme(),
+  );
+  const isLight = () => currentTheme() === "light";
 
   const visitedProvinces = (SITE as any).visitedProvinces || [
     "Ha Noi",
@@ -457,6 +477,29 @@ export default function VietnamMap() {
     // Clean up any leftover tooltips from previous DOM states
     d3.select("body").selectAll(".vn-map-tooltip").remove();
 
+    const handleThemeChange = (event: Event) => {
+      const nextTheme =
+        event instanceof CustomEvent && event.detail?.theme
+          ? event.detail.theme
+          : readCurrentTheme();
+      setCurrentTheme(nextTheme === "light" ? "light" : "dark");
+      renderMap();
+    };
+
+    window.addEventListener("ui-theme-change", handleThemeChange);
+
+    const observer = new MutationObserver(() => {
+      const nextTheme = readCurrentTheme();
+      if (nextTheme !== currentTheme()) {
+        setCurrentTheme(nextTheme);
+        renderMap();
+      }
+    });
+    observer.observe(document.documentElement, {
+      attributes: true,
+      attributeFilter: ["data-ui-theme"],
+    });
+
     const renderMap = () => {
       if (!containerRef) return;
 
@@ -471,6 +514,11 @@ export default function VietnamMap() {
         400,
       );
       const isMobile = width < 640;
+      const lightMode = isLight();
+
+      const oceanFill = lightMode ? "#e3d8c5" : OCEAN_FILL;
+      const oceanStipple = lightMode ? "#cfc2ad" : OCEAN_STIPPLE;
+      const graticuleStroke = lightMode ? "rgba(88, 66, 60, 0.15)" : GRATICULE_STROKE;
 
       const svg = d3
         .select(containerRef)
@@ -479,7 +527,7 @@ export default function VietnamMap() {
         .attr("height", "100%")
         .attr("viewBox", `0 0 ${width} ${height}`)
         .attr("preserveAspectRatio", "xMidYMid meet")
-        .style("background", OCEAN_FILL);
+        .style("background", oceanFill);
 
       svgSelection = svg as any;
 
@@ -497,19 +545,19 @@ export default function VietnamMap() {
         .append("rect")
         .attr("width", 6)
         .attr("height", 6)
-        .attr("fill", OCEAN_FILL);
+        .attr("fill", oceanFill);
       stipple
         .append("circle")
         .attr("cx", 1.5)
         .attr("cy", 1.5)
         .attr("r", 0.5)
-        .attr("fill", OCEAN_STIPPLE);
+        .attr("fill", oceanStipple);
       stipple
         .append("circle")
         .attr("cx", 4.5)
         .attr("cy", 4.5)
         .attr("r", 0.5)
-        .attr("fill", OCEAN_STIPPLE);
+        .attr("fill", oceanStipple);
 
       // Glow filter for visited provinces & beacons
       const filter = defs
@@ -578,7 +626,9 @@ export default function VietnamMap() {
 
       const pathGenerator = d3.geoPath().projection(projection);
 
-      // Dynamic CARTO Dark Matter tile renderer
+      // Dynamic CARTO tile renderer (dark_nolabels or light_nolabels)
+      const tileVariant = lightMode ? "light_nolabels" : "dark_nolabels";
+
       const updateTiles = (transform = d3.zoomIdentity) => {
         const scale = projection.scale() * transform.k;
         const translate = projection.translate();
@@ -630,9 +680,9 @@ export default function VietnamMap() {
             const tileX = x0 + txIdx * tileSizeProj;
             const tileY = y0 + tyIdx * tileSizeProj;
             const subdomain = subdomains[(txIdx + tyIdx) % subdomains.length];
-            const url = `https://${subdomain}.basemaps.cartocdn.com/dark_nolabels/${z}/${txIdx}/${tyIdx}.png${keyParam}`;
+            const url = `https://${subdomain}.basemaps.cartocdn.com/${tileVariant}/${z}/${txIdx}/${tyIdx}.png${keyParam}`;
             tiles.push({
-              id: `${z}-${txIdx}-${tyIdx}`,
+              id: `${tileVariant}-${z}-${txIdx}-${tyIdx}`,
               url,
               x: tileX,
               y: tileY,
@@ -671,7 +721,7 @@ export default function VietnamMap() {
         .datum(graticule)
         .attr("d", pathGenerator as any)
         .style("fill", "none")
-        .style("stroke", GRATICULE_STROKE)
+        .style("stroke", graticuleStroke)
         .style("stroke-width", 0.8)
         .style("opacity", 0.8);
 
@@ -1090,6 +1140,8 @@ export default function VietnamMap() {
     onCleanup(() => {
       clearTimeout(resizeTimer);
       resizeObserver.disconnect();
+      window.removeEventListener("ui-theme-change", handleThemeChange);
+      observer.disconnect();
       d3.select("body").selectAll(".vn-map-tooltip").remove();
     });
   });
@@ -1365,31 +1417,31 @@ export default function VietnamMap() {
 
             {/* Region Breakdown Grid */}
             <div class="grid grid-cols-3 gap-2.5 text-center">
-              <div class="bg-darkslate-900/80 border border-darkslate-600/60 rounded-xl p-2 sm:p-2.5 flex flex-col items-center">
-                <span class="text-[10px] sm:text-[11px] font-bold text-slate-200 uppercase tracking-wider mb-0.5 sm:mb-1">
+              <div class="visit-map-region-card bg-darkslate-900/80 border border-darkslate-600/60 rounded-xl p-2 sm:p-2.5 flex flex-col items-center">
+                <span class="visit-map-region-title text-[10px] sm:text-[11px] font-bold text-slate-200 uppercase tracking-wider mb-0.5 sm:mb-1">
                   Bắc Bộ
                 </span>
-                <span class="text-sm sm:text-base font-extrabold text-white">
+                <span class="visit-map-region-count text-sm sm:text-base font-extrabold text-white">
                   {regionCounts().bac}{" "}
-                  <span class="text-xs font-semibold text-slate-300">tỉnh</span>
+                  <span class="visit-map-region-unit text-xs font-semibold text-slate-300">tỉnh</span>
                 </span>
               </div>
-              <div class="bg-darkslate-900/80 border border-darkslate-600/60 rounded-xl p-2 sm:p-2.5 flex flex-col items-center">
-                <span class="text-[10px] sm:text-[11px] font-bold text-slate-200 uppercase tracking-wider mb-0.5 sm:mb-1">
+              <div class="visit-map-region-card bg-darkslate-900/80 border border-darkslate-600/60 rounded-xl p-2 sm:p-2.5 flex flex-col items-center">
+                <span class="visit-map-region-title text-[10px] sm:text-[11px] font-bold text-slate-200 uppercase tracking-wider mb-0.5 sm:mb-1">
                   Trung Bộ
                 </span>
-                <span class="text-sm sm:text-base font-extrabold text-white">
+                <span class="visit-map-region-count text-sm sm:text-base font-extrabold text-white">
                   {regionCounts().trung}{" "}
-                  <span class="text-xs font-semibold text-slate-300">tỉnh</span>
+                  <span class="visit-map-region-unit text-xs font-semibold text-slate-300">tỉnh</span>
                 </span>
               </div>
-              <div class="bg-darkslate-900/80 border border-darkslate-600/60 rounded-xl p-2 sm:p-2.5 flex flex-col items-center">
-                <span class="text-[10px] sm:text-[11px] font-bold text-slate-200 uppercase tracking-wider mb-0.5 sm:mb-1">
+              <div class="visit-map-region-card bg-darkslate-900/80 border border-darkslate-600/60 rounded-xl p-2 sm:p-2.5 flex flex-col items-center">
+                <span class="visit-map-region-title text-[10px] sm:text-[11px] font-bold text-slate-200 uppercase tracking-wider mb-0.5 sm:mb-1">
                   Nam Bộ
                 </span>
-                <span class="text-sm sm:text-base font-extrabold text-white">
+                <span class="visit-map-region-count text-sm sm:text-base font-extrabold text-white">
                   {regionCounts().nam}{" "}
-                  <span class="text-xs font-semibold text-slate-300">tỉnh</span>
+                  <span class="visit-map-region-unit text-xs font-semibold text-slate-300">tỉnh</span>
                 </span>
               </div>
             </div>

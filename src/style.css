@@ -2152,27 +2152,53 @@ html[data-ui-theme="light"] .books-page [class*="bg-gradient-to-t"] {
   }
 }
 
-/* Exhaustive audit: Visit map remains intentionally dark, but its transparent header and ivory stats panel need route-specific contrast. */
+/* Visit map light mode synchronization and contrast refinement */
 html[data-ui-theme="light"] body[data-route="/visit"] nav a[href="/"] {
-  color: #f8f1e6 !important;
-  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.72);
+  color: var(--light-ink-strong) !important;
+  text-shadow: none;
 }
 
 html[data-ui-theme="light"] body[data-route="/visit"] nav a[href="/"]:hover {
-  color: #ffffff !important;
+  color: var(--light-accent-strong) !important;
+}
+
+html[data-ui-theme="light"] .visit-map-shell {
+  background-color: #e8dfd0 !important;
+  color: var(--light-ink) !important;
 }
 
 html[data-ui-theme="light"] .visit-map-shell .visit-map-stats-label {
-  color: #4c3933 !important;
+  color: var(--light-ink-strong) !important;
   text-shadow: none;
 }
 
 html[data-ui-theme="light"] .visit-map-shell .visit-map-stat-denominator {
-  color: #6f5146 !important;
+  color: var(--light-ink-soft) !important;
 }
 
 html[data-ui-theme="light"] .visit-map-shell .visit-map-stat-caption {
-  color: #70594f !important;
+  color: var(--light-ink-soft) !important;
+}
+
+html[data-ui-theme="light"] .visit-map-shell .visit-map-region-card {
+  background-color: rgba(245, 239, 229, 0.9) !important;
+  border-color: rgba(88, 66, 60, 0.22) !important;
+  box-shadow: 0 1px 3px rgba(88, 66, 60, 0.08);
+}
+
+html[data-ui-theme="light"] .visit-map-shell .visit-map-region-title {
+  color: var(--light-ink-strong) !important;
+  font-weight: 700 !important;
+}
+
+html[data-ui-theme="light"] .visit-map-shell .visit-map-region-count {
+  color: var(--light-ink-strong) !important;
+  font-weight: 800 !important;
+}
+
+html[data-ui-theme="light"] .visit-map-shell .visit-map-region-unit {
+  color: var(--light-ink-soft) !important;
+  font-weight: 600 !important;
 }
 
 /* Super-audit polish: keep the intentional dark Dice Roller score badge, but
