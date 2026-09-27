@@ -98,7 +98,7 @@ Set-Location S:\jev-vndo
 npm install
 ```
 
-2. Configure a key for the current session, or enter it in the dashboard Settings screen. Do not commit the key or expose it in a public screenshot/video:
+2. Configure a key for the current session, or enter it in the dashboard Settings screen. Never place an active key in source control or any public recording:
 
 ```powershell
 $env:TYPESAFE_API_KEY = "<your-typesafe-api-key>"
@@ -128,12 +128,13 @@ Keeping the heuristic separate from Jev is a useful design choice. Not every lin
 
 ### POC 2 — 15Min Math Quiz Solver
 
-The second POC needs a separate 15Min instance at `http://localhost:4200`. The default quiz URL in the repo is:
+The second POC connects to a separate 15Min instance at `http://localhost:4200`. It is not a quiz-accuracy benchmark; it is a concrete trace of decision-in-the-loop automation: the runner reads the current question, constructs typed state, asks Jev to choose from a bounded answer set, and only then performs the browser action.
 
 <figure class="blog-demo-gif my-6 overflow-hidden rounded-xl border border-neutral-800 bg-neutral-900/60">
-  <img src="/blog/jev-system-one/demo.gif" alt="Optimized GIF of the 15Min Math Quiz Solver demo running Jev" loading="lazy" decoding="async" />
-  <figcaption class="border-t border-neutral-800 px-3 py-2 text-sm text-neutral-400">A compact GIF preview of the real 15Min Math Quiz Solver run. <a href="/blog/jev-system-one/demo.mp4">Open the full MP4 recording</a>.</figcaption>
+  <img src="/blog/jev-system-one/demo.gif" alt="15Min Math Quiz Solver running with Jev" width="640" height="273" loading="lazy" decoding="async" />
 </figure>
+
+The default quiz URL in the repo is:
 
 ```text
 http://localhost:4200/lesson/2379791/quiz?difficulty=easy
@@ -141,13 +142,7 @@ http://localhost:4200/lesson/2379791/quiz?difficulty=easy
 
 In **Settings**, choose the quiz URL and use the local/test account provisioned for that environment. The demo README contains default values; do not copy test credentials into a public article while they are still valid.
 
-When started, Playwright signs in, opens the quiz, reads the question and choices, sends state to Jev, and clicks the answer selected by the engine. This is a neat demonstration of “AI decides, automation executes”, but it is also where the safety boundary matters most: a real system needs validation, an audit trail, bounded retries, and human review before consequential actions.
-
-## Reading the screenshot and demo GIF
-
-The screenshot included with this article shows the dashboard structure: the navigation route on the left, the browser preview on the right, the **TypeSafe System One (Jev Decisions)** table below, and execution telemetry updating in realtime. The `Selected by TypeSafe Jev System One` line maps a model decision to a link choice; it is not evidence that every route will be correct on every run.
-
-The GIF is an optimized preview of the local 15Min demo recording and sits with POC 2 rather than acting as an article summary. The full MP4 remains available from the link under the GIF. Both files are project assets, so the preview no longer depends on the personal `D:\\Users...` path.
+When started, Playwright signs in, opens the quiz, reads the question and choices, sends state to Jev, and clicks the answer selected by the engine. The value of the example is not automatic answer selection; it is the operational boundary it exposes. Execution authority, validation, auditability, retry limits, and escalation to human review must be defined by the system around the model.
 
 ## Where should Jev sit in an AI system?
 
@@ -177,7 +172,7 @@ For example, Jev can decide whether a request should go to a fast or a frontier 
 ## Limits worth keeping in view
 
 - Jev is a hosted model called through an API, not a local model bundled with this demo.
-- The demo sends text/data-structure state; a browser screenshot does not mean Jev is directly seeing page pixels.
+- The demo passes text/data-structure state into the model; it is not a vision system reading browser pixels directly.
 - Jev returns typed decisions, but it can still be wrong. Confidence is a policy signal, not a correctness certificate.
 - It should not replace open-ended reasoning, long-form writing, or cases where the option space cannot be declared.
 - Keep API keys in a server/session boundary. The demo’s API Key field is appropriate for local experiments, not a pattern to copy into a public production app.
@@ -192,4 +187,3 @@ That makes Jev a good fit for the small but frequent judgments inside an agent: 
 - [Jev dashboard — Try the System One model & API](https://www.jevtypesafeai.com/dashboard)
 - [Jev System One model overview](https://jevtypesafeai.com/jev/system-one)
 - [Official TypeScript/JavaScript SDK](https://github.com/typesafe-ai/typesafe-sdk-js)
-- Demo source: `S:\\jev-vndo\README.md`, `server.js`, `src/typesafe-client.js`
