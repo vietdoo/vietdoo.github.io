@@ -1,6 +1,6 @@
 ---
 title: "Jev và System One: Khi AI trả về quyết định typed thay vì một đoạn văn"
-description: 'Giới thiệu mô hình System One của TypeSafe AI, cách Jev biến state và câu hỏi thành các quyết định có kiểu, cùng hướng dẫn chạy demo Wiki Speedrunner và Quiz Solver tại S:\\jev-vndo.'
+description: 'Giới thiệu mô hình System One của TypeSafe AI, cách Jev biến state và câu hỏi thành các quyết định có kiểu, cùng hướng dẫn chạy hai demo Wiki Speedrunner và Quiz Solver.'
 pubDate: 2026-09-22
 category: "ai"
 image: "/blog/jev-system-one/hero.png"
@@ -15,7 +15,7 @@ Tôi thường nghĩ về AI theo hình ảnh một model nhận prompt rồi vi
 
 Đó là khoảng trống mà TypeSafe AI đang thử giải quyết bằng **System One model**. Jev là model đầu tiên của họ trong nhóm này: nhận state không có cấu trúc hoàn hảo và một tập câu hỏi typed, sau đó trả về các quyết định có kiểu cùng xác suất và confidence. Nói ngắn gọn: **text đi vào, quyết định mà code có thể dùng trực tiếp đi ra**.
 
-Bài viết này vừa là phần giải thích kiến trúc ở mức thực dụng, vừa là nhật ký chạy demo của tôi trong `S:\\jev-vndo`. Demo có hai POC: Wiki Speedrunner dùng Jev để chọn bước nhảy tiếp theo giữa các trang Wikipedia, còn 15Min Math Quiz Solver dùng Jev trong vòng lặp Playwright để hỗ trợ chọn đáp án.
+Bài viết kết hợp phần giải thích kiến trúc với hai ví dụ có thể chạy được: Wiki Speedrunner dùng Jev để chọn bước nhảy tiếp theo giữa các trang Wikipedia, còn 15Min Math Quiz Solver dùng Jev trong vòng lặp Playwright để hỗ trợ chọn đáp án.
 
 > **Luận điểm:** Jev không phải một chatbot nhỏ hơn. Nó là một decision layer bổ sung cho hệ thống phần mềm: model chịu trách nhiệm đánh giá theo schema, còn code giữ quyền điều phối, threshold, side effect và recovery.
 
@@ -85,9 +85,9 @@ console.log(result.answers.escalate.noul);
 
 Điểm hay của contract này là business code không cần đoán xem model có trả đúng JSON hay không. Nhưng typed không có nghĩa là đúng tuyệt đối. Jev có thể chọn sai, câu hỏi có thể mơ hồ, option có thể thiếu, và confidence không phải proof. Production code vẫn cần threshold, fallback, observability và đường lui rõ ràng.
 
-## Demo trong `S:\\jev-vndo`
+## Chạy demo
 
-Repo demo là một ứng dụng Node.js nhỏ dùng Express, WebSocket và Playwright. `server.js` phục vụ dashboard ở port `3000`, còn các engine gửi event realtime về UI để hiển thị telemetry. Phía Wiki gọi `@typesafe-ai/sdk`, tiền xử lý ứng viên bằng heuristic rồi đưa top contenders cho Jev chọn bằng primitive `choice`.
+Bộ demo là một ứng dụng Node.js nhỏ dùng Express, WebSocket và Playwright. `server.js` phục vụ dashboard ở port `3000`, còn các engine gửi event realtime về UI để hiển thị telemetry. Phía Wiki gọi `@typesafe-ai/sdk`, tiền xử lý ứng viên bằng heuristic rồi đưa top contenders cho Jev chọn bằng primitive `choice`.
 
 ### Chuẩn bị
 
@@ -140,7 +140,7 @@ URL quiz mặc định trong repo là:
 http://localhost:4200/lesson/2379791/quiz?difficulty=easy
 ```
 
-Trong **Settings**, chọn URL quiz và dùng tài khoản local/test được cấp cho môi trường đó. README của demo có các giá trị mặc định; không nên sao chép credential test vào một bài blog public nếu chúng còn hoạt động.
+Trong **Settings**, chọn URL quiz và dùng tài khoản local/test được cấp cho môi trường đó. Các giá trị mặc định thuộc môi trường test; không nên sao chép credential còn hiệu lực vào một bài blog public.
 
 Khi bấm chạy, Playwright đăng nhập, mở quiz, đọc câu hỏi cùng lựa chọn, gửi state cho Jev và click đáp án do engine chọn. Giá trị của ví dụ không nằm ở việc tự động chọn một đáp án, mà ở ranh giới vận hành nó phơi bày: quyền thực thi, validation, audit trail, giới hạn retry và cơ chế chuyển sang human review phải được quyết định bởi hệ thống bao quanh model.
 
@@ -171,7 +171,7 @@ Ví dụ, Jev có thể đánh giá một request nên đi model nhanh hay model
 
 ## Các giới hạn cần ghi nhớ
 
-- Jev là hosted model được gọi qua API, không phải model local trong repo demo.
+- Jev là hosted model được gọi qua API, không phải model local đi kèm ứng dụng.
 - Demo gửi state dạng text/data structure vào model; đây không phải một vision system đọc trực tiếp pixel của trình duyệt.
 - Jev trả quyết định có kiểu, nhưng vẫn có thể đánh giá sai. Confidence là tín hiệu để policy sử dụng, không phải chứng nhận đúng.
 - Không nên dùng Jev để thay thế reasoning mở, viết nội dung dài hoặc các tình huống mà option space chưa thể định nghĩa.
