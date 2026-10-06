@@ -175,7 +175,6 @@ export function Navigation() {
                 {(link) => (
                   <a
                     href={link.href}
-                    data-skip-loader
                     class="text-sm text-darkslate-200 hover:text-white transition-colors duration-300 relative group"
                   >
                     {link.name}
@@ -357,7 +356,6 @@ export function Navigation() {
                       {(link, index) => (
                         <a
                           href={link.href}
-                          data-skip-loader
                           onClick={closeMobileMenu}
                           class={`group flex items-center gap-3 rounded-xl border border-transparent px-3 py-3.5 transition-all duration-200 hover:border-white/10 hover:bg-white/5 ${
                             isMobileMenuOpen()

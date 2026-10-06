@@ -266,20 +266,47 @@ const jsonLdGraph = {
     <meta name="theme-color" content="#171717" />
     <script is:inline>
       (() => {
-        try {
-          const params = new URLSearchParams(window.location.search);
-          const themeParam = params.get("theme");
-          let theme = themeParam || localStorage.getItem("portfolio:ui-mode") || "dark";
-          if (theme !== "light" && theme !== "dark") theme = "dark";
-          if (themeParam) {
-            localStorage.setItem("portfolio:ui-mode", theme);
+        function getResolvedTheme() {
+          try {
+            const params = new URLSearchParams(window.location.search);
+            const themeParam = params.get("theme");
+            let theme = themeParam || localStorage.getItem("portfolio:ui-mode") || "dark";
+            if (theme !== "light" && theme !== "dark") theme = "dark";
+            if (themeParam) {
+              localStorage.setItem("portfolio:ui-mode", theme);
+            }
+            return theme;
+          } catch {
+            return "dark";
           }
-          document.documentElement.dataset.uiTheme = theme;
-          document.documentElement.style.colorScheme = theme;
-          document.querySelector('meta[name="theme-color"]')?.setAttribute("content", theme === "light" ? "#e8dfd0" : "#171717");
-        } catch {
-          document.documentElement.dataset.uiTheme = "dark";
         }
+
+        const initialTheme = getResolvedTheme();
+        document.documentElement.dataset.uiTheme = initialTheme;
+        document.documentElement.style.colorScheme = initialTheme;
+        document.querySelector('meta[name="theme-color"]')?.setAttribute("content", initialTheme === "light" ? "#e8dfd0" : "#171717");
+
+        document.addEventListener("astro:before-swap", (event) => {
+          try {
+            const activeTheme = getResolvedTheme();
+            event.newDocument.documentElement.dataset.uiTheme = activeTheme;
+            event.newDocument.documentElement.style.colorScheme = activeTheme;
+
+            const themeColorMeta = event.newDocument.querySelector('meta[name="theme-color"]');
+            if (themeColorMeta) {
+              themeColorMeta.setAttribute("content", activeTheme === "light" ? "#e8dfd0" : "#171717");
+            }
+
+            const portfolioTheme = localStorage.getItem("theme");
+            if (portfolioTheme && portfolioTheme !== "default") {
+              event.newDocument.body.classList.add(portfolioTheme);
+            }
+            const portfolioStyle = localStorage.getItem("portfolioStyle");
+            if (portfolioStyle && portfolioStyle !== "default") {
+              event.newDocument.body.classList.add(portfolioStyle);
+            }
+          } catch {}
+        });
       })();
     </script>
     <meta name="author" content={`${SITE.author.fullNameVi} (${SITE.author.shortName})`} />

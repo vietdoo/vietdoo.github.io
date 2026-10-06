@@ -100,6 +100,9 @@ export default defineConfig({
     defaultStrategy: "hover",
   },
   vite: {
+    build: {
+      cssCodeSplit: false,
+    },
     assetsInclude: "**/*.riv",
     optimizeDeps: {
       include: [

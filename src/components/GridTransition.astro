@@ -147,26 +147,23 @@
     loader: NavigationLoader;
   };
 
-  let skipNextTransition = false;
-
   document.addEventListener("astro:before-preparation", (preparationEvent) => {
     const navigationEvent = preparationEvent as AstroBeforePreparationEvent;
-    const triggeringElement =
-      navigationEvent.sourceElement?.closest<HTMLElement>("[data-skip-loader]");
-    if (triggeringElement) {
-      skipNextTransition = true;
-      return;
-    }
     const originalLoader = navigationEvent.loader;
     navigationEvent.loader = () => Promise.all([cover(), originalLoader()]);
   });
 
+  document.addEventListener("astro:before-swap", () => {
+    applyTheme();
+  });
+
   document.addEventListener("astro:after-swap", () => {
-    if (skipNextTransition) {
-      skipNextTransition = false;
-      applyTheme();
-      return;
-    }
-    reveal(0.35);
+    applyTheme();
+    // Wait two animation frames to ensure the browser has painted the styled layout
+    requestAnimationFrame(() => {
+      requestAnimationFrame(() => {
+        reveal(0.35);
+      });
+    });
   });
 </script>
