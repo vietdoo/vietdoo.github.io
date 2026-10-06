@@ -1082,10 +1082,11 @@ html[data-ui-theme="light"] header nav {
   box-shadow: 0 10px 30px rgba(76, 57, 51, 0.12) !important;
 }
 
-/* Logo in header */
-html[data-ui-theme="light"] header nav a img[src*="vndo.png"] {
-  border: 1px solid var(--light-line);
-  box-shadow: 0 1px 3px var(--light-shadow);
+/* Logo in header: clean borderless badge in light mode */
+html[data-ui-theme="light"] header nav a img[src*="vndo.png"],
+html[data-ui-theme="light"] header nav img {
+  border: none !important;
+  box-shadow: none !important;
 }
 
 /* Back button in light mode */
