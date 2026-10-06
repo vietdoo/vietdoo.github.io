@@ -656,8 +656,11 @@ html[data-ui-theme="light"] select {
 }
 
 html[data-ui-theme="light"] input::placeholder,
-html[data-ui-theme="light"] textarea::placeholder {
+html[data-ui-theme="light"] textarea::placeholder,
+html[data-ui-theme="light"] [class*="placeholder:"]::placeholder,
+html[data-ui-theme="light"] [class*="placeholder-"]::placeholder {
   color: var(--light-ink-soft) !important;
+  opacity: 0.9 !important;
 }
 
 html[data-ui-theme="light"] .bg-darkslate-900,
@@ -669,6 +672,8 @@ html[data-ui-theme="light"] .bg-darkslate-950 {
 }
 
 html[data-ui-theme="light"] .bg-darkslate-800,
+html[data-ui-theme="light"] .bg-darkslate-800\/20,
+html[data-ui-theme="light"] .bg-darkslate-800\/70,
 html[data-ui-theme="light"] .bg-darkslate-800\/80,
 html[data-ui-theme="light"] .bg-darkslate-800\/95 {
   background-color: color-mix(
@@ -679,6 +684,9 @@ html[data-ui-theme="light"] .bg-darkslate-800\/95 {
 }
 
 html[data-ui-theme="light"] .bg-darkslate-700,
+html[data-ui-theme="light"] .bg-darkslate-700\/40,
+html[data-ui-theme="light"] .bg-darkslate-700\/60,
+html[data-ui-theme="light"] .bg-darkslate-700\/80,
 html[data-ui-theme="light"] .bg-darkslate-600,
 html[data-ui-theme="light"] .bg-darkslate-600\/70,
 html[data-ui-theme="light"] .bg-darkslate-500 {
@@ -1335,12 +1343,14 @@ html[data-ui-theme="light"]
 
 html[data-ui-theme="light"] .desktop-search-form input::placeholder,
 html[data-ui-theme="light"] .mobile-search-panel input::placeholder {
-  color: rgba(255, 249, 240, 0.68) !important;
+  color: var(--light-ink-soft) !important;
+  opacity: 0.9 !important;
 }
 
 html[data-ui-theme="light"] .desktop-search-form input {
-  color: #fff9f0 !important;
+  color: var(--light-ink-strong) !important;
 }
+
 
 /* ── Light-mode readability pass: feed, reading surfaces, forms ───── */
 html[data-ui-theme="light"] .blog-post-row-shell {
@@ -1693,7 +1703,7 @@ html[data-ui-theme="light"] .books-page .book-card:hover {
 }
 
 html[data-ui-theme="light"] .books-page .book-card h3,
-html[data-ui-theme="light"] .books-page .book-card [class*="text-zinc-"] {
+html[data-ui-theme="light"] .books-page [class*="text-zinc-"] {
   color: var(--light-ink-strong) !important;
 }
 
@@ -2199,6 +2209,77 @@ html[data-ui-theme="light"] .visit-map-shell .visit-map-region-count {
 html[data-ui-theme="light"] .visit-map-shell .visit-map-region-unit {
   color: var(--light-ink-soft) !important;
   font-weight: 600 !important;
+}
+
+/* ── Contact dialog light theme refinement ────────────────────── */
+html[data-ui-theme="light"] [aria-labelledby="contact-dialog-title"] {
+  background-color: var(--light-surface-strong) !important;
+  border-color: var(--light-line) !important;
+  box-shadow: 0 20px 45px rgba(88, 66, 60, 0.16) !important;
+}
+
+html[data-ui-theme="light"] [aria-labelledby="contact-dialog-title"] a,
+html[data-ui-theme="light"] [aria-labelledby="contact-dialog-title"] .bg-darkslate-800\/20 {
+  background-color: var(--light-surface) !important;
+  border-color: var(--light-line) !important;
+}
+
+html[data-ui-theme="light"] [aria-labelledby="contact-dialog-title"] a:hover {
+  background-color: var(--light-paper-deep) !important;
+  border-color: var(--light-accent) !important;
+}
+
+html[data-ui-theme="light"] [aria-labelledby="contact-dialog-title"] .bg-darkslate-800 {
+  background-color: var(--light-paper-deep) !important;
+}
+
+html[data-ui-theme="light"] [aria-labelledby="contact-dialog-title"] button {
+  background-color: var(--light-surface) !important;
+  border-color: var(--light-line) !important;
+  color: var(--light-ink-strong) !important;
+}
+
+/* ── Blog billboard: preserve high-contrast light text on dark photo overlay ── */
+html[data-ui-theme="light"] .blog-billboard-container {
+  border-color: rgba(88, 66, 60, 0.22) !important;
+}
+
+html[data-ui-theme="light"] .blog-billboard-container h3,
+html[data-ui-theme="light"] .blog-billboard-container [class*="text-white"],
+html[data-ui-theme="light"] .blog-billboard-container span.font-mono {
+  color: #ffffff !important;
+  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.8) !important;
+}
+
+/* ── Engineering showcase card pill badges ────────────────────── */
+html[data-ui-theme="light"] main:has(h1) .bg-darkslate-700\/60,
+html[data-ui-theme="light"] .bg-darkslate-700\/60 {
+  background-color: var(--light-paper-deep) !important;
+  border-color: var(--light-line) !important;
+  color: var(--light-ink-strong) !important;
+}
+
+html[data-ui-theme="light"] .bg-darkslate-700\/60.text-primary-400 {
+  color: var(--light-accent-strong) !important;
+}
+
+html[data-ui-theme="light"] .bg-darkslate-700\/80 {
+  background-color: var(--light-surface-strong) !important;
+  border-color: var(--light-line) !important;
+  color: var(--light-ink-strong) !important;
+}
+
+/* ── Accessible status badges for light mode ──────────────────── */
+html[data-ui-theme="light"] .text-amber-400 {
+  color: #b45309 !important;
+}
+
+html[data-ui-theme="light"] .text-emerald-400 {
+  color: #047857 !important;
+}
+
+html[data-ui-theme="light"] .text-emerald-300 {
+  color: #065f46 !important;
 }
 
 /* Super-audit polish: keep the intentional dark Dice Roller score badge, but
