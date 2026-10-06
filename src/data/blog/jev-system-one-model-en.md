@@ -1,6 +1,6 @@
 ---
 title: "Jev and System One: When AI Returns Typed Decisions Instead of Prose"
-description: 'A practical introduction to TypeSafe AI''s System One model, how Jev turns state and typed questions into decisions, and how to run two demos: Wiki Speedrunner and Quiz Solver.'
+description: 'An architectural introduction to TypeSafe AI''s System One model, how Jev turns state and typed questions into decisions, and case studies on heuristic pathfinding and decision-in-the-loop automation.'
 pubDate: 2026-09-22
 category: "ai"
 image: "/blog/jev-system-one/hero.png"
@@ -15,7 +15,7 @@ I usually think about AI as a model that receives a prompt and writes an answer.
 
 That is the gap TypeSafe AI is exploring with a **System One model**. Jev is its first model in this category: it receives an imperfect state and a set of typed questions, then returns typed decisions with probabilities and confidence. In short: **messy state in, structured decisions that code can use directly out**.
 
-This article combines a practical explanation of the architecture with two runnable examples: a Wiki Speedrunner that uses Jev to choose the next hop between Wikipedia pages, and a 15Min Math Quiz Solver that uses Jev inside a Playwright loop to help select answers.
+This article combines an architectural breakdown with two real-world case studies: **Wiki Speedrunner** (applying Jev for graph hop selection between Wikipedia articles) and **15Min Math Quiz Solver** (integrating Jev into a browser automation decision-in-the-loop to evaluate optimal actions in real time).
 
 > **Thesis:** Jev is not a smaller chatbot. It is a decision layer for software: the model evaluates against a declared schema, while code owns orchestration, thresholds, side effects, and recovery.
 
@@ -83,66 +83,41 @@ console.log(result.answers.severity.score);
 console.log(result.answers.escalate.noul);
 ```
 
-The value of this contract is that application code does not need to guess whether the model returned valid JSON. But typed does not mean correct. Jev can still choose poorly, a question can be ambiguous, an option set can be incomplete, and confidence is not proof. Production code still needs thresholds, fallbacks, observability, and an explicit safe exit.
+The benefit of this contract is that business code never needs to guess whether the model returned valid JSON. However, typed does not mean infallible. Jev can choose incorrectly, questions can be ambiguous, options can be incomplete, and confidence is not proof. Production code still demands thresholds, fallbacks, observability, and clear safe exits.
 
-## Running the demo
+## Implementation: Two Architectural Case Studies
 
-The demo is a small Node.js application built with Express, WebSocket, and Playwright. `server.js` serves the dashboard on port `3000`, while the engines emit realtime events for telemetry. The Wiki path calls `@typesafe-ai/sdk`, pre-ranks candidates with a heuristic, and then asks Jev to choose among the top contenders with `choice`.
+To evaluate a System One model in practical software pipelines, we examine two concrete application architectures: **Wiki Speedrunner** (pathfinding combining heuristics with a decision model) and **15Min Math Quiz Solver** (decision-in-the-loop browser automation). Both emphasize delegating judgment to the model while keeping orchestration firmly in code.
 
-### Prepare the project
+### Case Study 1 — Wiki Speedrunner: Pathfinding & Heuristic Gating
 
-1. Open PowerShell and move to the repo:
+Wiki Speedrunner tackles the challenge of finding the shortest path between two arbitrary Wikipedia pages (e.g., from `Hanoi` to `ChatGPT`). In open graph problems with high branching factors like Wikipedia, sending hundreds of links per page into a frontier LLM is prohibitively slow and expensive.
 
-```powershell
-Set-Location S:\jev-vndo
-npm install
-```
+The architecture solves this with a 3-tier pipeline:
 
-2. Configure a key for the current session, or enter it in the dashboard Settings screen. Never place an active key in source control or any public recording:
+1. **Graph / DOM Extractor**: Parses the current page and extracts all outgoing hyperlinks.
+2. **Heuristic Candidate Pruning**: Uses lightweight semantic similarity or lexical overlap to reduce hundreds of raw links down to a top subset of candidates.
+3. **Decision Classification (Jev `choice`)**: Jev evaluates the structured state (target topic and candidate list) and returns the optimal choice along with probability distribution and confidence for the next hop.
 
-```powershell
-$env:TYPESAFE_API_KEY = "<your-typesafe-api-key>"
-```
-
-3. Start the dashboard:
-
-```powershell
-npm start
-```
-
-Open [http://localhost:3000](http://localhost:3000). If `PORT` is already set, use the port printed by the terminal.
-
-### POC 1 — Wiki Speedrunner
-
-Select **POC 1: Wiki Speedrunner**, enter a start page and a target page, and press **Start Race**. A typical run starts at `Hanoi` and uses `ChatGPT` as the target. The dashboard shows the navigation route, hop count, scanned links, scan rate, and decision log.
-
-The flow has three visible layers:
-
-1. The Playwright/browser runner reads the page and collects clickable links.
-2. A heuristic reduces the list to candidates close to the target.
-3. Jev runs a `choice` over that candidate set; the engine uses the choice, probabilities, and confidence to decide the next hop.
-
-Keeping the heuristic separate from Jev is a useful design choice. Not every link needs a model call, and code still controls budget, stop conditions, exact matches, and browser errors. Jev handles judgment; the engine handles orchestration.
+Decoupling the heuristic filter from Jev is a key design choice: heuristics reduce search space at minimal compute cost, Jev solves nuanced semantic navigation that static rules cannot capture, and application code governs hop limits, backtracking, stop conditions, and network retries.
 
 ![A doodle Wiki Speedrunner: a browser agent ranks candidate links and chooses a path to the target](/blog/jev-system-one/wiki-agent-loop.webp)
 
-### POC 2 — 15Min Math Quiz Solver
+### Case Study 2 — 15Min Math Quiz Solver: Decision-in-the-loop Loop
 
-The second POC connects to a separate 15Min instance at `http://localhost:4200`. It is not a quiz-accuracy benchmark; it is a concrete trace of decision-in-the-loop automation: the runner reads the current question, constructs typed state, asks Jev to choose from a bounded answer set, and only then performs the browser action.
+The second case study illustrates a **“decision-in-the-loop”** architecture in time-bounded web automation. Instead of having an agent generate freeform text and attempting to parse actions backward, the system establishes a closed loop between DOM parsing, typed state construction, decision modeling, and action execution.
 
 <figure class="blog-demo-gif my-6 overflow-hidden rounded-xl border border-neutral-800 bg-neutral-900/60">
   <img src="/blog/jev-system-one/demo.gif" alt="15Min Math Quiz Solver running with Jev" width="640" height="273" loading="lazy" decoding="async" />
 </figure>
 
-The default quiz URL in the repo is:
+The step-by-step workflow:
 
-```text
-http://localhost:4200/lesson/2379791/quiz?difficulty=easy
-```
+1. **Extraction & Typed State Construction**: The engine extracts the active question, available answer options, and time constraints from the DOM into a validated state object.
+2. **Typed Evaluation**: State is sent to Jev alongside structured questions (e.g., `choice` for candidate answer selection and `score` for confidence).
+3. **Policy Gating & Execution**: Application code checks the confidence score against safety thresholds. If above threshold, it triggers the corresponding browser action; if below threshold or unexpected anomalies occur, it executes safe fallbacks or escalates to human review.
 
-In **Settings**, choose the quiz URL and use the local/test account provisioned for that environment. The defaults belong to the test environment; do not copy credentials that are still valid into a public article.
-
-When started, Playwright signs in, opens the quiz, reads the question and choices, sends state to Jev, and clicks the answer selected by the engine. The value of the example is not automatic answer selection; it is the operational boundary it exposes. Execution authority, validation, auditability, retry limits, and escalation to human review must be defined by the system around the model.
+The primary value is the **clear operational boundary**: the model acts purely as an evaluator in a bounded space, while execution authority, audit trails, retry limits, and safety policies reside entirely within the surrounding software system.
 
 ## Where should Jev sit in an AI system?
 

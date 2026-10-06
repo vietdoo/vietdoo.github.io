@@ -1,6 +1,6 @@
 ---
 title: "Jev và System One: Khi AI trả về quyết định typed thay vì một đoạn văn"
-description: 'Giới thiệu mô hình System One của TypeSafe AI, cách Jev biến state và câu hỏi thành các quyết định có kiểu, cùng hướng dẫn chạy hai demo Wiki Speedrunner và Quiz Solver.'
+description: 'Khám phá mô hình System One của TypeSafe AI, kiến trúc decision-in-the-loop, cách Jev chuyển đổi state thành các quyết định có kiểu (typed decisions) và phân tích luồng kết hợp giữa heuristic, LLM và code policy.'
 pubDate: 2026-09-22
 category: "ai"
 image: "/blog/jev-system-one/hero.png"
@@ -15,7 +15,7 @@ Tôi thường nghĩ về AI theo hình ảnh một model nhận prompt rồi vi
 
 Đó là khoảng trống mà TypeSafe AI đang thử giải quyết bằng **System One model**. Jev là model đầu tiên của họ trong nhóm này: nhận state không có cấu trúc hoàn hảo và một tập câu hỏi typed, sau đó trả về các quyết định có kiểu cùng xác suất và confidence. Nói ngắn gọn: **text đi vào, quyết định mà code có thể dùng trực tiếp đi ra**.
 
-Bài viết kết hợp phần giải thích kiến trúc với hai ví dụ có thể chạy được: Wiki Speedrunner dùng Jev để chọn bước nhảy tiếp theo giữa các trang Wikipedia, còn 15Min Math Quiz Solver dùng Jev trong vòng lặp Playwright để hỗ trợ chọn đáp án.
+Bài viết kết hợp phần giải thích kiến trúc với hai case study thực nghiệm: **Wiki Speedrunner** (áp dụng Jev để định tuyến bước nhảy hop selection giữa các bài viết Wikipedia) và **15Min Math Quiz Solver** (tích hợp Jev vào vòng lặp Browser Automation decision-in-the-loop để hỗ trợ lựa chọn phương án tối ưu theo thời gian thực).
 
 > **Luận điểm:** Jev không phải một chatbot nhỏ hơn. Nó là một decision layer bổ sung cho hệ thống phần mềm: model chịu trách nhiệm đánh giá theo schema, còn code giữ quyền điều phối, threshold, side effect và recovery.
 
@@ -35,7 +35,7 @@ System One model bắt đầu từ một giả định khác: câu hỏi mà ph�
 | Điểm mạnh | Viết, giải thích, suy luận mở | Routing, ranking, gating và classification nhanh |
 | Giới hạn | Có thể lan man hoặc sai format | Không sinh prose và không thay thế reasoning mở |
 
-TypeSafe mô tả stack của họ gồm kiến trúc model mới, parallel sampler và một phương pháp huấn luyện gọi là **Reinforcement Learning for Calibrated Decisions (RLCD)**. Đây là mô tả ở cấp sản phẩm/research; bài demo này không giả vờ suy ra các chi tiết nội bộ mà API không công bố. Điều đáng quan tâm ở phía developer là contract: ta gửi nhiều câu hỏi cho cùng một state và nhận lại các giá trị typed để code tiếp tục xử lý.
+TypeSafe mô tả stack của họ gồm kiến trúc model mới, parallel sampler và một phương pháp huấn luyện gọi là **Reinforcement Learning for Calibrated Decisions (RLCD)**. Đây là mô tả ở cấp sản phẩm/research; bài phân tích này không giả vờ suy ra các chi tiết nội bộ mà API không công bố. Điều đáng quan tâm ở phía developer là contract: ta gửi nhiều câu hỏi cho cùng một state và nhận lại các giá trị typed để code tiếp tục xử lý.
 
 ## Ba primitive mà code có thể dùng
 
@@ -85,64 +85,39 @@ console.log(result.answers.escalate.noul);
 
 Điểm hay của contract này là business code không cần đoán xem model có trả đúng JSON hay không. Nhưng typed không có nghĩa là đúng tuyệt đối. Jev có thể chọn sai, câu hỏi có thể mơ hồ, option có thể thiếu, và confidence không phải proof. Production code vẫn cần threshold, fallback, observability và đường lui rõ ràng.
 
-## Chạy demo
+## Hiện thực hoá: Hai Case Study Kiến trúc Thực tế
 
-Bộ demo là một ứng dụng Node.js nhỏ dùng Express, WebSocket và Playwright. `server.js` phục vụ dashboard ở port `3000`, còn các engine gửi event realtime về UI để hiển thị telemetry. Phía Wiki gọi `@typesafe-ai/sdk`, tiền xử lý ứng viên bằng heuristic rồi đưa top contenders cho Jev chọn bằng primitive `choice`.
+Để kiểm chứng vai trò của một System One model trong pipeline phần mềm, ta xem xét hai mô hình ứng dụng thực tế: **Wiki Speedrunner** (thuật toán tìm đường kết hợp heuristic và decision model) và **15Min Math Quiz Solver** (mô hình decision-in-the-loop trong tự động hoá trình duyệt). Cả hai đều tập trung vào việc chuyển giao trách nhiệm phán đoán (judgment) cho model, trong khi giữ toàn bộ quyền điều phối luồng (orchestration) ở tầng code.
 
-### Chuẩn bị
+### Case Study 1 — Wiki Speedrunner: Thuật toán Tìm đường & Heuristic Gating
 
-1. Mở PowerShell và chuyển tới repo:
+Wiki Speedrunner giải quyết bài toán tìm lộ trình ngắn nhất giữa hai trang Wikipedia bất kỳ (ví dụ: từ `Hanoi` tới `ChatGPT`). Trong các bài toán đồ thị mở với số lượng phân nhánh (branching factor) lớn như Wikipedia, việc gửi toàn bộ hàng trăm liên kết trên mỗi trang vào một mô hình AI lớn là cực kỳ tốn kém và chậm.
 
-```powershell
-Set-Location S:\jev-vndo
-npm install
-```
+Kiến trúc giải quyết được tổ chức theo pipeline 3 lớp:
 
-2. Cấu hình key trong session hiện tại, hoặc nhập key ở màn hình Settings của dashboard. Không đưa key đang hoạt động vào source control hay bất kỳ bản ghi công khai nào:
+1. **Lớp Thu thập & Trích xuất (Graph/DOM Extractor)**: Đọc trang hiện tại và bóc tách toàn bộ danh sách các siêu liên kết (hyperlinks) có thể duyệt tiếp.
+2. **Lớp Lọc Heuristic (Candidate Pruning)**: Dùng các thuật toán heuristic tính khoảng cách ngữ nghĩa nhẹ (hoặc lexical overlap giữa tiêu đề bài viết và đích đến) để rút gọn từ hàng trăm link xuống top ứng viên tiềm năng nhất.
+3. **Lớp Quyết định Phân loại (Jev `choice`)**: Jev nhận state có cấu trúc gồm chủ đề mục tiêu và danh sách ứng viên, sau đó trả về lựa chọn tối ưu kèm phân phối xác suất và confidence score để engine thực hiện bước nhảy (hop) tiếp theo.
 
-```powershell
-$env:TYPESAFE_API_KEY = "<your-typesafe-api-key>"
-```
-
-3. Khởi động dashboard:
-
-```powershell
-npm start
-```
-
-Mở [http://localhost:3000](http://localhost:3000). Nếu terminal in ra port khác vì `PORT` đã được set, dùng port đó.
-
-### POC 1 — Wiki Speedrunner
-
-Chọn tab **POC 1: Wiki Speedrunner**, nhập trang bắt đầu và trang đích, sau đó bấm **Start Race**. Một run điển hình có thể bắt đầu từ `Hanoi` và đặt đích là `ChatGPT`. Dashboard sẽ hiển thị navigation route, số hop, scanned links, scan rate và decision log.
-
-Luồng xử lý có ba lớp dễ quan sát:
-
-1. Playwright/browser runner đọc trang và gom các link có thể click.
-2. Heuristic giảm danh sách về một nhóm ứng viên gần nhất với target.
-3. Jev thực hiện `choice` trên nhóm đó; engine lấy lựa chọn, probability và confidence để quyết định hop tiếp theo.
-
-Tách heuristic khỏi Jev là một quyết định thiết kế đáng giữ. Không phải mọi link đều cần gửi lên model, và code vẫn kiểm soát budget, stop condition, exact match và các lỗi browser. Jev làm phần judgment; engine làm phần orchestration.
+Tách biệt rõ ràng giữa heuristic và decision model là một quyết định thiết kế quan trọng: heuristic làm giảm không gian tìm kiếm với chi phí tính toán tối thiểu, Jev giải quyết bài toán phán đoán ngữ cảnh phức tạp mà quy tắc tĩnh khó bao quát, còn code ứng dụng toàn quyền quản lý ngân sách tìm kiếm, điều kiện dừng, cơ chế quay lui (backtracking) và xử lý lỗi mạng.
 
 ![Doodle Wiki Speedrunner: browser agent xếp hạng candidate links rồi chọn đường tới target](/blog/jev-system-one/wiki-agent-loop.webp)
 
-### POC 2 — 15Min Math Quiz Solver
+### Case Study 2 — 15Min Math Quiz Solver: Vòng lặp Decision-in-the-loop
 
-POC thứ hai kết nối với một instance 15Min chạy riêng tại `http://localhost:4200`. Đây không phải benchmark về độ đúng của quiz, mà là một trace cụ thể cho mô hình “decision-in-the-loop”: runner đọc câu hỏi hiện tại, dựng state có cấu trúc, yêu cầu Jev chọn trong tập đáp án hữu hạn rồi mới thực thi thao tác trên trình duyệt.
+Case study thứ hai minh hoạ mô hình **“decision-in-the-loop”** trong tự động hoá giao diện web có giới hạn thời gian. Thay vì để agent tự do sinh văn bản rồi parse ngược lại hành động, hệ thống xây dựng một vòng lặp kín giữa DOM Parser, Typed State Builder, Decision Model và Action Execution.
 
 <figure class="blog-demo-gif my-6 overflow-hidden rounded-xl border border-neutral-800 bg-neutral-900/60">
   <img src="/blog/jev-system-one/demo.gif" alt="15Min Math Quiz Solver đang chạy với Jev" width="640" height="273" loading="lazy" decoding="async" />
 </figure>
 
-URL quiz mặc định trong repo là:
+Quy trình vận hành từng bước:
 
-```text
-http://localhost:4200/lesson/2379791/quiz?difficulty=easy
-```
+1. **Trích xuất & Dựng Typed State**: Engine đọc câu hỏi hiện tại, danh sách phương án lựa chọn và các ràng buộc về thời gian từ DOM, đóng gói thành một đối tượng state chuẩn xác.
+2. **Đánh giá Quyết định có Kiểu (Evaluation)**: State được gửi đến Jev cùng schema câu hỏi dạng `choice` (chọn đáp án khả thi nhất) kết hợp `score` (độ tin cậy trong ngữ cảnh).
+3. **Gating & Kiểm soát Thực thi (Policy Gate)**: Code ứng dụng so khớp confidence score với ngưỡng threshold an toàn đã định trước. Nếu vượt ngưỡng, engine thực thi action click tương ứng trên trình duyệt; nếu dưới ngưỡng hoặc phát hiện bất thường, luồng sẽ kích hoạt fallback hoặc chuyển sang cơ chế human review.
 
-Trong **Settings**, chọn URL quiz và dùng tài khoản local/test được cấp cho môi trường đó. Các giá trị mặc định thuộc môi trường test; không nên sao chép credential còn hiệu lực vào một bài blog public.
-
-Khi bấm chạy, Playwright đăng nhập, mở quiz, đọc câu hỏi cùng lựa chọn, gửi state cho Jev và click đáp án do engine chọn. Giá trị của ví dụ không nằm ở việc tự động chọn một đáp án, mà ở ranh giới vận hành nó phơi bày: quyền thực thi, validation, audit trail, giới hạn retry và cơ chế chuyển sang human review phải được quyết định bởi hệ thống bao quanh model.
+Giá trị cốt lõi của mô hình này không nằm ở việc tự động click đáp án, mà ở **ranh giới vận hành rõ ràng**: model chỉ đóng vai trò thẩm định trong không gian hữu hạn, còn quyền thực thi, lưu vết audit trail, giới hạn số lần retry và chính sách an toàn luôn thuộc về hệ thống kiểm soát bao quanh model.
 
 ## Jev nên đứng ở đâu trong một hệ thống AI?
 
