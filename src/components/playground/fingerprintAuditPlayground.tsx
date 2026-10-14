@@ -387,7 +387,7 @@ export default function FingerprintAuditPlayground() {
             <span class="text-darkslate-400">No permission prompts</span>
           </div>
           <h1 class="text-2xl sm:text-3xl font-bold tracking-tight text-white">
-            Browser Fingerprint Audit
+            Browser fingerprint audit
           </h1>
           <p class="max-w-3xl text-xs sm:text-sm text-darkslate-300 mt-1 leading-relaxed">
             Một phòng thí nghiệm minh bạch về browser fingerprinting. Công cụ
@@ -448,7 +448,7 @@ export default function FingerprintAuditPlayground() {
             type="button"
             onClick={rerunInspection}
             disabled={isInspecting()}
-            class="shrink-0 rounded-lg border border-darkslate-400 bg-darkslate-700/70 px-4 py-2.5 text-sm font-medium text-darkslate-100 transition hover:border-primary-400 hover:text-white active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-50"
+            class="shrink-0 px-3.5 py-1.5 rounded-lg border border-darkslate-500 bg-darkslate-600/30 hover:bg-darkslate-600/60 text-darkslate-200 hover:text-white text-xs font-medium transition disabled:cursor-not-allowed disabled:opacity-50"
           >
             {isInspecting() ? "Đang kiểm tra…" : "Quét lại"}
           </button>

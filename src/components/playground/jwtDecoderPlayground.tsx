@@ -119,7 +119,7 @@ export default function JwtDecoderPlayground() {
       {/* Title */}
       <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
         <div>
-          <h1 class="text-2xl sm:text-3xl font-bold text-white tracking-tight">JWT Decoder</h1>
+          <h1 class="text-2xl sm:text-3xl font-bold text-white tracking-tight">JWT decoder</h1>
           <p class="text-xs sm:text-sm text-darkslate-300 mt-1">
             Decode and inspect JSON Web Token headers, payloads, and signatures.
           </p>

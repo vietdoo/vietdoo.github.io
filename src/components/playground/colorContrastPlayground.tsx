@@ -73,7 +73,7 @@ export default function ColorContrastPlayground() {
       <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
         <div>
           <h1 class="text-2xl sm:text-3xl font-bold text-white tracking-tight">
-            Color Contrast Checker
+            Color contrast checker
           </h1>
           <p class="text-xs sm:text-sm text-darkslate-300 mt-1">
             Calculate contrast ratios between text and background colors according
@@ -107,7 +107,7 @@ export default function ColorContrastPlayground() {
       <div class="grid grid-cols-1 md:grid-cols-3 gap-4 items-stretch">
         {/* Foreground Color Picker */}
         <div class="bg-darkslate-600/30 border border-darkslate-500 rounded-xl p-4 flex flex-col gap-3">
-          <label class="text-xs font-medium text-darkslate-300">
+          <label class="text-xs font-semibold text-darkslate-200">
             Text Color (Foreground)
           </label>
           <div class="flex items-center gap-3">
@@ -153,7 +153,7 @@ export default function ColorContrastPlayground() {
 
         {/* Background Color Picker */}
         <div class="bg-darkslate-600/30 border border-darkslate-500 rounded-xl p-4 flex flex-col gap-3">
-          <label class="text-xs font-medium text-darkslate-300">
+          <label class="text-xs font-semibold text-darkslate-200">
             Background Color
           </label>
           <div class="flex items-center gap-3">

@@ -1,13 +1,14 @@
 ---
 import Layout from "../../layouts/Layout.astro";
 import { SitePageShell } from "../../components/site/site-page-shell";
+import { SITE } from "../../site-config";
 
 const navCta = { href: "#demo-cta", label: "Bắt đầu ngay" };
 ---
 
 <Layout
-  title="Floating Header Demo - Playground"
-  description="Dynamic Floating Header and Subpage Shell pattern demo"
+  title={`${SITE.author.fullName} - Playground - Floating header`}
+  description="Dynamic glassmorphism floating header and subpage shell demo"
 >
   <SitePageShell client:load navLabel="PLAYGROUND DEMO" navCta={navCta}>
     <main
@@ -15,7 +16,7 @@ const navCta = { href: "#demo-cta", label: "Bắt đầu ngay" };
     >
       <div class="mb-10 text-center">
         <h1 class="text-2xl sm:text-3xl font-bold tracking-tight mb-2 text-white">
-          Dynamic Floating Header System
+          Floating header
         </h1>
         <p class="text-xs sm:text-sm text-darkslate-300 max-w-2xl mx-auto">
           Cuộn trang bên dưới để trải nghiệm hiệu ứng Floating Glassmorphism
@@ -90,11 +91,37 @@ const navCta = { href: "#demo-cta", label: "Bắt đầu ngay" };
 
 <style is:global>
   .floating-header-page,
+  .floating-header-page *,
+  html[data-ui-theme="light"] .floating-header-page,
+  html[data-ui-theme="light"] .floating-header-page *,
   .floating-header-page h1,
   .floating-header-page h2,
   .floating-header-page p,
   .floating-header-page span,
-  .floating-header-page li {
-    font-family: var(--font-satoshi), "Inter", "Be Vietnam Pro", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  .floating-header-page li,
+  .floating-header-page a,
+  .floating-header-page button,
+  html[data-ui-theme="light"] .floating-header-page h1,
+  html[data-ui-theme="light"] .floating-header-page h2,
+  html[data-ui-theme="light"] .floating-header-page p,
+  html[data-ui-theme="light"] .floating-header-page span,
+  html[data-ui-theme="light"] .floating-header-page li,
+  html[data-ui-theme="light"] .floating-header-page a,
+  html[data-ui-theme="light"] .floating-header-page button {
+    font-family: var(--font-satoshi), "Inter", "Be Vietnam Pro", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif !important;
+  }
+
+  .floating-header-page code,
+  .floating-header-page code *,
+  .floating-header-page pre,
+  .floating-header-page pre *,
+  .floating-header-page kbd,
+  .floating-header-page .font-mono,
+  .floating-header-page [class*="font-mono"],
+  html[data-ui-theme="light"] .floating-header-page code,
+  html[data-ui-theme="light"] .floating-header-page pre,
+  html[data-ui-theme="light"] .floating-header-page .font-mono,
+  html[data-ui-theme="light"] .floating-header-page [class*="font-mono"] {
+    font-family: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace !important;
   }
 </style>

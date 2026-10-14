@@ -330,7 +330,7 @@ export default function TaskAgentPlayground() {
       {/* Header */}
       <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-4 border-b border-darkslate-500">
         <div>
-          <h1 class="text-2xl sm:text-3xl font-bold text-white tracking-tight">Task Agent</h1>
+          <h1 class="text-2xl sm:text-3xl font-bold text-white tracking-tight">Task agent</h1>
           <p class="text-xs sm:text-sm text-darkslate-300 mt-1">
             Autonomous agent chat interface for task delegation, tool execution, and action review.
           </p>

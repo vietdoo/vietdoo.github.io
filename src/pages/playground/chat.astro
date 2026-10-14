@@ -1,11 +1,12 @@
 ---
 import PlaygroundShell from "../../components/PlaygroundShell.astro";
 import ChatbotPlayground from "../../components/playground/chatbotPlayground";
+import { SITE } from "../../site-config";
 ---
 
 <PlaygroundShell
-  title="Smart chat — vndo-ai playground"
-  description="A provider-agnostic AI chat playground with automatic server-side routing and failover."
+  title={`${SITE.author.fullName} - Playground - Smart chat`}
+  description="Provider-agnostic AI chat playground with automatic server-side routing and failover."
   scrollable
 >
   <ChatbotPlayground client:load />

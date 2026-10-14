@@ -39,6 +39,11 @@ const heightClass = scrollable ? "min-h-screen" : "h-screen";
 
 <style is:global>
   .playground-demo-shell,
+  .playground-demo-shell *,
+  html[data-ui-theme="light"] .playground-demo-shell,
+  html[data-ui-theme="light"] .playground-demo-shell *,
+  html[data-ui-theme="dark"] .playground-demo-shell,
+  html[data-ui-theme="dark"] .playground-demo-shell *,
   .playground-demo-shell button,
   .playground-demo-shell input,
   .playground-demo-shell textarea,
@@ -46,21 +51,42 @@ const heightClass = scrollable ? "min-h-screen" : "h-screen";
   .playground-demo-shell label,
   .playground-demo-shell span,
   .playground-demo-shell p,
+  .playground-demo-shell a,
+  .playground-demo-shell li,
   .playground-demo-shell h1,
   .playground-demo-shell h2,
   .playground-demo-shell h3,
   .playground-demo-shell h4,
   .playground-demo-shell h5,
-  .playground-demo-shell h6 {
-    font-family: var(--font-satoshi), "Inter", "Be Vietnam Pro", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  .playground-demo-shell h6,
+  html[data-ui-theme="light"] .playground-demo-shell h1,
+  html[data-ui-theme="light"] .playground-demo-shell h2,
+  html[data-ui-theme="light"] .playground-demo-shell h3,
+  html[data-ui-theme="light"] .playground-demo-shell h4,
+  html[data-ui-theme="light"] .playground-demo-shell h5,
+  html[data-ui-theme="light"] .playground-demo-shell h6,
+  html[data-ui-theme="light"] .playground-demo-shell p,
+  html[data-ui-theme="light"] .playground-demo-shell span,
+  html[data-ui-theme="light"] .playground-demo-shell button,
+  html[data-ui-theme="light"] .playground-demo-shell input,
+  html[data-ui-theme="light"] .playground-demo-shell textarea,
+  html[data-ui-theme="light"] .playground-demo-shell label {
+    font-family: var(--font-satoshi), "Inter", "Be Vietnam Pro", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif !important;
   }
 
   .playground-demo-shell code,
+  .playground-demo-shell code *,
   .playground-demo-shell pre,
+  .playground-demo-shell pre *,
   .playground-demo-shell kbd,
   .playground-demo-shell samp,
   .playground-demo-shell .font-mono,
-  .playground-demo-shell [class*="font-mono"] {
+  .playground-demo-shell [class*="font-mono"],
+  .playground-demo-shell [class*="font-mono"] *,
+  html[data-ui-theme="light"] .playground-demo-shell code,
+  html[data-ui-theme="light"] .playground-demo-shell pre,
+  html[data-ui-theme="light"] .playground-demo-shell .font-mono,
+  html[data-ui-theme="light"] .playground-demo-shell [class*="font-mono"] {
     font-family: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace !important;
   }
 </style>

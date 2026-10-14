@@ -7,7 +7,7 @@ import { SITE } from "../../site-config";
 
 const projects = [
   {
-    title: "Browser Fingerprint Audit",
+    title: "Browser fingerprint audit",
     description:
       "Privacy-first browser fingerprint audit with an AI explanation",
     slug: "/fingerprint-audit",
@@ -151,11 +151,20 @@ const projects = [
 
 <style is:global>
   .playground-page,
+  .playground-page *,
+  html[data-ui-theme="light"] .playground-page,
+  html[data-ui-theme="light"] .playground-page *,
   .playground-page h1,
   .playground-page h2,
   .playground-page p,
-  .playground-page span {
-    font-family: var(--font-satoshi), "Inter", "Be Vietnam Pro", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  .playground-page span,
+  .playground-page a,
+  html[data-ui-theme="light"] .playground-page h1,
+  html[data-ui-theme="light"] .playground-page h2,
+  html[data-ui-theme="light"] .playground-page p,
+  html[data-ui-theme="light"] .playground-page span,
+  html[data-ui-theme="light"] .playground-page a {
+    font-family: var(--font-satoshi), "Inter", "Be Vietnam Pro", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif !important;
   }
 </style>
 

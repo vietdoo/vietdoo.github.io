@@ -234,7 +234,7 @@ export default function ImageDescriptionPlayground() {
             type="button"
             onClick={analyzeImage}
             disabled={!imageData() || isLoading()}
-            class="inline-flex items-center justify-center gap-2 rounded-lg bg-primary-500 px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-primary-400 active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-40"
+            class="inline-flex items-center justify-center gap-2 rounded-lg bg-primary-600 hover:bg-primary-500 px-4 py-2.5 text-sm font-semibold text-white transition active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-40 shadow-sm"
           >
             <Show when={isLoading()} fallback="Describe image">
               <span class="h-4 w-4 animate-spin rounded-full border-2 border-white/30 border-t-white" />
