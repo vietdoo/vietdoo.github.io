@@ -130,13 +130,15 @@ export default function ImageDescriptionPlayground() {
 
   return (
     <div class="image-description-page w-full max-w-4xl mx-auto flex flex-col gap-6 text-darkslate-100 p-2 md:p-4 font-sans">
-      <div class="flex flex-col gap-1">
-        <h1 class="text-2xl font-bold text-white tracking-tight">
-          Image describer
-        </h1>
-        <p class="text-xs text-darkslate-300">
-          Upload one image and get a clear description powered by vndo-ai.
-        </p>
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+        <div>
+          <h1 class="text-2xl sm:text-3xl font-bold text-white tracking-tight">
+            Image describer
+          </h1>
+          <p class="text-xs sm:text-sm text-darkslate-300 mt-1">
+            Upload one image and get a clear description powered by vndo-ai.
+          </p>
+        </div>
       </div>
 
       <div class="grid grid-cols-1 lg:grid-cols-[minmax(0,1.08fr)_minmax(280px,0.92fr)] gap-4 items-start">
@@ -343,7 +345,7 @@ export default function ImageDescriptionPlayground() {
             border-radius: 0.3rem;
             background: rgb(15 23 42 / 0.75);
             color: rgb(191 219 254);
-            font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+            font-family: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
             font-size: 0.82em;
             padding: 0.12rem 0.3rem;
           }

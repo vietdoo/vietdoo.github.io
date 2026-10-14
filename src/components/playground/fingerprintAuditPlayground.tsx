@@ -386,10 +386,10 @@ export default function FingerprintAuditPlayground() {
             </span>
             <span class="text-darkslate-400">No permission prompts</span>
           </div>
-          <h1 class="text-3xl font-bold tracking-tight text-white md:text-4xl">
+          <h1 class="text-2xl sm:text-3xl font-bold tracking-tight text-white">
             Browser Fingerprint Audit
           </h1>
-          <p class="max-w-3xl text-sm leading-7 text-darkslate-300 md:text-base">
+          <p class="max-w-3xl text-xs sm:text-sm text-darkslate-300 mt-1 leading-relaxed">
             Một phòng thí nghiệm minh bạch về browser fingerprinting. Công cụ
             chỉ đọc các tín hiệu mà trang web hiện tại được trình duyệt cho phép
             thấy, tạo mã minh họa ngay trên máy bạn và không cố xác định danh

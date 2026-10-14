@@ -36,3 +36,31 @@ const heightClass = scrollable ? "min-h-screen" : "h-screen";
     </div>
   </div>
 </Layout>
+
+<style is:global>
+  .playground-demo-shell,
+  .playground-demo-shell button,
+  .playground-demo-shell input,
+  .playground-demo-shell textarea,
+  .playground-demo-shell select,
+  .playground-demo-shell label,
+  .playground-demo-shell span,
+  .playground-demo-shell p,
+  .playground-demo-shell h1,
+  .playground-demo-shell h2,
+  .playground-demo-shell h3,
+  .playground-demo-shell h4,
+  .playground-demo-shell h5,
+  .playground-demo-shell h6 {
+    font-family: var(--font-satoshi), "Inter", "Be Vietnam Pro", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  }
+
+  .playground-demo-shell code,
+  .playground-demo-shell pre,
+  .playground-demo-shell kbd,
+  .playground-demo-shell samp,
+  .playground-demo-shell .font-mono,
+  .playground-demo-shell [class*="font-mono"] {
+    font-family: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace !important;
+  }
+</style>

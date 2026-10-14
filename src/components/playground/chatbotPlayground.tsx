@@ -120,16 +120,16 @@ export default function ChatbotPlayground() {
   };
 
   return (
-    <div class="w-full max-w-5xl mx-auto flex flex-col gap-5 text-neutral-100 p-2 md:p-4 font-sans">
-      <div class="flex flex-col sm:flex-row sm:items-end justify-between gap-4 pb-4 border-b border-neutral-800/80">
+    <div class="w-full max-w-5xl mx-auto flex flex-col gap-5 text-darkslate-100 p-2 md:p-4 font-sans">
+      <div class="flex flex-col sm:flex-row sm:items-end justify-between gap-4 pb-4 border-b border-darkslate-500">
         <div>
-          <p class="text-[10px] font-medium tracking-[0.2em] uppercase text-sky-400 mb-2">
+          <p class="text-[10px] font-medium tracking-[0.2em] uppercase text-primary-400 mb-1">
             vndo-ai playground
           </p>
-          <h1 class="text-2xl md:text-3xl font-bold tracking-tight text-white">
+          <h1 class="text-2xl sm:text-3xl font-bold tracking-tight text-white">
             Smart chat
           </h1>
-          <p class="text-sm text-neutral-400 mt-1 max-w-xl">
+          <p class="text-xs sm:text-sm text-darkslate-300 mt-1 max-w-xl">
             Chat tự nhiên với routing tự động phía server để ưu tiên độ ổn định
             và khả năng đáp ứng.
           </p>
@@ -137,13 +137,13 @@ export default function ChatbotPlayground() {
         <button
           type="button"
           onClick={clearChat}
-          class="rounded-lg border border-neutral-700 bg-neutral-900/70 px-3 py-2 text-xs font-medium text-neutral-300 transition hover:border-neutral-500 hover:text-white"
+          class="rounded-lg border border-darkslate-500 bg-darkslate-600/30 px-3 py-1.5 text-xs font-medium text-darkslate-200 transition hover:bg-darkslate-600/60 hover:text-white"
         >
           New conversation
         </button>
       </div>
 
-      <div class="overflow-hidden rounded-2xl border border-neutral-800/90 bg-neutral-950/70 shadow-2xl shadow-black/20">
+      <div class="overflow-hidden rounded-2xl border border-darkslate-500 bg-darkslate-800/80 shadow-2xl">
         <div
           ref={messagesEl}
           class="flex min-h-[420px] max-h-[58vh] flex-col gap-4 overflow-y-auto p-4 md:p-6"
@@ -156,11 +156,11 @@ export default function ChatbotPlayground() {
                 <div
                   class={`group max-w-[92%] md:max-w-[78%] rounded-2xl border px-4 py-3 ${
                     message.role === "user"
-                      ? "border-sky-500/30 bg-sky-500/15 text-sky-50"
-                      : "border-neutral-800 bg-neutral-900/80 text-neutral-200"
+                      ? "border-primary-500/30 bg-primary-500/15 text-white"
+                      : "border-darkslate-500 bg-darkslate-700/60 text-darkslate-100"
                   }`}
                 >
-                  <div class="mb-2 flex items-center justify-between gap-4 text-[10px] font-medium uppercase tracking-widest text-neutral-500">
+                  <div class="mb-2 flex items-center justify-between gap-4 text-[10px] font-medium uppercase tracking-widest text-darkslate-400">
                     <span>{message.role === "user" ? "You" : "vndo-ai"}</span>
                     <Show when={message.role === "assistant"}>
                       <button
@@ -192,9 +192,9 @@ export default function ChatbotPlayground() {
           </For>
           <Show when={isLoading()}>
             <div class="flex justify-start">
-              <div class="rounded-2xl border border-neutral-800 bg-neutral-900/80 px-4 py-3 text-sm text-neutral-400">
+              <div class="rounded-2xl border border-darkslate-500 bg-darkslate-700/60 px-4 py-3 text-xs sm:text-sm text-darkslate-300">
                 <span class="inline-flex items-center gap-2">
-                  <span class="h-1.5 w-1.5 animate-pulse rounded-full bg-sky-400" />
+                  <span class="h-1.5 w-1.5 animate-pulse rounded-full bg-primary-400" />
                   Đang suy nghĩ…
                 </span>
               </div>
@@ -203,7 +203,7 @@ export default function ChatbotPlayground() {
         </div>
 
         <Show when={messages().length === 1 && !isLoading()}>
-          <div class="flex flex-wrap gap-2 border-t border-neutral-800/80 px-4 py-3 md:px-6">
+          <div class="flex flex-wrap gap-2 border-t border-darkslate-500 px-4 py-3 md:px-6">
             <For each={SUGGESTIONS}>
               {(suggestion) => (
                 <button
@@ -212,7 +212,7 @@ export default function ChatbotPlayground() {
                     setInput(suggestion);
                     requestAnimationFrame(() => textareaEl?.focus());
                   }}
-                  class="rounded-full border border-neutral-800 bg-neutral-900/70 px-3 py-1.5 text-left text-xs text-neutral-400 transition hover:border-sky-500/50 hover:text-sky-300"
+                  class="rounded-full border border-darkslate-500 bg-darkslate-700/50 px-3 py-1.5 text-left text-xs text-darkslate-300 transition hover:border-primary-400 hover:text-white"
                 >
                   {suggestion}
                 </button>
@@ -221,13 +221,13 @@ export default function ChatbotPlayground() {
           </div>
         </Show>
 
-        <div class="border-t border-neutral-800/80 p-3 md:p-4">
+        <div class="border-t border-darkslate-500 p-3 md:p-4">
           <Show when={error()}>
             <p class="mb-3 rounded-lg border border-red-500/20 bg-red-500/10 px-3 py-2 text-xs text-red-300">
               {error()}
             </p>
           </Show>
-          <div class="flex items-end gap-2 rounded-xl border border-neutral-800 bg-neutral-900/80 p-2 focus-within:border-sky-500/60">
+          <div class="flex items-end gap-2 rounded-xl border border-darkslate-500 bg-darkslate-900/80 p-2 focus-within:border-primary-500">
             <textarea
               ref={textareaEl}
               value={input()}
@@ -240,18 +240,18 @@ export default function ChatbotPlayground() {
               disabled={isLoading()}
               placeholder="Ask anything…"
               aria-label="Message"
-              class="max-h-40 min-h-11 flex-1 resize-none border-0 bg-transparent px-2 py-2 text-sm leading-6 text-white outline-none placeholder:text-neutral-600 disabled:opacity-50"
+              class="max-h-40 min-h-11 flex-1 resize-none border-0 bg-transparent px-2 py-2 text-sm leading-6 text-white outline-none placeholder:text-darkslate-400 disabled:opacity-50"
             />
             <button
               type="button"
               onClick={() => void submitMessage()}
               disabled={isLoading() || !input().trim()}
-              class="rounded-lg bg-sky-500 px-4 py-2.5 text-xs font-semibold text-white transition hover:bg-sky-400 disabled:cursor-not-allowed disabled:opacity-40"
+              class="rounded-lg bg-primary-600 px-4 py-2 text-xs font-semibold text-white transition hover:bg-primary-500 disabled:cursor-not-allowed disabled:opacity-40"
             >
               Send
             </button>
           </div>
-          <p class="mt-2 px-1 text-[10px] text-neutral-600">
+          <p class="mt-2 px-1 text-[10px] text-darkslate-400">
             Enter để gửi · Shift + Enter để xuống dòng
           </p>
         </div>
@@ -264,11 +264,11 @@ export default function ChatbotPlayground() {
         .chat-markdown :global(h1:first-child), .chat-markdown :global(h2:first-child), .chat-markdown :global(h3:first-child) { margin-top: 0; }
         .chat-markdown :global(ul), .chat-markdown :global(ol) { margin: 0.6rem 0 0.8rem 1.2rem; }
         .chat-markdown :global(li) { padding-left: 0.2rem; margin: 0.25rem 0; }
-        .chat-markdown :global(a) { color: #7dd3fc; text-decoration: underline; text-underline-offset: 3px; }
+        .chat-markdown :global(a) { color: var(--primary-400, #42a5f5); text-decoration: underline; text-underline-offset: 3px; }
         .chat-markdown :global(strong) { color: #fff; font-weight: 650; }
-        .chat-markdown :global(blockquote) { margin: 0.8rem 0; border-left: 2px solid #38bdf8; padding-left: 0.8rem; color: #a3a3a3; }
-        .chat-markdown :global(code) { border-radius: 0.35rem; background: #171717; padding: 0.12rem 0.32rem; font-size: 0.9em; color: #bae6fd; }
-        .chat-markdown :global(pre) { margin: 0.8rem 0; overflow-x: auto; border: 1px solid #262626; border-radius: 0.65rem; background: #0a0a0a; padding: 0.8rem; }
+        .chat-markdown :global(blockquote) { margin: 0.8rem 0; border-left: 2px solid var(--primary-400, #42a5f5); padding-left: 0.8rem; color: #a3a3a3; }
+        .chat-markdown :global(code) { border-radius: 0.35rem; background: #171717; padding: 0.12rem 0.32rem; font-size: 0.9em; color: var(--primary-200, #90caf9); font-family: "JetBrains Mono", ui-monospace, monospace; }
+        .chat-markdown :global(pre) { margin: 0.8rem 0; overflow-x: auto; border: 1px solid var(--darkslate-500, #171717); border-radius: 0.65rem; background: #0b0b0b; padding: 0.8rem; }
         .chat-markdown :global(pre code) { background: transparent; padding: 0; color: #d4d4d4; }
       `}</style>
     </div>

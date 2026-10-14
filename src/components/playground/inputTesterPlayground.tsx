@@ -193,10 +193,10 @@ export default function InputTesterPlayground() {
       {/* Title Header */}
       <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
         <div>
-          <h1 class="text-2xl font-bold text-white tracking-tight">
+          <h1 class="text-2xl sm:text-3xl font-bold text-white tracking-tight">
             Input tester
           </h1>
-          <p class="text-xs text-darkslate-300 mt-0.5">
+          <p class="text-xs sm:text-sm text-darkslate-300 mt-1">
             Test keyboard keys, mouse clicks, and scroll wheel events.
           </p>
         </div>
@@ -204,7 +204,7 @@ export default function InputTesterPlayground() {
         <button
           onClick={handleReset}
           type="button"
-          class="px-3.5 py-1.5 rounded-lg border border-darkslate-500 hover:bg-darkslate-600/60 hover:text-white transition text-darkslate-300 text-xs font-medium self-start sm:self-auto"
+          class="px-3.5 py-1.5 rounded-lg border border-darkslate-500 bg-darkslate-600/30 hover:bg-darkslate-600/60 hover:text-white transition text-darkslate-200 text-xs font-medium self-start sm:self-auto"
         >
           Reset test
         </button>

@@ -67,14 +67,16 @@ ${img ? `<meta property="twitter:image" content="${img}" />\n` : ""}${tw ? `<met
   return (
     <div class="meta-tag-generator-page w-full max-w-3xl mx-auto flex flex-col gap-6 text-darkslate-100 p-2 md:p-4 font-sans">
       {/* Title */}
-      <div class="flex flex-col gap-1">
-        <h1 class="text-2xl font-bold text-white tracking-tight">
-          Meta Tag Generator
-        </h1>
-        <p class="text-xs text-darkslate-300">
-          Create standard SEO, Open Graph, and Twitter Card meta tags with live
-          social previews.
-        </p>
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+        <div>
+          <h1 class="text-2xl sm:text-3xl font-bold text-white tracking-tight">
+            Meta Tag Generator
+          </h1>
+          <p class="text-xs sm:text-sm text-darkslate-300 mt-1">
+            Create standard SEO, Open Graph, and Twitter Card meta tags with live
+            social previews.
+          </p>
+        </div>
       </div>
 
       {/* Form Fields */}

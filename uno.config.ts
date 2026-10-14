@@ -27,7 +27,9 @@ export default defineConfig({
       "custom-hover": `1px 1px 0`,
     },
     fontFamily: {
-      sans: "CabinetGrotesk, Satoshi",
+      sans: 'var(--font-satoshi), "Inter", "Be Vietnam Pro", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif',
+      display: 'var(--font-cabinet-grotesk), "Plus Jakarta Sans", "Be Vietnam Pro", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif',
+      mono: '"JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace',
     },
     gridTemplateRow: {
       "auto-250": "repeat(auto-fill, 250px)",

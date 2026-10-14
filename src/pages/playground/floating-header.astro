@@ -13,46 +13,46 @@ const navCta = { href: "#demo-cta", label: "Bắt đầu ngay" };
     <main
       class="floating-header-page max-w-[1200px] mx-auto px-6 py-12 text-white"
     >
-      <div class="mb-12 text-center">
-        <h1 class="text-4xl md:text-5xl font-bold mb-4">
+      <div class="mb-10 text-center">
+        <h1 class="text-2xl sm:text-3xl font-bold tracking-tight mb-2 text-white">
           Dynamic Floating Header System
         </h1>
-        <p class="text-darkslate-200 max-w-2xl mx-auto text-base md:text-lg">
+        <p class="text-xs sm:text-sm text-darkslate-300 max-w-2xl mx-auto">
           Cuộn trang bên dưới để trải nghiệm hiệu ứng Floating Glassmorphism
           Pill co dãn mượt mà khi scrollY &gt; 20px.
         </p>
       </div>
 
-      <div class="grid md:grid-cols-2 gap-8 my-12">
+      <div class="grid md:grid-cols-2 gap-6 my-10">
         <div
-          class="bg-darkslate-800 border border-darkslate-500 rounded-2xl p-8 shadow-lg"
+          class="bg-darkslate-800 border border-darkslate-500 rounded-2xl p-6 sm:p-8 shadow-lg"
         >
-          <h2 class="text-2xl font-bold mb-3 text-primary-400">
+          <h2 class="text-lg font-bold mb-2 text-primary-400">
             SubpageNavigation
           </h2>
-          <p class="text-sm text-darkslate-200 mb-4">
+          <p class="text-xs sm:text-sm text-darkslate-300 mb-4">
             Dành cho trang con (Blog, Tuyển dụng, About...). Hiển thị logo, nhãn
             nhận diện <code>— LABEL —</code> ở giữa và link về trang chủ hoặc nút
             CTA đặc thù.
           </p>
-          <ul class="text-xs text-darkslate-300 space-y-2 font-mono">
+          <ul class="text-xs text-darkslate-300 space-y-2">
             <li>• scrollY &lt;= 20px: h-20, background trong suốt</li>
             <li>• scrollY &gt; 20px: h-14, floating pill glassmorphism</li>
           </ul>
         </div>
 
         <div
-          class="bg-darkslate-800 border border-darkslate-500 rounded-2xl p-8 shadow-lg"
+          class="bg-darkslate-800 border border-darkslate-500 rounded-2xl p-6 sm:p-8 shadow-lg"
         >
-          <h2 class="text-2xl font-bold mb-3 text-primary-400">
+          <h2 class="text-lg font-bold mb-2 text-primary-400">
             Navigation (Landing)
           </h2>
-          <p class="text-sm text-darkslate-200 mb-4">
+          <p class="text-xs sm:text-sm text-darkslate-300 mb-4">
             Dành cho trang chủ / Landing page. Hỗ trợ menu điều hướng desktop,
             nút đăng nhập/CTA và Hamburger Menu Full-screen trên thiết bị di
             động.
           </p>
-          <ul class="text-xs text-darkslate-300 space-y-2 font-mono">
+          <ul class="text-xs text-darkslate-300 space-y-2">
             <li>• Full-screen overlay menu mượt mà trên Mobile</li>
             <li>• Backdrop-blur &amp; shadow-lg khi cuộn xuống</li>
           </ul>
@@ -60,18 +60,18 @@ const navCta = { href: "#demo-cta", label: "Bắt đầu ngay" };
       </div>
 
       {/* Tall dummy content to enable long scroll testing */}
-      <div class="space-y-12 my-16">
+      <div class="space-y-8 my-12">
         <div
           class="bg-darkslate-600/30 border border-darkslate-500 rounded-2xl p-8 h-80 flex items-center justify-center"
         >
-          <p class="text-darkslate-200 font-mono text-sm">
+          <p class="text-darkslate-300 text-xs sm:text-sm">
             [ Khung nội dung 1 - Tiếp tục cuộn trang... ]
           </p>
         </div>
         <div
           class="bg-darkslate-600/30 border border-darkslate-500 rounded-2xl p-8 h-80 flex items-center justify-center"
         >
-          <p class="text-darkslate-200 font-mono text-sm">
+          <p class="text-darkslate-300 text-xs sm:text-sm">
             [ Khung nội dung 2 - Tiếp tục cuộn trang... ]
           </p>
         </div>
@@ -79,7 +79,7 @@ const navCta = { href: "#demo-cta", label: "Bắt đầu ngay" };
           class="bg-darkslate-600/30 border border-darkslate-500 rounded-2xl p-8 h-80 flex items-center justify-center"
           id="demo-cta"
         >
-          <p class="text-primary-400 font-mono text-sm font-bold">
+          <p class="text-primary-400 text-xs sm:text-sm font-semibold">
             [ CTA Section Target ]
           </p>
         </div>
@@ -87,3 +87,14 @@ const navCta = { href: "#demo-cta", label: "Bắt đầu ngay" };
     </main>
   </SitePageShell>
 </Layout>
+
+<style is:global>
+  .floating-header-page,
+  .floating-header-page h1,
+  .floating-header-page h2,
+  .floating-header-page p,
+  .floating-header-page span,
+  .floating-header-page li {
+    font-family: var(--font-satoshi), "Inter", "Be Vietnam Pro", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  }
+</style>

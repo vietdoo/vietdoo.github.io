@@ -433,7 +433,7 @@ export default function DiceRollerPlayground() {
       {/* Title & Actions */}
       <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
         <div>
-          <h1 class="text-2xl sm:text-3xl md:text-4xl font-bold text-white tracking-tight">
+          <h1 class="text-2xl sm:text-3xl font-bold text-white tracking-tight">
             Dice roller
           </h1>
           <p class="text-xs sm:text-sm text-darkslate-300 mt-1">
@@ -446,7 +446,7 @@ export default function DiceRollerPlayground() {
           onClick={rollDice}
           disabled={isRolling()}
           type="button"
-          class="px-5 py-2.5 sm:px-6 sm:py-3.5 rounded-xl bg-primary-600 hover:bg-primary-500 text-white font-semibold text-xs sm:text-sm transition shadow-lg disabled:opacity-50 self-start sm:self-auto cursor-pointer touch-manipulation"
+          class="px-4 py-2 sm:px-5 sm:py-2.5 rounded-lg bg-primary-600 hover:bg-primary-500 text-white font-semibold text-xs sm:text-sm transition shadow-lg disabled:opacity-50 self-start sm:self-auto cursor-pointer touch-manipulation"
         >
           {isRolling() ? "Rolling..." : "Roll dice"}
         </button>

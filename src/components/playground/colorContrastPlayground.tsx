@@ -70,14 +70,16 @@ export default function ColorContrastPlayground() {
   return (
     <div class="color-contrast-page w-full max-w-3xl mx-auto flex flex-col gap-6 text-darkslate-100 p-2 md:p-4 font-sans">
       {/* Header */}
-      <div class="flex flex-col gap-1">
-        <h1 class="text-2xl font-bold text-white tracking-tight">
-          Color Contrast Checker
-        </h1>
-        <p class="text-xs text-darkslate-300">
-          Calculate contrast ratios between text and background colors according
-          to WCAG 2.1 guidelines.
-        </p>
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+        <div>
+          <h1 class="text-2xl sm:text-3xl font-bold text-white tracking-tight">
+            Color Contrast Checker
+          </h1>
+          <p class="text-xs sm:text-sm text-darkslate-300 mt-1">
+            Calculate contrast ratios between text and background colors according
+            to WCAG 2.1 guidelines.
+          </p>
+        </div>
       </div>
 
       {/* Preset Buttons */}
