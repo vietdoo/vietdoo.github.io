@@ -66,48 +66,56 @@ const resumeData = {
       issuer: "Anthropic",
       date: "May 2026",
       id: "uxun2k7buozd",
+      logo: "/assets/certifications/anthropic.svg",
     },
     {
       title: "Data Engineering, Big Data, & ML on GCP",
       issuer: "Google",
       date: "Sep 2022",
       id: "EZMZERSNG6UB",
+      logo: "/assets/certifications/googlecloud-icon.svg",
     },
     {
       title: "IBM Data Engineering Professional Certificate",
       issuer: "IBM",
       date: "Aug 2022",
       id: "948G3Z9KNZ7C",
+      logo: "/assets/certifications/ibm.svg",
     },
     {
       title: "SQL (Advanced)",
       issuer: "HackerRank",
       date: "Mar 2022",
       id: "f586e92927c5",
+      logo: "/assets/certifications/hackerrank.png",
     },
     {
       title: "Problem Solving (Intermediate)",
       issuer: "HackerRank",
       date: "Nov 2021",
       id: "ad708e2017db",
+      logo: "/assets/certifications/hackerrank.png",
     },
     {
       title: "Neural Networks and Deep Learning",
       issuer: "DeepLearning.AI",
       date: "Sep 2021",
       id: "CR8RHMS5LT5P",
+      logo: "/assets/certifications/deeplearning-ai-transparent.png",
     },
     {
       title: "Machine Learning with Python",
       issuer: "IBM",
       date: "Aug 2021",
       id: "6RGVKBUBRC9D",
+      logo: "/assets/certifications/ibm.svg",
     },
     {
       title: "Google Cloud Certified",
       issuer: "Google",
       date: "Mar 2021",
       id: "Verified",
+      logo: "/assets/certifications/googlecloud-icon.svg",
     },
   ],
   skills: [
@@ -416,21 +424,31 @@ const resumeData = {
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
           {
             resumeData.certifications.map((cert) => (
-              <div class="bg-darkslate-900/40 border border-darkslate-700/40 rounded-xl p-3.5 flex flex-col justify-between print:bg-transparent print:border-gray-200">
-                <div>
-                  <h3 class="text-xs font-bold text-white print:text-black">
-                    {cert.title}
-                  </h3>
-                  <p class="text-xs text-darkslate-200 print:text-gray-700 mt-1">
-                    {cert.issuer} •{" "}
-                    <span class="font-mono text-darkslate-300 print:text-gray-600">
-                      {cert.date}
-                    </span>
+              <div class="bg-darkslate-900/40 border border-darkslate-700/40 rounded-xl p-3.5 flex items-start gap-3.5 print:bg-transparent print:border-gray-200">
+                <div class="w-10 h-10 rounded-lg bg-darkslate-800/80 border border-darkslate-700/60 p-2 flex items-center justify-center shrink-0 print:bg-gray-100 print:border-gray-300">
+                  <img
+                    src={cert.logo}
+                    alt={cert.issuer}
+                    class="w-full h-full object-contain"
+                    loading="lazy"
+                  />
+                </div>
+                <div class="flex-1 min-w-0 flex flex-col justify-between h-full">
+                  <div>
+                    <h3 class="text-xs font-bold text-white print:text-black leading-snug">
+                      {cert.title}
+                    </h3>
+                    <p class="text-xs text-darkslate-200 print:text-gray-700 mt-0.5">
+                      {cert.issuer} •{" "}
+                      <span class="font-mono text-darkslate-300 print:text-gray-600">
+                        {cert.date}
+                      </span>
+                    </p>
+                  </div>
+                  <p class="text-[10px] font-mono text-darkslate-300 mt-1.5 truncate">
+                    ID: {cert.id}
                   </p>
                 </div>
-                <p class="text-[10px] font-mono text-darkslate-300 mt-2 truncate">
-                  ID: {cert.id}
-                </p>
               </div>
             ))
           }
