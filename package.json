@@ -15,6 +15,7 @@
     "format": "prettier --write \"src/**/*.{astro,ts,tsx,js,jsx,css,md}\"",
     "test": "vitest run",
     "ui:review": "node scripts/ui-review.mjs",
+    "check:deploy": "node scripts/check-deploy.mjs",
     "prepare": "husky"
   },
   "dependencies": {

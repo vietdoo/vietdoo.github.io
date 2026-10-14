@@ -36,3 +36,10 @@
 - For responsive work, capture both desktop (`1440x1000`) and mobile (`390x844`) states. For a focused component, use `--selector` but keep a full-page capture for context when possible.
 - Never claim visual verification when screenshot capture failed. Report the exact failure and distinguish expected visual changes from unrelated changes.
 - Keep `.artifacts/ui-review/` out of commits unless the user explicitly requests the artifacts to be versioned.
+
+## Deployment Monitoring Directive
+- **Theo dõi sau khi push code**: Mỗi khi agent thực hiện `git push` lên nhánh `main`, agent phải chủ động theo dõi (monitor) trạng thái build và deploy của Vercel (bằng cách chạy `pnpm check:deploy -- --wait` hoặc kiểm tra GitHub Commit Status).
+- **Thông báo kết quả cho người dùng**: Trước khi hoàn thành tác vụ, bắt buộc báo cáo rõ ràng:
+  - Trạng thái Vercel: ✅ Thành công (kèm link URL deployment) hoặc ❌ Thất bại (kèm mô tả lỗi).
+  - Trạng thái các luồng GitHub Actions CI chạy song song.
+
