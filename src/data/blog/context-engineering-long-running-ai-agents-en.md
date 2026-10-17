@@ -3,13 +3,13 @@ title: "Context Engineering for Long-Running AI Agents: What to Fetch, Compress,
 description: "A production blueprint for designing the context pipeline of long-running AI agents: retrieval, selection, compaction, tool-result clearing, durable memory, isolation, and measurable budgets."
 pubDate: 2026-04-11
 category: "engineering"
-image: "/blog/context-engineering/hero.svg"
+image: "/blog/context-engineering/hero.webp"
 lang: "en"
 translationKey: "context-engineering-long-running-ai-agents"
 draft: false
 ---
 
-![A context engineering pipeline connecting retrieval, compression, memory, and a bounded agent action](/blog/context-engineering/hero.svg)
+![A context engineering pipeline connecting retrieval, compression, memory, and a bounded agent action](/blog/context-engineering/hero.webp)
 
 A long-running agent rarely fails because the model cannot produce another sentence. It fails because the next inference call receives the wrong working set.
 
@@ -101,7 +101,7 @@ A context contract also creates a clean relationship with an existing [agent han
 
 Retrieval systems are usually rewarded for finding relevant material. Agents need a stricter property: the material must be relevant to the **next decision**, trustworthy enough for the action being considered, fresh enough for the domain and small enough to fit beside the rest of the packet.
 
-![A retrieval funnel filters many available sources into a compact high-signal context packet](/blog/context-engineering/retrieval-selection.svg)
+![A retrieval funnel filters many available sources into a compact high-signal context packet](/blog/context-engineering/retrieval-selection.webp)
 
 The common anti-pattern is the context dump. The agent receives the whole customer profile, every matching document, all previous tool results and a long list of tool definitions. It looks safe because no fact was omitted. It is unsafe because the model has to infer priority from volume, and the most important constraint may be visually indistinguishable from background noise.
 
@@ -130,7 +130,7 @@ A practical compaction record can preserve four groups of information:
 
 Tool-result clearing is a lighter operation. If a large result can be fetched again and the active state already contains the decision derived from it, remove the raw payload from the window while retaining a reference and its freshness. The [Claude Cookbook] explains the distinction clearly: compaction compresses the whole window, clearing drops stale re-fetchable data, and memory moves durable information outside the active window.
 
-![A long active context is compacted into a high-fidelity summary while durable notes remain outside the window](/blog/context-engineering/compaction-memory.svg)
+![A long active context is compacted into a high-fidelity summary while durable notes remain outside the window](/blog/context-engineering/compaction-memory.webp)
 
 Never make “keep the last N messages” the only compaction policy. The last message may be a verbose tool dump, while an earlier message contains the user's authority or a safety constraint. Compaction should be evaluated against a loss checklist: did it retain the current objective, actor and tenant, confirmed facts, pending approvals, constraints, tool outcomes, unresolved questions and the references needed to recover evidence?
 
@@ -152,7 +152,7 @@ This connects to durable execution, but the boundary is worth keeping explicit. 
 
 Some tasks require deep exploration: reading a repository, comparing many documents, testing several hypotheses or inspecting a large trace. Sending every intermediate observation back to one lead agent wastes tokens and makes the lead less decisive.
 
-![A lead agent coordinates isolated specialist contexts and receives compact summary cards](/blog/context-engineering/subagent-isolation.svg)
+![A lead agent coordinates isolated specialist contexts and receives compact summary cards](/blog/context-engineering/subagent-isolation.webp)
 
 Sub-agent architectures solve this by giving specialist workers clean context windows. The researcher can inspect dozens of sources, the implementer can work with code and tests, and the verifier can challenge assumptions. The lead agent receives a bounded result rather than the entire exploration history. Anthropic describes this pattern as a way to keep detailed search context isolated while the lead focuses on synthesis.
 

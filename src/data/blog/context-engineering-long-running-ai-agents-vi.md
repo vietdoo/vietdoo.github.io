@@ -3,13 +3,13 @@ title: "Context Engineering cho AI Agent chạy dài: Nên Fetch, Nén và Quên
 description: "Blueprint production để thiết kế context pipeline cho AI agent chạy dài: retrieval, selection, compaction, tool-result clearing, durable memory, isolation và budget có thể đo lường."
 pubDate: 2026-04-11
 category: "engineering"
-image: "/blog/context-engineering/hero.svg"
+image: "/blog/context-engineering/hero.webp"
 lang: "vi"
 translationKey: "context-engineering-long-running-ai-agents"
 draft: false
 ---
 
-![Context engineering pipeline nối retrieval, compression, memory và bounded action của AI agent](/blog/context-engineering/hero.svg)
+![Context engineering pipeline nối retrieval, compression, memory và bounded action của AI agent](/blog/context-engineering/hero.webp)
 
 Một agent chạy dài hiếm khi thất bại chỉ vì model không thể viết thêm một câu. Nó thất bại vì inference call tiếp theo nhận phải **working set** sai.
 
@@ -101,7 +101,7 @@ Context contract cũng tạo ra quan hệ rõ ràng với [kiến trúc agent ha
 
 Retrieval system thường được đánh giá qua việc tìm được material liên quan. Agent cần tiêu chuẩn chặt hơn: material phải liên quan tới **decision tiếp theo**, đủ trust cho action sắp làm, đủ mới đối với domain và đủ nhỏ để nằm cạnh các layer còn lại trong packet.
 
-![Retrieval funnel lọc nhiều source thành một context packet nhỏ nhưng có signal cao](/blog/context-engineering/retrieval-selection.svg)
+![Retrieval funnel lọc nhiều source thành một context packet nhỏ nhưng có signal cao](/blog/context-engineering/retrieval-selection.webp)
 
 Anti-pattern phổ biến là context dump. Agent nhận toàn bộ customer profile, mọi document match, tất cả tool result trước đó và danh sách tool definition dài. Cách này trông an toàn vì dường như không bỏ sót fact nào. Nhưng nó không an toàn vì model phải tự suy ra priority từ volume, trong khi constraint quan trọng nhất có thể trông không khác background noise.
 
@@ -130,7 +130,7 @@ Một compaction record thực tế nên giữ bốn nhóm information:
 
 Tool-result clearing là operation nhẹ hơn. Nếu một result lớn có thể fetch lại và active state đã chứa decision được suy ra từ nó, hãy bỏ raw payload khỏi window nhưng giữ reference và freshness. [Claude Cookbook] giải thích khác biệt này rất rõ: compaction nén toàn bộ window, clearing bỏ dữ liệu cũ có thể fetch lại, còn memory đưa thông tin bền vững ra ngoài active window.
 
-![Active context dài được compaction thành summary có fidelity cao, trong khi durable notes nằm ngoài window](/blog/context-engineering/compaction-memory.svg)
+![Active context dài được compaction thành summary có fidelity cao, trong khi durable notes nằm ngoài window](/blog/context-engineering/compaction-memory.webp)
 
 Đừng biến “giữ N message gần nhất” thành policy compaction duy nhất. Message cuối có thể là một tool dump dài, trong khi message cũ hơn chứa authority của user hoặc safety constraint. Hãy đánh giá compaction bằng loss checklist: objective hiện tại còn không, actor và tenant còn không, fact confirm còn không, approval pending còn không, constraint còn không, tool outcome còn không, unresolved question còn không và reference để recover evidence còn không?
 
@@ -152,7 +152,7 @@ Structured note-taking có thể rất đơn giản. Một file `NOTES.md`, mộ
 
 Một số task cần exploration sâu: đọc repository, so sánh nhiều document, thử vài hypothesis hoặc inspect trace lớn. Gửi mọi observation trung gian về một lead agent vừa tốn token vừa khiến lead kém quyết đoán.
 
-![Lead agent điều phối các specialist có context riêng và nhận về các summary card nhỏ gọn](/blog/context-engineering/subagent-isolation.svg)
+![Lead agent điều phối các specialist có context riêng và nhận về các summary card nhỏ gọn](/blog/context-engineering/subagent-isolation.webp)
 
 Sub-agent architecture giải quyết bằng cách cấp cho specialist một context window sạch. Researcher có thể đọc hàng chục source, implementer làm việc với code và test, còn verifier thách thức assumption. Lead agent chỉ nhận result có giới hạn thay vì toàn bộ exploration history. Anthropic mô tả pattern này như cách cô lập search context chi tiết để lead tập trung vào synthesis.
 
